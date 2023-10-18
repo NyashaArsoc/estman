@@ -1,0 +1,26 @@
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+img.avatar {
+  width: 16%;
+  border-radius: 10%;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #a1d9f4}
+
+th {
+  background-color: #1d04f7;
+  color: white;
+}

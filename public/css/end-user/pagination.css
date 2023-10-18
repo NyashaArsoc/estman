@@ -1,0 +1,31 @@
+.pagination { 
+   
+} 
+.pagination a { 
+    font-weight:bold; 
+    font-size:14px; 
+    color: blue; 
+    float: center; 
+    padding: 8px 16px; 
+    text-decoration: none; 
+    border-radius:10px; 
+    border:1px solid grey; 
+	left: 540px; 
+} 
+.pagination a.active { 
+    background-color:#009900; 
+} 
+.pagination a:hover:not(.active) { 
+    background-color: #d4d5d2; 
+}
+@media screen and (min-width: 400px) {
+  .pagination a { 
+	left: 150px; 
+}
+}
+
+@media screen and (min-width: 800px) {
+  .pagination a { 
+	left: 660px; 
+}
+} 

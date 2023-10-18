@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Title -->
+    <title>Suppliers</title>
+
+    <!-- estman CSS -->
+    <link rel="stylesheet" href="{{ asset('css/home/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/home/theme/themify-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/home/animate.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/home/jquery.jscrollpane.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/home/waves.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/home/switchery.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/progress/nprogress.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/toastr/toastr.min.css') }}">
+
+    <!-- Neptune CSS -->
+    <link rel="stylesheet" href="{{ asset('css/home/core.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/manage/prev-next/prev-next.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" href="{{ asset('css/manage/search/dataTables.bootstrap4.min.css') }}" /><!--search-->
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://rawgit.com/lykmapipo/themify-icons/master/css/themify-icons.css" rel="stylesheet">
+    <!--plugin for showing modal details-->
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"></script>
+    <!--end plugin for showing details-->
+</head>
+
+<body class="fixed-sidebar fixed-header skin-3 content-appear">
+    <div class="wrapper">
+        <!-- Preloader -->
+        <div class="preloader"></div>
+        <!-- Sidebar -->
+        <div class="site-overlay"></div>
+
+        <div class="site-sidebar">
+            <div class="custom-scroll custom-scroll-dark">
+                <ul class="sidebar-menu">
+                    <li class="menu-title">Main</li>
+                    <li class="with-sub">
+                        <a href="index.php" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-anchor"></i></span>
+                            <span class="s-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-id-badge"></i></span>
+                            <span class="s-text">Suppliers</span>
+                        </a>
+                        <ul>
+                            <li><a href="add-supplier.php">Add Supplier</a></li>
+                            <li><a href="suppliers.php">Manage Suppliers</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-view-grid"></i></span>
+                            <span class="s-text">Categories</span>
+                        </a>
+                        <ul>
+                            <li><a href="add-category.php">Add Categories</a></li>
+                            <li><a href="categories.php">Manage Categories</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-package"></i></span>
+                            <span class="s-text">Warehouse</span>
+                        </a>
+                        <ul>
+                            <li><a href="add-warehouse.php">Add Warehouse</a></li>
+                            <li><a href="warehouse.php">Manage Warehouse</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-shopping-cart"></i></span>
+                            <span class="s-text">Suppliers Invoice</span>
+                        </a>
+                        <ul>
+                            <li><a href="add-supplier-invoice.php">Add Invoice</a></li>
+                            <li><a href="suppliers-invoices.php">Products</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-shopping-cart"></i></span>
+                            <span class="s-text">Products</span>
+                        </a>
+                        <ul>
+                            <li><a href="add-product.php">Add Products</a></li>
+                            <li><a href="add-product-csv.php">Add Products CSV</a></li>
+                            <li><a href="products.php">Manage Products</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-shopping-cart"></i></span>
+                            <span class="s-text">Expired Products</span>
+                        </a>
+                        <ul>
+                            <li><a href="expired-products.php">Expired Products</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-shopping-cart"></i></span>
+                            <span class="s-text">Dead Stock</span>
+                        </a>
+                        <ul>
+                            <li><a href="dead-stock-products.php">Dead Stock Product</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-user"></i></span>
+                            <span class="s-text">Customers</span>
+                        </a>
+                        <ul>
+                            <li><a href="add-customer.php">Add Customer</a></li>
+                            <li><a href="customers.php">Manage Customers</a></li>
+                            <li><a href="credit-customers.php">Credit Customers</a></li>
+                            <li><a href="paid-customers.php">Paid Customers</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-loop"></i></span>
+                            <span class="s-text">Transaction</span>
+                        </a>
+                        <ul>
+                            <li><a href="cash-receivable.php">Cash Receivable</a></li>
+                            <li><a href="transaction-history.php">Transaction History</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-receipt"></i></span>
+                            <span class="s-text">Invoice</span>
+                        </a>
+                        <ul>
+
+                            <li><a href="add-invoice.php">Add Invoice</a></li>
+                            <li><a href="invoices.php">Manage Invoice</a></li>
+                            <li><a href="paid-invoices.php">Paid Invoices</a></li>
+                            <li><a href="unpaid-invoices.php">Unpad Invoices</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-receipt"></i></span>
+                            <span class="s-text">Expenses</span>
+                        </a>
+                        <ul>
+                            <li><a href="add-expense-type.php">Add Expense Type</a></li>
+                            <li><a href="expense-types.php">Manage Expenses Type</a></li>
+                            <li><a href="add-expense.php">Add Expenses Invoice</a></li>
+                            <li><a href="expense-invoices.php">Manage Expenses Invoice</a></li>
+                            <li><a href="paid-expense-invoices.php">Paid Expenses Invoice</a></li>
+                            <li><a href="unpaid-expense-invoices.php">Unpaid Expenses Invoice</a></li>
+                        </ul>
+                    </li>
+
+
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-money"></i></span>
+                            <span class="s-text">Loan</span>
+                        </a>
+                        <ul>
+                            <li><a href="add-loaner.php">Add Loaner</a></li>
+                            <li><a href="loaners.php">Manage Loaners</a></li>
+                            <li><a href="add-loan.php">Add Loan</a></li>
+                            <li><a href="loans.php">Manage Loan</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-user"></i></span>
+                            <span class="s-text">Staff</span>
+                        </a>
+                        <ul>
+                            <li><a href="add-staff.php">Add Staff</a></li>
+                            <li><a href="staff.php">Manage Staff</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-bar-chart"></i></span>
+                            <span class="s-text">Reports</span>
+                        </a>
+                        <ul>
+                            <li><a href="profit_and_loss_ledger.php">Sales Profit/Loss Ledger</a></li>
+                            <li><a href="sales_ledger.php">Sales Ledger</a></li>
+                            <li><a href="expense_ledger.php">Expenses Ledger</a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-settings"></i></span>
+                            <span class="s-text">Setting</span>
+                        </a>
+                        <ul>
+                            <li><a href="company-info.php">Company Info</a></li>
+                            <li> <a href="signout.php">Sign Out</a></li>
+                        </ul>
+                    </li>
+                    <li class="compact-hide">
+                        <a href="../Documentation/index.html" target="new" class="waves-effect  waves-light">
+                            <span class="s-icon"><i class="fa fa-circle-o text-primary"></i></span>
+                            <span class="s-text">Documentation</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- Sidebar second -->
+        <!-- Header -->
+        <div class="site-header">
+            <nav class="navbar navbar-light">
+                <div class="navbar-left">
+                    <a class="navbar-brand" href="index.php">
+                        <img src="{{ asset('img/arsoc.png') }}" class="logo">
+                    </a>
+                    <div class="toggle-button light sidebar-toggle-first float-xs-left hidden-md-up">
+                        <span class="hamburger"></span>
+                    </div>
+                    <div class="toggle-button-second light float-xs-right hidden-md-up">
+                        <i class="ti-arrow-left"></i>
+                    </div>
+                    <div class="toggle-button light float-xs-right hidden-md-up" data-toggle="collapse"
+                        data-target="#collapse-1">
+                        <span class="more"></span>
+                    </div>
+                </div>
+                <div class="navbar-right navbar-toggleable-sm collapse" id="collapse-1">
+
+                    <div class="toggle-button sidebar-toggle-second float-xs-left hidden-sm-down light">
+                        <span class="hamburger"></span>
+                    </div>
+                    <ul class="nav navbar-nav float-md-right">
+
+                        <li class="nav-item dropdown hidden-sm-down">
+                            <a href="#" data-toggle="dropdown" aria-expanded="false">
+                                <span class="avatar box-32">
+                                    <img src="{{ asset('img/profile.jpg') }}" alt="">
+                                </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right animated fadeInUp">
+                                <a class="dropdown-item" href="profile.php">
+                                    <i class="ti-user mr-0-5"></i> Profile </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="signout.php"><i class="ti-power-off mr-0-5"></i> Sign
+                                    Out</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li class="nav-item hidden-sm-down light">
+                            <a class="nav-link toggle-fullscreen" href="#">
+                                <i class="ti-fullscreen"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="site-content">
+            <!-- Content -->
+            <div class="content-area py-1">
+                <div class="container-fluid">
+              
+                
+                </div>
+            </div>
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row text-xs-center">
+                        <div class="col-sm-5 text-sm-left mb-0-5 mb-sm-0">
+                            2023 © <a class="nav-link text-black" target="new"
+                                href="https://www.arsoc.co.zw"> Arsoc</a> - All rights reserved
+                        </div>
+                        <div class="col-sm-7 text-sm-right">
+
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+    </div>
+    <!-- Scripts -->
+    <script type="text/javascript" src="{{ asset('js/home/jquery-1.12.3.min.js') }}"></script>
+    <script src="{{ asset('js/home/jquery-ui.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/home/tether.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/manage/search/jquery.min.js') }}"></script><!-- Search -->
+    <script src="{{ asset('js/manage/search/jquery.dataTables.min.js') }}"></script><!-- Search -->
+    <script src="{{ asset('js/manage/search/dataTables.bootstrap4.min.js') }}"></script><!-- Search -->
+    <script type="text/javascript" src="{{ asset('js/home/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/home/detectmobilebrowser.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/home/jquery.mousewheel.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/home/mwheelIntent.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/home/jquery.jscrollpane.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/home/jquery.fullscreen-min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/home/waves.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/home/switchery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/home/raphael.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/home/morris.min.js') }}"></script>
+
+
+    <script type="text/javascript" src="{{ asset('js/home/demo.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/home/app.js') }}"></script>
+
+    <script src="{{ asset('js/manage/search/responsive-search.js') }}"></script><!-- Search -->
+    <script type="text/javascript" src="{{ asset('js/popupforms/manage-buttons.js') }}"></script>
+
+
+</body>
+
+</html>
