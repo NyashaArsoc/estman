@@ -236,15 +236,32 @@ class PropertyController extends Controller
         }
     }
 
-    public function getproperty(Request $request, $id){
+    public function getpropertyaddress(Request $request, $id){
 
         $arr['property']   = DB::table('allproperty')
         ->where([['propertytypeid', $id],
         ['available','=' ,1]])
+        ->orwhere([['occupation','=', 2],['occupation','=',1]])
         ->select('id','streetaddress','propertytypeid')
         ->get();
          return view('property/get-single-property')
          ->with($arr);
+    }
+    public function getpropertyareataken($id){
+        $arr['prop'] = DB::table('propertyspacetaken')
+        ->where('propertyid', $id)
+        ->select('propertyid','totalareataken','roomstaken')
+        ->first();
+        return view('property/get-area-taken')
+        ->with($arr);
+    }
+    public function getpropertyareaavailable($id){
+        $arr['prop'] = DB::table('allproperty')
+        ->where('id', $id)
+        ->select('id','lettablearea')
+        ->first();
+        return view('property/get-area-available')
+             ->with($arr);
     }
     public function  listproperties(){
         try {

@@ -1,0 +1,1 @@
+{{$prop->lettablearea ?? 0}}

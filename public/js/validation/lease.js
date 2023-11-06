@@ -84,21 +84,21 @@ function validateInspection() {
         $("#inspectionscheck").hide();
     }
 }
- //maintenance period
- $("#maintenancecheck").hide();
- let maintenanceError = true;
- $("#LeaseMaintenancePeriod").keyup(function () {
-     validateMaintenance();
+ //rent review period
+ $("#rentreviewcheck").hide();
+ let rentreviewError = true;
+ $("#LeaseRentReviewPeriod").keyup(function () {
+     validateRentReview();
  });
- function validateMaintenance() {
-     let textValue = $("#LeaseMaintenancePeriod").val();
+ function validateRentReview() {
+     let textValue = $("#LeaseRentReviewPeriod").val();
      if (textValue.length == "") {
-         $("#maintenancecheck").show();
-         maintenanceError = false;
+         $("#rentreviewcheck").show();
+         rentreviewError = false;
          return false;
      } else {
-        maintenanceError = true;
-         $("#maintenancecheck").hide();
+        rentreviewError = true;
+         $("#rentreviewcheck").hide();
      }
  }
   //valid from
@@ -195,11 +195,6 @@ function validateRateSqm() {
         $("#ratesqmcheck").show();
         ratesqmError = false;
         return false;
-    } else if (textValue.length < 2) {
-        $("#ratesqmcheck").show();
-        $("#ratesqmcheck").html("**at least two digits allowed");
-        ratesqmError = false;
-        return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
             charscheck =  specialChars.test(textValue);
@@ -245,143 +240,250 @@ function validateExpectedRent() {
             }
     }
 }
-//operational cost
-$("#operationalcostcheck").hide();
-let operationalcostError = true;
-$("#OperationalCost").keyup(function () {
-    validateOperationalCost();
+//rate sqm
+$("#propertydescriptioncheck").hide();
+let propertydescriptionError = true;
+$("#PropertyDescription").keyup(function () {
+    validatePropertyDescription();
 });
-function validateOperationalCost() {
-    let textValue = $("#OperationalCost").val();
-        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+function validatePropertyDescription() {
+    let textValue = $("#PropertyDescription").val();
+    if (textValue.length == "") {
+        $("#propertydescriptioncheck").show();
+        propertydescriptionError = false;
+        return false;
+    } else if (textValue.length < 3) {
+        $("#propertydescriptioncheck").show();
+        $("#propertydescriptioncheck").html("**invalid description");
+        propertydescriptionError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
             charscheck =  specialChars.test(textValue);
             if (charscheck == true){
-                 $("#operationalcostcheck").show();
-                $("#operationalcostcheck").html("**digits only or (13.5)");
-                operationalcostError = false;
+                 $("#propertydescriptioncheck").show();
+                $("#propertydescriptioncheck").html("**follow the required format");
+                propertydescriptionError = false;
                 return false;
             }else{
-                operationalcostError = true;
-                $("#operationalcostcheck").hide();
+                propertydescriptionError = true;
+                $("#propertydescriptioncheck").hide();
             }
+    }
 }
-//rates cost
+
+ //valid operation cost & currency
+ $("#operationcurrencycheck").hide();
+ $("#operationalcostcheck").hide();
+ let operationcostcurrencyError = true;
+ $("#OperationCurrency").keyup(function() {
+    validateOperationCostCurrency();
+ });
+ $("#OperationalCost").keyup(function() {
+    validateOperationCostCurrency();
+ });
+function validateOperationCostCurrency(){
+    let OperationCurrencyVal       = $("#OperationCurrency").val();
+    let OperationalCostVal         = $("#OperationalCost").val();
+    if (OperationCurrencyVal != '' && OperationalCostVal == ''){
+        $("#operationalcostcheck").show();
+        $("#operationcurrencycheck").hide();
+        operationcostcurrencyError = false;
+        return false;
+    }else if (OperationCurrencyVal == '' && OperationalCostVal != ''){
+        $("#operationalcostcheck").hide();
+        $("#operationcurrencycheck").show();
+        operationcostcurrencyError = false;
+        return false;
+    }else if (OperationCurrencyVal != '' && OperationalCostVal != ''){
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck =  specialChars.test(OperationalCostVal);
+        if (charscheck == true){
+             $("#operationalcostcheck").show();
+            $("#operationalcostcheck").html("**digits only or (13.5)");
+            operationcostcurrencyError = false;
+            return false;
+        }else{
+            operationcostcurrencyError = true;
+            $("#operationcurrencycheck").hide();
+            $("#operationalcostcheck").hide();
+        }
+    }else {
+            operationcostcurrencyError = true;
+            $("#operationcurrencycheck").hide();
+            $("#operationalcostcheck").hide()
+    }
+}
+//valid rates cost & currency
+$("#ratescurrencycheck").hide();
 $("#ratescostcheck").hide();
-let ratescostError = true;
-$("#RatesCost").keyup(function () {
-    validateRatesCost();
+let ratescostcurrencyError = true;
+$("#RatesCost").keyup(function() {
+   validateRatesCostCurrency();
 });
-function validateRatesCost() {
-    let textValue = $("#RatesCost").val();
-        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#ratescostcheck").show();
-                $("#ratescostcheck").html("**digits only or (13.5)");
-                ratescostError = false;
-                return false;
-            }else{
-                ratescostError = true;
-                $("#ratescostcheck").hide();
-            }
-}
- //valid deposit currency
- $("#depositcurrencycheck").hide();
- let depositcurrencyError = true;
- $("#DepositCurrency").keyup(function () {
-     validateDepositCurrency();
- });
-function validateDepositCurrency() {
-    let textValue = $("#DepositCurrency").val();
-    if (textValue.length == "") {
-        $("#depositcurrencycheck").show();
-        depositcurrencyError = false;
+$("#RatesCurrency").keyup(function() {
+    validateRatesCostCurrency();
+});
+function validateRatesCostCurrency(){
+    let RatesCurrencyVal        = $("#RatesCurrency").val();
+    let RatesCostVal            = $("#RatesCost").val();
+    if (RatesCurrencyVal != '' && RatesCostVal == ''){
+        $("#ratescostcheck").show();
+        $("#ratescurrencycheck").hide();
+        ratescostcurrencyError = false;
         return false;
-    } else {
-        depositcurrencyError = true;
-        $("#depositcurrencycheck").hide();
+    }else if (RatesCurrencyVal == '' && RatesCostVal != ''){
+        $("#ratescostcheck").hide();
+        $("#ratescurrencycheck").show();
+        ratescostcurrencyError = false;
+        return false;
+    }else if (RatesCurrencyVal != '' && RatesCostVal != ''){
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck =  specialChars.test(RatesCostVal);
+        if (charscheck == true){
+             $("#ratescostcheck").show();
+            $("#ratescostcheck").html("**digits only or (13.5)");
+            ratescostcurrencyError = false;
+            return false;
+        }else{
+            ratescostcurrencyError = true;
+            $("#ratescurrencycheck").hide();
+            $("#ratescostcheck").hide();
+        }
+    }else {
+            ratescostcurrencyError = true;
+            $("#ratescurrencycheck").hide();
+            $("#ratescostcheck").hide()
     }
 }
-//deposit paid
+//valid deposit amt & currency
+$("#depositcurrencycheck").hide();
 $("#depositpaidcheck").hide();
-let depositpaidError = true;
-$("#DepositPaid").keyup(function () {
-    validateDepositPaid();
+let depositamtcurrencyError = true;
+$("#DepositCurrency").keyup(function() {
+   validateDepositAmtCurrency();
 });
-function validateDepositPaid() {
-    let textValue = $("#DepositPaid").val();
-    if (textValue.length == "") {
+$("#DepositPaid").keyup(function() {
+    validateDepositAmtCurrency();
+});
+function validateDepositAmtCurrency(){
+    let DepositCurrencyVal         = $("#DepositCurrency").val();
+    let DepositAmtVal              = $("#DepositPaid").val();
+    if (DepositCurrencyVal != '' && DepositAmtVal == ''){
         $("#depositpaidcheck").show();
-        depositpaidError = false;
-        return false;
-    }else {
-        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#depositpaidcheck").show();
-                $("#depositpaidcheck").html("**digits only or (13.5)");
-                depositpaidError = false;
-                return false;
-            }else{
-                depositpaidError = true;
-                $("#depositpaidcheck").hide();
-            }
-    }
-}
- //valid balance bd currency
- $("#bdcurrencycheck").hide();
- let bdcurrencyError = true;
- $("#BalanceBDCurrency").keyup(function () {
-     validateDepositCurrency();
- });
-function validateDepositCurrency() {
-    let textValue = $("#BalanceBDCurrency").val();
-    if (textValue.length == "") {
-        $("#depositcurrencycheck").show();
-        bdcurrencyError = false;
-        return false;
-    } else {
-        bdcurrencyError = true;
         $("#depositcurrencycheck").hide();
+        depositamtcurrencyError = false;
+        return false;
+    }else if (DepositCurrencyVal == '' && DepositAmtVal != ''){
+        $("#depositpaidcheck").hide();
+        $("#depositcurrencycheck").show();
+        depositamtcurrencyError = false;
+        return false;
+    }else if (DepositCurrencyVal != '' && DepositAmtVal != ''){
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck =  specialChars.test(DepositAmtVal);
+        if (charscheck == true){
+             $("#depositpaidcheck").show();
+            $("#depositpaidcheck").html("**digits only or (13.5)");
+            depositamtcurrencyError = false;
+            return false;
+        }else{
+            depositamtcurrencyError = true;
+            $("#depositcurrencycheck").hide();
+            $("#depositpaidcheck").hide();
+        }
+    }else {
+            depositamtcurrencyError = true;
+            $("#depositcurrencycheck").hide();
+            $("#depositpaidcheck").hide()
     }
 }
-//deposit paid
+//valid bal bd amt & currency
+$("#bdcurrencycheck").hide();
 $("#bdamountcheck").hide();
-let bdamountError = true;
-$("#BDamount").keyup(function () {
-    validateBDAmount();
+let balbdamtcurrencyError = true;
+$("#BalanceBDCurrency").keyup(function() {
+   validateBalbdAmtCurrency();
 });
-function validateBDAmount() {
-    let textValue = $("#BDamount").val();
-    if (textValue.length == "") {
+$("#BDamount").keyup(function() {
+    validateBalbdAmtCurrency();
+});
+function validateBalbdAmtCurrency(){
+    let BalBDCurrencyVal           = $("#BalanceBDCurrency").val();
+    let BalBDCostVal               = $("#BDamount").val();
+    if (BalBDCurrencyVal != '' && BalBDCostVal == ''){
         $("#bdamountcheck").show();
-        bdamountError = false;
+        $("#bdcurrencycheck").hide();
+        balbdamtcurrencyError = false;
         return false;
-    }else {
+    }else if (BalBDCurrencyVal == '' && BalBDCostVal != ''){
+        $("#bdamountcheck").hide();
+        $("#bdcurrencycheck").show();
+        balbdamtcurrencyError = false;
+        return false;
+    }else if (BalBDCurrencyVal != '' && BalBDCostVal != ''){
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#bdamountcheck").show();
-                $("#bdamountcheck").html("**digits only or (13.5)");
-                bdamountError = false;
-                return false;
-            }else{
-                bdamountError = true;
-                $("#bdamountcheck").hide();
-            }
+        charscheck =  specialChars.test(BalBDCostVal);
+        if (charscheck == true){
+             $("#bdamountcheck").show();
+            $("#bdamountcheck").html("**digits only or (13.5)");
+            balbdamtcurrencyError = false;
+            return false;
+        }else{
+            balbdamtcurrencyError = true;
+            $("#bdamountcheck").hide();
+            $("#bdcurrencycheck").hide();
+        }
+    }else {
+            balbdamtcurrencyError = true;
+            $("#bdamountcheck").hide();
+            $("#bdcurrencycheck").hide()
     }
 }
 // btn submit 
 $("#btn-submit-lease").click(function () {
     try {
         validateTenantType();validateTenantName(); validatePropertyType();
-        validatePropertyAddress(); validateInspection(); validateMaintenance();
-        validateValidFrom(); validateValidTo();
+        validatePropertyAddress(); validateInspection(); validateRentReview();
+        validateValidFrom(); validateValidTo();validateRentCurrency();
+        validatePropertyDescription();validateOperationCostCurrency();
+        validateRatesCostCurrency();validateDepositAmtCurrency();validateBalbdAmtCurrency();
         if(tenanttypeError==true && tenantnameError==true && propertytypeError==true &&
-            propertyaddressError==true && inspectionsError==true && maintenanceError==true &&
-            validfromError==true && validtoError==true){
+            propertyaddressError==true && inspectionsError==true && rentreviewError==true &&
+            validfromError==true && validtoError==true && rentalcurrencyError==true &&
+            propertydescriptionError == true &&  operationcostcurrencyError ==true &&
+            ratescostcurrencyError==true && depositamtcurrencyError==true && balbdamtcurrencyError==true){
                 //valid response
-                return true;
+                var PropertyTypeVal            = $("#LeasePropertyType").val();
+                var LeaseFromVal               = $("#LeaseValidFrom").val();
+                var LeaseToVal                 = $("#LeaseValidTo").val();
+                var Date_LeaseFromVal          = new Date(LeaseFromVal);
+                var Date_LeaseToVal            = new Date(LeaseToVal);
+                var AreaTakenVal               = $("#AreaTaken").val();
+                var OccupiedAreaVal            = $("#OccupiedArea").val();
+                var TotalAreaAvailableVal      = $("#AvailableLettableArea").val();
+                let RemainingArea              = (parseFloat(TotalAreaAvailableVal) - 
+                (parseFloat(OccupiedAreaVal) + parseFloat(AreaTakenVal)));
+                if (Date_LeaseFromVal >= Date_LeaseToVal){
+                    $("#validfromcheck").show();
+                    $("#validfromcheck").html("**invalid lease period**");
+                    return false;
+                }else{
+                    if (PropertyTypeVal == 1){ //residential
+                        validateExpectedRent();
+                        if(expectedrentalError == true){return true;}else{return false;}
+                    }else{ //commercial
+                        validateAreaTaken(); validateRateSqm();
+                        if(areatakenError==true && ratesqmError==true){
+                            if(RemainingArea < 1){
+                            $("#areatakencheck").show();
+                            $("#areatakencheck").html("**area allocated is more than available space**"); 
+                            return false 
+                            }else{ return true;}
+                           }
+                        else{return false;}
+                    }
+                }
             }else{//invalid response
             return false;
         }   

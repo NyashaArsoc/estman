@@ -43,4 +43,33 @@ function getPropertyonLease() {
         		$("#LeasePropertyAddress").html(data);
         	}
 	});
+	if(textValue==1){// residential
+		document.getElementById('Residential').style.display = "block";
+		document.getElementById('Commercial').style.display = "none";   
+		document.getElementById('CommercialBottom').style.display = "none";   
+	   } 
+	   else{
+		document.getElementById('Commercial').style.display = "block";
+		document.getElementById('CommercialBottom').style.display = "block";
+		document.getElementById('Residential').style.display = "none";   
+	   }	
+}
+// get property balances
+function getPropertyBalances() {
+    var textValue = $("#LeasePropertyAddress").val();
+	$.ajax({          
+        	type: "GET",
+        	url: "/property-areataken"+'/'+textValue,
+        	success: function(data){
+        		$("#OccupiedArea").val(data);
+        	}
+	});
+	$.ajax({          
+		type: "GET",
+		url: "/property-areaavailable"+'/'+textValue,
+		success: function(data){
+			$("#AvailableLettableArea").val(data);
+		}
+});
+
 }

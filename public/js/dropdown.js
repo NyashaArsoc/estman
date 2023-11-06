@@ -68,4 +68,14 @@ function AddPropertyType(select){
     
    }
 } 
+function LeasePropertyType(select){
+   if(select.value==1){// residential
+    document.getElementById('Residential').style.display = "block";
+    document.getElementById('Commercial').style.display = "none";    
+   } 
+   else{
+    document.getElementById('Commercial').style.display = "block";
+    document.getElementById('Residential').style.display = "none";   
+   }
+} 
 

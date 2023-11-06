@@ -31,6 +31,8 @@ class LeaseController extends Controller
             ->select('id','description')->get();
             $arr['propertytype']   = DB::table('propertytype')
             ->select('id','description')->get();
+            $arr['period']   = DB::table('periodviews')
+            ->select('id','description')->get();
           return view('lease/add-lease')
           ->with($arr);
             
@@ -45,7 +47,11 @@ class LeaseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+        }catch (QueryException $e) {
+            return redirect()->route('');
+        }
     }
 
     /**

@@ -1,0 +1,3 @@
+
+{{$prop->totalareataken ?? 0}}
+   
