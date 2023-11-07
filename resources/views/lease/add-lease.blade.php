@@ -88,7 +88,7 @@
                             onChange="getLandlordonProperty();" />
                         <option value="">Inspection Schedule</option>
                         @foreach ($period as $p)
-                        <option value="{{ $p->id }}"> {{ $p->description }} </option>
+                        <option value="{{ $p->description }}"> {{ $p->description }} </option>
                     @endforeach
                         </select>
                         <small id="inspectionscheck" style="color: red;"> select inspection schedule </small>
@@ -110,7 +110,7 @@
                     id="LeaseRentReviewPeriod" />
                 <option value="">Review Schedule</option>
                 @foreach ($period as $p)
-                <option value="{{ $p->id }}"> {{ $p->description }} </option>
+                <option value="{{ $p->description }}"> {{ $p->description }} </option>
             @endforeach
                 </select>
                 <small id="rentreviewcheck" style="color: red;"> select review schedule </small>
@@ -200,7 +200,7 @@
         </div>
         <h5>Deposit</h5>
         <div class="form-group row">
-            <label for="Bedrooms" class="col-sm-2 col-form-label">Currency</label>
+            <label for="" class="col-sm-2 col-form-label">Currency</label>
             <div class="col-sm-4">
                 <select class="js-example-basic-single w-100" name="DepositCurrency" id="DepositCurrency" />
                 <option value="">Select Currency </option>
@@ -211,7 +211,7 @@
                 </select>
                 <small id="depositcurrencycheck" style="color: red;"> deposit currency is required</small>
             </div>
-            <label for="Bedrooms" class="col-sm-2 col-form-label">Deposit Paid</label>
+            <label for="" class="col-sm-2 col-form-label">Deposit Paid</label>
             <div class="col-sm-2">
                 <input type="text" class="form-control" id="DepositPaid" name="DepositPaid" placeholder="0"
                     autocomplete="off">
@@ -219,7 +219,7 @@
             </div>
         </div><br />
         <div class="form-group row">
-            <label for="Bedrooms" class="col-sm-2 col-form-label">Balance b/d Currency</label>
+            <label for="" class="col-sm-2 col-form-label">Balance b/d Currency</label>
             <div class="col-sm-4">
                 <select class="js-example-basic-single w-100" name="BalanceBDCurrency" id="BalanceBDCurrency" />
                 <option value="">Select Currency </option>
@@ -230,7 +230,7 @@
                 </select>
                 <small id="bdcurrencycheck" style="color: red;"> balance bd currency is required</small>
             </div>
-            <label for="Bedrooms" class="col-sm-2 col-form-label">Balance b/d </label>
+            <label for="" class="col-sm-2 col-form-label">Balance b/d </label>
             <div class="col-sm-2">
                 <input type="text" class="form-control" id="BDamount" name="BDamount" placeholder="0"
                     autocomplete="off">
@@ -245,6 +245,7 @@
             </div>
         </div>
         </form>
+        @include('layout.arlet')
     </div>
     </div>
     <!-- Content End-->
