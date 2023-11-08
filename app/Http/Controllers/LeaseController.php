@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lease;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class LeaseController extends Controller
@@ -112,7 +113,7 @@ class LeaseController extends Controller
                         ->DepositCurrency,'balancebdcurrencyid'=>$request->BalanceBDCurrency,
                         'balancebd'=>$request->BDamount,'ratescurrencyid'=>$request->RatesCurrency,
                         'operatingcostcurrencyid'=>$request->OperationCurrency,'ratesqm'=>
-                        $request->RateSqm]);
+                        $request->RateSqm,'propertydescription'=>$request->PropertyDescription]);
             DB::table('propertyinspection')
             ->insert(['leaseid'=>$LeaseID,'nextinspectiondate'=>$inspectionperiod]);
             DB::table('rentreview')
@@ -159,8 +160,33 @@ class LeaseController extends Controller
     }
     
     public function  pendingapproval(){
-        return view('lease/pending-approval');
+        $arr['lease']   = DB::table('alllease')
+        ->where('approval','=' ,0)
+        ->select('fullname','companyname','id','clienttypeid','validfrom',
+        'validto','propertydescription','rentalcurrency','rental')
+        ->get();
+        return view('lease/pending-approval')
+        ->with($arr);
     }
+    public function viewpending($id){
+        $propertyid = Crypt::decrypt($id);
+        try {
+            $arr['property']   = DB::table('allproperty')
+            ->where('id', $propertyid)
+            ->select('fullname','id','companyname','code','location','province',
+            'propertytype','streetaddress','city','standnumber','comments','rooms',
+            'bedrooms','bathrooms','stories','totalarea','lettablearea','ratesqm',
+            'expectedrental','propertytypeid','percentage','commissiontype','landlordclienttype')
+            ->first();
+            return view('lease/view-pending')
+           ->with($arr);
+        } catch (QueryException $e) {
+            return  redirect()->route('lease.pending') 
+            ->with('error', 'failed to load');
+        }
+        
+    }
+ 
     public function  rejected(){
         return view('lease/rejected');
     }
