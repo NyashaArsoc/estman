@@ -440,6 +440,37 @@ function validateBalbdAmtCurrency(){
             $("#bdcurrencycheck").hide()
     }
 }
+
+$("#reasonscheck").hide();
+let reasonsError = true;
+$("#ReasonsForDecline").keyup(function () {
+    validateReasons();
+});
+function validateReasons() {
+    let textValue = $("#ReasonsForDecline").val();
+    if (textValue.length == "") {
+        $("#reasonscheck").show();
+        reasonsError = false;
+        return false;
+    } else if (textValue.length < 3) {
+        $("#reasonscheck").show();
+        $("#reasonscheck").html("**write a proper reason");
+        reasonsError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#reasonscheck").show();
+                $("#reasonscheck").html("**follow the required format");
+                reasonsError = false;
+                return false;
+            }else{
+              reasonsError = true;
+                $("#reasonscheck").hide();
+            }
+    }
+}
 // btn submit 
 $("#btn-submit-lease").click(function () {
     try {
@@ -492,4 +523,16 @@ $("#btn-submit-lease").click(function () {
         return false;
     }
 });
+// button reject 
+$("#reject-lease").click(function () {
+    validateReasons();
+    if(reasonsError == true ){
+        //valid
+        return true;
+    }else{
+        //failed
+        return false;
+    }
+});
+
 });

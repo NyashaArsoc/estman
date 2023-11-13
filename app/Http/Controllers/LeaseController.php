@@ -169,24 +169,102 @@ class LeaseController extends Controller
         ->with($arr);
     }
     public function viewpending($id){
-        $propertyid = Crypt::decrypt($id);
+        $leaseid = Crypt::decrypt($id);
         try {
-            $arr['property']   = DB::table('allproperty')
-            ->where('id', $propertyid)
-            ->select('fullname','id','companyname','code','location','province',
-            'propertytype','streetaddress','city','standnumber','comments','rooms',
-            'bedrooms','bathrooms','stories','totalarea','lettablearea','ratesqm',
-            'expectedrental','propertytypeid','percentage','commissiontype','landlordclienttype')
+            $arr['lease']   = DB::table('alllease')
+            ->where('id', $leaseid)
+            ->select('*')
             ->first();
-            return view('lease/view-pending')
-           ->with($arr);
+            $arr['inspection'] = DB::table('propertyinspection')
+            ->where('leaseid', $leaseid)
+            ->select('*')
+            ->orderBy('id','desc')
+            ->first();
+            $arr['review'] = DB::table('rentreview')
+            ->where('leaseid', $leaseid)
+            ->select('*')
+            ->orderBy('id','desc')
+            ->first();
+        //return $arr;
+           return view('lease/view-pending')
+            ->with($arr);
         } catch (QueryException $e) {
             return  redirect()->route('lease.pending') 
             ->with('error', 'failed to load');
         }
         
     }
- 
+    public function rejectlease($id, Request $request){
+       
+        try{
+            $leaseid = Crypt::decrypt($id);
+            $update = array('approval' => 2 , 'available'=> 0, 'reasons'=> $request->ReasonsForDecline);
+            DB::table('lease')
+            ->where('id',$leaseid)
+            ->update($update);
+
+            return  redirect()->route('lease.pending') 
+            ->with('success', 'lease rejected');
+        } catch(QueryException $e){
+            return  redirect()->route('lease.pending') 
+            ->with('error', 'failed to reject lease');
+        }
+    }
+    public function approvelease($id,$pid){
+        $leaseid = Crypt::decrypt($id);
+        $propertyid = Crypt::decrypt($pid);
+        try{
+            $property   = DB::table('allproperty')
+            ->where('id', $propertyid)
+            ->select('totalarea','lettablearea','propertytypeid','streetaddress')
+            ->first();
+            
+            if($property){   
+                $lease   = DB::table('alllease')
+            ->where('id', $leaseid)
+            ->select('areataken')
+            ->first();
+              
+                $space   = DB::table('propertyspacetaken')
+                ->where('propertyid', $propertyid)
+                ->select('totalareataken')
+                ->first();    
+                if($space){ $spacetaken = $space->totalareataken;}
+                else{$spacetaken = 0;}
+                $minmuinpercentage = 0.015 * $property->lettablearea;
+                $remainingspace  = $property->lettablearea - ($lease->areataken + $spacetaken);  
+                if($property->propertytypeid ==1){
+                    $occupationstatus = 1;
+                }else{
+                    if($remainingspace >= 0 and $remainingspace <= $minmuinpercentage){
+                        $occupationstatus = 1;
+                    }elseif($remainingspace > $minmuinpercentage){
+                        $occupationstatus = 2;
+                    }else{
+                        return  redirect()->route('lease.pending') 
+                        ->with('error', 'property'.$property->streetaddress.'if fully occupied');
+                    }
+                }
+             
+            $updatelease    = array('approval' => 1 , 'available'=> 1);
+            $updateproperty = array('occupation' => $occupationstatus );
+            DB::table('lease')
+            ->where('id',$leaseid)
+            ->update($updatelease);
+            DB::table('property')
+            ->where('id',$propertyid)
+            ->update($updateproperty);
+           return  redirect()->route('lease.pending') 
+           ->with('success', 'lease approved'); 
+            }else{
+                return  redirect()->route('lease.pending') 
+                ->with('error', 'faled to approve');     
+            }  
+        } catch(QueryException $e){
+            return  redirect()->route('lease.pending') 
+            ->with('error', 'failed to approve lease');
+        }
+    }
     public function  rejected(){
         return view('lease/rejected');
     }

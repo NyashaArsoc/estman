@@ -50,15 +50,15 @@ function deleteproperty(that) {
         window.location = anchor.attr("href");
     }
 }
-function DeleteLandlord(that) {
-    var Func_DeleteLandlord = confirm("Proceed to delete this landlord?")
-    if (Func_DeleteLandlord) {
+function approvelease(that) {
+    var proceedto = confirm("proceed to approve this lease?")
+    if (proceedto) {
         window.location = anchor.attr("href");
     }
 }
-function RestoreLandlord(that) {
-    var Func_RestoreLandlord = confirm("Proceed to restore this landlord?")
-    if (Func_RestoreLandlord) {
+function rejectlease(that) {
+    var proceedto = confirm("proceed to reject this lease?")
+    if (proceedto) {
         window.location = anchor.attr("href");
     }
 }
