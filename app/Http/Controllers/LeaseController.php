@@ -138,9 +138,40 @@ class LeaseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Lease $lease)
+    public function edit($id)
     {
-        //
+        $leaseid = Crypt::decrypt($id);
+        try {
+        $arr['type']   = DB::table('clienttype')
+        ->select('id','description')->get();
+        $arr['currency']   = DB::table('currency')
+        ->select('id','code')->get();
+        $arr['province']   = DB::table('province')
+        ->select('id','description')->get();
+        $arr['propertytype']   = DB::table('propertytype')
+        ->select('id','description')->get();
+        $arr['period']   = DB::table('periodviews')
+        ->select('id','description')->get();
+        $arr['lease']   = DB::table('alllease')
+        ->where('id', $leaseid)
+        ->select('*')
+        ->first();
+        $arr['inspection'] = DB::table('propertyinspection')
+        ->where('leaseid', $leaseid)
+        ->select('*')
+        ->orderBy('id','desc')
+        ->first();
+        $arr['review'] = DB::table('rentreview')
+        ->where('leaseid', $leaseid)
+        ->select('*')
+        ->orderBy('id','desc')
+        ->first();
+        return view('lease.edit-lease')
+        ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('property.rejected') 
+        ->with('error', 'failed to load'.$e);
+    }
     }
 
     /**
@@ -266,7 +297,20 @@ class LeaseController extends Controller
         }
     }
     public function  rejected(){
-        return view('lease/rejected');
+        try {
+            $arr['lease']   = DB::table('alllease')
+            ->where('approval','=' ,2)
+            ->where('available','=' ,0)
+            ->select('fullname','companyname','id','clienttypeid','validfrom',
+            'validto','propertydescription','rentalcurrency','rental','reasons')
+            ->get();
+            return view('lease/rejected')
+            ->with($arr);
+        } catch (QueryException $e) {
+            return  redirect()->route('lease.pending') 
+            ->with('error', 'failed to load');
+        }
+       
     }
     public function  listlandlords(){
         return view('lease/list');

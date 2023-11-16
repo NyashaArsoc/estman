@@ -1,7 +1,7 @@
-@php $title = 'Rejected Tenants'; 
-      $description = 'tenants rejected...'; @endphp
+@php $title = 'Rejected Leases'; 
+      $description = 'leases rejected...'; @endphp
     @extends('layout.main-layout')
-    @section('title', 'Tenants Rejected')
+    @section('title', 'Leases Rejected')
     @section('additional css')
     <!-- Additional css Start-->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
@@ -25,48 +25,52 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Cell</th>
-                                    <th>Tel</th>
-                                    <th>Email</th>
+                                    <th>Description</th>
+                                    <th>Valid From</th>
+                                    <th>Valid To</th>
+                                    <th>Rental</th>
+                                    <th>Reasons</th>
                                     <th>Option</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                         
+                            <tbody>@php $count=1;@endphp
+                                @foreach($lease as $abc)
+                                <tr>@php if ($abc->clienttypeid == 1){//individual
+                                    $lname   =  $abc->fullname ;
+                                 }else{
+                                     $lname   =  $abc->companyname ;
+                                 } @endphp
                             <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td><a class="btn btn-secondary btn-sm" href = ""
-                                     title="Edit Landlord"><i class="ti-pencil mr-0-5"></i>Edit</a> 
-                                     <a class="btn btn-info btn-sm view_landlord" id=""
-                                     title="Deactivate Landlord"><i class="ti-eye mr-0-5"></i>view</a>
-                                     <a onclick = "DeactivateLandlord(this); return false;"
-                                     class="btn btn-warning btn-sm" href=""
-                                     title="View Landlord"><i class="ti-close mr-0-5"></i>deactivate</a>
+                                <td>{{$count ++}}</td>
+                                <td>{{ $lname}}</td>
+                                <td>{{ $abc->propertydescription }}</td>
+                                <td>{{ $abc->validfrom }}</td>
+                                <td>{{ $abc->validto }}</td>
+                                <td>{{ $abc->rentalcurrency.' '.number_format($abc->rental, 2) }}</td>
+                                <td>{{ $abc->reasons }}</td>
+                                @php $id= Crypt::encrypt($abc->id); @endphp
+                                    <td><a class="btn btn-secondary btn-sm" 
+                                        href="{{route('lease.edit', $id)}}"
+                                     title="edit"><i class="ti-pencil mr-0-5"></i>Edit</a> 
                                      <a onclick = "DeleteLandlord(this); return false;"
                                      class="btn btn-danger btn-sm" href=" "
                                      title="View Landlord"><i class="ti-close mr-0-5"></i>delete</a>
                             </td>
                             </tr>
-    
-                            </tbody>
+                            @endforeach
                             <tfoot>
                                 <tr>
-                                <th>No</th>
+                                    <th>No</th>
                                     <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Cell</th>
-                                    <th>Tel</th>
-                                    <th>Email</th>
+                                    <th>Description</th>
+                                    <th>Valid From</th>
+                                    <th>Valid To</th>
+                                    <th>Rental</th>
+                                    <th>Reasons</th>
                                     <th>Option</th>
                                 </tr>
                             </tfoot>
-                        </table>
+                         </table>
                 </div>
             </div>
         </div>
