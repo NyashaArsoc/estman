@@ -99,7 +99,6 @@ class LeaseController extends Controller
              // property type
             if($request->PropertyType==1) {
                 $rental = $request->ExpectedRental;
-                $isoccupied =1;
             }else{
                 $rental = $request->RateSqm * $request->AreaTaken;
       //          $areabalance = $request->AvailableLettableArea -($request->OccupiedArea + $request->AreaTaken);
@@ -314,5 +313,59 @@ class LeaseController extends Controller
     }
     public function  listlandlords(){
         return view('lease/list');
+    }
+    
+    public function updatelease($id, Request $request){
+        try {
+            $leaseid = Crypt::decrypt($id);
+             // inspection schedule
+             if($request->InspectionPeriod == 'monthly') {
+                $inspectionperiod   = $this->monthlyvalue;
+             }else if($request->InspectionPeriod == 'quarterly') {
+                 $inspectionperiod   = $this->quarterlyvalue;
+             }else if($request->InspectionPeriod == 'half yearly') {
+                 $inspectionperiod   = $this->halfyearlyvalue;
+             }else if($request->InspectionPeriod == 'yearly') {
+                 $inspectionperiod   = $this->yearlyvalue;
+             }
+             // rental review
+            if($request->RentReviewPeriod == 'monthly') {
+                $rentreviewperiod   = $this->monthlyvalue;
+             }else if($request->RentReviewPeriod == 'quarterly') {
+                 $rentreviewperiod   = $this->quarterlyvalue;
+             }else if($request->RentReviewPeriod == 'half yearly') {
+                 $rentreviewperiod   = $this->halfyearlyvalue;
+             }else if($request->RentReviewPeriod == 'yearly') {
+                 $rentreviewperiod   = $this->yearlyvalue;
+             }
+              // property type
+            if($request->PropertyType==1) {
+                $rental = $request->ExpectedRental;
+            }else{
+                $rental = $request->RateSqm * $request->AreaTaken;
+            }
+            DB::table('lease')
+            ->updateOrInsert(['id'=>$leaseid],
+            ['tenantid'=>$request->TenantName,'propertyid'=>$request->PropertyAddress,
+            'validfrom'=>$request->LeaseValidFrom, 'validto'=>$request->LeaseValidTo,
+            'areataken'=>$request->AreaTaken,'rates'=>$request->RatesCost,'operatingcosts'
+            =>$request->OperationalCost,'rental'=>$rental,'rentalcurrencyid'=>
+            $request->RentCurrency,'deposit'=>$request->DepositPaid,'depositcurrencyid'=>$request
+            ->DepositCurrency,'balancebdcurrencyid'=>$request->BalanceBDCurrency,
+            'balancebd'=>$request->BDamount,'ratescurrencyid'=>$request->RatesCurrency,
+            'operatingcostcurrencyid'=>$request->OperationCurrency,'ratesqm'=>
+            $request->RateSqm,'propertydescription'=>$request->PropertyDescription
+            ,'approval' => 0 , 'available'=> 0]);
+
+            DB::table('leaseschedules')
+            ->updateOrInsert(['leaseid'=>$leaseid],
+            ['inspectionperiod'=>$request->InspectionPeriod,'rentreview'=>$request->RentReviewPeriod]);
+        
+          return  redirect()->route('lease.rejected') 
+                    ->with('success', 'lease updated successful');
+        } catch (QueryException $e) {
+            return  redirect()->route('lease.rejected') 
+            ->with('error', 'failed to update');
+        }
     }
 }

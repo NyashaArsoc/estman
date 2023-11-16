@@ -35,8 +35,8 @@ if ($lease->clienttypeid == 1){//individual
         <div class="box box-block bg-white">
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
-            <form class="form-material material-primary" action="{{ route('lease.store') }}"
-            method="POST"> @csrf
+            <form class="form-material material-primary" action="{{ route('lease.editupdate', $id) }}"
+            method="PUT"> @csrf
                 <div class="form-group row">
                     <label for="LandlordType" class="col-sm-2 form-control-label">Tenant Type</label>
                     <div class="col-sm-4">
@@ -101,7 +101,7 @@ if ($lease->clienttypeid == 1){//individual
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="InspectionPeriod" id="LeaseInspectionPeriod"
                          />
-                        <option value="{{ $lease->inspectionperiod }}">{{ $lease->inspectionperiod }}</option>
+                        <option value="{{ $lease->inspectionperiod ?? '' }}">{{ $lease->inspectionperiod }}</option>
                         @foreach ($period as $p)
                         <option value="{{ $p->description }}"> {{ $p->description }} </option>
                     @endforeach
