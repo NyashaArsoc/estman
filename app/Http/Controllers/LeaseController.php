@@ -117,6 +117,9 @@ class LeaseController extends Controller
             ->insert(['leaseid'=>$LeaseID,'nextinspectiondate'=>$inspectionperiod]);
             DB::table('rentreview')
             ->insert(['leaseid'=>$LeaseID,'nextreviewdate'=>$rentreviewperiod]);
+            DB::table('leaseschedules')
+            ->insert(['leaseid'=>$LeaseID,'rentreview'=>$request->RentReviewPeriod,
+            'inspectionperiod'=>$request->InspectionPeriod]);
           
             return  redirect()->route('lease.create') 
             ->with('success', 'lease added');
