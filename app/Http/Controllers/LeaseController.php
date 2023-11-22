@@ -193,13 +193,19 @@ class LeaseController extends Controller
     }
     
     public function  pendingapproval(){
-        $arr['lease']   = DB::table('alllease')
-        ->where('approval','=' ,0)
-        ->select('fullname','companyname','id','clienttypeid','validfrom',
-        'validto','propertydescription','rentalcurrency','rental')
-        ->get();
-        return view('lease/pending-approval')
-        ->with($arr);
+        try {
+            $arr['lease']   = DB::table('alllease')
+            ->where('approval','=' ,0)
+            ->select('fullname','companyname','id','clienttypeid','validfrom',
+            'validto','propertydescription','rentalcurrency','rental','propertyid')
+            ->get();
+            return view('lease/pending-approval')
+            ->with($arr);
+        } catch (QueryException $th) {
+            return  redirect()->route('lease.create') 
+            ->with('error', 'failed to load');
+        }
+       
     }
     public function viewpending($id){
         $leaseid = Crypt::decrypt($id);
