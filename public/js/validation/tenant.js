@@ -384,7 +384,7 @@ function validateKeenFirstName() {
                return false;
            }else{
             keenfirstnameError = true;
-               $("#contactfirstnamecheck").hide();
+               $("#keenfirstnamecheck").hide();
            }
    }
 }
