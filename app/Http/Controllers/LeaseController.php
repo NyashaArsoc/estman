@@ -377,4 +377,140 @@ class LeaseController extends Controller
             ->with('error', 'failed to update');
         }
     }
+
+    public function addcreate()
+    {
+        try {
+            $arr['type']   = DB::table('clienttype')
+            ->select('id','description')->get();
+            $arr['currency']   = DB::table('currency')
+            ->select('id','code')->get();
+            $arr['province']   = DB::table('province')
+            ->select('id','description')->get();
+            $arr['propertytype']   = DB::table('propertytype')
+            ->select('id','description')->get();
+            $arr['period']   = DB::table('periodviews')
+            ->select('id','description')->get();
+          return view('lease/add-lease')
+          ->with($arr);
+            
+        } catch (QueryException $e) {
+            return  redirect()->route('tenant.addcreate') 
+            ->with('error', 'failed to load lease');
+        }
+    }
+    public function addstore(Request $request)
+    {
+        try {
+            IF (!empty($request->LeaseItemCurrencyID)){ 
+                $CurrencyID         =      $request->LeaseItemCurrencyID;
+             }Else { $CurrencyID = [0]; }
+             IF (!empty($request->LeaseItemBDamount)){ 
+              $BalanceBD         =      $request->LeaseItemBDamount;
+              }Else { $BalanceBD = [0];}
+              IF (!empty($request->LeaseItemRatesCost)){ 
+                $RatesCost         =      $request->LeaseItemRatesCost;
+              }Else {
+                $RatesCost = [0];
+              }
+              IF (!empty($request->LeaseItemOperationalCost)){ 
+                $OperationalCost         =      $request->LeaseItemOperationalCost;
+              }Else {
+                $OperationalCost = [0];
+              }
+              IF (!empty($request->LeaseItemDepositPaid)){ 
+                $DepositPaid         =      $request->LeaseItemDepositPaid;
+              }Else {
+                $DepositPaid = [0];
+              }
+            $NumbersInArray         =       count($CurrencyID);
+            $a  = 0;
+            
+            // inspection schedule
+            if($request->InspectionPeriod == 'monthly') {
+               $inspectionperiod   = $this->monthlyvalue;
+            }else if($request->InspectionPeriod == 'quarterly') {
+                $inspectionperiod   = $this->quarterlyvalue;
+            }else if($request->InspectionPeriod == 'half yearly') {
+                $inspectionperiod   = $this->halfyearlyvalue;
+            }else if($request->InspectionPeriod == 'yearly') {
+                $inspectionperiod   = $this->yearlyvalue;
+            }
+            // rental review
+            if($request->RentReviewPeriod == 'monthly') {
+                $rentreviewperiod   = $this->monthlyvalue;
+             }else if($request->RentReviewPeriod == 'quarterly') {
+                 $rentreviewperiod   = $this->quarterlyvalue;
+             }else if($request->RentReviewPeriod == 'half yearly') {
+                 $rentreviewperiod   = $this->halfyearlyvalue;
+             }else if($request->RentReviewPeriod == 'yearly') {
+                 $rentreviewperiod   = $this->yearlyvalue;
+             }
+             // property type
+            if($request->PropertyType==1) {
+                $rental = $request->ExpectedRental;
+            }else{
+                $rental = $request->RateSqm * $request->AreaTaken;
+      //          $areabalance = $request->AvailableLettableArea -($request->OccupiedArea + $request->AreaTaken);
+            }
+            $LeaseID    = DB::table('lease')
+            ->insertGetId(['tenantid'=>$request->TenantName,'propertyid'=>$request->PropertyAddress,
+                        'validfrom'=>$request->LeaseValidFrom, 'validto'=>$request->LeaseValidTo,
+                        'areataken'=>$request->AreaTaken,'rates'=>$request->RatesCost,'operatingcosts'
+                        =>$request->OperationalCost,'rental'=>$rental,'rentalcurrencyid'=>
+                        $request->RentCurrency,'propertydescription'=>$request->PropertyDescription,
+                    'ratesqm'=>$request->RateSqm]);
+            DB::table('propertyinspection')
+            ->insert(['leaseid'=>$LeaseID,'nextinspectiondate'=>$inspectionperiod]);
+            DB::table('rentreview')
+            ->insert(['leaseid'=>$LeaseID,'nextreviewdate'=>$rentreviewperiod]);
+            DB::table('leaseschedules')
+            ->insert(['leaseid'=>$LeaseID,'rentreview'=>$request->RentReviewPeriod,
+            'inspectionperiod'=>$request->InspectionPeriod]);
+            while ($a   <   $NumbersInArray){
+                DB::table('leasecurrentbalance')
+                ->Insert(
+                    ['leaseid'=>$LeaseID,'currencyid'=>$CurrencyID[$a],
+                    'balancebd'=>$BalanceBD[$a],'deposit'=>$DepositPaid[$a],
+                    'ratescosts'=>$RatesCost[$a],'operationalcosts'=>$OperationalCost[$a]]
+                );
+                $a++;
+            }
+          
+            return  redirect()->route('lease.addcreate') 
+            ->with('success', 'lease added');
+        }catch (QueryException $e) {
+            return  redirect()->route('lease.addcreate') 
+            ->with('error', 'failed to add lease');
+        }
+    }
+
+    public function viewpendingtest($id){
+        $leaseid = Crypt::decrypt($id);
+        try {
+            $arr['lease']   = DB::table('alllease')
+            ->where('id', $leaseid)
+            ->select('*')
+            ->first();
+            $arr['inspection'] = DB::table('propertyinspection')
+            ->where('leaseid', $leaseid)
+            ->select('*')
+            ->orderBy('id','desc')
+            ->first();
+            $arr['review'] = DB::table('rentreview')
+            ->where('leaseid', $leaseid)
+            ->select('*')
+            ->orderBy('id','desc')
+            ->first();
+            $arr['balances'] = DB::select('EXEC spGetleasecurrentbalances ?',[$leaseid]);
+        //return $arr;
+           return view('lease/view-pending-test')
+            ->with($arr);
+        } catch (QueryException $e) {
+            return  redirect()->route('lease.pending') 
+            ->with('error', 'failed to load');
+        }
+       
+    }
+
 }

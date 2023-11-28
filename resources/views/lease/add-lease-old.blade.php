@@ -22,7 +22,7 @@
         <div class="box box-block bg-white">
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
-            <form class="form-material material-primary" action="{{ route('lease.addstore') }}"
+            <form class="form-material material-primary" action="{{ route('lease.store') }}"
             method="POST"> @csrf
                 <div class="form-group row">
                     <label for="LandlordType" class="col-sm-2 form-control-label">Tenant Type</label>
@@ -120,7 +120,7 @@
             </div>
         </div><br />
         <div class="form-group row">
-            <label for="" class="col-sm-2 col-form-label">Currency</label>
+            <label for="Bedrooms" class="col-sm-2 col-form-label">Currency</label>
             <div class="col-sm-4">
                 <select class="js-example-basic-single w-100" name="RentCurrency" id="RentCurrency" />
                 <option value="">Select Currency </option>
@@ -132,7 +132,7 @@
                 <small id="rentalcurrencycheck" style="color: red;"> rental currency is required</small>
             </div>
             <div id="Commercial" class="dropdwn">
-                <label for="" class="col-sm-2 col-form-label">Rate/sqm</label>
+                <label for="Bedrooms" class="col-sm-2 col-form-label">Rate/sqm</label>
                 <div class="col-sm-2">
                     <input type="text" class="form-control" id="RateSqm" name="RateSqm" placeholder="8"
                         autocomplete="off">
@@ -140,7 +140,7 @@
                 </div>
             </div>
             <div id="Residential" class="dropdwn">
-                <label for="" class="col-sm-2 col-form-label">Expected Rental</label>
+                <label for="Bedrooms" class="col-sm-2 col-form-label">Expected Rental</label>
                 <div class="col-sm-2">
                     <input type="text" class="form-control" id="ExpectedRental" name="ExpectedRental"
                         placeholder="8" autocomplete="off">
@@ -163,67 +163,83 @@
                     name="AvailableLettableArea" readonly hidden>
                 </div>
             </div>
-        </div> <br />
-        <h5>Additional Details  </h5>
-        <div class="table-responsive" style="margin-top: 15px;">
-            <table class="table table-bordered table-hover" id="leaseitems">
-                <thead>
-                    <tr>
-                    <th class="text-center">No</th>
-                    <th class="text-center">Curreny<i class="text-danger">*</i></th>
-                    <th class="text-center">Balance b/d</th>
-                    <th class="text-center">Rates/Utilities</th>
-                    <th class="text-center">Operation Cost</th>
-                    <th class="text-center">Deposit Paid</th>
-                    <th class="text-center">Option</th>
-                    </tr>
-                </thead>
-                <tbody id="addLeaseItem">
-                    <tr>
-                    <td></td><td>
-                        <select class="js-example-basic-single w-100" name="LeaseItemCurrencyID"
-                    id="LeaseItemCurrencyID"  tabindex="1"/>
-                    <option value="">Select Currency </option>
-                    @foreach ($currency as $cur)
+        </div><br />
+        <div class="form-group row">
+            <label for="TotalArea" class="col-sm-2 col-form-label">Operation Cost</label>
+            <div class="col-sm-2">
+                <select class="js-example-basic-single w-100" name="OperationCurrency" id="OperationCurrency" />
+                <option value="">Select Currency </option>
+                @foreach ($currency as $cur)
+                <option value="{{ $cur->id }}"> {{ $cur->code }}
+                </option>
+            @endforeach
+                </select>
+                <small id="operationcurrencycheck" style="color: red;">currency is required</small>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="OperationalCost" name="OperationalCost"
+                    placeholder="4000" autocomplete="off">
+                <small id="operationalcostcheck" style="color: red;">operational cost required</small>
+            </div>
+            <label for="Stories" class="col-sm-2 col-form-label">Rates/Utilities</label>
+            <div class="col-sm-2">
+                <select class="js-example-basic-single w-100" name="RatesCurrency" id="RatesCurrency" />
+                <option value="">Select Currency </option>
+                @foreach ($currency as $cur)
+                <option value="{{ $cur->id }}"> {{ $cur->code }}
+                </option>
+            @endforeach
+                </select>
+                <small id="ratescurrencycheck" style="color: red;">currency is required</small>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="RatesCost" name="RatesCost" placeholder="3800"
+                    autocomplete="off">
+                <small id="ratescostcheck" style="color: red;">amount is required</small>
+            </div>
+        </div>
+        <h5>Deposit</h5>
+        <div class="form-group row">
+            <label for="" class="col-sm-2 col-form-label">Currency</label>
+            <div class="col-sm-4">
+                <select class="js-example-basic-single w-100" name="DepositCurrency" id="DepositCurrency" />
+                <option value="">Select Currency </option>
+                @foreach ($currency as $cur)
+                <option value="{{ $cur->id }}"> {{ $cur->code }}
+                </option>
+            @endforeach
+                </select>
+                <small id="depositcurrencycheck" style="color: red;"> deposit currency is required</small>
+            </div>
+            <label for="" class="col-sm-2 col-form-label">Deposit Paid</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="DepositPaid" name="DepositPaid" placeholder="0"
+                    autocomplete="off">
+                <small id="depositpaidcheck" style="color: red;">deposit paid is required</small>
+            </div>
+        </div><br />
+        <div class="form-group row">
+            <label for="" class="col-sm-2 col-form-label">Balance b/d Currency</label>
+            <div class="col-sm-4">
+                <select class="js-example-basic-single w-100" name="BalanceBDCurrency" id="BalanceBDCurrency" />
+                <option value="">Select Currency </option>
+                @foreach ($currency as $cur)
                             <option value="{{ $cur->id }}"> {{ $cur->code }}
                             </option>
-                    @endforeach
-                    </select><small id="leaseitemcurrencycheck" style="color: red;"> select currency</small>
-                        </td>
-                        <td>
-                            <input name="LeaseItemBDamount" class="form-control"
-                            id="LeaseItemBDamount" value=""  tabindex="2" type="text">
-                            <small id="leaseitembdamountcheck" style="color: red;">  </small>
-                        </td>
-                        <td>
-                            <input name="LeaseItemRatesCost" class="form-control"
-                            id="LeaseItemRatesCost" value=""  tabindex="3" type="text">
-                            <small id="leaseitemratecostcheck" style="color: red;">  </small>
-                        </td>
-                        <td>
-                            <input name="LeaseItemOperationalCost" class="form-control "
-                            id="LeaseItemOperationalCost" value=""  tabindex="4" type="text">
-                            <small id="leaseitemoperationcostcheck" style="color: red;">  </small>
-                        </td>
-                        <td>
-                            <input name="LeaseItemDepositPaid" class="form-control "
-                            id="LeaseItemDepositPaid" value=""  tabindex="5" type="text">
-                            <small id="leaseitemdepositcheck" style="color: red;">  </small>
-                        </td>                                         
-                        <td align="center" colspan="2">
-                        <input id="add-lease-item" class="btn btn-info" name="add-lease-item" 
-                         value="Save" tabindex="6" type="button">
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-
-                </tfoot>
-            </table>
-        </div>
+                        @endforeach
+                </select>
+                <small id="bdcurrencycheck" style="color: red;"> balance bd currency is required</small>
+            </div>
+            <label for="" class="col-sm-2 col-form-label">Balance b/d </label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="BDamount" name="BDamount" placeholder="0"
+                    autocomplete="off">
+                <small id="bdamountcheck" style="color: red;"> balance bd is required</small>
+            </div>
+        </div><br />
         <div class="form-group row">
             <div class="offset-sm-2 col-sm-10">
-                <button type="submit" class="btn btn-primary" id="btn-submit-lease-new" value="{{ $title }}">
+                <button type="submit" class="btn btn-primary" id="btn-submit-lease" value="{{ $title }}">
                     {{ $title }}</button>
 
             </div>
@@ -240,6 +256,5 @@
     <script src="{{ asset('css/select2/select2.min.js') }}"></script>
     <script src="{{ asset('js/select2.js') }}"></script>
     <script src="{{ asset('js/dropdown.js') }}"></script>
-    <script src="{{ asset('js/add-table-details.js') }}"></script> 
     <!-- Additional JS End-->
 @endsection

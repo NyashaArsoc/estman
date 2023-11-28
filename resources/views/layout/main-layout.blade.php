@@ -102,23 +102,23 @@
                             <span class="s-text">Lease</span>
                         </a>
                         <ul>
-                            <li><a href="{{route('lease.create')}}">Add Lease</a></li>
+                            <li><a href="{{route('lease.addcreate')}}">Add Lease</a></li>
                             <li><a href="{{route('lease.pending')}}">Approval</a></li>
                             <li><a href="{{route('lease.rejected')}}">Rejected</a></li>
                             <li><a href="{{route('lease.list')}}">Manage Lease</a></li>
                         </ul>
                     </li>
-
-
                     <li class="with-sub">
                         <a href="#" class="waves-effect  waves-light">
                             <span class="s-caret"><i class="fa fa-angle-down"></i></span>
                             <span class="s-icon"><i class="ti-package"></i></span>
-                            <span class="s-text">Warehouse</span>
+                            <span class="s-text">Invoice</span>
                         </a>
                         <ul>
-                            <li><a href="add-warehouse.php">Add Warehouse</a></li>
-                            <li><a href="warehouse.php">Manage Warehouse</a></li>
+                            <li><a href="{{route('invoice.listpre')}}">Billed</a></li>
+                            <li><a href="warehouse.php">Approval</a></li>
+                            <li><a href="warehouse.php">Generated</a></li>
+                            <li><a href="warehouse.php">Rejected</a></li>
                         </ul>
                     </li>
                     <li class="with-sub">

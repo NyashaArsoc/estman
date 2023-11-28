@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LandlordController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\PropertyController;
@@ -71,5 +72,13 @@ Route::controller(LeaseController::class)->group(function () {
     Route::any('/edit-update-lease/{id}', 'updatelease')->name('lease.editupdate');
     Route::any('/lease-rejected', 'rejected')->name('lease.rejected');
     Route::any('/lease-landlord', 'listlandlords')->name('lease.list');
-});
 
+    Route::any('/lease-create', 'addcreate')->name('lease.addcreate');
+    Route::any('/lease-create-store', 'addstore')->name('lease.addstore');
+    Route::any('/view-pending-lease-test/{id}', 'viewpendingtest')->name('lease.viewpendingtest');
+});
+Route::resource('invoice', InvoiceController::class);
+Route::controller(InvoiceController::class)->group(function (){
+    Route::any('/pre-preinvoice', 'compilepreinvoice')->name('invoice.compilepre');
+    Route::any('/pre-invoice', 'listpreinvoice')->name('invoice.listpre');
+});
