@@ -37,7 +37,7 @@
                             <tr>
                                 @php if ($ten->clienttypeid == 1){
                                     $owner   =  $ten->fullname ;
-                                    $registration   =  $ten->nationalID ;
+                                    $registration   =  $ten->nationalid ;
                                  }else{
                                      $owner   =  $ten->companyname ;
                                      $registration   =  $ten->companynumber ;
