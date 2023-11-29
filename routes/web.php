@@ -63,7 +63,7 @@ Route::controller(PropertyController::class)->group(function () {
     Route::any('/property-areaavailable/{id}', 'getpropertyareaavailable')->name('property.areaavailable');
     
 });
-Route::resource('lease', LeaseController::class);
+//Route::resource('lease', LeaseController::class);
 Route::controller(LeaseController::class)->group(function () {
     Route::any('/lease-approval', 'pendingapproval')->name('lease.pending');
     Route::any('/view-pending-lease/{id}', 'viewpending')->name('lease.viewpending');
