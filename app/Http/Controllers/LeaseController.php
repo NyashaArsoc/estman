@@ -207,32 +207,32 @@ class LeaseController extends Controller
         }
        
     }
-    public function viewpending($id){
-        $leaseid = Crypt::decrypt($id);
-        try {
-            $arr['lease']   = DB::table('alllease')
-            ->where('id', $leaseid)
-            ->select('*')
-            ->first();
-            $arr['inspection'] = DB::table('propertyinspection')
-            ->where('leaseid', $leaseid)
-            ->select('*')
-            ->orderBy('id','desc')
-            ->first();
-            $arr['review'] = DB::table('rentreview')
-            ->where('leaseid', $leaseid)
-            ->select('*')
-            ->orderBy('id','desc')
-            ->first();
-        //return $arr;
-           return view('lease/view-pending')
-            ->with($arr);
-        } catch (QueryException $e) {
-            return  redirect()->route('lease.pending') 
-            ->with('error', 'failed to load');
-        }
+    // public function viewpendingoldnotin($id){
+    //     $leaseid = Crypt::decrypt($id);
+    //     try {
+    //         $arr['lease']   = DB::table('alllease')
+    //         ->where('id', $leaseid)
+    //         ->select('*')
+    //         ->first();
+    //         $arr['inspection'] = DB::table('propertyinspection')
+    //         ->where('leaseid', $leaseid)
+    //         ->select('*')
+    //         ->orderBy('id','desc')
+    //         ->first();
+    //         $arr['review'] = DB::table('rentreview')
+    //         ->where('leaseid', $leaseid)
+    //         ->select('*')
+    //         ->orderBy('id','desc')
+    //         ->first();
+    //     //return $arr;
+    //        return view('lease/view-pending')
+    //         ->with($arr);
+    //     } catch (QueryException $e) {
+    //         return  redirect()->route('lease.pending') 
+    //         ->with('error', 'failed to load');
+    //     }
         
-    }
+    // }
     public function rejectlease($id, Request $request){
        
         try{
@@ -485,7 +485,7 @@ class LeaseController extends Controller
         }
     }
 
-    public function viewpendingtest($id){
+    public function viewpending($id){
         $leaseid = Crypt::decrypt($id);
         try {
             $arr['lease']   = DB::table('alllease')
@@ -504,7 +504,7 @@ class LeaseController extends Controller
             ->first();
             $arr['balances'] = DB::select('EXEC spGetleasecurrentbalances ?',[$leaseid]);
         //return $arr;
-           return view('lease/view-pending-test')
+           return view('lease/view-pending')
             ->with($arr);
         } catch (QueryException $e) {
             return  redirect()->route('lease.pending') 

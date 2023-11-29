@@ -15,7 +15,7 @@
  $pid =Crypt::encrypt($lease->propertyid)
 @endphp
 @extends('layout.main-layout')
-@section('title', 'Approve Lease')
+@section('title', 'Add Lease')
 @section('additional css')
     <!-- Additional css Start-->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
@@ -95,7 +95,7 @@
             <div id="Commercial" class="{{$divclasscompany}}">
                 <label for="" class="col-sm-2 col-form-label">Rate/sqm</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" value="{{ $lease->ratesqm}}" readonly>
+                    <input type="text" class="form-control" value="{{ $lease->ratesqm ?? ''}}" readonly>
                 </div>
             </div>
         </div>
@@ -108,32 +108,34 @@
                 </div>
             </div>
         </div>
-        <h5>Additional Details  </h5>
-        <div class="table-responsive" style="margin-top: 15px;">
-            <table class="table table-bordered table-hover" id="leaseitems">
-                <thead>
-                    <tr>
-                    <th class="text-center">No</th>
-                    <th class="text-center">Curreny</th>
-                    <th class="text-center">Balance b/d</th>
-                    <th class="text-center">Rates/Utilities</th>
-                    <th class="text-center">Operation Cost</th>
-                    <th class="text-center">Deposit Paid</th>
-                    </tr>
-                </thead>
-                <tbody>@php $count=1;@endphp
-                    @foreach($balances as $abc)
-                    <tr>
-                    <td>{{$count ++}}</td>
-                    <td>{{ $abc->code }}</td>
-                    <td>{{ number_format($abc->balancebd,2) }}</td>
-                    <td>{{ number_format($abc->ratescosts,2) }}</td>
-                    <td>{{ number_format($abc->operationalcosts,2) }}</td>
-                    <td>{{ number_format($abc->deposit,2) }}</td>                                       
-                    </tr>  
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="form-group row">
+            <label for="TotalArea" class="col-sm-2 col-form-label">Operation Cost</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control"
+                value="{{ $lease->operatingcostcurrency.' '.number_format($lease->operatingcosts, 2) ?? '' }}" readonly>
+            </div>
+            <label for="Stories" class="col-sm-2 col-form-label">Rates/Utilities</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control"
+                 value="{{ $lease->ratescurrency.' '.number_format($lease->rates, 2) ?? '' }}" readonly>
+            </div>
+        </div>
+        <h5>Deposit</h5>
+        <div class="form-group row">
+            <label for="" class="col-sm-2 col-form-label">Deposit</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control"
+                 value="{{ $lease->depositcurrency.' '.number_format($lease->deposit, 2) ??'' }}"
+                 readonly>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-2 col-form-label">Balance b/d</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" 
+                value="{{ $lease->balbdcurrency.' '.number_format($lease->balancebd, 2) ??'' }}"
+                readonly>
+            </div>
         </div>
         <div class="form-group row">
             <label for="Email" class="col-sm-2 col-form-label">Reason for decline

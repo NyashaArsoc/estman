@@ -32,14 +32,15 @@
                                     <th>Option</th>
                                 </tr>
                             </thead>
-                            <tbody>@php $count=1;@endphp
+                            <tbody>
+                                @php $count=1;@endphp
                                 @foreach($lease as $abc)
                                 <tr>@php if ($abc->clienttypeid == 1){//individual
                                     $lname   =  $abc->fullname ;
                                  }else{
                                      $lname   =  $abc->companyname ;
                                  } @endphp
-                            <tr>
+                    
                                     <td>{{$count ++}}</td>
                                     <td>{{ $lname}}</td>
                                     <td>{{ $abc->propertydescription }}</td>

@@ -75,7 +75,6 @@ Route::controller(LeaseController::class)->group(function () {
 
     Route::any('/lease-create', 'addcreate')->name('lease.addcreate');
     Route::any('/lease-create-store', 'addstore')->name('lease.addstore');
-    Route::any('/view-pending-lease-test/{id}', 'viewpendingtest')->name('lease.viewpendingtest');
 });
 Route::resource('invoice', InvoiceController::class);
 Route::controller(InvoiceController::class)->group(function (){
