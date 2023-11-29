@@ -118,6 +118,6 @@
     <script src="{{ asset('css/select2/select2.min.js') }}"></script>
         <script src="{{ asset('js/select2.js') }}"></script>
 		<script src="{{ asset('js/dropdown.js') }}"></script>
-		<script src="{{ asset('js/add-banking-details.js') }}"></script> 
+		<script src="{{ asset('js/add-table-details.js') }}"></script> 
     <!-- Additional JS End-->
     @endsection
