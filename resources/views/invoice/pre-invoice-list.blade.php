@@ -1,7 +1,9 @@
-@php $title = 'Pending Approval'; 
-      $description = 'properties pending approval...'; @endphp
+@php $title = 'Profoma Billed'; 
+      $description = 'profoma pending generation...'; 
+    
+@endphp
     @extends('layout.main-layout')
-    @section('title', 'Property Approval')
+    @section('title', 'Profoma Billed')
     @section('additional css')
     <!-- Additional css Start-->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
@@ -27,23 +29,33 @@
                                     <th>Name</th>
                                     <th>Period</th>
                                     <th>Currency</th>
-                                    <th>Total Amount</th>
+                                    <th>Billed Amount</th>
                                     <th>Option</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                            <tbody>@php $count=1;@endphp
+                                @foreach($invoice as $abc)
+                               @php
+                                  if ($abc->clienttypeid == 1){
+                                    $tname   =  $abc->fullname ;
+                                   }else{
+                                     $tname   =  $abc->companyname ;
+                                 } 
+                               @endphp
+                                   <tr>
+                                    <td>{{$count ++}}</td>
+                                    <td>{{$tname ++}}</td> 
+                                    <td>{{\Carbon\Carbon::createFromTimestamp(strtotime
+                                    ($abc->period))->format('M-Y')}}</td>
+                                    <td>{{ $abc->currencycode }}</td>
+                                    <td>{{ number_format($abc->totalbilled,2)}}</td>
                                     <td>
                                         <a class="btn btn-info btn-sm " id=""
                                         href=""
                                         title="view"><i class="ti-eye mr-0-5"></i>view</a>
-                            </td>
-                            </tr>
-                            
+                                    </td>
+                                </tr>
+                                @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -51,7 +63,7 @@
                                     <th>Name</th>
                                     <th>Period</th>
                                     <th>Currency</th>
-                                    <th>Total Amount</th>
+                                    <th>Billed Amount</th>
                                     <th>Option</th>
                                 </tr>
                             </tfoot>

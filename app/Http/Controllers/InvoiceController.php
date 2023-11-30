@@ -93,6 +93,16 @@ class InvoiceController extends Controller
         
     }
 public function listpreinvoice(){
-    return view('invoice/pre-invoice-list');
+    try {
+        $arr['invoice']   = DB::table('allpreinvoice')
+        ->select('*')
+        ->get();
+        return view('invoice/pre-invoice-list')
+        ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('lease.pending') 
+        ->with('error', 'failed to load');
+    }
+
 }
 }

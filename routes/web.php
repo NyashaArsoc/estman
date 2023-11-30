@@ -78,6 +78,7 @@ Route::controller(LeaseController::class)->group(function () {
 });
 Route::resource('invoice', InvoiceController::class);
 Route::controller(InvoiceController::class)->group(function (){
-    Route::any('/pre-preinvoice', 'compilepreinvoice')->name('invoice.compilepre');
+    Route::any('/genaratepre-preinvoice', 'compilepreinvoice')->name('invoice.compilepre');
     Route::any('/pre-invoice', 'listpreinvoice')->name('invoice.listpre');
+    
 });
