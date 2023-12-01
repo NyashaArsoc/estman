@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\invoice;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
@@ -104,5 +105,38 @@ public function listpreinvoice(){
         ->with('error', 'failed to load');
     }
 
+}
+public function viewprofoma($id){
+    $invoiceid = Crypt::decrypt($id);
+    try {
+        $arr['invoice']   = DB::table('allpreinvoice')
+        ->where('invoicenumber',$invoiceid)
+        ->select('*')
+        ->first();
+        return view('invoice/view-pre-invoice')
+        ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('invoice.listpre') 
+        ->with('error', 'failed to load');
+    }
+
+    
+}
+public function vieweditprofomamount($id){
+    $invoiceid = Crypt::decrypt($id);
+    try {
+        $arr['invoice']   = DB::table('allpreinvoice')
+        ->where('invoicenumber',$invoiceid)
+        ->select('currencycode','invoicenumber','prerental','prerates','operationalcost'
+        ,'fullname','companyname')
+        ->first();
+        return view('invoice/view-edit-pre-invoice')
+        ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('invoice.listpre') 
+        ->with('error', 'failed to load');
+    }
+
+    
 }
 }

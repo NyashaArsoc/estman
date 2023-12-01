@@ -80,5 +80,6 @@ Route::resource('invoice', InvoiceController::class);
 Route::controller(InvoiceController::class)->group(function (){
     Route::any('/genaratepre-preinvoice', 'compilepreinvoice')->name('invoice.compilepre');
     Route::any('/pre-invoice', 'listpreinvoice')->name('invoice.listpre');
-    
+    Route::any('/view-pro-foma/{id}', 'viewprofoma')->name('invoice.viewpro');
+    Route::any('/edit-pro-foma/{id}', 'vieweditprofomamount')->name('invoice.editviewpro');
 });

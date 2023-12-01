@@ -49,9 +49,9 @@
                                     ($abc->period))->format('M-Y')}}</td>
                                     <td>{{ $abc->currencycode }}</td>
                                     <td>{{ number_format($abc->totalbilled,2)}}</td>
-                                    <td>
+                                    <td>@php $id= Crypt::encrypt($abc->invoicenumber) @endphp
                                         <a class="btn btn-info btn-sm " id=""
-                                        href=""
+                                        href="{{route('invoice.viewpro', $id)}}"
                                         title="view"><i class="ti-eye mr-0-5"></i>view</a>
                                     </td>
                                 </tr>
