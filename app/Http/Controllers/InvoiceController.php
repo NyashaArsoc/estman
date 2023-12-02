@@ -96,6 +96,7 @@ class InvoiceController extends Controller
 public function listpreinvoice(){
     try {
         $arr['invoice']   = DB::table('allpreinvoice')
+        ->where('isedited','<>' ,1)
         ->select('*')
         ->get();
         return view('invoice/pre-invoice-list')
@@ -128,7 +129,7 @@ public function vieweditprofomamount($id){
         $arr['invoice']   = DB::table('allpreinvoice')
         ->where('invoicenumber',$invoiceid)
         ->select('currencycode','invoicenumber','prerental','prerates','operationalcost'
-        ,'fullname','companyname')
+        ,'fullname','companyname','clienttypeid','period','predeposit')
         ->first();
         return view('invoice/view-edit-pre-invoice')
         ->with($arr);
@@ -138,5 +139,20 @@ public function vieweditprofomamount($id){
     }
 
     
+}
+public function updateprofoma($id, Request $request){
+    try {
+        $invoiceid = Crypt::decrypt($id);
+        DB::table('preinvoice')
+            ->updateOrInsert(['id'=>$invoiceid],
+           [ 'rental'=>$request->Rental,'rates'=>
+            $request->RatesLevies,'operationalcost'=>$request->OperationCosts
+            ,'isedited' => 1 ]);
+            return  redirect()->route('invoice.listpre') 
+            ->with('success', 'invoice updated');
+    } catch (QueryException $e) {
+        return  redirect()->route('invoice.listpre') 
+        ->with('error', 'failed to update');
+    }
 }
 }
