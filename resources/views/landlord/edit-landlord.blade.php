@@ -15,7 +15,7 @@ if ($landlord->clienttypeid == 1){
     $divcompanyclass      =   'hide';
    } 
 @endphp
-@extends('layout.main-layout')
+@extends('layout.no-menu-layout')
 @section('title', 'Edit Landlord')
 @section('additional css')
     <!-- Additional css Start-->
