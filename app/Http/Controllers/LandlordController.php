@@ -78,7 +78,7 @@ class LandlordController extends Controller
                         ->updateOrInsert(
                             ['accountnumber'=>$AccountNumber[$a]],
                             ['branch'=>$Branch[$a],'bankname'=>$BankName[$a],'accountname'=>$AccountName[$a],
-                            'currencyid'=>$CurrencyID[$a],'landlordid'=>$LandlordID]
+                            'currencyid'=>$CurrencyID[$a],'landlordid'=>$LandlordID,'available'=>'Y']
                         );
                         $a++;
                     }
@@ -229,8 +229,7 @@ class LandlordController extends Controller
         ['available','=' ,'Y']])
         ->select(DB::raw("concat(firstname,' ',lastname) As fullname"),'id','companyname','clienttypeid')
         ->get();
-      // return $arr_owner['landlord'];
-   
+
          return view('landlord/get-single-landlord')
          ->with($arr_owner);
     }
@@ -303,7 +302,7 @@ class LandlordController extends Controller
              'contactaddress'=>$request->ContactAddress,'bpnumber'=>$request->BPNumber,
             'vatnumber'=>$request->VATNumber,'companyname'=>$request->CompanyName,
             'nationalID'=>$request->NationalID,'firstname'=>$request->FirstName,
-            'lastname'=>$request->LastName,'approval' => 'N' , 'available'=> 'Y']  );
+            'lastname'=>$request->LastName,'approval' => 'N']  );
             DB::table('landlordcontact')
                     ->updateOrInsert(
                         ['email'=>$request->ContactEmail],
