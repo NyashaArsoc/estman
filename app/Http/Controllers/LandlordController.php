@@ -111,7 +111,7 @@ class LandlordController extends Controller
                         ->updateOrInsert(
                             ['accountnumber'=>$AccountNumber[$a]],
                             ['branch'=>$Branch[$a],'bankname'=>$BankName[$a],'accountname'=>$AccountName[$a],
-                            'currencyid'=>$CurrencyID[$a],'landlordid'=>$LandlordID,'available'=>1]
+                            'currencyid'=>$CurrencyID[$a],'landlordid'=>$LandlordID,'available'=>'Y']
                         );
                         $a++;
                     }
@@ -153,7 +153,7 @@ class LandlordController extends Controller
             ->first();
             $arr_owner['contact']   = DB::table('landlordcontact')
             ->where('landlordid', $landlordid)
-            ->where('available', '=',1)
+            ->where('available', '=','Y')
             ->select('email','cell','lastname','firstname')
             ->first();
             $arr_owner['type']   = DB::table('clienttype')
@@ -193,7 +193,7 @@ class LandlordController extends Controller
     }
     public function  pendingapproval(){
         $arr_owner['landlord']   = DB::table('alllandlord')
-        ->where('approval','=' ,0)
+        ->where('approval','=' ,'N')
         ->select('fullname','id','companyname','nationalID','companynumber',
         'cell','email','clienttypeid','description')
         ->get();
@@ -202,8 +202,8 @@ class LandlordController extends Controller
     }
     public function  rejected(){
         $arr_owner['landlord']   = DB::table('alllandlord')
-        ->where('approval','=' ,2)
-        ->where('available','=' ,0)
+        ->where('approval','=' ,'R')
+        ->where('available','=' ,'N')
         ->select('fullname','id','companyname','nationalID','companynumber',
         'cell','email','clienttypeid','description','reasons')
         ->get();
@@ -212,9 +212,9 @@ class LandlordController extends Controller
     }
     public function  listlandlords(){
         $arr_owner['landlord']   = DB::table('alllandlord')
-        ->where('approval','=' ,1)
-        ->where('available','=' ,1)
-        ->orwhere('available','=' ,2)
+        ->where('approval','=' ,'Y')
+        ->where('available','=' ,'Y')
+        ->orwhere('available','=' ,'R')
         ->select('fullname','id','companyname','nationalID','companynumber',
         'cell','email','clienttypeid','description','reasons')
         ->get();
@@ -226,7 +226,7 @@ class LandlordController extends Controller
       //$id =1;
         $arr_owner['landlord']   = DB::table('landlord')
         ->where([['clienttypeid', $id],
-        ['available','=' ,1]])
+        ['available','=' ,'Y']])
         ->select(DB::raw("concat(firstname,' ',lastname) As fullname"),'id','companyname','clienttypeid')
         ->get();
       // return $arr_owner['landlord'];
@@ -239,7 +239,7 @@ class LandlordController extends Controller
        
         try{
             $landlordid = Crypt::decrypt($id);
-            $update = array('approval' => 1 , 'available'=> 1);
+            $update = array('approval' => 'Y' , 'available'=> 'Y');
             DB::table('landlord')
             ->where('id',$landlordid)
             ->update($update);
@@ -256,7 +256,7 @@ class LandlordController extends Controller
        
         try{
             $landlordid = Crypt::decrypt($id);
-            $update = array('approval' => 2 , 'available'=> 0, 'reasons'=> $request->ReasonsForDecline);
+            $update = array('approval' => 'R' , 'available'=> 'N', 'reasons'=> $request->ReasonsForDecline);
             DB::table('landlord')
             ->where('id',$landlordid)
             ->update($update);
@@ -279,7 +279,7 @@ class LandlordController extends Controller
             ->first();
             $arr_owner['contact']   = DB::table('landlordcontact')
             ->where('landlordid', $landlordid)
-            ->where('available', '=',1)
+            ->where('available', '=','Y')
             ->select('email','cell','lastname','firstname')
             ->first();
 
@@ -303,7 +303,7 @@ class LandlordController extends Controller
              'contactaddress'=>$request->ContactAddress,'bpnumber'=>$request->BPNumber,
             'vatnumber'=>$request->VATNumber,'companyname'=>$request->CompanyName,
             'nationalID'=>$request->NationalID,'firstname'=>$request->FirstName,
-            'lastname'=>$request->LastName,'approval' => 0 , 'available'=> 1]  );
+            'lastname'=>$request->LastName,'approval' => 'N' , 'available'=> 'Y']  );
             DB::table('landlordcontact')
                     ->updateOrInsert(
                         ['email'=>$request->ContactEmail],
@@ -321,7 +321,7 @@ class LandlordController extends Controller
     public function deleterejected($id){
         try{
             $landlordid = Crypt::decrypt($id);
-            $update = array('available'=> 3);
+            $update = array('available'=> 'D');
             DB::table('landlord')
             ->where('id',$landlordid)
             ->update($update);
