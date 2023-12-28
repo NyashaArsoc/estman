@@ -502,7 +502,7 @@ class LeaseController extends Controller
             ->select('*')
             ->orderBy('id','desc')
             ->first();
-            $arr['balances'] = DB::select('EXEC spGetleasecurrentbalances ?',[$leaseid]);
+            $arr['balances'] = DB::select('EXEC spGetleasecurrentbillrates ?',[$leaseid]);
         //return $arr;
            return view('lease/view-pending')
             ->with($arr);
