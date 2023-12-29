@@ -12,7 +12,7 @@ if ($landlord->clienttypeid == 1){
                              } 
                              $id= Crypt::encrypt($landlord->id);
 @endphp
-@extends('layout.main-layout')
+@extends('layout.no-menu-layout')
 @section('title', 'Pending Landlord')
 @section('content')
     <!-- Content Start-->
