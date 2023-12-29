@@ -56,7 +56,7 @@
                             <span class="s-text">Configs</span>
                         </a>
                         <ul>
-                            <li><a href="{{route('landlord.addbanking')}}">view ledgers</a></li>
+                            <li><a href="{{$sharedroute}}">ledgers</a></li>
                         </ul>
                     </li>
                 </ul>

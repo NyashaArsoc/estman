@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class LandlordController extends Controller
+class LandlordController  extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -334,9 +334,12 @@ class LandlordController extends Controller
     }
 
     public function viewindividual($id){
-
         $landlordid = Crypt::decrypt($id);
+              
         try {
+                
+               
+                BaseController::sharelandlordid($id);
             $arr['landlord']   = DB::table('alllandlord')
             ->where('id', $landlordid)
             ->select('firstname','lastname','id','companyname','nationalID','companynumber',
@@ -350,6 +353,7 @@ class LandlordController extends Controller
             ->first();
             $arr['type']   = DB::table('clienttype')
             ->select('id','description')->get();
+            
             return view('landlord.view-single-landlord')
         ->with($arr);
 
@@ -357,6 +361,9 @@ class LandlordController extends Controller
             return  redirect()->route('landlord.list') 
             ->with('error', 'failed to load');
         }
+    }
+    public function viewledgers($id){
+        return view('landlord.view-ledgers'); 
     }
 }
 

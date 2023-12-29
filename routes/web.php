@@ -36,6 +36,7 @@ Route::controller(LandlordController::class)->group(function () {
     Route::any('/edit-update-landlord/{id}', 'updatelandlord')->name('landlord.editupdate');
     Route::any('/delete-rejected-landlord/{id}', 'deleterejected')->name('landlord.deleterejected');
     Route::any('/landlord/{id}/view', 'viewindividual')->name('landlord.view');
+    Route::any('/landlord/{id}/view-ledgers', 'viewledgers')->name('landlord.ledgers');
 
     Route::any('/manage-landlord', 'listlandlords')->name('landlord.list');
 });
