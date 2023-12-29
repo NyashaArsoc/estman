@@ -332,5 +332,31 @@ class LandlordController extends Controller
             ->with('error', 'failed to deleted landlord');
         }
     }
+
+    public function viewindividual($id){
+
+        $landlordid = Crypt::decrypt($id);
+        try {
+            $arr['landlord']   = DB::table('alllandlord')
+            ->where('id', $landlordid)
+            ->select('firstname','lastname','id','companyname','nationalID','companynumber',
+            'cell','email','clienttypeid','description','vatnumber','bpnumber',
+            'contactaddress','tel','fullname')
+            ->first();
+            $arr['contact']   = DB::table('landlordcontact')
+            ->where('landlordid', $landlordid)
+            ->where('available', '=','Y')
+            ->select('email','cell','lastname','firstname')
+            ->first();
+            $arr['type']   = DB::table('clienttype')
+            ->select('id','description')->get();
+            return view('landlord.view-single-landlord')
+        ->with($arr);
+
+        } catch (QueryException $e) {
+            return  redirect()->route('landlord.list') 
+            ->with('error', 'failed to load');
+        }
+    }
 }
 

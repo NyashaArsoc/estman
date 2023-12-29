@@ -29,13 +29,15 @@ Route::controller(LandlordController::class)->group(function () {
     Route::any('/landlord-banking-details', 'addbanking')->name('landlord.addbanking');
     Route::any('/landlord-approval', 'pendingapproval')->name('landlord.pending');
     Route::any('/landlord-rejected', 'rejected')->name('landlord.rejected');
-    Route::any('/manage-landlord', 'listlandlords')->name('landlord.list');
     Route::any('/single-landlord/{id}', 'getlandlord')->name('landlord.getlandlord');
     Route::any('/approve-landlord/{id}', 'approvelandlord')->name('landlord.approve');
     Route::any('/view-pending-landlord/{id}', 'viewpending')->name('landlord.viewpending');
     Route::any('/reject-landlord/{id}', 'rejectlandlord')->name('landlord.reject');
     Route::any('/edit-update-landlord/{id}', 'updatelandlord')->name('landlord.editupdate');
     Route::any('/delete-rejected-landlord/{id}', 'deleterejected')->name('landlord.deleterejected');
+    Route::any('/landlord/{id}/view', 'viewindividual')->name('landlord.view');
+
+    Route::any('/manage-landlord', 'listlandlords')->name('landlord.list');
 });
 Route::resource('tenant', TenantController::class);
 Route::controller(TenantController::class)->group(function () {
