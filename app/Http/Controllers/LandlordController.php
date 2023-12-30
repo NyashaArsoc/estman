@@ -363,7 +363,26 @@ class LandlordController  extends BaseController
         }
     }
     public function viewledgers($id){
-        return view('landlord.view-ledgers'); 
+        $landlordid = Crypt::decrypt($id);
+              
+        try {
+                
+            $arr['landlord']   = DB::table('alllandlord')
+            ->where('id', $landlordid)
+            ->select('id','companyname','clienttypeid' ,'fullname','description')
+            ->first();
+            $arr['ledgers']   = DB::table('mappedsubledgersaccounts')
+            ->where('landlordid', $landlordid)
+            ->select('accountcode','currencycode','code','description')
+            ->get();
+            return view('landlord.view-ledgers')
+        ->with($arr);
+
+        } catch (QueryException $e) {
+            return  redirect()->route('landlord.list') 
+            ->with('error', 'failed to load');
+        }
+
     }
 }
 
