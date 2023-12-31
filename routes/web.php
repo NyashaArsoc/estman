@@ -37,7 +37,7 @@ Route::controller(LandlordController::class)->group(function () {
     Route::any('/delete-rejected-landlord/{id}', 'deleterejected')->name('landlord.deleterejected');
     Route::any('/landlord/{id}/view', 'viewindividual')->name('landlord.view');
     Route::get('/landlord/{id}/view-ledgers', 'viewledgers')->name('landlord.ledgers');
-    Route::post('/landlord-create/{id}/sub-ledgers', 'createsubledgers')->name('landlord.createsubledgers');
+    Route::post('/landlord/{id}/sub-ledgers/{product}', 'createsubledgers')->name('landlord.createsub');
 
     Route::any('/manage-landlord', 'listlandlords')->name('landlord.list');
 });

@@ -2,7 +2,7 @@
 $title = 'Subledgers';
 $description = 'landlord subledgers...'; 
 $id= Crypt::encrypt($landlord->id);
-
+$product= Crypt::encrypt('landlord');
 if ($landlord->clienttypeid == 1){
     $owner   =  $landlord->fullname ;
     }else{
@@ -18,14 +18,14 @@ if ($landlord->clienttypeid == 1){
         <ol class="breadcrumb no-bg mb-1">
             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="{{route('landlord.list')}}">List</a></li>
-            <li class="breadcrumb-item"><a href="{{route('landlord.view', $id)}}">Landlord</a></li>
+            <li class="breadcrumb-item"><a href="{{route('landlord.view',$id)}}">Landlord</a></li>
             <li class="breadcrumb-item active">{{ $title }}</li>
         </ol>
         <div class="box box-block bg-white">
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
-            <form class="form-material material-primary" id="addlandlord" method="PUT"
-                action="{{route('landlord.reject', $id)}}">@csrf
+            <form class="form-material material-primary" id="addlandlord" method="POST"
+                action="{{route('landlord.createsub',['id'=>$id,'product'=>$product])}}">@csrf
                 <div class="form-group row">
                     <label for="FirstName" class="col-sm-2 form-control-label">Type </label>
                     <div class="col-sm-4">
