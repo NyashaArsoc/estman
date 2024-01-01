@@ -216,7 +216,7 @@ class LandlordController  extends BaseController
         ->where('available','=' ,'Y')
         ->orwhere('available','=' ,'R')
         ->select('fullname','id','companyname','nationalID','companynumber',
-        'cell','email','clienttypeid','description','reasons')
+        'cell','email','clienttypeid','description','reasons','available')
         ->get();
         return view('landlord/list')
         ->with($arr_owner);

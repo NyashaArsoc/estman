@@ -42,14 +42,21 @@
                                  }else{
                                      $owner   =  $land->companyname ;
                                      $registration   =  $land->companynumber ;
-                                 } @endphp
+                                 } if ($land->available = 'Y'){
+                                        $status = 'active';
+                                        $badge = "badge badge-pill bg-success badge-secondary";
+                                 }else{
+                                        $status = 'inactive';
+                                        $badge = 'badge badge-pill bg-danger badge-secondary';
+                                 }
+                                 @endphp
                                     <td>{{$count ++}}</td>
                                     <td>{{ $land->description }}</td>
                                     <td>{{ $owner}}</td>
                                     <td>{{ $registration }}</td>
                                     <td>{{ $land->cell }}</td>
                                     <td>{{ $land->email }}</td>
-                                    <td><span class="badge badge-pill  bg-success badge-secondary">Success</span></td>
+                                    <td><span class="{{ $badge }}">{{$status}}</span></td>
                                     <td>@php $id= Crypt::encrypt($land->id); @endphp
                                      <a class="btn btn-info btn-sm"  href="{{route('landlord.view', $id)}}"
                                      title="view"><i class="ti-eye mr-0-5"></i>view</a>
