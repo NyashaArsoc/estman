@@ -34,24 +34,29 @@
                                 </tr>
                             </thead>
                             <tbody>@php $count=1;@endphp
-                                @foreach($tenant as $loo)
+                                @foreach($tenant as $abc)
                                 <tr>
-                                    @php if ($loo->clienttypeid == 1){
-                                        $owner   =  $loo->fullname ;
-                                        $registration   =  $loo->nationalid ;
+                                    @php if ($abc->clienttypeid == 1){
+                                        $owner   =  $abc->fullname ;
+                                        $registration   =  $abc->nationalid ;
                                      }else{
-                                         $owner   =  $loo->companyname ;
-                                         $registration   =  $loo->companynumber ;
-                                     } @endphp
+                                         $owner   =  $abc->companyname ;
+                                         $registration   =  $abc->companynumber ;
+                                     }if ($abc->available = 'Y'){
+                                        $status = 'active';
+                                        $badge = "badge badge-pill bg-success badge-secondary";
+                                 }else{
+                                        $status = 'inactive';
+                                        $badge = 'badge badge-pill bg-danger badge-secondary';
+                                 } @endphp
                                         <td>{{$count ++}}</td>
-                                        <td>{{ $loo->typedescription }}</td>
+                                        <td>{{ $abc->typedescription }}</td>
                                         <td>{{ $owner}}</td>
                                         <td>{{ $registration }}</td>
-                                        <td>{{ $loo->cell }}</td>
-                                        <td>{{ $loo->email }}</td>
-                                        <td><span class="badge badge-pill  bg-success badge-secondary">Success</span></td>
-                                        <td><a class="btn btn-secondary btn-sm" href = ""
-                                         title="Edit Landlord"><i class="ti-pencil mr-0-5"></i>Edit</a> 
+                                        <td>{{ $abc->cell }}</td>
+                                        <td>{{ $abc->email }}</td>
+                                        <td><span class="{{ $badge }}">{{$status}}</span></td>
+                                        <td>
                                          <a class="btn btn-info btn-sm view_landlord" id=""
                                          title="Deactivate Landlord"><i class="ti-eye mr-0-5"></i>view</a>
                                          <a onclick = "DeactivateLandlord(this); return false;"

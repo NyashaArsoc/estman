@@ -283,11 +283,9 @@ class TenantController extends Controller
     public function  listtenants(){
         try {
             $arr['tenant']   = DB::table('alltenant')
-            ->where('approval','=' ,1)
-            ->where('available','=' ,1)
-            ->orwhere('available','=' ,2)
+            ->where('approval','=' ,'Y')
             ->select('fullname','id','companyname','nationalid','companynumber',
-            'cell','email','clienttypeid','typedescription','reasons')
+            'cell','email','clienttypeid','typedescription','available')
             ->get();
             return view('tenant/list')
             ->with($arr);
