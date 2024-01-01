@@ -57,8 +57,8 @@
                                         <td>{{ $abc->email }}</td>
                                         <td><span class="{{ $badge }}">{{$status}}</span></td>
                                         <td>
-                                         <a class="btn btn-info btn-sm view_landlord" id=""
-                                         title="Deactivate Landlord"><i class="ti-eye mr-0-5"></i>view</a>
+                                         <a class="btn btn-info btn-sm" id=""
+                                         title="view"><i class="ti-eye mr-0-5"></i>view</a>
                                          <a onclick = "DeactivateLandlord(this); return false;"
                                          class="btn btn-warning btn-sm" href=""
                                          title="View Landlord"><i class="ti-close mr-0-5"></i>deactivate</a>
