@@ -25,7 +25,7 @@ if ($property->landlordclienttype == 1){
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
             <form class="form-material material-primary" id="" method="POST"
-                action="{{route('landlord.createsub',['id'=>$id,'product'=>$product])}}">@csrf
+                action="{{route('property.createsub',['id'=>$id,'product'=>$product])}}">@csrf
                 <div class="form-group row">
                     <label for="" class="col-sm-2 form-control-label">Landlord Name
                     </label>
@@ -84,8 +84,4 @@ if ($property->landlordclienttype == 1){
     <!-- Content End-->
 
 @endsection
-@section('additional js')
-<script src="{{ asset('js/validation/landlord.js') }}"></script>
-<script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script> 
-    <!-- Additional JS End-->
-@endsection
+

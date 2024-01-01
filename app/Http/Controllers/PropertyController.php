@@ -319,7 +319,7 @@ public function viewledgers($id){
     } 
 public function createsubledgers($id,$product){
         // subledger account creation -> interface+accountgl+prduct+system ledger+id  
-        $landlordid = Crypt::decrypt($id);
+        $propertyid = Crypt::decrypt($id);
         $productdescription = Crypt::decrypt($product);
 
         try{
@@ -328,7 +328,7 @@ public function createsubledgers($id,$product){
             ->select('*')
             ->get();
             if($ledgers->isEmpty()){ 
-                return  redirect()->route('landlord.ledgers',$id) 
+                return  redirect()->route('property.ledgers',$id) 
                 ->with('error', 'no products found to map');
             }else{
                 foreach($ledgers as $abc){
@@ -339,21 +339,21 @@ public function createsubledgers($id,$product){
                     $caption = 'some ledgers are not configured correctly';
                     $head = 'error';
                 }else{
-                    $subledgeraccount = $code.''.$productid.''.$systemledgerid.''.$landlordid;
+                    $subledgeraccount = $code.''.$productid.''.$systemledgerid.''.$propertyid;
                     DB::table('subledgers')
                     ->insert(
-                        ['accountcode'=>$subledgeraccount,'landlordid'=>$landlordid,
+                        ['accountcode'=>$subledgeraccount,'propertyid'=>$propertyid,
                          'staticledgerid'=>$systemledgerid,'ledgercode'=>$code]);
                     $caption = 'subledgers created';
                     $head = 'success';
                 }
                     }
-                    return  redirect()->route('landlord.ledgers',$id) 
+                    return  redirect()->route('property.ledgers',$id) 
                     ->with($head, $caption);
             }
 
         }catch(QueryException $e){
-            return  redirect()->route('landlord.ledgers',$id) 
+            return  redirect()->route('property.ledgers',$id) 
                     ->with('error', 'failed to load');
         }
     }

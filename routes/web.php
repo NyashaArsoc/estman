@@ -66,7 +66,7 @@ Route::controller(PropertyController::class)->group(function () {
     Route::any('/property-areaavailable/{id}', 'getpropertyareaavailable')->name('property.areaavailable');
     Route::any('/property/{id}/view', 'viewindividual')->name('property.view');
     Route::get('/property/{id}/view-ledgers', 'viewledgers')->name('property.ledgers');
-    Route::post('/property/{id}/sub-ledgers/{product}', 'createsubledgers')->name('landlord.createsub');
+    Route::post('/property/{id}/sub-ledgers/{product}', 'createsubledgers')->name('property.createsub');
 
     Route::any('/property-list', 'listproperties')->name('property.list');
 
