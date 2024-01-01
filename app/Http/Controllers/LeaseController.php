@@ -202,7 +202,7 @@ class LeaseController extends Controller
             return view('lease/pending-approval')
             ->with($arr);
         } catch (QueryException $th) {
-            return  redirect()->route('lease.create') 
+            return  redirect()->route('lease.addcreate') 
             ->with('error', 'failed to load');
         }
        
@@ -320,8 +320,19 @@ class LeaseController extends Controller
         }
        
     }
-    public function  listlandlords(){
-        return view('lease/list');
+    public function  listleases(){
+        try {
+            $arr['lease']   = DB::table('alllease')
+            ->where('approval','=' ,'Y')
+            ->select('fullname','companyname','id','clienttypeid','validfrom',
+            'validto','propertydescription','rentalcurrency','rental','propertyid')
+            ->get();
+            return view('lease/list')
+            ->with($arr);
+        } catch (QueryException $th) {
+            return  redirect()->route('lease.addcreate') 
+            ->with('error', 'failed to load');
+        }
     }
     
     public function updatelease($id, Request $request){

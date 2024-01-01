@@ -1,7 +1,7 @@
-@php $title = 'Manage Tenants'; 
-      $description = 'list of all tenants...'; @endphp
+@php $title = 'Manage Lease'; 
+      $description = 'list of all leases...'; @endphp
     @extends('layout.main-layout')
-    @section('title', 'Manage Tenants')
+    @section('title', 'Manage Lease')
     @section('additional css')
     <!-- Additional css Start-->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
@@ -25,24 +25,37 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Cell</th>
-                                    <th>Tel</th>
-                                    <th>Email</th>
+                                    <th>Description</th>
+                                    <th>Valid From</th>
+                                    <th>Valid To</th>
+                                    <th>Rental</th>
+                                    <th>Status</th>
                                     <th>Option</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                         
+                            <tbody> @php $count=1;@endphp
+                                @foreach($lease as $abc)
+                                @php if ($abc->clienttypeid == 1){//individual
+                                    $tenantname   =  $abc->fullname ;
+                                 }else{
+                                     $tenantname   =  $abc->companyname ;
+                                 } if ($abc->available = 'Y'){
+                                        $status = 'active';
+                                        $badge = "badge badge-pill bg-success badge-secondary";
+                                 }else{
+                                        $status = 'inactive';
+                                        $badge = 'badge badge-pill bg-danger badge-secondary';
+                                 }
+                                 @endphp
                             <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td><a class="btn btn-secondary btn-sm" href = ""
-                                     title="Edit Landlord"><i class="ti-pencil mr-0-5"></i>Edit</a> 
+                                    <td>{{$count ++}}</td>
+                                    <td>{{ $tenantname}}</td>
+                                    <td>{{ $abc->propertydescription }}</td>
+                                    <td>{{ $abc->validfrom}}</td>
+                                    <td>{{ $abc->validto }}</td>
+                                    <td>{{ $abc->rentalcurrency.' '.number_format($abc->rental, 2) }}</td>
+                                    <td><span class="{{ $badge }}">{{$status}}</span></td>
+                                    <td>
                                      <a class="btn btn-info btn-sm view_landlord" id=""
                                      title="Deactivate Landlord"><i class="ti-eye mr-0-5"></i>view</a>
                                      <a onclick = "DeactivateLandlord(this); return false;"
@@ -53,17 +66,18 @@
                                      title="View Landlord"><i class="ti-close mr-0-5"></i>delete</a>
                             </td>
                             </tr>
-    
+                            @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
                                 <th>No</th>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Cell</th>
-                                    <th>Tel</th>
-                                    <th>Email</th>
-                                    <th>Option</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Valid From</th>
+                                <th>Valid To</th>
+                                <th>Rental</th>
+                                <th>Status</th>
+                                <th>Option</th>
                                 </tr>
                             </tfoot>
                         </table>
