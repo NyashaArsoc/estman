@@ -62,9 +62,14 @@ Route::controller(PropertyController::class)->group(function () {
     Route::any('/delete-rejected-property/{id}', 'deleterejected')->name('property.deleterejected');
     Route::any('/edit-update-tenant/{id}', 'updateproperty')->name('property.editupdate');
     Route::any('/single-property/{id}', 'getpropertyaddress')->name('property.getproperty');
-    Route::any('/property-list', 'listproperties')->name('property.list');
     Route::any('/property-areataken/{id}', 'getpropertyareataken')->name('property.areataken');
     Route::any('/property-areaavailable/{id}', 'getpropertyareaavailable')->name('property.areaavailable');
+    Route::any('/property/{id}/view', 'viewindividual')->name('property.view');
+    Route::get('/property/{id}/view-ledgers', 'viewledgers')->name('property.ledgers');
+    Route::post('/property/{id}/sub-ledgers/{product}', 'createsubledgers')->name('landlord.createsub');
+
+    Route::any('/property-list', 'listproperties')->name('property.list');
+
     
 });
 //Route::resource('lease', LeaseController::class);

@@ -11,4 +11,8 @@ class BaseController extends Controller
         $routes = '/landlord/'.$id.'/view-ledgers';
         view()->share('sharedroute',$routes);
     }
+    public function sharepropertyid($id){
+        $routes = '/property/'.$id.'/view-ledgers';
+        view()->share('sharedroute',$routes);
+    }
 }

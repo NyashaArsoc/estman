@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
-class PropertyController extends Controller
+class PropertyController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -277,6 +277,84 @@ class PropertyController extends Controller
             ->with('error', 'failed to load property list');
         }
     }
-  
- 
+
+public function viewindividual($id){
+    $propertyid = Crypt::decrypt($id);
+              
+        try {
+                BaseController::sharepropertyid($id);
+                $arr['property']   = DB::table('allproperty')
+                ->where('id', $propertyid)
+                ->select('fullname','id','companyname','code','location','province',
+                'propertytype','streetaddress','city','standnumber','comments','rooms',
+                'bedrooms','bathrooms','stories','totalarea','lettablearea','ratesqm',
+                'expectedrental','propertytypeid','percentage','commissiontype','landlordclienttype')
+                ->first();
+            return view('property.view-single-property')
+        ->with($arr);
+
+        } catch (QueryException $e) {
+            return  redirect()->route('property.list') 
+            ->with('error', 'failed to load');
+        }
+    }
+public function viewledgers($id){
+        $propertyid = Crypt::decrypt($id);
+              
+        try {        
+            $arr['property']   = DB::table('allproperty')
+            ->where('id', $propertyid)
+            ->select('id','companyname','landlordclienttype' ,'fullname','streetaddress')
+            ->first();
+            $arr['ledgers']   = DB::table('mappedsubledgersaccounts')
+            ->where('propertyid', $propertyid)
+            ->select('accountcode','currencycode','code','description')
+            ->get();
+            return view('property.view-ledgers')
+        ->with($arr);
+        } catch (QueryException $e) {
+            return  redirect()->route('property.list') 
+            ->with('error', 'failed to load');
+        }
+    } 
+public function createsubledgers($id,$product){
+        // subledger account creation -> interface+accountgl+prduct+system ledger+id  
+        $landlordid = Crypt::decrypt($id);
+        $productdescription = Crypt::decrypt($product);
+
+        try{
+            $ledgers  = DB::table('mappedsubledgersaccounts')
+            ->where('productdescription',$productdescription)
+            ->select('*')
+            ->get();
+            if($ledgers->isEmpty()){ 
+                return  redirect()->route('landlord.ledgers',$id) 
+                ->with('error', 'no products found to map');
+            }else{
+                foreach($ledgers as $abc){
+                $code = $abc->code;
+                $productid = $abc->productid;
+                $systemledgerid = $abc->staticid;
+                if(is_null($code) || is_null($productid) || is_null($systemledgerid)){
+                    $caption = 'some ledgers are not configured correctly';
+                    $head = 'error';
+                }else{
+                    $subledgeraccount = $code.''.$productid.''.$systemledgerid.''.$landlordid;
+                    DB::table('subledgers')
+                    ->insert(
+                        ['accountcode'=>$subledgeraccount,'landlordid'=>$landlordid,
+                         'staticledgerid'=>$systemledgerid,'ledgercode'=>$code]);
+                    $caption = 'subledgers created';
+                    $head = 'success';
+                }
+                    }
+                    return  redirect()->route('landlord.ledgers',$id) 
+                    ->with($head, $caption);
+            }
+
+        }catch(QueryException $e){
+            return  redirect()->route('landlord.ledgers',$id) 
+                    ->with('error', 'failed to load');
+        }
+    }
 }

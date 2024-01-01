@@ -55,7 +55,7 @@
                                     <td><span class="{{ $badge }}">{{$status}}</span></td>
                                     <td>@php $id= Crypt::encrypt($abc->id); @endphp
                                         <a class="btn btn-info btn-sm " id=""
-                                        href="{{route('property.viewpending', $id)}}"
+                                        href="{{route('property.view', $id)}}"
                                         title="view"><i class="ti-eye mr-0-5"></i>view</a>
                                         <a onclick = "approveproperty(this); return false;"
                                         class="btn btn-success btn-sm" href="{{route('property.approve', $id)}}"

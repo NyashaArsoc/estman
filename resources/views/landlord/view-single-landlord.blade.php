@@ -28,8 +28,8 @@ if ($landlord->clienttypeid == 1){
         <div class="box box-block bg-white">
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
-            <form class="form-material material-primary" id="addlandlord" method="PUT"
-                action="{{route('landlord.reject', $id)}}">@csrf
+            <form class="form-material material-primary" id="addlandlord" method=""
+                action="">
                 <div class="form-group row">
                     <label for="ClientType" class="col-sm-2 form-control-label">Type</label>
                     <div class="col-sm-4">
