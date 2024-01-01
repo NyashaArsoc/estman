@@ -39,14 +39,20 @@
                                 $owner   =  $abc->fullname ;
                              }else{
                                  $owner   =  $abc->companyname ;
-                             } @endphp
+                             } if ($abc->available = 'Y'){
+                                        $status = 'active';
+                                        $badge = "badge badge-pill bg-success badge-secondary";
+                                 }else{
+                                        $status = 'inactive';
+                                        $badge = 'badge badge-pill bg-danger badge-secondary';
+                                 }@endphp
                                     <td>{{$count ++}}</td>
                                     <td>{{ $owner}}</td>
                                     <td>{{ $abc->propertytype }}</td>
                                     <td>{{ $abc->code }}</td>
                                     <td>{{ $abc->location }}</td>
                                     <td>{{ $abc->streetaddress }}</td>
-                                    <td><span class="badge badge-pill  bg-success badge-secondary">Success</span></td>
+                                    <td><span class="{{ $badge }}">{{$status}}</span></td>
                                     <td>@php $id= Crypt::encrypt($abc->id); @endphp
                                         <a class="btn btn-info btn-sm " id=""
                                         href="{{route('property.viewpending', $id)}}"

@@ -266,9 +266,7 @@ class PropertyController extends Controller
     public function  listproperties(){
         try {
             $arr['property']   = DB::table('allproperty')
-            ->where('approval','=' ,1)
-            ->where('available','=' ,1)
-            ->orwhere('available','=' ,2)
+            ->where('approval','=' ,'Y')
             ->select('fullname','id','companyname','code','landlordclienttype',
             'location','propertytype','streetaddress','available')
             ->get();
