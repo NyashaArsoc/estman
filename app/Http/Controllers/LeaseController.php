@@ -237,7 +237,7 @@ class LeaseController extends Controller
        
         try{
             $leaseid = Crypt::decrypt($id);
-            $update = array('approval' => 2 , 'available'=> 0, 'reasons'=> $request->ReasonsForDecline);
+            $update = array('approval' => 'R' , 'available'=> 'N', 'reasons'=> $request->ReasonsForDecline);
             DB::table('lease')
             ->where('id',$leaseid)
             ->update($update);
@@ -285,7 +285,7 @@ class LeaseController extends Controller
                     }
                 }
              
-            $updatelease    = array('approval' => 1 , 'available'=> 1);
+            $updatelease    = array('approval' => 'Y' , 'available'=> 'Y');
             $updateproperty = array('occupation' => $occupationstatus );
             DB::table('lease')
             ->where('id',$leaseid)
@@ -307,8 +307,8 @@ class LeaseController extends Controller
     public function  rejected(){
         try {
             $arr['lease']   = DB::table('alllease')
-            ->where('approval','=' ,2)
-            ->where('available','=' ,0)
+            ->where('approval','=' ,'R')
+            ->where('available','=' ,'N')
             ->select('fullname','companyname','id','clienttypeid','validfrom',
             'validto','propertydescription','rentalcurrency','rental','reasons')
             ->get();
@@ -375,7 +375,7 @@ class LeaseController extends Controller
             'balancebd'=>$request->BDamount,'ratescurrencyid'=>$request->RatesCurrency,
             'operatingcostcurrencyid'=>$request->OperationCurrency,'ratesqm'=>
             $request->RateSqm,'propertydescription'=>$request->PropertyDescription
-            ,'approval' => 0 , 'available'=> 0]);
+            ,'approval' => 'N' , 'available'=> 'N']);
 
             DB::table('leaseschedules')
             ->updateOrInsert(['leaseid'=>$leaseid],
