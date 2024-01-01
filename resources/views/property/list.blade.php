@@ -1,7 +1,7 @@
-@php $title = 'Manage Tenants'; 
-      $description = 'list of all tenants...'; @endphp
+@php $title = 'Manage Property'; 
+      $description = 'list of all properties...'; @endphp
     @extends('layout.main-layout')
-    @section('title', 'Manage Tenants')
+    @section('title', 'Manage Property')
     @section('additional css')
     <!-- Additional css Start-->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
