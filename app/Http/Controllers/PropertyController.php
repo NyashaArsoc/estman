@@ -152,7 +152,7 @@ class PropertyController extends BaseController
        
         try{
             $propertyid = Crypt::decrypt($id);
-            $update = array('approval' => 1 , 'available'=> 1);
+            $update = array('approval' => 'Y' , 'available'=> 'Y');
             DB::table('property')
             ->where('id',$propertyid)
             ->update($update);
@@ -169,7 +169,7 @@ class PropertyController extends BaseController
        
         try{
             $propertyid = Crypt::decrypt($id);
-            $update = array('approval' => 2 , 'available'=> 0, 'reasons'=> $request->ReasonsForDecline);
+            $update = array('approval' => 'R' , 'available'=> 'N', 'reasons'=> $request->ReasonsForDecline);
             DB::table('property')
             ->where('id',$propertyid)
             ->update($update);
@@ -184,8 +184,8 @@ class PropertyController extends BaseController
     public function  rejected(){
         try {
             $arr['property']   = DB::table('allproperty')
-            ->where('approval','=' ,2)
-            ->where('available','=' ,0)
+            ->where('approval','=' ,'R')
+            ->where('available','=' ,'N')
             ->select('fullname','id','companyname','code','landlordclienttype',
             'location','propertytype','streetaddress','reasons')
             ->get();
@@ -200,7 +200,7 @@ class PropertyController extends BaseController
     public function deleterejected($id){
         try{
             $propertyid = Crypt::decrypt($id);
-            $update = array('available'=> 3);
+            $update = array('available'=> 'D');
             DB::table('property')
             ->where('id',$propertyid)
             ->update($update);
@@ -224,7 +224,7 @@ class PropertyController extends BaseController
                 'comments'=> $request->Highlights, 'rooms'=> $request->Rooms, 'bedrooms'=> $request->Bedrooms,
                 'bathrooms'=> $request->Bathrooms, 'stories'=> $request->Stories, 'totalarea'=> $request->TotalArea,
                 'lettablearea'=> $request->LettableArea,'ratesqm'=> $request->ExpectedRate,'expectedrental'=> $request->ExpectedRental
-            ,'approval' => 0 , 'available'=> 0]);
+            ,'approval' => 'N' , 'available'=> 'N']);
                 DB::table('commissionpercent')
                 ->updateOrInsert(['propertyid'=>$propertyid],['commissiontypeid'=>$request->CommissionType, 
                     'percentage'=>$request->CommissionPercentage]);
@@ -240,7 +240,7 @@ class PropertyController extends BaseController
 
         $arr['property']   = DB::table('allproperty')
         ->where([['propertytypeid', $id],
-        ['available','=' ,1]])
+        ['available','=' ,'Y']])
         ->orwhere([['occupation','=', 2],['occupation','=',1]])
         ->select('id','streetaddress','propertytypeid')
         ->get();
