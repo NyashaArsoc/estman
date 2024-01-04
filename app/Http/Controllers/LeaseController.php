@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
-class LeaseController extends Controller
+class LeaseController extends BaseController
 {
     private $monthlyvalue;
     private $addmonthlyvalue;
@@ -524,4 +524,24 @@ class LeaseController extends Controller
        
     }
 
+public function viewindividual($id){
+        $propertyid = Crypt::decrypt($id);
+                  
+            try {
+                    BaseController::shareleaseid($id);
+                    $arr['property']   = DB::table('allproperty')
+                    ->where('id', $propertyid)
+                    ->select('fullname','id','companyname','code','location','province',
+                    'propertytype','streetaddress','city','standnumber','comments','rooms',
+                    'bedrooms','bathrooms','stories','totalarea','lettablearea','ratesqm',
+                    'expectedrental','propertytypeid','percentage','commissiontype','landlordclienttype')
+                    ->first();
+                return view('lease.view-single-lease')
+            ->with($arr);
+    
+            } catch (QueryException $e) {
+                return  redirect()->route('lease.list') 
+                ->with('error', 'failed to load');
+            }
+        }
 }

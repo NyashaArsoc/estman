@@ -15,4 +15,8 @@ class BaseController extends Controller
         $routes = '/property/'.$id.'/view-ledgers';
         view()->share('sharedroute',$routes);
     }
+    public function shareleaseid($id){
+        $routes = '/lease/'.$id.'/view-ledgers';
+        view()->share('sharedroute',$routes);
+    }
 }

@@ -84,6 +84,7 @@ Route::controller(LeaseController::class)->group(function () {
 
     Route::any('/lease-create', 'addcreate')->name('lease.addcreate');
     Route::any('/lease-create-store', 'addstore')->name('lease.addstore');
+    Route::any('/lease/{id}/view', 'viewindividual')->name('lease.view');
 
     Route::any('/lease-list', 'listleases')->name('lease.list');
 });
