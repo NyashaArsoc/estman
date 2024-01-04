@@ -547,4 +547,64 @@ try {
                 ->with('error', 'failed to load');
             }
         }
+
+public function viewledgers($id){
+            $leaseid = Crypt::decrypt($id);
+                  
+            try {        
+                $arr['lease']   = DB::table('alllease')
+                ->where('id', $leaseid)
+                ->select('id','clienttypeid' ,'fullname','propertydescription','companyname')
+                ->first();
+                $arr['ledgers']   = DB::table('mappedsubledgersaccounts')
+                ->where('leaseid', $leaseid)
+                ->select('accountcode','currencycode','code','description')
+                ->get();
+                return view('lease.view-ledgers')
+            ->with($arr);
+            } catch (QueryException $e) {
+                return  redirect()->route('lease.list') 
+                ->with('error', 'failed to load');
+            }
+        }
+public function createsubledgers($id,$product){
+            // subledger account creation -> interface+accountgl+prduct+system ledger+id  
+            $leaseid = Crypt::decrypt($id);
+            $productdescription = Crypt::decrypt($product);
+    
+            try{
+                $ledgers  = DB::table('mappedsubledgersaccounts')
+                ->where('productdescription',$productdescription)
+                ->select('*')
+                ->get();
+                if($ledgers->isEmpty()){ 
+                    return  redirect()->route('lease.ledgers',$id) 
+                    ->with('error', 'no products found to map');
+                }else{
+                    foreach($ledgers as $abc){
+                    $code = $abc->code;
+                    $productid = $abc->productid;
+                    $systemledgerid = $abc->staticid;
+                    if(is_null($code) || is_null($productid) || is_null($systemledgerid)){
+                        $caption = 'some ledgers are not configured correctly';
+                        $head = 'error';
+                    }else{
+                        $subledgeraccount = $code.''.$productid.''.$systemledgerid.''.$leaseid;
+                        DB::table('subledgers')
+                        ->insert(
+                            ['accountcode'=>$subledgeraccount,'leaseid'=>$leaseid,
+                             'staticledgerid'=>$systemledgerid,'ledgercode'=>$code]);
+                        $caption = 'subledgers created';
+                        $head = 'success';
+                    }
+                        }
+                        return  redirect()->route('lease.ledgers',$id) 
+                        ->with($head, $caption);
+                }
+    
+            }catch(QueryException $e){
+                return  redirect()->route('lease.ledgers',$id) 
+                        ->with('error', 'failed to load');
+            }
+        } 
 }

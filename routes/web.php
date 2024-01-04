@@ -80,10 +80,11 @@ Route::controller(LeaseController::class)->group(function () {
     Route::any('/reject-lease/{id}', 'rejectlease')->name('lease.reject');
     Route::any('/edit-update-lease/{id}', 'updatelease')->name('lease.editupdate');
     Route::any('/lease-rejected', 'rejected')->name('lease.rejected');
-
     Route::any('/lease-create', 'addcreate')->name('lease.addcreate');
     Route::any('/lease-create-store', 'addstore')->name('lease.addstore');
     Route::any('/lease/{id}/view', 'viewindividual')->name('lease.view');
+    Route::get('/lease/{id}/view-ledgers', 'viewledgers')->name('lease.ledgers');
+    Route::post('/lease/{id}/sub-ledgers/{product}', 'createsubledgers')->name('lease.createsub');
 
     Route::any('/lease-list', 'listleases')->name('lease.list');
 });
