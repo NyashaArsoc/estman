@@ -324,7 +324,7 @@ class LeaseController extends BaseController
         try {
             $arr['lease']   = DB::table('alllease')
             ->where('approval','=' ,'Y')
-            ->select('fullname','companyname','id','clienttypeid','validfrom',
+            ->select('fullname','companyname','id','clienttypeid','validfrom','available',
             'validto','propertydescription','rentalcurrency','rental','propertyid')
             ->get();
             return view('lease/list')
@@ -525,18 +525,21 @@ class LeaseController extends BaseController
     }
 
 public function viewindividual($id){
-        $propertyid = Crypt::decrypt($id);
-                  
-            try {
-                    BaseController::shareleaseid($id);
-                    $arr['property']   = DB::table('allproperty')
-                    ->where('id', $propertyid)
-                    ->select('fullname','id','companyname','code','location','province',
-                    'propertytype','streetaddress','city','standnumber','comments','rooms',
-                    'bedrooms','bathrooms','stories','totalarea','lettablearea','ratesqm',
-                    'expectedrental','propertytypeid','percentage','commissiontype','landlordclienttype')
-                    ->first();
-                return view('lease.view-single-lease')
+    $leaseid = Crypt::decrypt($id);   
+try {
+      BaseController::shareleaseid($id);
+         $arr['lease']   = DB::table('alllease')
+          ->where('id', $leaseid)
+          ->select('*')->first();
+          $arr['inspection'] = DB::table('propertyinspection')
+          ->where('leaseid', $leaseid)
+          ->select('*')
+          ->orderBy('id','desc')->first();
+          $arr['review'] = DB::table('rentreview')
+          ->where('leaseid', $leaseid)
+          ->select('*')->orderBy('id','desc')->first();
+          $arr['balances'] = DB::select('EXEC spGetleasecurrentbillrates ?',[$leaseid]);
+       return view('lease.view-single-lease')
             ->with($arr);
     
             } catch (QueryException $e) {
