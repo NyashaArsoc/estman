@@ -35,19 +35,22 @@
                             </thead>
                             <tbody> @php $count=1;@endphp
                                 @foreach($lease as $abc)
-                                @php if ($abc->clienttypeid == 1){//individual
+                                <tr> @php //if ($abc->available = 'o'){
+                                    if (trim($abc->available) =='Y'){
+                                        $status = 'active'; 
+                                        $badge = "badge badge-pill bg-success badge-secondary";
+                                     }else{
+                                        $status = 'inactive';
+                                        $badge = 'badge badge-pill bg-danger badge-secondary'; 
+                                    } 
+                                if ($abc->clienttypeid == 1){//individual
                                     $tenantname   =  $abc->fullname ;
+                                    $status = 'active'; 
                                  }else{
                                      $tenantname   =  $abc->companyname ;
-                                 } if ($abc->available = 'Y'){
-                                        $status = 'active';
-                                        $badge = "badge badge-pill bg-success badge-secondary";
-                                 }else{
-                                        $status = 'inactive';
-                                        $badge = 'badge badge-pill bg-danger badge-secondary';
-                                 }
-                                 @endphp
-                            <tr>
+                                 } 
+                                 @endphp 
+                                 
                                     <td>{{$count ++}}</td>
                                     <td>{{ $tenantname}}</td>
                                     <td>{{ $abc->propertydescription }}</td>
