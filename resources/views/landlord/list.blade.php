@@ -83,6 +83,7 @@
                                 </tr>
                             </tfoot>
                         </table>
+                        @include('layout.arlet')
                 </div>
             </div>
         </div>
