@@ -299,7 +299,7 @@ class TenantController extends Controller
 
         $arr['tenant']   = DB::table('alltenant')
         ->where([['clienttypeid', $id],
-        ['available','=' ,1]])
+        ['available','=' ,'Y']])
         ->select('id','companyname','clienttypeid','fullname')
         ->get();
          return view('tenant/get-single-tenant')

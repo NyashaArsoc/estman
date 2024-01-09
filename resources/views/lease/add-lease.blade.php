@@ -25,7 +25,7 @@
             <form class="form-material material-primary" action="{{ route('lease.addstore') }}"
             method="POST"> @csrf
                 <div class="form-group row">
-                    <label for="LandlordType" class="col-sm-2 form-control-label">Tenant Type</label>
+                    <label for="" class="col-sm-2 form-control-label">Tenant Type</label>
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="TenantClientType" id="LeaseTenantClientType"
                             onChange="getTenantonLease();" />
@@ -47,7 +47,7 @@
                     <small id="tenantnamecheck" style="color: red;"> select tenant name </small>
                 </div><br />
                 <div class="form-group row">
-                    <label for="LandlordType" class="col-sm-2 form-control-label">Property Type</label>
+                    <label for="" class="col-sm-2 form-control-label">Property Type</label>
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="PropertyType" 
                         id="LeasePropertyType" onchange="getPropertyonLease();"

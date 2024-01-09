@@ -225,7 +225,6 @@
                     </div>
                 </div>
                 <div class="navbar-right navbar-toggleable-sm collapse" id="collapse-1">
-
                     <div class="toggle-button sidebar-toggle-second float-xs-left hidden-sm-down light">
                         <span class="hamburger"></span>
                     </div>

@@ -421,19 +421,16 @@ class LeaseController extends BaseController
               }Else { $BalanceBD = [0];}
               IF (!empty($request->LeaseItemRatesCost)){ 
                 $RatesCost         =      $request->LeaseItemRatesCost;
-              }Else {
-                $RatesCost = [0];
-              }
+              }Else {  $RatesCost = [0]; }
               IF (!empty($request->LeaseItemOperationalCost)){ 
                 $OperationalCost         =      $request->LeaseItemOperationalCost;
-              }Else {
-                $OperationalCost = [0];
-              }
+              }Else {  $OperationalCost = [0]; }
               IF (!empty($request->LeaseItemDepositPaid)){ 
                 $DepositPaid         =      $request->LeaseItemDepositPaid;
-              }Else {
-                $DepositPaid = [0];
-              }
+              }Else { $DepositPaid = [0];  }
+              IF (!empty($request->LeaseItemAdminPaid)){ 
+                $AdminPaid         =      $request->LeaseItemAdminPaid;
+              }Else {  $AdminPaid = [0];  }
             $NumbersInArray         =       count($CurrencyID);
             $a  = 0;
             
@@ -479,9 +476,9 @@ class LeaseController extends BaseController
             ->insert(['leaseid'=>$LeaseID,'rentreview'=>$request->RentReviewPeriod,
             'inspectionperiod'=>$request->InspectionPeriod]);
             while ($a   <   $NumbersInArray){
-                DB::table('leasecurrentbalance')
+                DB::table('unpostedleaserates')
                 ->Insert(
-                    ['leaseid'=>$LeaseID,'currencyid'=>$CurrencyID[$a],
+                    ['leaseid'=>$LeaseID,'currencyid'=>$CurrencyID[$a],'adminpaid'=>$AdminPaid[$a],
                     'balancebd'=>$BalanceBD[$a],'deposit'=>$DepositPaid[$a],
                     'ratescosts'=>$RatesCost[$a],'operationalcosts'=>$OperationalCost[$a]]
                 );
