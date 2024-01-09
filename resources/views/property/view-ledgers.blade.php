@@ -2,7 +2,7 @@
 $title = 'Subledgers';
 $description = 'property subledgers...'; 
 $id= Crypt::encrypt($property->id);
-$product= Crypt::encrypt('property');
+$product= Crypt::encrypt('rental');
 if ($property->landlordclienttype == 1){
     $owner   =  $property->fullname ;
     }else{
