@@ -382,32 +382,32 @@ class LandlordController  extends BaseController
         }
     }
     public function createsubledgers($id,$product){
-        // subledger account creation -> interface+accountgl+prduct+system ledger+id  
+        // subledger account creation -> interface+system ledger+accountgl+id  
         $landlordid = Crypt::decrypt($id);
         $productdescription = Crypt::decrypt($product);
 
         try{
             $ledgers  = DB::table('mappedsubledgersaccounts')
-            ->where('productdescription',$productdescription)
+            ->where('staticdescription',$productdescription)
             ->select('*')
             ->get();
             if($ledgers->isEmpty()){ 
                 return  redirect()->route('landlord.ledgers',$id) 
-                ->with('error', 'no products found to map');
+                ->with('error', 'no ledgers found to map');
             }else{
                 foreach($ledgers as $abc){
                 $code = $abc->code;
-                $productid = $abc->productid;
-                $systemledgerid = $abc->staticid;
-                if(is_null($code) || is_null($productid) || is_null($systemledgerid)){
+                $generalledgerid = $abc->glid;
+                $currencycode = $abc->currencycode;
+                if(is_null($code) || is_null($generalledgerid) || is_null($currencycode)){
                     $caption = 'some ledgers are not configured correctly';
                     $head = 'error';
                 }else{
-                    $subledgeraccount = $code.''.$productid.''.$systemledgerid.''.$landlordid;
+                    $subledgeraccount = $code.''.$landlordid;
                     DB::table('subledgers')
                     ->insert(
                         ['accountcode'=>$subledgeraccount,'landlordid'=>$landlordid,
-                         'staticledgerid'=>$systemledgerid,'ledgercode'=>$code]);
+                         'staticledgerid'=>$abc->staticid,'ledgercode'=>$code]);
                     $caption = 'subledgers created';
                     $head = 'success';
                 }
