@@ -175,6 +175,7 @@
                     <th class="text-center">Rates/Utilities</th>
                     <th class="text-center">Operation Cost</th>
                     <th class="text-center">Deposit Paid</th>
+                    <th class="text-center">Admin Paid</th>
                     <th class="text-center">Option</th>
                     </tr>
                 </thead>
@@ -209,7 +210,12 @@
                             <input name="LeaseItemDepositPaid" class="form-control "
                             id="LeaseItemDepositPaid" value=""  tabindex="5" type="text">
                             <small id="leaseitemdepositcheck" style="color: red;">  </small>
-                        </td>                                         
+                        </td> 
+                        <td>
+                            <input name="LeaseItemAdminPaid" class="form-control "
+                            id="LeaseItemAdminPaid" value=""  tabindex="4" type="text">
+                            <small id="leaseitemadminpaidcheck" style="color: red;">  </small>
+                        </td>                                        
                         <td align="center" colspan="2">
                         <input id="add-lease-item" class="btn btn-info" name="add-lease-item" 
                          value="Save" tabindex="6" type="button">

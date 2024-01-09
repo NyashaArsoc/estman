@@ -111,6 +111,28 @@ function validateLeaseItemDepositPaid(){
        }
     }
 }
+//valid lease item admin
+$("#leaseitemadminpaidcheck").hide();
+let leaseitemadmincheckError = true;
+$("#LeaseItemAdminPaid").keyup(function() {
+   validateLeaseItemAdminPaid();
+});
+function validateLeaseItemAdminPaid(){
+    let textValue         = $("#LeaseItemAdminPaid").val();
+    if(textValue!=''){
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck =  specialChars.test(textValue);
+        if (charscheck == true){
+            $("#leaseitemadminpaidcheck").show();
+           $("#leaseitemadminpaidcheck").html("**digits only or (13.5)");
+           leaseitemadmincheckError = false;
+           return false;
+       }else{
+        leaseitemadmincheckError = true;
+           $("#leaseitemadminpaidcheck").hide();
+       }
+    }
+}
 $('#add-banking-item').on('click', function() {
 	var CurrencyID		=	$('#CurrencyID').val();
 	var AccountName		=	$('#AccountName').val();
@@ -151,6 +173,7 @@ $('#add-lease-item').on('click', function() {
 	var RatesCost				=	$('#LeaseItemRatesCost').val();
 	var OperationalCost			=	$('#LeaseItemOperationalCost').val();
 	var DepositPaid				=	$('#LeaseItemDepositPaid').val();
+    var AdminPaid				=	$('#LeaseItemAdminPaid').val();
 	var Currency 				=	'';
 	var count = $('#leaseitems tr').length - 1;
 	
@@ -160,16 +183,18 @@ $('#add-lease-item').on('click', function() {
 		validateLeaseItemRatesCost();
 		validateLeaseItemOperationalCost();
 		validateLeaseItemDepositPaid();
+        validateLeaseItemAdminPaid();
 		try {
 			if(leaseitemcurrencyError == true && leaseitembdamountError==true && leaseitemratecostError==true
-				&& leaseitemoperationcostError==true && leaseitemdepositcheckError==true) {
+				&& leaseitemoperationcostError==true && leaseitemdepositcheckError==true && leaseitemadmincheckError==true) {
 		if (CurrencyID == 1){Currency = "ZWL"}else if (CurrencyID == 2){Currency = "USD"}
 		if(BalanceBD ==''){BalanceBD = 0;}
 		if(RatesCost ==''){RatesCost = 0;}
 		if(OperationalCost ==''){OperationalCost = 0;}
 		if(DepositPaid ==''){DepositPaid = 0;}
-		$('#leaseitems tbody').append('<tr class="child"><td>'+count+'</td><td> <input name="LeaseItemCurrencyID[]" type="hidden" value='+CurrencyID+' readonly/><input name="Currency" class="form-control" value='+Currency+' readonly/></td><td><input name="LeaseItemBDamount[]" class="form-control" value='+BalanceBD+' readonly /></td><td><input name="LeaseItemRatesCost[]" class="form-control" value='+RatesCost+' readonly /></td><td> <input name="LeaseItemOperationalCost[]" class="form-control " value='+OperationalCost+' readonly/></td><td><input name="LeaseItemDepositPaid[]" class="form-control " value='+DepositPaid+' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="Delete" onclick="deleteLeaseRow(this)">Delete</button></td></tr>');
-		$('#LeaseItemBDamount').val('');  $('#LeaseItemRatesCost').val('');   $('#LeaseItemOperationalCost').val(''); $('#LeaseItemDepositPaid').val(''); 
+        if(AdminPaid ==''){AdminPaid = 0;}
+		$('#leaseitems tbody').append('<tr class="child"><td>'+count+'</td><td> <input name="LeaseItemCurrencyID[]" type="hidden" value='+CurrencyID+' readonly/><input name="Currency" class="form-control" value='+Currency+' readonly/></td><td><input name="LeaseItemBDamount[]" class="form-control" value='+BalanceBD+' readonly /></td><td><input name="LeaseItemRatesCost[]" class="form-control" value='+RatesCost+' readonly /></td><td> <input name="LeaseItemOperationalCost[]" class="form-control " value='+OperationalCost+' readonly/></td><td><input name="LeaseItemDepositPaid[]" class="form-control " value='+DepositPaid+' readonly /></td><td><input name="LeaseItemAdminPaid[]" class="form-control " value='+AdminPaid+' readonly/></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="Delete" onclick="deleteLeaseRow(this)">Delete</button></td></tr>');
+		$('#LeaseItemBDamount').val('');  $('#LeaseItemRatesCost').val('');   $('#LeaseItemOperationalCost').val(''); $('#LeaseItemDepositPaid').val(''); $('#LeaseItemAdminPaid').val(''); 
 				//valid
 				return true;
 			}else{
