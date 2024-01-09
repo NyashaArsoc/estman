@@ -2,7 +2,7 @@
 $title = 'Subledgers';
 $description = 'lease subledgers...'; 
 $id= Crypt::encrypt($lease->id);
-$product= Crypt::encrypt('lease');
+$product= Crypt::encrypt('debtors');
 if ($lease->clienttypeid == 1){
     $tname   =  $lease->fullname ;
    }else{
