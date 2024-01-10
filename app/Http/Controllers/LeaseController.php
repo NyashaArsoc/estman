@@ -249,16 +249,19 @@ class LeaseController extends BaseController
             ->with('error', 'failed to reject lease');
         }
     }
-    public function approvelease($id,$pid){
+    public function approvelease($id,$pid,$product){
         $leaseid = Crypt::decrypt($id);
         $propertyid = Crypt::decrypt($pid);
         try{
             $property   = DB::table('allproperty')
             ->where('id', $propertyid)
+           ->where('available','=' ,'Y')
             ->select('totalarea','lettablearea','propertytypeid','streetaddress')
             ->first();
-            
-            if($property){   
+            if(is_null($property)) {
+                return  redirect()->route('lease.pending') 
+                ->with('error', 'failed to approve property not found');  
+            }else{   
                 $lease   = DB::table('alllease')
             ->where('id', $leaseid)
             ->select('areataken')
@@ -268,17 +271,17 @@ class LeaseController extends BaseController
                 ->where('propertyid', $propertyid)
                 ->select('totalareataken')
                 ->first();    
-                if($space){ $spacetaken = $space->totalareataken;}
-                else{$spacetaken = 0;}
+                if(is_null($space)){$spacetaken = 0; }
+                else{$spacetaken = $space->totalareataken;}
                 $minmuinpercentage = 0.015 * $property->lettablearea;
                 $remainingspace  = $property->lettablearea - ($lease->areataken + $spacetaken);  
-                if($property->propertytypeid ==1){
-                    $occupationstatus = 1;
+                if($property->propertytypeid ==1){ //Residential building
+                    $occupationstatus = 'F';
                 }else{
                     if($remainingspace >= 0 and $remainingspace <= $minmuinpercentage){
-                        $occupationstatus = 1;
+                        $occupationstatus = 'F';
                     }elseif($remainingspace > $minmuinpercentage){
-                        $occupationstatus = 2;
+                        $occupationstatus = 'P';
                     }else{
                         return  redirect()->route('lease.pending') 
                         ->with('error', 'property'.$property->streetaddress.'if fully occupied');
@@ -293,15 +296,15 @@ class LeaseController extends BaseController
             DB::table('property')
             ->where('id',$propertyid)
             ->update($updateproperty);
+
+            $this->createsubledgers($id,$product);
+            
            return  redirect()->route('lease.pending') 
            ->with('success', 'lease approved'); 
-            }else{
-                return  redirect()->route('lease.pending') 
-                ->with('error', 'faled to approve');     
-            }  
+            }
         } catch(QueryException $e){
             return  redirect()->route('lease.pending') 
-            ->with('error', 'failed to approve lease');
+            ->with('error', 'failed to approve lease'.$e);
         }
     }
     public function  rejected(){

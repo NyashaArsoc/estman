@@ -12,7 +12,8 @@
     $divclasscompany   =   'show';
  }
  $id= Crypt::encrypt($lease->id);
- $pid =Crypt::encrypt($lease->propertyid)
+ $pid =Crypt::encrypt($lease->propertyid);
+ $product= Crypt::encrypt('debtors');
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'Approve Lease')
@@ -153,7 +154,7 @@
         <div class="form-group row">
             <div class="offset-sm-2 col-sm-10">
                 <a onclick = "approvelease(this); return false;"
-                class="btn btn-success btn-sm" href="{{route('lease.approve',['id'=>$id,'pid'=>$pid])}}"
+                class="btn btn-success btn-sm" href="{{route('lease.approve',['id'=>$id,'pid'=>$pid,'product'=>$product])}}"
                 title="approve"><i class="ti-check mr-0-5"></i>approve</a>  
             <button type="submit" class="btn btn-danger btn-sm" id="reject-lease" 
                     onclick = "rejectlease(this); return false;"><i class="ti-close mr-0-5">
