@@ -45,7 +45,6 @@
                                     } 
                                 if ($abc->clienttypeid == 1){//individual
                                     $tenantname   =  $abc->fullname ;
-                                    $status = 'active'; 
                                  }else{
                                      $tenantname   =  $abc->companyname ;
                                  } 

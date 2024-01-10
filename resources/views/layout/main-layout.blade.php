@@ -125,10 +125,10 @@
                         <a href="#" class="waves-effect  waves-light">
                             <span class="s-caret"><i class="fa fa-angle-down"></i></span>
                             <span class="s-icon"><i class="ti-shopping-cart"></i></span>
-                            <span class="s-text">Suppliers Invoice</span>
+                            <span class="s-text">Transactions </span>
                         </a>
                         <ul>
-                            <li><a href="add-supplier-invoice.php">Add Invoice</a></li>
+                            <li><a href="{{route('transact.newbal')}}">New Leases Balances</a></li>
                             <li><a href="suppliers-invoices.php">Products</a></li>
                         </ul>
                     </li>

@@ -5,6 +5,7 @@ use App\Http\Controllers\LandlordController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -95,4 +96,8 @@ Route::controller(InvoiceController::class)->group(function (){
     Route::any('/view-pro-foma/{id}', 'viewprofoma')->name('invoice.viewpro');
     Route::any('/edit-pro-foma/{id}', 'vieweditprofomamount')->name('invoice.editviewpro');
     Route::any('/update-view-pro-foma/{id}', 'updateprofoma')->name('invoice.updateviewpro');
+});
+
+Route::controller(TransactionController::class)->group(function (){
+    Route::get('/new-lease/unposted-balances', 'viewnewbalances')->name('transact.newbal');
 });
