@@ -195,7 +195,7 @@ class LeaseController extends BaseController
     public function  pendingapproval(){
         try {
             $arr['lease']   = DB::table('alllease')
-            ->where('approval','=' ,0)
+            ->where('approval','=' ,'N')
             ->select('fullname','companyname','id','clienttypeid','validfrom',
             'validto','propertydescription','rentalcurrency','rental','propertyid')
             ->get();
