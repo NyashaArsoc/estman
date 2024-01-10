@@ -14,7 +14,7 @@
  $id= Crypt::encrypt($lease->id);
  $pid =Crypt::encrypt($lease->propertyid)
 @endphp
-@extends('layout.main-layout')
+@extends('layout.no-menu-layout')
 @section('title', 'Approve Lease')
 @section('additional css')
     <!-- Additional css Start-->
@@ -38,7 +38,11 @@
             <form class="form-material material-primary" action="{{ route('lease.reject',$id) }}"
             method="PUT"> @csrf
                 <div class="form-group row">
-                    <label for="LandlordType" class="col-sm-2 form-control-label">Tenant Name</label>
+                    <label for="" class="col-sm-2 form-control-label">Type</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" value="{{ $lease->clienttype }}" readonly>
+                    </div>
+                    <label for="" class="col-sm-2 form-control-label">Tenant Name</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" value="{{ $tname }}" readonly>
                     </div>
@@ -119,6 +123,7 @@
                     <th class="text-center">Rates/Utilities</th>
                     <th class="text-center">Operation Cost</th>
                     <th class="text-center">Deposit Paid</th>
+                    <th class="text-center">Admin Paid</th>
                     </tr>
                 </thead>
                 <tbody>@php $count=1;@endphp
@@ -129,7 +134,8 @@
                     <td>{{ number_format($abc->balancebd,2) }}</td>
                     <td>{{ number_format($abc->ratescosts,2) }}</td>
                     <td>{{ number_format($abc->operationalcosts,2) }}</td>
-                    <td>{{ number_format($abc->deposit,2) }}</td>                                       
+                    <td>{{ number_format($abc->deposit,2) }}</td>   
+                    <td>{{ number_format($abc->adminpaid,2) }}</td>                                      
                     </tr>  
                     @endforeach
                 </tbody>
