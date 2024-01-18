@@ -27,4 +27,16 @@ class Controller extends BaseController
         }
        
     }
+    public function transationid(){
+        try {
+            $trxid = DB::select('EXEC spTriggerGetTrxID');
+            if(is_null($trxid)){
+                return 'failed';
+            }else{
+                return $trxid;
+            }
+        } catch (QueryException $th) {
+            return 'failed';
+        }
+    }
 }
