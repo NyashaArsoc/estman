@@ -86,12 +86,30 @@ public function getrentalsubledger($leaseid,$currencycode){
         ->where('currencycode',$currencycode)
         ->select('*')->first();
         if(is_null($rentalsubledger)){
-            return 'failed empty';
+            return 'failed';
         }else{
             if(is_null($rentalsubledger->accountcode)){
                 return 'failed';
             }else{
                 return $rentalsubledger->accountcode;
+            } 
+        }
+    } catch (QueryException $th) {
+        return 'failed';
+    }
+}
+public function getexchangerate($currencycode){
+    try {
+        $exchangerate   = DB::table('currencyrate')
+            ->select('*')->where('currencycode',$currencycode)
+            ->latest('id')->first();
+        if(is_null($exchangerate)){
+            return 'failed';
+        }else{
+            if(is_null($exchangerate->meanrate)){
+                return 'failed';
+            }else{
+                return $exchangerate->meanrate;
             } 
         }
     } catch (QueryException $th) {
