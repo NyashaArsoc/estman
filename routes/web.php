@@ -100,4 +100,5 @@ Route::controller(InvoiceController::class)->group(function (){
 
 Route::controller(TransactionController::class)->group(function (){
     Route::get('/new-lease/unposted-balances', 'viewnewbalances')->name('transact.newbal');
+    Route::any('/transact-lease/{id}/post/{code}', 'postnewleasebalances')->name('transact.postnewbal');
 });

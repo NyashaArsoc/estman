@@ -128,7 +128,7 @@
                             <span class="s-text">Transactions </span>
                         </a>
                         <ul>
-                            <li><a href="{{route('transact.newbal')}}">New Leases Balances</a></li>
+                            <li><a href="{{route('transact.newbal')}}">Leases Rates</a></li>
                             <li><a href="suppliers-invoices.php">Products</a></li>
                         </ul>
                     </li>
