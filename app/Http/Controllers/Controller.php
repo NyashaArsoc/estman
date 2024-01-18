@@ -66,12 +66,32 @@ public function getsubledger($productcolumn,$id,$currencycode){
         ->where('currencycode',$currencycode)
         ->latest('id')->first();
         if(is_null($subledgerledger)){
-            return 'failed empty';
+            return 'failed';
         }else{
             if(is_null($subledgerledger->accountcode)){
                 return 'failed';
             }else{
                 return $subledgerledger->accountcode;
+            } 
+        }
+    } catch (QueryException $th) {
+        return 'failed';
+    }
+}
+public function getrentalsubledger($leaseid,$currencycode){
+    try {
+        $rentalsubledger = DB::table('mappedsubledgersaccounts')
+        ->whereIn('propertyid',DB::table('alllease')->where('id',$leaseid)
+        ->select('propertyid'))
+        ->where('currencycode',$currencycode)
+        ->select('*')->first();
+        if(is_null($rentalsubledger)){
+            return 'failed empty';
+        }else{
+            if(is_null($rentalsubledger->accountcode)){
+                return 'failed';
+            }else{
+                return $rentalsubledger->accountcode;
             } 
         }
     } catch (QueryException $th) {
