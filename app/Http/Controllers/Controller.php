@@ -39,4 +39,24 @@ class Controller extends BaseController
             return 'failed';
         }
     }
+
+    public function getgeneralledger($ledger,$currencycode){
+        try {
+            $generalledger   = DB::table('mappedsubledgersaccounts')
+            ->select('*')->where('staticdescription',$ledger)
+            ->where('currencycode',$currencycode)
+            ->latest('id')->first();
+            if(is_null($generalledger)){
+                return 'failed';
+            }else{
+                if(is_null($generalledger->ledgercode)){
+                    return 'failed';
+                }else{
+                    return $generalledger->ledgercode;
+                } 
+            }
+        } catch (QueryException $th) {
+            return 'failed';
+        }
+    }
 }
