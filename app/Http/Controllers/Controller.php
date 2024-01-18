@@ -59,4 +59,23 @@ class Controller extends BaseController
             return 'failed';
         }
     }
+public function getsubledger($productcolumn,$id,$currencycode){
+    try {
+        $subledgerledger   = DB::table('mappedsubledgersaccounts')
+        ->select('*')->where($productcolumn,$id)
+        ->where('currencycode',$currencycode)
+        ->latest('id')->first();
+        if(is_null($subledgerledger)){
+            return 'failed empty';
+        }else{
+            if(is_null($subledgerledger->accountcode)){
+                return 'failed';
+            }else{
+                return $subledgerledger->accountcode;
+            } 
+        }
+    } catch (QueryException $th) {
+        return 'failed';
+    }
+}
 }
