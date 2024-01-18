@@ -12,8 +12,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
     public function systemdate(){
-        try {
-            
+        try {      
             $sysdate   = DB::table('sysdates')
             ->select('*')->where('OpenClose','=','O')
             ->latest('id')->first();
@@ -114,6 +113,20 @@ public function getexchangerate($currencycode){
         }
     } catch (QueryException $th) {
         return 'failed';
+    }
+}
+public function getbasecurrency(){
+    try {      
+        $basecurrency   = DB::table('currencybase')
+        ->select('*')->where('active','=','Y')
+        ->latest('id')->first();
+        if(is_null($basecurrency)){
+            return 'failed';
+        }else{
+            return $basecurrency->code;
+        }
+    } catch (QueryException $th) {
+       return 'failed';
     }
 }
 }
