@@ -329,7 +329,7 @@ public function createsubledgers($id,$product){
                 ->select('ledgercode'))
             ->select('*')
             ->get();
-            if(is_null($ledgers)){ 
+            if(is_null($ledgers)|| $ledgers->isEmpty()){ 
                 return  redirect()->route('property.ledgers',$id) 
                 ->with('error', 'no ledgers found to map');
             }else{
