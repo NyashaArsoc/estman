@@ -389,9 +389,11 @@ class LandlordController  extends BaseController
         try{
             $ledgers  = DB::table('mappedsubledgersaccounts')
             ->where('staticdescription',$productdescription)
+            ->whereNotIn('code',DB::table('subledgers')->where('landlordid',$landlordid)
+                ->select('ledgercode'))
             ->select('*')
             ->get();
-            if($ledgers->isEmpty()){ 
+            if(is_null($ledgers)){ 
                 return  redirect()->route('landlord.ledgers',$id) 
                 ->with('error', 'no ledgers found to map');
             }else{
