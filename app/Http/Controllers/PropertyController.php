@@ -325,9 +325,11 @@ public function createsubledgers($id,$product){
         try{
             $ledgers  = DB::table('mappedsubledgersaccounts')
             ->where('staticdescription',$productdescription)
+            ->whereNotIn('code',DB::table('subledgers')->where('propertyid',$propertyid)
+                ->select('ledgercode'))
             ->select('*')
             ->get();
-            if($ledgers->isEmpty()){ 
+            if(is_null($ledgers)){ 
                 return  redirect()->route('property.ledgers',$id) 
                 ->with('error', 'no ledgers found to map');
             }else{
