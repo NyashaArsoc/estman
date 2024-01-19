@@ -575,9 +575,11 @@ public function createsubledgers($id,$product){
             try{
                 $ledgers  = DB::table('mappedsubledgersaccounts')
                 ->where('staticdescription',$productdescription)
+                ->whereNotIn('code',DB::table('subledgers')->where('leaseid',$leaseid)
+                ->select('ledgercode'))
                 ->select('*')
                 ->get();
-                if($ledgers->isEmpty()){ 
+                if(is_null($ledgers)){ 
                     return  redirect()->route('lease.ledgers',$id) 
                     ->with('error', 'no ledgers found to map');
                 }else{
@@ -604,7 +606,7 @@ public function createsubledgers($id,$product){
     
             }catch(QueryException $e){
                 return  redirect()->route('lease.ledgers',$id) 
-                        ->with('error', 'failed to load');
+                        ->with('error', 'failed to load'.$e);
             }
         } 
 }
