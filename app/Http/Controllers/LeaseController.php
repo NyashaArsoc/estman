@@ -538,6 +538,7 @@ try {
           $arr['review'] = DB::table('rentreview')
           ->where('leaseid', $leaseid)
           ->select('*')->orderBy('id','desc')->first();
+          //procedure deleted, the reason being to restructure 
           $arr['balances'] = DB::select('EXEC spGetleasecurrentbillrates ?',[$leaseid]);
        return view('lease.view-single-lease')
             ->with($arr);
