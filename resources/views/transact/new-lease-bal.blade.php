@@ -55,8 +55,9 @@ $description = 'unposted new lease balances...'; @endphp
                             <td>{{number_format($abc->operationalcosts, 2)}}</td>
                             <td>{{number_format($abc->deposit, 2)}}</td>
                             <td>{{number_format($abc->adminpaid, 2)}}</td>
-                            <td>@php $id= Crypt::encrypt($abc->leaseid);$code= Crypt::encrypt($abc->code); @endphp
-                                <a class="btn btn-info btn-sm" href="{{route('transact.postnewbal',['id'=>$id,'code'=>$code])}}"
+                            <td>@php $id= Crypt::encrypt($abc->leaseid);$code= Crypt::encrypt($abc->code); 
+                                $name=Crypt::encrypt($tenantname); @endphp
+                                <a class="btn btn-info btn-sm" href="{{route('transact.postnewbal',['id'=>$id,'code'=>$code,'name'=>$name])}}"
                                  title="view"><i class="ti-share mr-0-5"></i>post</a>
                             </td>
                         </tr>

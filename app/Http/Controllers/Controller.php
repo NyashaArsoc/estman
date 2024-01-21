@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+//current system date
     public function systemdate(){
         try {      
             $sysdate   = DB::table('sysdates')
@@ -26,19 +27,20 @@ class Controller extends BaseController
         }
        
     }
+// take the transaction id for all transactions
     public function transationid(){
         try {
-            $trxid = DB::select('EXEC spTriggerGetTrxID');
+            $trxid = collect(DB::select('EXEC spTriggerGetTrxID'))->first();
             if(is_null($trxid)){
                 return 'failed';
             }else{
-                return $trxid;
+                return $trxid->trxid;
             }
         } catch (QueryException $th) {
             return 'failed';
         }
     }
-
+//find general ledger for accounts without subledgers
     public function getgeneralledger($ledger,$currencycode){
         try {
             $generalledger   = DB::table('mappedsubledgersaccounts')
@@ -46,19 +48,20 @@ class Controller extends BaseController
             ->where('currencycode',$currencycode)
             ->latest('id')->first();
             if(is_null($generalledger)){
-                return 'failed';
+                return 'failed not found';
             }else{
-                if(is_null($generalledger->ledgercode)){
-                    return 'failed';
+                if(is_null($generalledger->code)){
+                    return 'failed empty';
                 }else{
-                    return $generalledger->ledgercode;
+                    return $generalledger->code;
                 } 
             }
         } catch (QueryException $th) {
-            return 'failed';
+            return 'failed'.$th;
         }
     }
-public function getsubledger($productcolumn,$id,$currencycode){
+//find subledger of all products(property,landlord,lease)
+public function getproductsubledger($productcolumn,$id,$currencycode){
     try {
         $subledgerledger   = DB::table('mappedsubledgersaccounts')
         ->select('*')->where($productcolumn,$id)
@@ -77,6 +80,7 @@ public function getsubledger($productcolumn,$id,$currencycode){
         return 'failed';
     }
 }
+//find rental subledger corresponding to a lease
 public function getrentalsubledger($leaseid,$currencycode){
     try {
         $rentalsubledger = DB::table('mappedsubledgersaccounts')
@@ -97,6 +101,7 @@ public function getrentalsubledger($leaseid,$currencycode){
         return 'failed';
     }
 }
+//find latest exchange rate for currency
 public function getexchangerate($currencycode){
     try {
         $exchangerate   = DB::table('currencyrate')
@@ -115,6 +120,7 @@ public function getexchangerate($currencycode){
         return 'failed';
     }
 }
+//find active base currency
 public function getbasecurrency(){
     try {      
         $basecurrency   = DB::table('currencybase')
