@@ -147,4 +147,8 @@ public function postnewleasebalances($id,$code,$name){
             }
         }//end system date */
     }
+
+public function interestcalculation(){
+    
+}
 }
