@@ -147,8 +147,51 @@ public function postnewleasebalances($id,$code,$name){
             }
         }//end system date */
     }
-
 public function interestcalculation(){
+ try { 
     
+    $currencyavailable = DB::table('currency')->select('id','code')->get();
+    if(is_null($currencyavailable)){
+        return 'failed';
+    }else{
+        //call days in month run
+        $monthday = collect(DB::select('EXEC  spGetDaysInThisMonth'))->first();
+        foreach($currencyavailable as $abc){
+            $graceperiod = $this->getgraceperiod($abc->code);
+            if($graceperiod != 'failed'){
+                $interestrate   = (((float)$graceperiod->intrestcharged /100)
+                / (int)$monthday->DaysInMonth);
+                // get calculated interests
+                $interestcalculated = DB::select('EXEC spGetArrearsInterestCalculated ?,?,?',
+                array($interestrate,$abc->code,$graceperiod->interestperiod));
+                //run through results in a procedure
+                foreach($interestcalculated as $abcd){
+                    if ($graceperiod->applyintereston =='rental'){
+                        //take rent bal bd only
+                        $interest = $abcd->rentint ;
+                    }else if ($graceperiod->applyintereston =='rental and rates'){
+                        //take rent bal bd and rates
+                        $interest = $abcd->rentratesint ;
+                    }else if ($graceperiod->applyintereston =='rental and operation cost'){
+                        //take rent bal bd and operation
+                        $interest = $abcd->rentopeint;
+                    }else{
+                         //take rent bal bd and operation & rates
+                         $interest = $abcd->allint;
+                    }
+                    $update = array('balinterest'=> $interest);
+                    DB::table('leasearrearsdetails')
+                    ->where('id',$abcd->id)
+                    ->update($update);
+                    return 'success';
+                } 
+            }
+        }
+    }
+
+    //return $monthday->DaysInMonth;
+ } catch (QueryException $th) {
+    return 'query failed';
+ }
 }
 }
