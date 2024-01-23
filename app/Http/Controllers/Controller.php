@@ -135,4 +135,16 @@ public function getbasecurrency(){
        return 'failed';
     }
 }
+
+public function getgraceperiod($currencycode){
+    try {
+    $grace   = DB::table('arrearsconfig')
+            ->select('*')->where('currencycode',$currencycode)
+            ->latest('id')->first();
+        if(is_null($grace)){ return 'failed'; }
+        else{ return $grace;}
+    } catch (QueryException $th) {
+        return 'failed';
+    }
+}
 }
