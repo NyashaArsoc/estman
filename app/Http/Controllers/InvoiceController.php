@@ -75,18 +75,18 @@ class InvoiceController extends Controller
 
     public function compilepreinvoice(){
         try {
-            $arr= DB::select('EXEC spPostpreinvoice');
-            if($arr){
+            $arr= DB::select('EXEC spPostPreInvoice');
+            if(is_null($arr)){
+                return 'problem in connection';
+            }else{
                 $result = $arr[0]->ReturnValue;
                 if($result ==0){
                     //success full run 
-                    return 'success run'.$result;
+                    return 'success';
                 }else{
                     //already run 
-                    return 'you can only run once'.$result;
+                    return 'you can only run once';
                 }
-            }else{
-               return 'problem in connection';
             }
         } catch (QueryException $th) {
             return 'failed to execute query';
