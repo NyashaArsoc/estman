@@ -36,6 +36,8 @@
                             <tbody>@php $count=1;@endphp
                                 @foreach($invoice as $abc)
                                @php
+                                $totalbilled = ($abc->rental + $abc->rates + $abc->operationalcost +
+                                $abc->balancebd + $abc->interestbd);
                                   if ($abc->clienttypeid == 1){
                                     $tname   =  $abc->fullname ;
                                    }else{
@@ -44,12 +46,12 @@
                                @endphp
                                    <tr>
                                     <td>{{$count ++}}</td>
-                                    <td>{{$tname ++}}</td> 
+                                    <td>{{$tname }}</td> 
                                     <td>{{\Carbon\Carbon::createFromTimestamp(strtotime
                                     ($abc->period))->format('M-Y')}}</td>
                                     <td>{{ $abc->currencycode }}</td>
-                                    <td>{{ number_format($abc->totalbilled,2)}}</td>
-                                    <td>@php $id= Crypt::encrypt($abc->invoicenumber) @endphp
+                                    <td>{{ $totalbilled }}</td>
+                                    <td>@php $id= Crypt::encrypt($abc->id) @endphp
                                         <a class="btn btn-info btn-sm " id=""
                                         href="{{route('invoice.viewpro', $id)}}"
                                         title="view"><i class="ti-eye mr-0-5"></i>view</a>

@@ -95,7 +95,7 @@ class InvoiceController extends Controller
     }
 public function listpreinvoice(){
     try {
-        $arr['invoice']   = DB::table('allpreinvoice')
+        $arr['invoice']   = DB::table('preinvoice')
         ->where('isedited','<>' ,1)
         ->select('*')
         ->get();
