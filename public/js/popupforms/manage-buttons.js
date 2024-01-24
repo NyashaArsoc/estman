@@ -62,9 +62,9 @@ function rejectlease(that) {
         window.location = anchor.attr("href");
     }
 }
-function ReactivateLandlord(that) {
-    var Func_RestoreLandlord = confirm("Proceed to reactivate this landlord?")
-    if (Func_RestoreLandlord) {
+function approveprofomaedited(that) {
+    var proceedto = confirm("proceed to approve this edited profoma?")
+    if (proceedto) {
         window.location = anchor.attr("href");
     }
 }

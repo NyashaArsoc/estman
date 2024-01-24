@@ -176,10 +176,22 @@ public function vieweditedprofoma($id){
         return view('invoice/view-edited-pre-invoice')
         ->with($arr);
     } catch (QueryException $e) {
-        return  redirect()->route('invoice.listpre') 
+        return  redirect()->route('invoice.listeditedprofoma') 
         ->with('error', 'failed to load');
+    } 
+}
+public function approveeditedprofoma($id, Request $request){
+    try {
+        $todaydate = date('Y-m-d H:i:s');
+        $invoiceid = Crypt::decrypt($id);
+        DB::table('preinvoice')
+            ->updateOrInsert(['id'=>$invoiceid],
+           [ 'isedited' => 0,'approvedon'=>$todaydate]);
+            return  redirect()->route('invoice.listeditedprofoma') 
+            ->with('success', 'invoice updated');
+    } catch (QueryException $e) {
+        return  redirect()->route('invoice.listeditedprofoma') 
+        ->with('error', 'failed to update');
     }
-
-    
 }
 }

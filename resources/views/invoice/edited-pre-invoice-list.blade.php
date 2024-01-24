@@ -1,5 +1,5 @@
-@php $title = 'Profoma Billed'; 
-      $description = 'profoma pending generation...'; 
+@php $title = 'Edited Profoma Billed'; 
+      $description = 'profoma edited pending generation...'; 
     
 @endphp
     @extends('layout.main-layout')
@@ -55,9 +55,9 @@
                                         <a class="btn btn-info btn-sm " id=""
                                         href="{{route('invoice.editedviewpro', $id)}}"
                                         title="view"><i class="ti-eye mr-0-5"></i>view</a>
-                                        <a onclick = "approvelease(this); return false;"
-                class="btn btn-success btn-sm"
-                title="approve"><i class="ti-check mr-0-5"></i>approve</a> 
+                                        <a onclick = "approveprofomaedited(this); return false;"
+                                        class="btn btn-success btn-sm" href="{{route('invoice.approveeditedprofoma', $id)}}"
+                                        title="approve"><i class="ti-check mr-0-5"></i>approve</a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -83,5 +83,6 @@
     <!-- Additional JS Start-->
     <script src="{{ asset('css/select2/select2.min.js') }}"></script>
         <script src="{{ asset('js/select2.js') }}"></script>
+<script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script> 
     <!-- Additional JS End-->
     @endsection
