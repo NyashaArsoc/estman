@@ -136,9 +136,7 @@ public function vieweditprofomamount($id){
     } catch (QueryException $e) {
         return  redirect()->route('invoice.listpre') 
         ->with('error', 'failed to load');
-    }
-
-    
+    } 
 }
 public function updateprofoma($id, Request $request){
     try {
@@ -153,6 +151,19 @@ public function updateprofoma($id, Request $request){
     } catch (QueryException $e) {
         return  redirect()->route('invoice.listpre') 
         ->with('error', 'failed to update');
+    }
+}
+public function listeditedprofoma(){
+    try {
+        $arr['invoice']   = DB::table('preinvoice')
+        ->where('isedited','=' ,1)
+        ->select('*')
+        ->get();
+        return view('invoice/edited-pre-invoice-list')
+        ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('lease.pending') 
+        ->with('error', 'failed to load');
     }
 }
 }
