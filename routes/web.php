@@ -97,6 +97,7 @@ Route::controller(InvoiceController::class)->group(function (){
     Route::any('/edit-pro-foma/{id}', 'vieweditprofomamount')->name('invoice.editviewpro');
     Route::any('/update-view-pro-foma/{id}', 'updateprofoma')->name('invoice.updateviewpro');
     Route::get('/edited-pro-foma', 'listeditedprofoma')->name('invoice.listeditedprofoma');
+    Route::get('/view-edited-pro-foma/{id}', 'vieweditedprofoma')->name('invoice.editedviewpro');
 });
 
 Route::controller(TransactionController::class)->group(function (){

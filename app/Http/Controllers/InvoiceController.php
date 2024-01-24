@@ -166,4 +166,20 @@ public function listeditedprofoma(){
         ->with('error', 'failed to load');
     }
 }
+public function vieweditedprofoma($id){
+    $invoiceid = Crypt::decrypt($id);
+    try {
+        $arr['invoice']   = DB::table('preinvoice')
+        ->where('id',$invoiceid)
+        ->select('*')
+        ->first();
+        return view('invoice/view-edited-pre-invoice')
+        ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('invoice.listpre') 
+        ->with('error', 'failed to load');
+    }
+
+    
+}
 }
