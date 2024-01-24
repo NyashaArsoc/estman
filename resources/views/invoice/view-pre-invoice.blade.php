@@ -6,9 +6,11 @@
    }else{
      $tname   =  $invoice->companyname ;
  } 
- $id= Crypt::encrypt($invoice->invoicenumber);
+ $id= Crypt::encrypt($invoice->id);
+ $totalbilled = ($invoice->rental + $invoice->rates + $invoice->operationalcost +
+                                $invoice->balancebd + $invoice->interestbd);
 @endphp
-@extends('layout.main-layout')
+@extends('layout.no-menu-layout')
 @section('title', 'Profoma')
 @section('additional css')
     <!-- Additional css Start-->
@@ -53,7 +55,7 @@
                 <div class="form-group row">
                     <label for="Type" class="col-sm-2 form-control-label">Deposit Paid</label>
                     <div class="col-sm-2">
-                        <input type="text" class="form-control" value="{{ number_format($invoice->predeposit,2) }}"
+                        <input type="text" class="form-control" value="{{ number_format($invoice->deposit,2) }}"
                          @readonly(true)>
                     </div>
                 </div><br />
@@ -61,7 +63,7 @@
         <div class="form-group row">
             <label for="City" class="col-sm-2 col-form-label">Balance b/f</label>
             <div class="col-sm-2">
-                <input type="text" class="form-control" value="{{ number_format($invoice->prebalancebd,2) }}" @readonly(true)>
+                <input type="text" class="form-control" value="{{ $invoice->balancebd }}" @readonly(true)>
             </div>
             <div class="col-sm-2">
             </div>
@@ -80,7 +82,7 @@
                     <tr>
                     <td>{{$count ++}}</td>
                     <td><i>Rental</i></td>
-                    <td>{{ number_format($invoice->prerental,2) }}</td>
+                    <td>{{ number_format($invoice->rental,2) }}</td>
                     <td><a class="btn btn-secondary btn-sm" 
                         href="{{route('invoice.editviewpro', $id)}}"
                      title="edit"><i class="ti-pencil mr-0-5"></i>Edit</a> </td>                                      
@@ -88,7 +90,7 @@
                     <tr>
                         <td>{{$count ++}}</td>
                         <td><i>Rates & Levies</i></td>
-                        <td>{{ number_format($invoice->prerates,2) }}</td>
+                        <td>{{ number_format($invoice->rates,2) }}</td>
                         <td><a class="btn btn-secondary btn-sm" 
                             href="{{route('invoice.editviewpro', $id)}}"
                          title="edit"><i class="ti-pencil mr-0-5"></i>Edit</a> </td>                                      
@@ -101,10 +103,16 @@
                                 href="{{route('invoice.editviewpro', $id)}}"
                              title="edit"><i class="ti-pencil mr-0-5"></i>Edit</a></td>                                      
                             </tr>
+                        <tr>
+                                <td>{{$count ++}}</td>
+                                <td><i>Interest Charged</i></td>
+                                <td>{{ number_format($invoice->interestbd,3) }}</td>
+                                <td></td>                                      
+                                </tr>
                             <tr>
                                 <td></td>
                                 <td><strong><i>Total Billed</i></strong> </td>
-                                <td>{{ number_format($invoice->totalbilled,2) }}</td>
+                                <td>{{ number_format($totalbilled,2) }}</td>
                                 <td> </td>                                      
                                 </tr>
                 </tbody>

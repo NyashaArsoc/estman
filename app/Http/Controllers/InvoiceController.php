@@ -110,8 +110,8 @@ public function listpreinvoice(){
 public function viewprofoma($id){
     $invoiceid = Crypt::decrypt($id);
     try {
-        $arr['invoice']   = DB::table('allpreinvoice')
-        ->where('invoicenumber',$invoiceid)
+        $arr['invoice']   = DB::table('preinvoice')
+        ->where('id',$invoiceid)
         ->select('*')
         ->first();
         return view('invoice/view-pre-invoice')

@@ -115,7 +115,7 @@
                             <span class="s-text">Invoice</span>
                         </a>
                         <ul>
-                            <li><a href="{{route('invoice.listpre')}}">Billed</a></li>
+                            <li><a href="{{route('invoice.listpre')}}">Profoma Billed</a></li>
                             <li><a href="warehouse.php">Approval</a></li>
                             <li><a href="warehouse.php">Generated</a></li>
                             <li><a href="warehouse.php">Rejected</a></li>
