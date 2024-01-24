@@ -126,10 +126,10 @@ public function viewprofoma($id){
 public function vieweditprofomamount($id){
     $invoiceid = Crypt::decrypt($id);
     try {
-        $arr['invoice']   = DB::table('allpreinvoice')
-        ->where('invoicenumber',$invoiceid)
-        ->select('currencycode','invoicenumber','prerental','prerates','operationalcost'
-        ,'fullname','companyname','clienttypeid','period','predeposit')
+        $arr['invoice']   = DB::table('preinvoice')
+        ->where('id',$invoiceid)
+        ->select('currencycode','id','rental','rates','operationalcost'
+        ,'fullname','companyname','clienttypeid','period','deposit')
         ->first();
         return view('invoice/view-edit-pre-invoice')
         ->with($arr);

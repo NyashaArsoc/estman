@@ -6,7 +6,7 @@
    }else{
      $tname   =  $invoice->companyname ;
  } 
- $id= Crypt::encrypt($invoice->invoicenumber);
+ $id= Crypt::encrypt($invoice->id);
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'Profoma')
@@ -41,7 +41,7 @@
                     </div>
                         <label for="Type" class="col-sm-2 form-control-label">Deposit Paid</label>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control"value="{{ number_format($invoice->predeposit,2) }}"
+                            <input type="text" class="form-control"value="{{ number_format($invoice->deposit,2) }}"
                             @readonly(true)>
                         </div>
                 </div>
@@ -60,14 +60,14 @@
                     <td>{{$count ++}}</td>
                     <td><i>Rental</i></td>
                     <td><input type="text" class="form-control" id="Rental"
-                        name="Rental" value="{{ floatval($invoice->prerental) }}"/>
+                        name="Rental" value="{{ floatval($invoice->rental) }}"/>
                         <small id="proitemrentcheck" style="color: red;">  </small></td>                                      
                     </tr>  
                     <tr>
                         <td>{{$count ++}}</td>
                         <td><i>Rates & Levies</i></td>
                         <td><input type="text" class="form-control" id="RatesLevies"
-                            name="RatesLevies" value="{{ floatval($invoice->prerates) }}"/>
+                            name="RatesLevies" value="{{ floatval($invoice->rates) }}"/>
                             <small id="proitemratecostcheck" style="color: red;">  </small> </td>                                      
                         </tr>
                         <tr>
@@ -79,7 +79,7 @@
                             </tr>
                             <tr>
                                 <td></td>
-                                <td><strong><i>Total Billed</i></strong> </td>
+                                <td><strong><i>Total</i></strong> </td>
                                 <td>
                                     <small id="proitemtotalbilledcheck" style="color: rgb(218, 12, 12));">  </small></td>                                    
                                 </tr>
