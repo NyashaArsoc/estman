@@ -118,6 +118,12 @@
                 </tbody>
             </table>
         </div>
+        <div class="form-group row">
+            <div class="offset-sm-2 col-sm-10">
+                <button type="submit" class="btn btn-primary" id="btn-edit-pro" value="{{ $title }}">
+                    approve</button>
+            </div>
+        </div>
         @include('layout.arlet')
         </form>
     </div>
