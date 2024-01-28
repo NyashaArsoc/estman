@@ -37,7 +37,7 @@
                                 @foreach($invoice as $abc)
                                @php
                                 $totalbilled = ($abc->rental + $abc->rates + $abc->operationalcost +
-                                $abc->balancebd + $abc->interestbd);
+                                $abc->balancebd + $abc->interestbd + $abc->vat);
                                   if ($abc->clienttypeid == 1){
                                     $tname   =  $abc->fullname ;
                                    }else{
