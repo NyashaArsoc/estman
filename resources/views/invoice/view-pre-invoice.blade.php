@@ -8,7 +8,7 @@
  } 
  $id= Crypt::encrypt($invoice->id);
  $totalbilled = ($invoice->rental + $invoice->rates + $invoice->operationalcost +
-                                $invoice->balancebd + $invoice->interestbd);
+                                $invoice->balancebd + $invoice->interestbd + $invoice->vat);
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'Profoma')
@@ -31,15 +31,13 @@
         <div class="box box-block bg-white">
             <h5>{{ $invoice->currencycode.' - '.$title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
-            <form class="form-material material-primary" action=""
-            method="PUT"> @csrf
+            <form class="form-material material-primary" action="{{ route('invoice.approveprofoma', $id) }}"
+            method="POST"> @csrf
                 <div class="form-group row">
                     <label for="" class="col-sm-2 form-control-label">Tenant Name</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" value="{{ $tname }}" readonly>
                     </div>
-                </div>
-                <div class="form-group row">
                     <label for="" class="col-sm-2 form-control-label">Property Des</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" value="{{ $invoice->propertydescription }}" readonly>
@@ -109,6 +107,12 @@
                                 <td>{{ number_format($invoice->interestbd,3) }}</td>
                                 <td></td>                                      
                                 </tr>
+                        <tr>
+                                    <td>{{$count ++}}</td>
+                                    <td><i>VAT on Rent</i></td>
+                                    <td>{{ number_format($invoice->vat,3) }}</td>
+                                    <td></td>                                      
+                                    </tr>
                             <tr>
                                 <td></td>
                                 <td><strong><i>Total Billed</i></strong> </td>
