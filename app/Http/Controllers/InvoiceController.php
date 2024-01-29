@@ -98,7 +98,7 @@ class InvoiceController extends Controller
 public function listpreinvoice(){
     try {
         $arr['invoice']   = DB::table('preinvoice')
-        ->where('isedited','<>' ,1)
+        ->where('isedited','<>' ,'Y')
         ->select('*')
         ->get();
         return view('invoice/pre-invoice-list')
@@ -147,7 +147,7 @@ public function updateprofoma($id, Request $request){
             ->updateOrInsert(['id'=>$invoiceid],
            [ 'rental'=>$request->Rental,'rates'=>
             $request->RatesLevies,'operationalcost'=>$request->OperationCosts
-            ,'isedited' => 1 ]);
+            ,'isedited' => 'Y' ]);
             return  redirect()->route('invoice.listpre') 
             ->with('success', 'invoice updated');
     } catch (QueryException $e) {
@@ -158,7 +158,7 @@ public function updateprofoma($id, Request $request){
 public function listeditedprofoma(){
     try {
         $arr['invoice']   = DB::table('preinvoice')
-        ->where('isedited','=' ,1)
+        ->where('isedited','=' ,'Y')
         ->select('*')
         ->get();
         return view('invoice/edited-pre-invoice-list')
@@ -188,7 +188,7 @@ public function approveeditedprofoma($id, Request $request){
         $invoiceid = Crypt::decrypt($id);
         DB::table('preinvoice')
             ->updateOrInsert(['id'=>$invoiceid],
-           [ 'isedited' => 0,'approvedon'=>$todaydate]);
+           [ 'isedited' => 'N','approvedon'=>$todaydate]);
             return  redirect()->route('invoice.listeditedprofoma') 
             ->with('success', 'invoice updated');
     } catch (QueryException $e) {
