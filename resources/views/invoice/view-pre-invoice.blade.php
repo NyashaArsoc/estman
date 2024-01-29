@@ -7,6 +7,7 @@
      $tname   =  $invoice->companyname ;
  } 
  $id= Crypt::encrypt($invoice->id);
+ $lid= Crypt::encrypt($invoice->leaseid);
  $totalbilled = ($invoice->rental + $invoice->rates + $invoice->operationalcost +
                                 $invoice->balancebd + $invoice->interestbd + $invoice->vat);
 @endphp
@@ -31,7 +32,7 @@
         <div class="box box-block bg-white">
             <h5>{{ $invoice->currencycode.' - '.$title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
-            <form class="form-material material-primary" action="{{ route('invoice.approveprofoma', $id) }}"
+            <form class="form-material material-primary" action="{{ route('invoice.approveprofoma',['id'=>$id,'lease'=>$lid]) }}"
             method="POST"> @csrf
                 <div class="form-group row">
                     <label for="" class="col-sm-2 form-control-label">Tenant Name</label>

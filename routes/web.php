@@ -99,6 +99,9 @@ Route::controller(InvoiceController::class)->group(function (){
     Route::get('/edited-pro-foma', 'listeditedprofoma')->name('invoice.listeditedprofoma');
     Route::get('/view-edited-pro-foma/{id}', 'vieweditedprofoma')->name('invoice.editedviewpro');
     Route::any('/approve-edited-pro-foma/{id}', 'approveeditedprofoma')->name('invoice.approveeditedprofoma');
+    Route::any('/approve/{id}/pro-foma/{lease}', 'approveprofoma')->name('invoice.approveprofoma');
+
+    Route::any('/invoice-print', 'testinvoiceprint')->name('invoice.printtest');
 });
 
 Route::controller(TransactionController::class)->group(function (){

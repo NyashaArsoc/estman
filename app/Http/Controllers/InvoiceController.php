@@ -7,6 +7,8 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 
 class InvoiceController extends Controller
 {
@@ -193,5 +195,73 @@ public function approveeditedprofoma($id, Request $request){
         return  redirect()->route('invoice.listeditedprofoma') 
         ->with('error', 'failed to update');
     }
+}
+public function approveprofoma($id,$lease){
+    $invoiceid = Crypt::decrypt($id);
+    $leaseid =  Crypt::decrypt($lease);
+    try {
+        $invoice   = DB::table('preinvoice')
+        ->where('id',$invoiceid)->select('*')->first();
+        $tenant = DB::table('alllease')->join('alltenant','alllease.tenantid','=','alltenant.id')
+    ->select('email','alltenant.vatnumber')->where('alllease.id',$leaseid)->first();
+    if(is_null($tenant)){
+        return  redirect()->route('invoice.listpre') 
+        ->with('error', 'failed to load'); 
+    }else{
+        $banking   = DB::table('bankingdetails')
+        ->where('currencycode',$invoice->currencycode)->select('*')->first();
+
+        //$invoiceperiod = date_format($invoice->period,"M-Y");
+        if ($invoice->clienttypeid == 1){$tenantname   =  $invoice->fullname ;}
+           else{$tenantname   =  $invoice->companyname ; } 
+           $totalbilled = ($invoice->rental + $invoice->rates + $invoice->operationalcost +
+                 $invoice->balancebd + $invoice->interestbd);
+         $totalvatincl = ($invoice->rental + $invoice->rates + $invoice->operationalcost +
+                 $invoice->balancebd + $invoice->interestbd + $invoice->vat);
+
+        $data["email"] = $tenant->email;
+        $data["CCemail"] = "kudzchitz@gmail.com";
+        $data["title"] = "Invoice for ".$tenantname;
+        $data["tenantname"] = $tenantname;
+        $data["propdesc"] = $invoice->propertydescription;
+        $data["period"] = $invoice->period;
+        $data["tenantvatnumber"] = $tenant->vatnumber;
+        $data["invoicenumber"] = $invoice->id;
+        $data["balancebd"] = number_format($invoice->balancebd,2);
+        $data["currencycode"] = $invoice->currencycode;
+        $data["rent"] = number_format($invoice->rental,2);
+        $data["rateswater"] = number_format($invoice->rates,2);
+        $data["interestcharged"] = number_format($invoice->interestbd,2);
+        $data["operational"] = number_format($invoice->operationalcost,2);
+        $data["rentvat"] = number_format($invoice->vat,2);
+        $data["billedtotal"] = number_format($totalbilled,2);
+        $data["totalvatincl"] = number_format($totalvatincl,2);
+        $data["bankname"] = $banking->bankname;
+        $data["branch"] = $banking->branch;
+        $data["accountnumber"] = $banking->accountnumber;
+        $data['today'] = date('d-M-Y');
+        $data["deposit"] = number_format($invoice->deposit,2);
+
+        $invoicepdf =   PDF::loadView('tomail/invoice',$data);
+        Mail::send('tomail/empty', $data, function($message)use($data, $invoicepdf) {
+            $message->to($data["email"], $data["email"])
+                   ->cc($data["CCemail"])
+                  ->subject($data["title"])
+                  ->attachData($invoicepdf->output(), ''.$data["title"].'.pdf');
+        });
+        echo 'mail send';
+    } 
+}catch (QueryException $e) {
+        return  redirect()->route('invoice.listpre') 
+        ->with('error', 'failed to load');
+    }
+ //$invoicepdf->download('testinvoice.pdf');
+    
+    // return $invoicepdf->stream('reportjs.pdf');
+ 
+}
+public function testinvoiceprint(){
+   // return view('toprint/test-invoice');
+   return view('tomail/invoice');
 }
 }
