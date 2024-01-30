@@ -330,8 +330,4 @@ public function approveprofoma($id,$lease){
         ->with('error', 'failed to load');
     }
 }
-public function testinvoiceprint(){
-   // return view('toprint/test-invoice');
-   return view('tomail/invoice');
-}
 }

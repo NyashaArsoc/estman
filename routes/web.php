@@ -52,6 +52,7 @@ Route::controller(TenantController::class)->group(function () {
     Route::any('/edit-update-tenant/{id}', 'updatetenant')->name('tenant.editupdate');
     Route::any('/single-tenant/{id}', 'gettenant')->name('tenant.gettenant');
     Route::any('/manage-tenant', 'listtenants')->name('tenant.list');
+    Route::get('/single-tenant/details/{id}', 'gettenantdetails')->name('tenant.tenantdetails');
 });
 Route::resource('property', PropertyController::class);
 Route::controller(PropertyController::class)->group(function () {
@@ -100,11 +101,10 @@ Route::controller(InvoiceController::class)->group(function (){
     Route::get('/view-edited-pro-foma/{id}', 'vieweditedprofoma')->name('invoice.editedviewpro');
     Route::any('/approve-edited-pro-foma/{id}', 'approveeditedprofoma')->name('invoice.approveeditedprofoma');
     Route::any('/approve/{id}/pro-foma/{lease}', 'approveprofoma')->name('invoice.approveprofoma');
-
-    Route::any('/invoice-print', 'testinvoiceprint')->name('invoice.printtest');
 });
 
 Route::controller(TransactionController::class)->group(function (){
     Route::get('/new-lease/unposted-balances', 'viewnewbalances')->name('transact.newbal');
     Route::any('/transact-lease/{id}/post/{code}/{name}', 'postnewleasebalances')->name('transact.postnewbal');
+    Route::get('/customer/receipt', 'receipting')->name('transact.payment');
 });

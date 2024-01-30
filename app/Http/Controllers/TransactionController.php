@@ -147,4 +147,19 @@ public function postnewleasebalances($id,$code,$name){
             }
         }//end system date */
     }
+public function receipting(){
+    try {
+        $arr['lease']   = DB::table('alllease')
+        ->where('expiry','=','N')->where('approval','=','Y')
+        ->where('available','=','Y')
+        ->select('*')
+        ->get();
+        return  view('transact/tenant-recepting')
+        ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('invoice.listeditedprofoma') 
+        ->with('error', 'failed to load');
+    }
+    
+}
 }
