@@ -199,66 +199,136 @@ public function approveeditedprofoma($id, Request $request){
 public function approveprofoma($id,$lease){
     $invoiceid = Crypt::decrypt($id);
     $leaseid =  Crypt::decrypt($lease);
+    $productcolumn          =       'leaseid';
+    $ledger_vat             =        'vat';
+    $ledger_creditors       =        'creditors';
     try {
+        $systemdate             =       $this->systemdate();
+        $trxid                  =       $this->transationid();
+        $basecurrency           =       $this->getbasecurrency();
+        
+        
         $invoice   = DB::table('preinvoice')
         ->where('id',$invoiceid)->select('*')->first();
         $tenant = DB::table('alllease')->join('alltenant','alllease.tenantid','=','alltenant.id')
-    ->select('email','alltenant.vatnumber')->where('alllease.id',$leaseid)->first();
+            ->select('email','alltenant.vatnumber')->where('alllease.id',$leaseid)->first();
+            /*check if the base currency is the one running 
+                    use exchange rate as 1*/
+    if(trim($basecurrency)  ==      trim($invoice->currencycode)){ $exchangerate =1;}
+    $productsubledger       =       $this->getproductsubledger($productcolumn,$leaseid,$invoice->currencycode);
+    $rentalsubledger        =       $this->getrentalsubledger($leaseid,$invoice->currencycode);
+    $vatcode                =       $this->getgeneralledger($ledger_vat,$invoice->currencycode);
+    $creditorscode          =       $this->getgeneralledger($ledger_creditors,$invoice->currencycode);
     if(is_null($tenant)){
         return  redirect()->route('invoice.listpre') 
         ->with('error', 'failed to load'); 
     }else{
         $banking   = DB::table('bankingdetails')
         ->where('currencycode',$invoice->currencycode)->select('*')->first();
-
-        //$invoiceperiod = date_format($invoice->period,"M-Y");
-        if ($invoice->clienttypeid == 1){$tenantname   =  $invoice->fullname ;}
-           else{$tenantname   =  $invoice->companyname ; } 
-           $totalbilled = ($invoice->rental + $invoice->rates + $invoice->operationalcost +
+        if($systemdate != 'failed'){
+            if($rentalsubledger!='failed' || $productsubledger!='failed' || $creditorscode!='failed'
+            || $vatcode!='failed'){// correct ledgers
+                if ($invoice->clienttypeid == 1){$tenantname   =  $invoice->fullname ;}
+                else{$tenantname   =  $invoice->companyname ; }
+                $totalbilled = ($invoice->rental + $invoice->rates + $invoice->operationalcost +
                  $invoice->balancebd + $invoice->interestbd);
-         $totalvatincl = ($invoice->rental + $invoice->rates + $invoice->operationalcost +
-                 $invoice->balancebd + $invoice->interestbd + $invoice->vat);
+                    $totalvatincl = ($invoice->rental + $invoice->rates + $invoice->operationalcost +
+                    $invoice->balancebd + $invoice->interestbd + $invoice->vat);
+                // data for email 
+                $data["email"]          = $tenant->email;
+                $data["CCemail"]        = "kudzchitz@gmail.com";
+                $data["title"]          = "Invoice for ".$tenantname;
+                $data["tenantname"]     = $tenantname;
+                $data["propdesc"]       = $invoice->propertydescription;
+                $data["period"]         = $invoice->period;
+                $data["tenantvatnumber"] = $tenant->vatnumber;
+                $data["invoicenumber"]  = $invoice->id;
+                $data["balancebd"]      = number_format($invoice->balancebd,2);
+                $data["currencycode"]   = $invoice->currencycode;
+                $data["rent"]           = number_format($invoice->rental,2);
+                $data["rateswater"]     = number_format($invoice->rates,2);
+                $data["interestcharged"] = number_format($invoice->interestbd,2);
+                $data["operational"]    = number_format($invoice->operationalcost,2);
+                $data["rentvat"]        = number_format($invoice->vat,2);
+                $data["billedtotal"]    = number_format($totalbilled,2);
+                $data["totalvatincl"]   = number_format($totalvatincl,2);
+                $data["bankname"]       = $banking->bankname;
+                $data["branch"]         = $banking->branch;
+                $data["accountnumber"]  = $banking->accountnumber;
+                $data['today']          = date('d-M-Y');
+                $data["deposit"]        = number_format($invoice->deposit,2); 
+                //convert to pdf
+                $invoicepdf =   PDF::loadView('tomail/invoice',$data);
+                //mail the invoice
+                Mail::send('tomail/empty', $data, function($message)use($data, $invoicepdf) {
+                    $message->to($data["email"], $data["email"])
+                           ->cc($data["CCemail"])
+                          ->subject($data["title"])
+                          ->attachData($invoicepdf->output(), ''.$data["title"].'.pdf'); 
+                });
+                // return $invoicepdf->stream('reportjs.pdf');
+                //double entry into ledgers
+                    // transaction description 
+                    $trxdescriptionclient = 'Invoice Number '.$invoice->id;
+                    $trxdescriptionrates = 'Invoice Number '.$invoice->id.' Rates';
+                    $trxdescriptionoppcst = 'Invoice Number '.$invoice->id. ' Operational Costs';
+                    $totalvatincltrxratedamt = $totalvatincl * $exchangerate;
+                    $rentaltrxratedamt = $invoice->rental * $exchangerate;
+                    $vattrxratedamt = $invoice->vat * $exchangerate;
+                    $ratestrxratedamt = $invoice->rates * $exchangerate;
+                    $oppcoststrxratedamt = $invoice->rates * $exchangerate;
+                    //transaction debit client
+                DB::table('accounttransactions')
+                ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$productsubledger
+                 ,'trxtype'=>'TD','trxcurrencycode'=>$invoice->currencycode,'trxamount'=>$totalvatincl,
+                    'trxratedamount'=>$totalvatincltrxratedamt,'trxexchangerate'=>$exchangerate,
+                    'trxdescription'=>$trxdescriptionclient,'trxsystemdate'=>$systemdate]);
+                //transaction credit rental
+                if($invoice->rental <> 0 || $invoice->rental < 0){
+                    DB::table('accounttransactions')
+                    ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$rentalsubledger
+                    ,'trxtype'=>'TC','trxcurrencycode'=>$invoice->currencycode,'trxamount'=>$invoice->rental,
+                    'trxratedamount'=>$rentaltrxratedamt,'trxexchangerate'=>$exchangerate,
+                    'trxdescription'=>$trxdescriptionclient,'trxsystemdate'=>$systemdate]);
+                }
+                //transaction credit vat
+                if($invoice->vat <> 0 || $invoice->vat < 0){
+                    DB::table('accounttransactions')
+                    ->insert(['trxreference'=>$trxid,'trxglaccount'=>$vatcode
+                    ,'trxtype'=>'TC','trxcurrencycode'=>$invoice->currencycode,'trxamount'=>$invoice->vat,
+                    'trxratedamount'=>$vattrxratedamt,'trxexchangerate'=>$exchangerate,
+                    'trxdescription'=>$trxdescriptionclient,'trxsystemdate'=>$systemdate]);
+                }
+                 //transaction credit rates
+                 if($invoice->vat <> 0 || $invoice->vat < 0){
+                    DB::table('accounttransactions')
+                    ->insert(['trxreference'=>$trxid,'trxglaccount'=>$creditorscode
+                    ,'trxtype'=>'TC','trxcurrencycode'=>$invoice->currencycode,'trxamount'=>$invoice->rates,
+                    'trxratedamount'=>$ratestrxratedamt,'trxexchangerate'=>$exchangerate,
+                    'trxdescription'=>$trxdescriptionrates,'trxsystemdate'=>$systemdate]);
+                }
+                //transaction credit opperational costs
+                if($invoice->operationalcost <> 0 || $invoice->operationalcost < 0){
+                    DB::table('accounttransactions')
+                ->insert(['trxreference'=>$trxid,'trxglaccount'=>$creditorscode
+                ,'trxtype'=>'TC','trxcurrencycode'=>$invoice->currencycode,'trxamount'=>$invoice->operationalcost,
+                'trxratedamount'=>$oppcoststrxratedamt,'trxexchangerate'=>$exchangerate,
+                'trxdescription'=>$trxdescriptionoppcst,'trxsystemdate'=>$systemdate]);
+                }
+             //post data into invoices & arrear details and clear preinvoice 
+             DB::select ('EXEC spPostGenerateInvoiceAndArrears ?,?',array($invoiceid,$systemdate));
 
-        $data["email"] = $tenant->email;
-        $data["CCemail"] = "kudzchitz@gmail.com";
-        $data["title"] = "Invoice for ".$tenantname;
-        $data["tenantname"] = $tenantname;
-        $data["propdesc"] = $invoice->propertydescription;
-        $data["period"] = $invoice->period;
-        $data["tenantvatnumber"] = $tenant->vatnumber;
-        $data["invoicenumber"] = $invoice->id;
-        $data["balancebd"] = number_format($invoice->balancebd,2);
-        $data["currencycode"] = $invoice->currencycode;
-        $data["rent"] = number_format($invoice->rental,2);
-        $data["rateswater"] = number_format($invoice->rates,2);
-        $data["interestcharged"] = number_format($invoice->interestbd,2);
-        $data["operational"] = number_format($invoice->operationalcost,2);
-        $data["rentvat"] = number_format($invoice->vat,2);
-        $data["billedtotal"] = number_format($totalbilled,2);
-        $data["totalvatincl"] = number_format($totalvatincl,2);
-        $data["bankname"] = $banking->bankname;
-        $data["branch"] = $banking->branch;
-        $data["accountnumber"] = $banking->accountnumber;
-        $data['today'] = date('d-M-Y');
-        $data["deposit"] = number_format($invoice->deposit,2);
-
-        $invoicepdf =   PDF::loadView('tomail/invoice',$data);
-        Mail::send('tomail/empty', $data, function($message)use($data, $invoicepdf) {
-            $message->to($data["email"], $data["email"])
-                   ->cc($data["CCemail"])
-                  ->subject($data["title"])
-                  ->attachData($invoicepdf->output(), ''.$data["title"].'.pdf');
-        });
-        echo 'mail send';
+             return  redirect()->route('invoice.listpre') 
+             ->with('success', 'invoice send to client');
+            }
+        }
+        return  redirect()->route('invoice.listpre') 
+        ->with('error', 'system date not found');
     } 
 }catch (QueryException $e) {
         return  redirect()->route('invoice.listpre') 
         ->with('error', 'failed to load');
     }
- //$invoicepdf->download('testinvoice.pdf');
-    
-    // return $invoicepdf->stream('reportjs.pdf');
- 
 }
 public function testinvoiceprint(){
    // return view('toprint/test-invoice');
