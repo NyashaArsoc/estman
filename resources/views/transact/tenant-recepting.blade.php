@@ -34,14 +34,14 @@ $description = 'tenant payments...'; @endphp
                                     id="PropertyAddressDesc" onchange="getTenantDetails();" />
                                     <option value="">Property Description</option>
                                     @foreach($lease as $abc)
-								    <option value="{{ $abc->tenantid }}"> {{$abc->streetaddress.' - '.$abc->propertydescription}}
+								    <option value="{{ $abc->id }}"> {{$abc->streetaddress.' - '.$abc->propertydescription}}
                                     </option>
                                     @endforeach
                                     </select>
                                       <h5>Payment Details:</h5>
                                       <div id="tenantdetailsform">
                                         <div class="clearfix mb-0-25">
-                                            <span class="float-xs-left">Customers:</span>
+                                            <span class="float-xs-left">Tenant:</span>
                                             <span class="float-xs-right" id="tenantname">k</span>
                                           </div>
                                           <div class="clearfix mb-0-25">
@@ -56,71 +56,72 @@ $description = 'tenant payments...'; @endphp
                                             <span class="float-xs-left">Billing Address:</span>
                                             <span class="float-xs-right" id="tenantaddress"></span>
                                         </div>
-                                      </div>
                                     <div class="b-a b-a-success b-a-width-1 mb-0-5"></div>
-									<div class="clearfix mb-0-25">
-											<span class="float-xs-left ">Total Amount:</span>
-											<p><span class="float-xs-right" id="total_amount"></span></p>
-									</div>
-									<div class="clearfix mb-0-25">
-											<span class="float-xs-left">Paid Amount:</span>
-											<span class="float-xs-right" id="total_paid_amount"></span>
-									</div>
+                                    <table  class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr><th>Currency</th><th>Balance</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td></td><td></td></tr>
+                                        </tbody>
+                                    </table>
                                     <div class="b-a b-a-success b-a-width-1 mb-0-5"></div>
-									<div class="clearfix mb-0-25">
-											<span class="float-xs-left">Remaing Amount:</span>
-											<span class="float-xs-right" id="total_remaining_amount"></span>
-									</div>
+                                </div>
                                 </div>
                                 <div  class=" col-sm-3"></div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="CashReceivable" class="col-sm-2 col-form-label">Cash Received <i class="text-danger">*</i></label>
+                        <label for="pay_payment_type" class="col-sm-2 col-form-label">Currency
+                            <i class="text-danger">*</i></label>
+                        <div class="col-sm-4 has-success">
+                             <select class="js-example-basic-single w-100" name="ReceiptCurrency"
+                                    id="ReceiptCurrency" />                                               	
+                                <option value="">Select Currency</option>
+                                @foreach($currency as $abc)
+								    <option value="{{ $abc->code }}"> {{$abc->code}}
+                                    </option>
+                                    @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="CashReceivable" class="col-sm-2 col-form-label">Amount Received <i class="text-danger">*</i></label>
                         <div class="col-sm-4">
                             <div class="input-group has-success">
                                 <div class="input-group-addon">$</div>
-                                <input type="text" class="form-control" id="cash_recieved" name="cash_recieved" autocomplete="off" onkeyup="received_amount();" placeholder="Amount">
+                                <input type="text" class="form-control" id="cash_recieved" 
+                                name="cash_recieved" autocomplete="off" onkeyup="received_amount();" 
+                                placeholder="Amount">
                                 <div class="input-group-addon">.00</div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="datepicker_invoice_date" class="col-sm-2 col-form-label">Date <i class="text-danger">*</i></label>
+                        <label for="" class="col-sm-2 col-form-label">Date <i class="text-danger">*</i></label>
                         <div class="col-sm-4">
                              <div class="input-group has-success">
-                                <input type="text" class="form-control" autocomplete="off" required  id="datepicker_invoice_date" name="datepicker_invoice_date" placeholder="yyyy-mm-dd">
+                                <input type="text" class="form-control" autocomplete="off" required 
+                                 id="datepicker_invoice_date" name="datepicker_invoice_date" placeholder="yyyy-mm-dd">
                                 <span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="pay_payment_type" class="col-sm-2 col-form-label">Payment Type <i class="text-danger">*</i></label>
-                        <div class="col-sm-4 has-success">
-                             <select id="pay_payment_type" name="pay_payment_type" class="form-control" data-plugin="select2" tabindex="8" required>                                                	
-                                <option value="">Select Payment Type</option>
-                                <option value="Credit">Credit</option> 
-                                <option value="Cash">Cash</option> 
-                                <option value="Check">Check</option> 
-                                <option value="Debit card">Debit card</option> 
-                                <option value="Credit card">Credit card</option>
-                                <option value="Mobile payment">Mobile payment</option> 
-                                <option value="Bank transfers">Bank transfers</option> 
-                            </select>
-                        </div>
-                    </div>
+                    
                     <div class="form-group row">
                         <label for="pay_payment_detail" class="col-sm-2 col-form-label"></label>
                         <div class="col-sm-4 has-success">
-                             <input id="pay_payment_detail" autocomplete="off" class="form-control" name="pay_payment_detail" placeholder="Payment Type Reference #/ Detail">
+                             <input id="pay_payment_detail" autocomplete="off" class="form-control" 
+                             name="pay_payment_detail" placeholder="Payment Type Reference #/ Detail">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="CashReceivable" class="col-sm-2 col-form-label"></label>
                         <div class="col-sm-4">
                             <div class="input-group has-success">
-                                <input id="add-receivable" class="btn btn-success" name="add-receivable"  value="Cash Received" tabindex="9" type="submit">
+                                <input id="add-receivable" class="btn btn-success" name="add-receivable" 
+                                 value="Cash Received" tabindex="9" type="submit">
                                         
                             </div>
                         </div>

@@ -73,3 +73,14 @@ function getPropertyBalances() {
 });
 
 }
+// get tenant details on recepting
+function getTenantDetails() {
+    var textValue = $("#PropertyAddressDesc").val();
+	$.ajax({          
+        	type: "GET",
+        	url: "/single-tenant/details"+'/'+textValue,
+        	success: function(data){
+        		$("#tenantdetailsform").html(data);
+        	}
+	});
+}

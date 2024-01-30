@@ -305,4 +305,19 @@ class TenantController extends Controller
          return view('tenant/get-single-tenant')
          ->with($arr);
     }
+public function gettenantdetails($id){
+    try { 
+        $arr['tenant']    = collect(DB::select ('EXEC spGetSingleTenantByLeaseID ?',
+        [$id]))->first();
+        $arr['balances']    = DB::select ('EXEC spGetSingleLeaseCurrentAmountDue ?',
+       [$id]);
+
+       return view('tenant/get-single-tenant-alldetails')
+         ->with($arr);
+    }catch (QueryException $e) {
+        return 'failed'.$e;
+    }
+    
+    
+}
 }

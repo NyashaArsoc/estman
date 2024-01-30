@@ -154,6 +154,8 @@ public function receipting(){
         ->where('available','=','Y')
         ->select('*')
         ->get();
+        $arr['currency']   = DB::table('currency')
+        ->select('id','code')->get();
         return  view('transact/tenant-recepting')
         ->with($arr);
     } catch (QueryException $e) {
