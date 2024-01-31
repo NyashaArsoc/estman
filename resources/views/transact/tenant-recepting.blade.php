@@ -20,7 +20,7 @@ $description = 'tenant payments...'; @endphp
             <li class="breadcrumb-item active">{{$title}}</li>
         </ol>
         <div class="box box-block bg-white">
-            <form class="form-vertical" id="" name="" 
+            <form class="form-vertical" id="" action="{{ route('transact.addreceipt') }}"
             enctype="multipart/form-data" method="post" accept-charset="utf-8">
                 <div class="panel-body">
                     <div class="row"> 
@@ -38,6 +38,7 @@ $description = 'tenant payments...'; @endphp
                                     </option>
                                     @endforeach
                                     </select>
+                                    <small id="receiptaddresscheck" style="color: red;"> date is required</small>
                                       <h5>Payment Details:</h5>
                                       <div id="tenantdetailsform">
                                         <div class="clearfix mb-0-25">
@@ -74,7 +75,7 @@ $description = 'tenant payments...'; @endphp
                     </div>
                     <div class="form-group row">
                         <label for="pay_payment_type" class="col-sm-2 col-form-label">Currency
-                            <i class="text-danger">*</i></label>
+                            </label>
                         <div class="col-sm-4 has-success">
                              <select class="js-example-basic-single w-100" name="ReceiptCurrency"
                                     id="ReceiptCurrency" />                                               	
@@ -84,44 +85,46 @@ $description = 'tenant payments...'; @endphp
                                     </option>
                                     @endforeach
                             </select>
+                            <small id="receiptingcurrencycheck" style="color: red;"> currency is required</small>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="CashReceivable" class="col-sm-2 col-form-label">Amount Received <i class="text-danger">*</i></label>
+                        <label for="CashReceivable" class="col-sm-2 col-form-label">Amount Received</label>
                         <div class="col-sm-4">
                             <div class="input-group has-success">
                                 <div class="input-group-addon">$</div>
-                                <input type="text" class="form-control" id="cash_recieved" 
-                                name="cash_recieved" autocomplete="off" onkeyup="received_amount();" 
-                                placeholder="Amount">
+                                <input type="text" class="form-control" id="ReceiptAmount" 
+                                name="ReceiptAmount" autocomplete="off" placeholder="300">
                                 <div class="input-group-addon">.00</div>
                             </div>
+                            <small id="receiptamountcheck" style="color: red;"> amount is required</small>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="" class="col-sm-2 col-form-label">Date <i class="text-danger">*</i></label>
+                        <label for="" class="col-sm-2 col-form-label">Date</label>
                         <div class="col-sm-4">
                              <div class="input-group has-success">
-                                <input type="text" class="form-control" autocomplete="off" required 
-                                 id="datepicker_invoice_date" name="datepicker_invoice_date" placeholder="yyyy-mm-dd">
-                                <span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
+                                <input type="date" class="form-control" autocomplete="off" 
+                                 id="ReceiptDate" name="ReceiptDate" placeholder="yyyy-mm-dd">
+                                <span class="input-group-addon"></span>
                             </div>
+                            <small id="receiptdatecheck" style="color: red;"> date is required</small>
                         </div>
                     </div>
                     
                     <div class="form-group row">
-                        <label for="pay_payment_detail" class="col-sm-2 col-form-label"></label>
+                        <label for="pay_payment_detail" class="col-sm-2 col-form-label">Receipt Reference</label>
                         <div class="col-sm-4 has-success">
-                             <input id="pay_payment_detail" autocomplete="off" class="form-control" 
-                             name="pay_payment_detail" placeholder="Payment Type Reference #/ Detail">
+                             <input id="ReceiptReference" autocomplete="off" class="form-control" 
+                             name="ReceiptReference" placeholder="Receipt Reference #/ Detail">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="CashReceivable" class="col-sm-2 col-form-label"></label>
+                        <label for="" class="col-sm-2 col-form-label"></label>
                         <div class="col-sm-4">
                             <div class="input-group has-success">
-                                <input id="add-receivable" class="btn btn-success" name="add-receivable" 
-                                 value="Cash Received" tabindex="9" type="submit">
+                                <input id="add-receipt" class="btn btn-primary" name="add-receipt" 
+                                 value="Process" tabindex="9" type="submit">
                                         
                             </div>
                         </div>
@@ -133,6 +136,7 @@ $description = 'tenant payments...'; @endphp
 @endsection
 @section('additional js')
     <!-- Additional JS Start-->
+    <script src="{{ asset('js/validation/transaction.js') }}"></script>
     <script src="{{ asset('css/select2/select2.min.js') }}"></script>
     <script src="{{ asset('js/select2.js') }}"></script>
     <!-- Additional JS End-->
