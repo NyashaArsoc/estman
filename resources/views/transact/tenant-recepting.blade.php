@@ -21,7 +21,7 @@ $description = 'tenant payments...'; @endphp
         </ol>
         <div class="box box-block bg-white">
             <form class="form-vertical" id="" action="{{ route('transact.addreceipt') }}"
-            enctype="multipart/form-data" method="post" accept-charset="utf-8">
+            enctype="multipart/form-data" method="post" accept-charset="utf-8">@csrf
                 <div class="panel-body">
                     <div class="row"> 
                         <div id="error"></div> 
@@ -60,10 +60,10 @@ $description = 'tenant payments...'; @endphp
                                     <div class="b-a b-a-success b-a-width-1 mb-0-5"></div>
                                     <table  class="table table-hover table-bordered">
                                         <thead>
-                                            <tr><th>Currency</th><th>Balance</th></tr>
+                                            <tr><th>Currency</th><th>Balance</th><th>Prepayment</th></tr>
                                         </thead>
                                         <tbody>
-                                            <tr><td></td><td></td></tr>
+                                            <tr><td></td><td></td><td></td></tr>
                                         </tbody>
                                     </table>
                                     <div class="b-a b-a-success b-a-width-1 mb-0-5"></div>
@@ -131,6 +131,7 @@ $description = 'tenant payments...'; @endphp
                     </div>
                 </div>
             </form>
+            @include('layout.arlet')
         </div>
     </div>
 @endsection

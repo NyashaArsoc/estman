@@ -17,10 +17,11 @@
 <div class="b-a b-a-success b-a-width-1 mb-0-5"></div>
 <table  class="table table-hover table-bordered">
     <thead>
-        <tr><th>Currency</th><th>Balance</th></tr>
+        <tr><th>Currency</th><th>Balance</th><th>Prepayment</th></tr>
     </thead>
     <tbody id="balancebd">
-        @foreach($balances as $abc)<tr><td>{{ $abc->currencycode }}</td><td>{{ $abc->balancebd }}</td></tr>@endforeach
+        @foreach($balances as $abc)<tr><td>{{ $abc->currencycode }}</td>
+            <td>{{ $abc->balancebd }}</td><td>{{ number_format($abc->prepayment,2) }}</td></tr>@endforeach
     </tbody>
 </table>
 <div class="b-a b-a-success b-a-width-1 mb-0-5"></div>

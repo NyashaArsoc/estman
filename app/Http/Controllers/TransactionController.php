@@ -164,4 +164,184 @@ public function receipting(){
     }
     
 }
+/*
+public function addreceipts(Request $request){
+    try {/*
+        $ledger_bank            =       'bank';
+        $productcolumn          =       'leaseid';
+        $bankcode               =       $this->getgeneralledger($ledger_bank,$request->ReceiptCurrency);
+        $systemdate             =       $this->systemdate();
+        $trxid                  =       $this->transationid();
+        $basecurrency           =       $this->getbasecurrency();
+        $productsubledger       =       $this->getproductsubledger($productcolumn,$request->PropertyAddressDesc,$request->ReceiptCurrency);
+          */
+          /*check if the base currency is the one running 
+                    use exchange rate as 1*/
+      /*  if(trim($basecurrency)==trim($request->ReceiptCurrency)){ $exchangerate =1;}
+        else{ $exchangerate  =  $this->getexchangerate($request->ReceiptCurrency);   }
+        */
+      /*  DB::table('payments')
+        ->insert(['receiptnumber'=>$trxid,'leaseid'=>$request->PropertyAddressDesc
+        ,'currencycode'=>$request->ReceiptCurrency,'amountpaid'=>$request->ReceiptAmount,
+        'receiptdate'=>$request->ReceiptDate,
+            'receiptreference'=>$request->ReceiptReference,'systemdate'=>$systemdate]);
+        //double entry 
+        $trxratedamt = $request->ReceiptAmount * $exchangerate;
+        $trxdescription = 'Receipt Number '.$trxid;
+        DB::table('accounttransactions')
+        ->insert(['trxreference'=>$trxid,'trxglaccount'=>$bankcode
+            ,'trxtype'=>'TD','trxcurrencycode'=>$request->ReceiptCurrency,
+            'trxamount'=>$request->ReceiptAmount,'trxratedamount'=>$trxratedamt,
+            'trxexchangerate'=>$exchangerate,'trxdescription'=>$trxdescription,
+            'trxsystemdate'=>$systemdate]);
+           //transaction credit
+           DB::table('accounttransactions')
+           ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$productsubledger
+           ,'trxtype'=>'TC','trxcurrencycode'=>$request->ReceiptCurrency,'trxamount'=>$request->ReceiptAmount,
+           'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+           'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
+        */
+           /*reducing the tenant balance by 
+               starting with interest ->rental->rates->operational->vat starting with the 
+               Old one FIFO*/
+        /*   
+            return 'yes';
+
+    } catch (QueryException $e) {
+        return  redirect()->route('transact.payment') 
+        ->with('error', 'failed to load');
+    }
+    
+}*/
+/*public function processreceipt(Request $request){
+    try {
+        $AmountPaid = $request->ReceiptAmount;
+        $a  = 0;
+          //count number of arrears 
+            $arr   = DB::table('leasearrearsdetails')
+                ->where('leaseid',$request->PropertyAddressDesc)
+                ->where('currencycode',$request->ReceiptCurrency)
+                    ->select('*')->get();
+            $arrearcount = count($arr);
+            while ($a   <   $arrearcount){
+                $interestbalcheck = DB::table('leasearrearsdetails')->where('leaseid',
+                $request->PropertyAddressDesc)->where('currencycode',$request->ReceiptCurrency)
+                ->select('*')->oldest('id')->first();
+                if($interestbalcheck->balinterest !=''){
+                    //reduce the interest balance
+                   $balremaininterest = $AmountPaid - $interestbalcheck->balinterest;
+                    //check if the remain balance is in -vet
+                    if($balremaininterest < 0 || $balremaininterest==0){
+                        $newbalinterest = $interestbalcheck->balinterest - $AmountPaid;
+                        //update the lease table interest with new balance
+                      /*  DB::table('leasearrearsdetails')
+                        ->where('id',$interestbalcheck->id)
+                        ->update(['balinterest'=> $newbalinterest]);*/
+                        //break the loop
+           /*             break;
+                    }else{//when the balance is still greater than zero then take from rental
+                        $newrentalbal = $balremaininterest - $interestbalcheck->balrent;
+
+                    }
+                    echo $newrentalbal;    
+                };
+                $a++;
+            }
+        } catch (QueryException $e) {
+            return  redirect()->route('transact.payment') 
+            ->with('error', 'failed to load');
+        }
+}*/
+public function processreceipt(Request $request){
+    try {
+        // Retrieve the payment amount
+        $remainingamount = $request->ReceiptAmount;
+                
+        // Retrieve the arrears data ordered by priority (expenses, levies, rates, rental)
+        $arrears   = DB::table('leasearrearsdetails')
+                ->where('leaseid',$request->PropertyAddressDesc)
+                ->where('currencycode',$request->ReceiptCurrency)
+                    ->select('*')->oldest('id')->get();
+         // Retrieve the prepayment account
+         $prepayment   = DB::table('leaseprepayments')
+         ->where('leaseid',$request->PropertyAddressDesc)
+         ->where('currencycode',$request->ReceiptCurrency)
+             ->select('*')->latest('id')->first();
+        // Iterate through the arrears data
+        foreach ($arrears as $abc) {
+    
+            if ($remainingamount <= 0) {
+                break; // No remaining amount, exit the loop
+            }
+            if ($remainingamount >= $abc->balinterest) {
+                // Deduct from interest
+                $remainingamount -= $abc->balinterest;
+                $abc->balinterest = 0;
+            } else {
+                // Deduct partially from inerest
+                $abc->balinterest -= $remainingamount;
+                $remainingamount = 0;
+            }
+            if ($remainingamount >= $abc->balrent) {
+                // Deduct from levies
+                $remainingamount -= $abc->balrent;
+                $abc->balrent = 0;
+            } else {
+                // Deduct partially from levies
+                $abc->balrent -= $remainingamount;
+                $remainingamount = 0;
+            }
+            if ($remainingamount >= $abc->balrates) {
+                // Deduct from rates
+                $remainingamount -= $abc->balrates;
+                $abc->balrates = 0;
+            } else {
+                // Deduct partially from rates
+                $abc->balrates -= $remainingamount;
+                $remainingamount = 0;
+            }
+            if ($remainingamount >= $abc->baloperational) {
+                // Deduct from opperational cost
+                $remainingamount -= $abc->baloperational;
+                $abc->baloperational = 0;
+            } else {
+                // Deduct partially from operational cost
+                $abc->baloperational -= $remainingamount;
+                $remainingamount = 0;
+            }
+            if ($remainingamount >= $abc->balvat) {
+                // Deduct from vat
+                $remainingamount -= $abc->balvat;
+                $abc->balvat = 0;
+            } else {
+                // Deduct partially from vat
+                $abc->balvat -= $remainingamount;
+                $remainingamount = 0;
+            }
+          
+            // Update the arrears record with the cleared balances
+            $updatereceipt = array('balvat' => $abc->balvat, 'balinterest'=> $abc->balinterest,
+                    'balrent'=>$abc->balrent,'balrates'=>$abc->balrates,'baloperational'=>$abc->baloperational);
+            DB::table('leasearrearsdetails')
+            ->where('leaseid',$request->PropertyAddressDesc)
+            ->where('currencycode',$request->ReceiptCurrency)
+                            ->update($updatereceipt);
+            if(is_null($prepayment)){
+                DB::table('leaseprepayments') 
+                ->insert(['balance'=>$remainingamount,'currencycode'=>$request->ReceiptCurrency
+            ,'leaseid'=>$request->PropertyAddressDesc]);
+            }else{
+                DB::table('leaseprepayments') 
+                ->updateOrInsert(['id'=>$prepayment->id],
+                ['balance'=>$prepayment->balance += $remainingamount]);
+            }
+            
+        }
+        return redirect()->route('transact.payment') 
+        ->with('success', 'balance updated');
+    } catch (QueryException $th) {
+        return  redirect()->route('transact.payment') 
+            ->with('error', 'failed to load');
+    }
+}
 }
