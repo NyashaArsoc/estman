@@ -213,47 +213,21 @@ public function addreceipts(Request $request){
     }
     
 }*/
-/*public function processreceipt(Request $request){
-    try {
-        $AmountPaid = $request->ReceiptAmount;
-        $a  = 0;
-          //count number of arrears 
-            $arr   = DB::table('leasearrearsdetails')
-                ->where('leaseid',$request->PropertyAddressDesc)
-                ->where('currencycode',$request->ReceiptCurrency)
-                    ->select('*')->get();
-            $arrearcount = count($arr);
-            while ($a   <   $arrearcount){
-                $interestbalcheck = DB::table('leasearrearsdetails')->where('leaseid',
-                $request->PropertyAddressDesc)->where('currencycode',$request->ReceiptCurrency)
-                ->select('*')->oldest('id')->first();
-                if($interestbalcheck->balinterest !=''){
-                    //reduce the interest balance
-                   $balremaininterest = $AmountPaid - $interestbalcheck->balinterest;
-                    //check if the remain balance is in -vet
-                    if($balremaininterest < 0 || $balremaininterest==0){
-                        $newbalinterest = $interestbalcheck->balinterest - $AmountPaid;
-                        //update the lease table interest with new balance
-                      /*  DB::table('leasearrearsdetails')
-                        ->where('id',$interestbalcheck->id)
-                        ->update(['balinterest'=> $newbalinterest]);*/
-                        //break the loop
-           /*             break;
-                    }else{//when the balance is still greater than zero then take from rental
-                        $newrentalbal = $balremaininterest - $interestbalcheck->balrent;
 
-                    }
-                    echo $newrentalbal;    
-                };
-                $a++;
-            }
-        } catch (QueryException $e) {
-            return  redirect()->route('transact.payment') 
-            ->with('error', 'failed to load');
-        }
-}*/
 public function processreceipt(Request $request){
     try {
+        $systemdate             =       $this->systemdate();
+        $trxid                  =       $this->transationid();
+        $basecurrency           =       $this->getbasecurrency();
+        $ledger_bank            =       'bank';
+        $productcolumn          =       'leaseid';
+        $bankcode               =       $this->getgeneralledger($ledger_bank,$request->ReceiptCurrency);
+        $productsubledger       =       $this->getproductsubledger($productcolumn,$request->PropertyAddressDesc,$request->ReceiptCurrency);
+       /*check if the base currency is the one running 
+                    use exchange rate as 1*/
+        if(trim($basecurrency)==trim($request->ReceiptCurrency)){ $exchangerate =1;}
+        else{ $exchangerate  =  $this->getexchangerate($request->ReceiptCurrency);   }
+
         // Retrieve the payment amount
         $remainingamount = $request->ReceiptAmount;
                 
@@ -339,7 +313,27 @@ public function processreceipt(Request $request){
         }
         //clean  arrears table balances
         DB::select('EXEC spCleanArrearsZeroBalances');
-
+        //post into payments table 
+        DB::table('payments')
+        ->insert(['receiptnumber'=>$trxid,'leaseid'=>$request->PropertyAddressDesc
+        ,'currencycode'=>$request->ReceiptCurrency,'amountpaid'=>$request->ReceiptAmount,
+        'receiptdate'=>$request->ReceiptDate,
+            'receiptreference'=>$request->ReceiptReference,'systemdate'=>$systemdate]);
+          //completing double entry 
+          $trxratedamt = $request->ReceiptAmount * $exchangerate;
+          $trxdescription = 'Receipt Number '.$trxid;
+          DB::table('accounttransactions')
+          ->insert(['trxreference'=>$trxid,'trxglaccount'=>$bankcode
+              ,'trxtype'=>'TD','trxcurrencycode'=>$request->ReceiptCurrency,
+              'trxamount'=>$request->ReceiptAmount,'trxratedamount'=>$trxratedamt,
+              'trxexchangerate'=>$exchangerate,'trxdescription'=>$trxdescription,
+              'trxsystemdate'=>$systemdate]);
+             //transaction credit
+             DB::table('accounttransactions')
+             ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$productsubledger
+             ,'trxtype'=>'TC','trxcurrencycode'=>$request->ReceiptCurrency,'trxamount'=>$request->ReceiptAmount,
+             'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+             'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
         return redirect()->route('transact.payment') 
         ->with('success', 'balance updated');
     } catch (QueryException $th) {
