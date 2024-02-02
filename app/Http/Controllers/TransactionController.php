@@ -337,6 +337,9 @@ public function processreceipt(Request $request){
             }
             
         }
+        //clean  arrears table balances
+        DB::select('EXEC spCleanArrearsZeroBalances');
+
         return redirect()->route('transact.payment') 
         ->with('success', 'balance updated');
     } catch (QueryException $th) {
