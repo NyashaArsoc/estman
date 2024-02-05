@@ -87,7 +87,7 @@ public function getrentalsubledger($leaseid,$currencycode){
         ->whereIn('propertyid',DB::table('alllease')->where('id',$leaseid)
         ->select('propertyid'))
         ->where('currencycode',$currencycode)
-        ->select('*')->first();
+        ->select('*')->latest('id')->first();
         if(is_null($rentalsubledger)){
             return 'failed';
         }else{
