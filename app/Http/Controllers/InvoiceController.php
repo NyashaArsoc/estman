@@ -215,6 +215,7 @@ public function approveprofoma($id,$lease){
             /*check if the base currency is the one running 
                     use exchange rate as 1*/
     if(trim($basecurrency)  ==      trim($invoice->currencycode)){ $exchangerate =1;}
+    else{ $exchangerate  =  $this->getexchangerate($invoice->currencycode);   }
     $productsubledger       =       $this->getproductsubledger($productcolumn,$leaseid,$invoice->currencycode);
     $rentalsubledger        =       $this->getrentalsubledger($leaseid,$invoice->currencycode);
     $vatcode                =       $this->getgeneralledger($ledger_vat,$invoice->currencycode);
