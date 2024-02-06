@@ -359,4 +359,16 @@ public function createsubledgers($id,$product){
                     ->with('error', 'failed to load');
         }
     }
+public function remitlist(){
+    try {
+        $arr['remit']   = DB::table('preremitlist')
+        ->select('*')
+        ->get();
+        return view('property/remittance-list')
+        ->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('property.rejected') 
+            ->with('error', 'failed to load property list');
+    }
+}
 }

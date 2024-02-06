@@ -92,6 +92,7 @@
                             <li><a href="{{route('property.create')}}">Add Property</a></li>
                             <li><a href="{{route('property.pending')}}">Approval</a></li>
                             <li><a href="{{route('property.rejected')}}">Rejected</a></li>
+                            <li><a href="{{route('property.remit')}}">Remit</a></li>
                             <li><a href="{{route('property.list')}}">Manage Property</a></li>
                         </ul>
                     </li>
