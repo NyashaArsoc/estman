@@ -69,9 +69,9 @@ Route::controller(PropertyController::class)->group(function () {
     Route::any('/property/{id}/view', 'viewindividual')->name('property.view');
     Route::get('/property/{id}/view-ledgers', 'viewledgers')->name('property.ledgers');
     Route::post('/property/{id}/sub-ledgers/{product}', 'createsubledgers')->name('property.createsub');
-    Route::any('/property-remittance', 'remitlist')->name('property.remit');
-
+    Route::get('/property-remittance', 'remitlist')->name('property.remit');
     Route::any('/property-list', 'listproperties')->name('property.list');
+    Route::any('/genarate-preremit', 'compilepreremitlist');
 
     
 });
