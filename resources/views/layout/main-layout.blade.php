@@ -131,6 +131,7 @@
                         <ul>
                             <li><a href="{{route('transact.newbal')}}">Leases Rates</a></li>
                             <li><a href="{{route('transact.payment')}}">Receipt</a></li>
+                            <li><a href="{{route('transact.remit')}}">Remittance</a></li>
                         </ul>
                     </li>
                     <li class="with-sub">

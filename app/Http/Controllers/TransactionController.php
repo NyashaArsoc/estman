@@ -341,4 +341,17 @@ public function processreceipt(Request $request){
             ->with('error', 'failed to load');
     }
 }
+public function viewremit(){
+    try {
+        $arr['remit']   = DB::table('preremitlist')
+        ->whereNotNull('totaldeduction')
+        ->select('*')
+        ->get();
+        return view('transact/remittance-schedule')
+        ->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('property.rejected') 
+            ->with('error', 'failed to load property list');
+    }
+}
 }
