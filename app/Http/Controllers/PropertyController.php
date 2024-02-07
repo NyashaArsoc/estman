@@ -406,7 +406,8 @@ public function prepareremittance($id,$currency,$period){
     try {
         $arr['property']   = DB::table('allproperty')
             ->where('id', $propertyid)
-            ->select('id','companyname','landlordclienttype' ,'fullname','streetaddress')
+            ->select('id','companyname','landlordclienttype' ,'fullname','streetaddress',
+            'commissionpercentage','commissionon')
             ->first();
         $arr['remit']=collect(DB::select('EXEC spGetSingleRemitList ?,?,?'
         ,array($remitperiod,$propertyid,$currencycode)))->first();

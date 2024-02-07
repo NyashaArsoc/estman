@@ -5,7 +5,18 @@ if ($property->landlordclienttype == 1){
     $owner   =  $property->fullname ;
    }else{
      $owner   =  $property->companyname ;
- } 
+ }
+ if ($property->commissionon == 'rental'){
+    $comissioncharged   =  ($property->commissionpercentage/100) * $remit->rental;
+   }else if($property->commissionon == 'rental and rates'){
+    $comissioncharged   =  ($property->commissionpercentage/100) * ($remit->rental +
+    $remit->rates );
+   }else if($property->commissionon == 'rental and operation cost'){
+    $comissioncharged   =  ($property->commissionpercentage/100) * ($remit->rental +
+    $remit->operationalcost );
+   }else{
+    $comissioncharged   =  0;
+ }
  $id= Crypt::encrypt($property->id);
  $currency= Crypt::encrypt($remit->currencycode);
 @endphp
@@ -63,11 +74,11 @@ if ($property->landlordclienttype == 1){
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="" class="col-sm-2 col-form-label">Commission</label>
+                        <label for="" class="col-sm-2 col-form-label">Commission ({{$property->commissionpercentage.'%'}})</label>
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
                             <input type="text" class="form-control" id="BillCommission" name="BillCommission"
-                             readonly />
+                             readonly value="{{$comissioncharged}}"/>
                         </div>
                     </div>
                     <div class="form-group row">
