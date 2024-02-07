@@ -72,6 +72,8 @@ Route::controller(PropertyController::class)->group(function () {
     Route::get('/property-remittance', 'remitlist')->name('property.remit');
     Route::any('/property-list', 'listproperties')->name('property.list');
     Route::any('/genarate-preremit', 'compilepreremitlist');
+    Route::get('/property/{id}/remit/{currency}/{period}', 'prepareremittance')->name('property.remitprepare');
+    Route::any('/remit/{id}/property/{currency}', 'addpreremit')->name('property.preremit');
 
     
 });

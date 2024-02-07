@@ -1,7 +1,7 @@
 @php $title = 'Remit Property'; 
       $description = 'list of all monthly remittance...'; @endphp
     @extends('layout.main-layout')
-    @section('title', 'Manage Property')
+    @section('title', 'Remit List')
     @section('additional css')
     <!-- Additional css Start-->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
@@ -46,13 +46,13 @@
                                     <td>{{ $abc->currencycode }}</td>
                                     <td>{{ $abc->totalbilled }}</td>
                                     <td>{{ $abc->period }}</td>
-                                    <td>
+                                    <td>@php $id= Crypt::encrypt($abc->propertyid);
+                                    $currency= Crypt::encrypt($abc->currencycode); 
+                                    $period= Crypt::encrypt($abc->period); @endphp
                                         <a class="btn btn-info btn-sm " id=""
-                                        href=""
+                                        href="{{route('property.remitprepare',['id'=>$id,'currency'=>$currency,'period'
+                                        =>$period])}}"
                                         title="view"><i class="ti-eye mr-0-5"></i>view</a>
-                                        <a onclick = "approveproperty(this); return false;"
-                                        class="btn btn-success btn-sm" href="{{route('property.approve', $owner)}}"
-                                        title="approve"><i class="ti-check mr-0-5"></i>approve</a>
                             </td>
                             </tr>
                             @endforeach

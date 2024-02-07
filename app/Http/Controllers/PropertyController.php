@@ -399,4 +399,54 @@ public function compilepreremitlist(){
     }
     
 }
+public function prepareremittance($id,$currency,$period){
+    $propertyid = Crypt::decrypt($id);
+    $currencycode = Crypt::decrypt($currency);
+    $remitperiod = Crypt::decrypt($period);
+    try {
+        $arr['property']   = DB::table('allproperty')
+            ->where('id', $propertyid)
+            ->select('id','companyname','landlordclienttype' ,'fullname','streetaddress')
+            ->first();
+        $arr['remit']=collect(DB::select('EXEC spGetSingleRemitList ?,?,?'
+        ,array($remitperiod,$propertyid,$currencycode)))->first();
+        return view('property/remittance-prepare')
+        ->with($arr);
+        if(is_null($arr)){
+            return  redirect()->route('property.rejected') 
+            ->with('error', 'failed to load property list');
+        }
+    } catch (QueryException $th) {
+        return  redirect()->route('property.rejected') 
+        ->with('error', 'failed to load property list');
+    }
+}
+public function addpreremit(Request $request,$id,$currency){
+    $propertyid = Crypt::decrypt($id);
+    $currencycode = Crypt::decrypt($currency);
+    try {
+        $totaldeduction = $request->BillInterest + $request->BillCommission + 
+    $request->BillRates + $request->BillOppC + $request->BillVAT + $request->SecurityCharge +
+    $request->CaretakerCharge + $request->OtherExpensesCharge;
+    $toremit = $request->BillCollections - $totaldeduction;
+    if($toremit < 0){
+        return  redirect()->route('property.remit') 
+        ->with('error', 'remittance is negative'.$toremit);
+    }
+        // Update the remittance balances
+    $update = array('deductsecurity' => $request->SecurityCharge, 'deductcaretaker'=> 
+    $request->CaretakerCharge,'deductother'=>$request->OtherExpensesCharge,'deductcommission'=>
+    $request->BillCommission,'totaldeduction'=>$totaldeduction);
+    DB::table('preremitlist')
+        ->where('propertyid',$propertyid)
+        ->where('currencycode',$currencycode)
+                    ->update($update);
+    return  redirect()->route('property.remit') 
+    ->with('success', 'remittance set');
+    } catch (\Throwable $th) {
+        return  redirect()->route('property.remit') 
+        ->with('error', 'failed to set remittance');
+    }
+    
+}
 }
