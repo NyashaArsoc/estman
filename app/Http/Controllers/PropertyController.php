@@ -31,7 +31,7 @@ class PropertyController extends BaseController
         ->select('id','description')->get();
         $arr['propertytype']   = DB::table('propertytype')
         ->select('id','description')->get();
-        $arr['commission']   = DB::table('commissiontype')
+        $arr['commission']   = DB::table('interestoptions')
         ->select('id','description')->get();
       return view('property/add-property')
       ->with($arr);
