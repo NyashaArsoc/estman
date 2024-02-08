@@ -156,8 +156,9 @@ if ($property->landlordclienttype == 1){
                     <table><!--4th table-->
                         <tr><td><hr></td></tr>
                         <tr class="heading"><td>Banking Details</td></tr>
-                        <tr class="item"><td>Integrated Properties ( currencycode)<br>$bankname <br>
-                             $branch  <br>  $accountnumber </td></tr>
+                        <tr class="item"><td>{{$bank->accountname }} ( {{$bank->code}})
+                            <br>{{$bank->bankname }}<br>
+                             {{$bank->branch}}  <br>  {{$bank->accountnumber}} </td></tr>
                         <tr><td><hr></td></tr>
                     </table><!--4th table-->
                 </div>

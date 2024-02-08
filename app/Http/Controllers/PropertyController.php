@@ -407,10 +407,16 @@ public function prepareremittance($id,$currency,$period){
         $arr['property']   = DB::table('allproperty')
             ->where('id', $propertyid)
             ->select('id','companyname','landlordclienttype' ,'fullname','streetaddress',
-            'commissionpercentage','commissionon')
+            'commissionpercentage','commissionon','landlordid')
             ->first();
         $arr['remit']=collect(DB::select('EXEC spGetSingleRemitList ?,?,?'
         ,array($remitperiod,$propertyid,$currencycode)))->first();
+        $arr['bank'] = DB::table('landlordbank')->join ('currency',
+        'landlordbank.currencyid','=','currency.id')
+        ->where('landlordbank.landlordid',$arr['property']->landlordid)
+        ->where('currency.code',$currencycode)
+        ->select('*')->latest('landlordbank.id')->first();
+
         return view('property/remittance-prepare')
         ->with($arr);
         if(is_null($arr)){
@@ -419,7 +425,7 @@ public function prepareremittance($id,$currency,$period){
         }
     } catch (QueryException $th) {
         return  redirect()->route('property.rejected') 
-        ->with('error', 'failed to load property list');
+        ->with('error', 'failed to load property list'.$th);
     }
 }
 public function addpreremit(Request $request,$id,$currency){
