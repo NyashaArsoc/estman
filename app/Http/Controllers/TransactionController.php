@@ -354,4 +354,17 @@ public function viewremit(){
             ->with('error', 'failed to load property list');
     }
 }
+public function addscheduleremit($id){
+    $remitid = Crypt::decrypt($id);
+    try {
+        $arr['remit']   = DB::table('preremitlist')
+        ->where('id', $remitid)
+        ->select('*')->first();
+        return view('transact/remittance-process')
+        ->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('property.rejected') 
+        ->with('error', 'failed to load property list');
+    }
+}
 }

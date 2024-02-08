@@ -111,5 +111,6 @@ Route::controller(TransactionController::class)->group(function (){
     Route::any('/transact-lease/{id}/post/{code}/{name}', 'postnewleasebalances')->name('transact.postnewbal');
     Route::get('/customer/receipt', 'receipting')->name('transact.payment');
     Route::any('/receipt/tenant', 'processreceipt')->name('transact.addreceipt');
-    Route::any('/remit/property', 'viewremit')->name('transact.remit');
+    Route::get('/remit/property', 'viewremit')->name('transact.remit');
+    Route::get('/remit/{id}/property', 'addscheduleremit')->name('transact.scheduleremit');
 });
