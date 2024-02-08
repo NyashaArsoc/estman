@@ -6,17 +6,7 @@ if ($property->landlordclienttype == 1){
    }else{
      $owner   =  $property->companyname ;
  }
- if ($property->commissionon == 'rental'){
-    $comissioncharged   =  ($property->commissionpercentage/100) * $remit->rental;
-   }else if($property->commissionon == 'rental and rates'){
-    $comissioncharged   =  ($property->commissionpercentage/100) * ($remit->rental +
-    $remit->rates );
-   }else if($property->commissionon == 'rental and operation cost'){
-    $comissioncharged   =  ($property->commissionpercentage/100) * ($remit->rental +
-    $remit->operationalcost );
-   }else{
-    $comissioncharged   =  0;
- }
+ $totalremit = $remit->totalbilled - $remit->totaldeduction;
  $id= Crypt::encrypt($property->id);
  $currency= Crypt::encrypt($remit->currencycode);
 @endphp
@@ -28,7 +18,7 @@ if ($property->landlordclienttype == 1){
         <h4>{{ $title }}</h4>
         <ol class="breadcrumb no-bg mb-1">
             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{route('property.remit')}}">Remit List</a></li>
+            <li class="breadcrumb-item"><a href="{{route('transact.remit')}}">Remit Schedule</a></li>
             <li class="breadcrumb-item active">{{ $title }}</li>
         </ol>
         <div class="box box-block bg-white">
@@ -52,7 +42,7 @@ if ($property->landlordclienttype == 1){
                     <label for="" class="col-sm-2 col-form-label"> </label>
                     <div class="col-sm-2">
                         <input type="text" class="form-control" id="BillTotalBilled"
-                         value="{{ $remit->balancebf}}" readonly name="BillTotalBilled">
+                         value="{{ $remit->totalbilled}}" readonly name="BillTotalBilled">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -61,7 +51,7 @@ if ($property->landlordclienttype == 1){
                     <label for="" class="col-sm-2 col-form-label"> </label>
                     <div class="col-sm-2">
                         <input type="text" class="form-control" id="BillCollections" 
-                        value="{{ $remit->balancebf}}" readonly name="BillCollections">
+                        value="{{ $remit->totalbilled}}" readonly name="BillCollections">
                     </div>
                 </div>
                 <h4>Deductions</h4>
@@ -70,7 +60,7 @@ if ($property->landlordclienttype == 1){
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
                             <input type="text" class="form-control" id="BillInterest" 
-                            value="{{ $remit->interest}}" readonly name="BillInterest">
+                            value="{{ $remitbal->interest}}" readonly name="BillInterest">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -78,7 +68,7 @@ if ($property->landlordclienttype == 1){
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
                             <input type="text" class="form-control" id="BillCommission" name="BillCommission"
-                             readonly value="{{$comissioncharged}}"/>
+                             readonly value="{{ $remit->deductcommission}}"/>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -86,7 +76,7 @@ if ($property->landlordclienttype == 1){
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
                             <input type="text" class="form-control" id="BillRates" 
-                            value="{{ $remit->rates}}" readonly name="BillRates">
+                            value="{{ $remitbal->rates}}" readonly name="BillRates">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -94,7 +84,7 @@ if ($property->landlordclienttype == 1){
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
                             <input type="text" class="form-control" id="BillOppC" 
-                            value="{{ $remit->operationalcost}}" readonly name="BillOppC">
+                            value="{{ $remitbal->operationalcost}}" readonly name="BillOppC">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -102,7 +92,7 @@ if ($property->landlordclienttype == 1){
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
                             <input type="text" class="form-control" id="BillVAT" 
-                            value="{{ $remit->vat}}" readonly name="BillVAT">
+                            value="{{ $remitbal->vat}}" readonly name="BillVAT">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -110,17 +100,15 @@ if ($property->landlordclienttype == 1){
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
                             <input type="text" class="form-control" name="SecurityCharge" 
-                            id="SecurityCharge" autocomplete="off"/>
-                            <small id="securitychargecheck" style="color: red;"></small>
+                            value="{{ $remit->deductsecurity}}" readonly/>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="" class="col-sm-2 col-form-label">Caretaker</label>
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control" name="CaretakerCharge" 
-                            id="CaretakerCharge" autocomplete="off" />
-                            <small id="caretakerchargecheck" style="color: red;"></small>
+                            <input type="text" class="form-control" 
+                            value="{{ $remit->deductcaretaker}}" readonly />
                         </div>
                     </div>
                     <div class="form-group row">
@@ -128,8 +116,7 @@ if ($property->landlordclienttype == 1){
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
                             <input type="text" class="form-control" name="OtherExpensesCharge" 
-                            id="OtherExpensesCharge" autocomplete="off"/>
-                            <small id="otherexpensecheck" style="color: red;"></small>
+                            value="{{ $remit->deductother}}" readonly/>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -137,7 +124,8 @@ if ($property->landlordclienttype == 1){
                         <div class="col-sm-4"></div>
                         <label for="" class="col-sm-2 col-form-label"></label>
                         <div class="col-sm-2">
-                            <small id="remitcalcdeductionscheck" id="totaldeductions" style="color: rgb(4, 70, 49);"> </small>
+                            <input type="text" class="form-control" 
+                            value="{{ $remit->totaldeduction}}" readonly/>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -146,19 +134,29 @@ if ($property->landlordclienttype == 1){
                         </div>
                         <label for="" class="col-sm-2 col-form-label"></label>
                         <div class="col-sm-2">
-                            <small id="remitcalcremittancecheck" id="totalremittance" style="color: rgb(7, 86, 16);"></small>
+                            <input type="text" class="form-control" name="totalremittance"
+                            value="{{ $totalremit}}" readonly/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="TotalArea" class="col-sm-2 col-form-label">Amount Processed</label>
+                        <div class="col-sm-4">
+                        </div>
+                        <label for="" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" name="amountprocessed"
+                            id="amountprocessed" autocomplete="off" />
                         </div>
                     </div>
                 <br />
-                <h5>rental information </h5>
                 <div class="form-group row">
                     <div class="col-sm-4">
                     <table><!--4th table-->
-                        <tr><td><hr></td></tr>
+                        <tr><td></td></tr>
                         <tr class="heading"><td>Banking Details</td></tr>
-                        <tr class="item"><td>{{$bank->accountname }} ( {{$bank->code}})
-                            <br>{{$bank->bankname }}<br>
-                             {{$bank->branch}}  <br>  {{$bank->accountnumber}} </td></tr>
+                        <tr class="item"><td>{{$bank->accountname ?? ''}} ( {{$bank->code ?? ''}})
+                            <br>{{$bank->bankname ?? ''}}<br>
+                             {{$bank->branch ?? ''}}  <br>  {{$bank->accountnumber ?? ''}} </td></tr>
                         <tr><td><hr></td></tr>
                     </table><!--4th table-->
                 </div>

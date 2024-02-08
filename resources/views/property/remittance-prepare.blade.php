@@ -150,7 +150,6 @@ if ($property->landlordclienttype == 1){
                         </div>
                     </div>
                 <br />
-                <h5>rental information </h5>
                 <div class="form-group row">
                     <div class="col-sm-4">
                     <table><!--4th table-->

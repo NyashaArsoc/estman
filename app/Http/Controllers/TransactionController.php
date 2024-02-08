@@ -360,6 +360,18 @@ public function addscheduleremit($id){
         $arr['remit']   = DB::table('preremitlist')
         ->where('id', $remitid)
         ->select('*')->first();
+        $arr['property']   = DB::table('allproperty')
+            ->where('id', $arr['remit']->propertyid)
+            ->select('id','companyname','landlordclienttype' ,'fullname','streetaddress',
+            'commissionpercentage','commissionon','landlordid')
+            ->first();
+            $arr['bank'] = DB::table('landlordbank')->join ('currency',
+            'landlordbank.currencyid','=','currency.id')
+            ->where('landlordbank.landlordid',$arr['property']->landlordid)
+            ->where('currency.code',$arr['remit']->currencycode)
+            ->select('*')->latest('landlordbank.id')->first();
+            $arr['remitbal']=collect(DB::select('EXEC spGetSingleRemitList ?,?,?'
+        ,array($arr['remit']->period,$arr['remit']->propertyid,$arr['remit']->currencycode)))->first();
         return view('transact/remittance-process')
         ->with($arr);
     } catch (\Throwable $th) {
