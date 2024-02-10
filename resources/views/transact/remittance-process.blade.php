@@ -7,8 +7,10 @@ if ($property->landlordclienttype == 1){
      $owner   =  $property->companyname ;
  }
  $totalremit = $remit->totalbilled - $remit->totaldeduction;
- $id= Crypt::encrypt($property->id);
+ $id= Crypt::encrypt($remit->id);
+ $pid= Crypt::encrypt($remit->propertyid);
  $currency= Crypt::encrypt($remit->currencycode);
+ $lid= Crypt::encrypt($property->landlordid);
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'Property Remit')
@@ -25,7 +27,8 @@ if ($property->landlordclienttype == 1){
             <h5>{{ $title.'-'.$remit->currencycode }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
             <form class="form-material material-primary" id="add property" 
-            action="{{ route('property.preremit',['id'=>$id,'currency'=>$currency]) }}" method="put" >
+            action="{{ route('transact.payremit',['id'=>$id,'currency'=>$currency,'pid'=>$pid,
+            'lid'=>$lid]) }}" method="put" >
                 <div class="form-group row">
                     <label for="Province" class="col-sm-2 form-control-label">Landlord </label>
                     <div class="col-sm-4">
@@ -107,7 +110,7 @@ if ($property->landlordclienttype == 1){
                         <label for="" class="col-sm-2 col-form-label">Caretaker</label>
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control" 
+                            <input type="text" class="form-control" name="CaretakerCharge" 
                             value="{{ $remit->deductcaretaker}}" readonly />
                         </div>
                     </div>
@@ -124,7 +127,7 @@ if ($property->landlordclienttype == 1){
                         <div class="col-sm-4"></div>
                         <label for="" class="col-sm-2 col-form-label"></label>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control" 
+                            <input type="text" class="form-control" name="totaldeduction" 
                             value="{{ $remit->totaldeduction}}" readonly/>
                         </div>
                     </div>
@@ -146,6 +149,7 @@ if ($property->landlordclienttype == 1){
                         <div class="col-sm-2">
                             <input type="text" class="form-control" name="amountprocessed"
                             id="amountprocessed" autocomplete="off" />
+                            <small id="amountprocessedcheck" style="color: rgb(241, 23, 27);"></small>
                         </div>
                     </div>
                 <br />
@@ -163,7 +167,7 @@ if ($property->landlordclienttype == 1){
                 </div>
                 <div class="form-group row">
                     <div class="offset-sm-2 col-sm-10">
-                        <button type="submit" class="btn btn-primary" id="btn-pre-remit"
+                        <button type="submit" class="btn btn-primary" id="btn-remit"
                          value="Submit">submit</button>
                     </div>
                 </div>
@@ -175,7 +179,7 @@ if ($property->landlordclienttype == 1){
 @endsection
 @section('additional js')
     <!-- Additional JS Start-->
-    <script src="{{ asset('js/validation/property.js') }}"></script>
+    <script src="{{ asset('js/validation/transaction.js') }}"></script>
     <script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script> 
     <!-- Additional JS End-->
 @endsection

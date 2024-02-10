@@ -379,4 +379,82 @@ public function addscheduleremit($id){
         ->with('error', 'failed to load property list');
     }
 }
+public function processremit(Request $request,$id,$pid,$currency,$lid){
+    $remitid = Crypt::decrypt($id);
+    $propertyid = Crypt::decrypt($pid);
+    $currencycode = Crypt::decrypt($currency);
+    $landlordid = Crypt::decrypt($lid);
+
+    $systemdate             =       $this->systemdate();
+    $trxid                  =       $this->transationid();
+    $basecurrency           =       $this->getbasecurrency();
+    $ledger_bank            =       'bank';
+    $productcolumn          =       'landlordid';
+    $bankcode               =       $this->getgeneralledger($ledger_bank,$currencycode);
+    $productsubledger       =       $this->getproductsubledger($productcolumn,$landlordid,$currencycode);
+        /*check if the base currency is the one running 
+                    use exchange rate as 1*/
+        if(trim($basecurrency)==trim($currency)){ $exchangerate =1;}
+        else{ $exchangerate  =  $this->getexchangerate($currency);   }
+   
+    try {
+        if($request->amountprocessed <0 || $request->amountprocessed > $request->totalremittance){
+            return  redirect()->route('transact.scheduleremit',$id) 
+        ->with('error', 'total remittance is less/more');
+        }
+        // updating property deductions to be paid to suppliers 
+        $remitbal   = DB::table('propertyremitdeductions')
+        ->where('propertyid', $propertyid)->where('currency',$currencycode)
+        ->select('*')->first();
+        if(is_null($remitbal)){
+            $remitbalvat =$request->BillVAT; $remitbalinterest =$request->BillInterest;
+            $remitbalrates =$request->BillRates; $remitbaloperationalcost =$request->BillOppC;
+            $remitbalcommission =$request->BillCommission; $remitbalsecurity =$request->SecurityCharge;
+            $remitbalcaretaker =$request->CaretakerCharge; $remitbalotherexpenses =$request->OtherExpensesCharge;
+        }else{
+            $remitbalvat = $remitbal->vat += $request->BillVAT; 
+            $remitbalinterest =$remitbal->interest +=$request->BillInterest;
+            $remitbalrates =$remitbal->rates +=$request->BillRates; 
+            $remitbaloperationalcost =$remitbal->operationalcost +=$request->BillOppC;
+            $remitbalcommission =$remitbal->commission +=$request->BillCommission; 
+            $remitbalsecurity =$remitbal->security +=$request->SecurityCharge;
+            $remitbalcaretaker =$remitbal->caretaker +=$request->CaretakerCharge; 
+            $remitbalotherexpenses =$remitbal->otherexpenses +=$request->OtherExpensesCharge;
+        }
+        $property   = DB::table('allproperty')
+        ->where('id', $propertyid)->select('streetaddress')->first();
+        $updatedeductions = array('vat'=>$remitbalvat,'interest'=>$remitbalinterest ,
+        'rates'=>$remitbalrates,'operationalcost'=>$remitbaloperationalcost ,
+        'commission'=>$remitbalcommission,
+        'security'=>$remitbalsecurity,'caretaker'=>$remitbalcaretaker,
+        'otherexpenses'=>$remitbalotherexpenses);
+        DB::table('propertyremitdeductions') 
+                ->updateOrInsert(['propertyid'=>$propertyid,'currency'=>$currencycode],
+                $updatedeductions);
+        //completing double entry 
+        if ($request->amountprocessed <> 0){
+            $trxratedamt = $request->amountprocessed * $exchangerate;
+        $trxdescription = 'Remittance for '.$property->streetaddress;
+            DB::table('accounttransactions')
+            ->insert(['trxreference'=>$trxid,'trxglaccount'=>$productsubledger
+                ,'trxtype'=>'TD','trxcurrencycode'=>$currencycode,
+                'trxamount'=>$request->amountprocessed,'trxratedamount'=>$trxratedamt,
+                'trxexchangerate'=>$exchangerate,'trxdescription'=>$trxdescription,
+                'trxsystemdate'=>$systemdate]);
+           //transaction credit
+           DB::table('accounttransactions')
+           ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$bankcode
+           ,'trxtype'=>'TC','trxcurrencycode'=>$currencycode,'trxamount'=>$request->amountprocessed,
+           'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+           'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
+        }
+  
+       DB::select('EXEC  spPostSingleRemit ?,?,?', array($trxid,$systemdate,$remitid));
+       return  redirect()->route('transact.remit') 
+       ->with('success', 'remittance processed');
+    } catch (\Throwable $th) {
+        return  redirect()->route('transact.remit') 
+        ->with('error', 'failed to load property list'.$th);
+    }
+}
 }

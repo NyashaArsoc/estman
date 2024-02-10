@@ -46,7 +46,7 @@
                                     <td>{{ $abc->currencycode }}</td>
                                     <td>{{ $abc->totalbilled }}</td>
                                     <td>{{ $abc->period }}</td>
-                                    <td>@php $id= Crypt::encrypt($abc->propertyid);@endphp
+                                    <td>@php $id= Crypt::encrypt($abc->id);@endphp
                                         <a class="btn btn-info btn-sm " id=""
                                         href="{{route('transact.scheduleremit',$id)}}"
                                         title="view"><i class="ti-eye mr-0-5"></i>view</a>

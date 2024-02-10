@@ -113,4 +113,5 @@ Route::controller(TransactionController::class)->group(function (){
     Route::any('/receipt/tenant', 'processreceipt')->name('transact.addreceipt');
     Route::get('/remit/property', 'viewremit')->name('transact.remit');
     Route::get('/remit/{id}/property', 'addscheduleremit')->name('transact.scheduleremit');
+    Route::any('/process/{id}/remit/{pid}/prop/{currency}/details/{lid}', 'processremit')->name('transact.payremit');
 });
