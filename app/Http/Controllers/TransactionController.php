@@ -389,9 +389,11 @@ public function processremit(Request $request,$id,$pid,$currency,$lid){
     $trxid                  =       $this->transationid();
     $basecurrency           =       $this->getbasecurrency();
     $ledger_bank            =       'bank';
+    $ledger_commission      =       'commission';
     $productcolumn          =       'landlordid';
     $bankcode               =       $this->getgeneralledger($ledger_bank,$currencycode);
     $productsubledger       =       $this->getproductsubledger($productcolumn,$landlordid,$currencycode);
+    $comissioncode          =       $this->getgeneralledger($ledger_commission,$currencycode);
         /*check if the base currency is the one running 
                     use exchange rate as 1*/
         if(trim($basecurrency)==trim($currency)){ $exchangerate =1;}
@@ -432,6 +434,7 @@ public function processremit(Request $request,$id,$pid,$currency,$lid){
                 ->updateOrInsert(['propertyid'=>$propertyid,'currency'=>$currencycode],
                 $updatedeductions);
         //completing double entry 
+        // for amount remited
         if ($request->amountprocessed <> 0){
             $trxratedamt = $request->amountprocessed * $exchangerate;
         $trxdescription = 'Remittance for '.$property->streetaddress;
@@ -448,6 +451,23 @@ public function processremit(Request $request,$id,$pid,$currency,$lid){
            'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
            'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
         }
+        // for comission
+        if ($request->BillCommission <> 0){
+            $trxratedamt = $request->BillCommission * $exchangerate;
+        $trxcomdescription = 'Commission for '.$property->streetaddress;
+            DB::table('accounttransactions')
+            ->insert(['trxreference'=>$trxid,'trxglaccount'=>$comissioncode
+                ,'trxtype'=>'TD','trxcurrencycode'=>$currencycode,
+                'trxamount'=>$request->BillCommission,'trxratedamount'=>$trxratedamt,
+                'trxexchangerate'=>$exchangerate,'trxdescription'=>$trxcomdescription,
+                'trxsystemdate'=>$systemdate]);
+           //transaction credit
+           DB::table('accounttransactions')
+           ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$bankcode
+           ,'trxtype'=>'TC','trxcurrencycode'=>$currencycode,'trxamount'=>$request->BillCommission,
+           'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+           'trxdescription'=>$trxcomdescription,'trxsystemdate'=>$systemdate]);
+        }
   
        DB::select('EXEC  spPostSingleRemit ?,?,?', array($trxid,$systemdate,$remitid));
        return  redirect()->route('transact.remit') 
@@ -455,6 +475,19 @@ public function processremit(Request $request,$id,$pid,$currency,$lid){
     } catch (\Throwable $th) {
         return  redirect()->route('transact.remit') 
         ->with('error', 'failed to load property list'.$th);
+    }
+}
+public function creditorview(){
+    try {
+        $arr['property']   = DB::table('allproperty')
+        ->where('approval','=','Y')->where('available','=','Y')
+        ->select('*')->get();
+        $arr['currency']   = DB::table('currency')
+        ->select('id','code')->get();
+        return  view('transact/creditor-payment')
+        ->with($arr);
+    } catch (\Throwable $th) {
+        //throw $th;
     }
 }
 }
