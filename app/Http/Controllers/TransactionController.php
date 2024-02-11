@@ -490,4 +490,34 @@ public function creditorview(){
         //throw $th;
     }
 }
+public function getlandlorddetails($id){
+    try { 
+        $arr['property']   = DB::table('allproperty')
+        ->where('id',$id)
+        ->select('*')->first();
+       return view('property/get-single-landlord-remit')
+         ->with($arr);
+    }catch (QueryException $e) {
+        return 'failed';
+    }
+    
+    
+}
+public function getcreditorbal($column,$id){
+    try { 
+        if($column=='otherexp'){$columnname = 'otherexpenses';}
+        else if ($column=='caretaker'){$columnname = 'caretaker';}
+        else if ($column=='security'){$columnname = 'security';}
+        else if ($column=='vat'){$columnname = 'vat';}
+        else if ($column=='oppcost'){$columnname = 'operationalcost';}
+        else if ($column=='rates'){$columnname = 'rates';}
+        $arr['balance']   = DB::table('propertyremitdeductions')
+        ->where('propertyid',$id)
+        ->select('currency',$columnname)->get();
+       return view('transact/get-creditor-balance')
+         ->with($arr);
+    }catch (QueryException $e) {
+        return 'failed'.$e;
+    }
+}
 }

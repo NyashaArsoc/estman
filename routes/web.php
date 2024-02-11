@@ -114,4 +114,7 @@ Route::controller(TransactionController::class)->group(function (){
     Route::get('/remit/property', 'viewremit')->name('transact.remit');
     Route::get('/remit/{id}/property', 'addscheduleremit')->name('transact.scheduleremit');
     Route::any('/process/{id}/remit/{pid}/prop/{currency}/details/{lid}', 'processremit')->name('transact.payremit');
+    Route::get('/creditor/payment', 'creditorview')->name('transact.viewpay');
+    Route::get('/single-landlord/remit/{id}', 'getlandlorddetails');
+    Route::get('/single-creditor/bal/{column}/{id}', 'getcreditorbal');
 });
