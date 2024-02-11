@@ -84,3 +84,26 @@ function getTenantDetails() {
         	}
 	});
 }
+// get tenant details on recepting
+function getRemittanceLandlordDetails() {
+    var textValue = $("#PropertyAddressDesc").val();
+	$.ajax({          
+        	type: "GET",
+        	url: "/single-landlord/remit"+'/'+textValue,
+        	success: function(data){
+        		$("#propertydetailsform").html(data);
+        	}
+	});
+}
+// get creditor balance
+function getCreditorBalance() {
+    var textValue = $("#CreditorCode").val();
+	var anothertextValue = document.querySelector('#PropertyAddressDesc').value;;//$("#").val();
+	$.ajax({          
+        	type: "GET",
+        	url: "/single-creditor/bal"+'/'+textValue+'/'+anothertextValue,
+        	success: function(data){
+        		$("#creditorbalance").html(data);
+        	}
+	});
+}
