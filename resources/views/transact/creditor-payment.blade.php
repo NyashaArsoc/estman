@@ -1,8 +1,8 @@
 @php
-    $title = 'Tenant Receipting';
-$description = 'tenant payments...'; @endphp
+    $title = 'Creditor Payment';
+$description = 'creditors payments...'; @endphp
 @extends('layout.main-layout')
-@section('title', 'Receipt')
+@section('title', 'Creditor')
 
 @section('additional css')
     <!-- Additional css Start-->
@@ -20,7 +20,7 @@ $description = 'tenant payments...'; @endphp
             <li class="breadcrumb-item active">{{$title}}</li>
         </ol>
         <div class="box box-block bg-white">
-            <form class="form-vertical" id="" action="{{ route('transact.addreceipt') }}"
+            <form class="form-vertical" id="" action="{{ route('transact.paycreditor') }}"
             enctype="multipart/form-data" method="post" accept-charset="utf-8">@csrf
                 <div class="panel-body">
                     <div class="row"> 
@@ -31,43 +31,47 @@ $description = 'tenant payments...'; @endphp
                                     Search Property <i class="text-danger">*</i></label>
                                 <div class="col-sm-6 has-success">
                                     <select class="js-example-basic-single w-100" name="PropertyAddressDesc"
-                                    id="PropertyAddressDesc" onchange="getTenantDetails();" />
-                                    <option value="">Property Description</option>
-                                    @foreach($lease as $abc)
-								    <option value="{{ $abc->id }}"> {{$abc->streetaddress.' - '.$abc->propertydescription}}
+                                    id="PropertyAddressDesc" onchange="getRemittanceLandlordDetails();" />
+                                    <option value="">Property Address</option>
+                                    @foreach($property as $abc)
+								    <option value="{{ $abc->id }}"> {{$abc->streetaddress}}
                                     </option>
                                     @endforeach
                                     </select>
-                                    <small id="receiptaddresscheck" style="color: red;">address is required</small>
-                                      <h5>Payment Details:</h5>
-                                      <div id="tenantdetailsform">
+                                    <small id="receiptaddresscheck" style="color: red;"> address is required</small>
+                                      <h5>Property Details:</h5>
+                                      <div id="propertydetailsform">
                                         <div class="clearfix mb-0-25">
-                                            <span class="float-xs-left">Tenant:</span>
-                                            <span class="float-xs-right" id="tenantname"></span>
+                                            <span class="float-xs-left">Landlord:</span>
+                                            <span class="float-xs-right" id="landlordname"></span>
                                           </div>
                                           <div class="clearfix mb-0-25">
-                                            <span class="float-xs-left">Mobile:</span>
-                                            <span class="float-xs-right" id="tenantcell"></span>
-                                          </div>
-                                          <div class="clearfix mb-0-25">
-                                            <span class="float-xs-left">Email:</span>
-                                            <span class="float-xs-right" id="tenantemail"></span>
-                                        </div>
-                                        <div class="clearfix mb-0-25">
-                                            <span class="float-xs-left">Billing Address:</span>
-                                            <span class="float-xs-right" id="tenantaddress"></span>
-                                        </div>
-                                    <div class="b-a b-a-success b-a-width-1 mb-0-5"></div>
-                                    <table  class="table table-hover table-bordered">
-                                        <thead>
-                                            <tr><th>Currency</th><th>Balance</th><th>Prepayment</th></tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr><td></td><td></td><td></td></tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="b-a b-a-success b-a-width-1 mb-0-5"></div>
+                                            <span class="float-xs-left">Property Type:</span>
+                                            <span class="float-xs-right" id="propertytype"></span>
+                                          </div>    
                                 </div>
+                                <div class="b-a b-a-success b-a-width-1 mb-0-5"></div>
+                                          <select class="js-example-basic-single w-100" name="CreditorCode"
+                                    id="CreditorCode" onchange="getCreditorBalance();" />
+                                    <option value="">Select Creditor</option>
+								    <option value="rates">Rates/Levies </option>
+                                    <option value="oppcost">Operational Cost</option>
+                                    <option value="vat">VAT</option>
+                                    <option value="security">Security</option>
+                                    <option value="caretaker">Caretaker</option>
+                                    <option value="otherexp">Other Expenses</option>
+                                    </select>
+                                    <div id="creditorbalance"> 
+                                        <table  class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr><th>Currency</th><th>Balance</th></tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td></td><td></td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="b-a b-a-success b-a-width-1 mb-0-5"></div>
                                 </div>
                                 <div  class=" col-sm-3"></div>
                             </div>
@@ -101,29 +105,10 @@ $description = 'tenant payments...'; @endphp
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="" class="col-sm-2 col-form-label">Date</label>
-                        <div class="col-sm-4">
-                             <div class="input-group has-success">
-                                <input type="date" class="form-control" autocomplete="off" 
-                                 id="ReceiptDate" name="ReceiptDate" placeholder="yyyy-mm-dd">
-                                <span class="input-group-addon"></span>
-                            </div>
-                            <small id="receiptdatecheck" style="color: red;"> date is required</small>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group row">
-                        <label for="pay_payment_detail" class="col-sm-2 col-form-label">Receipt Reference</label>
-                        <div class="col-sm-4 has-success">
-                             <input id="ReceiptReference" autocomplete="off" class="form-control" 
-                             name="ReceiptReference" placeholder="Receipt Reference #/ Detail">
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label for="" class="col-sm-2 col-form-label"></label>
                         <div class="col-sm-4">
                             <div class="input-group has-success">
-                                <input id="add-receipt" class="btn btn-primary" name="add-receipt" 
+                                <input id="add-receipt" class="btn btn-primary" name="process-payment" 
                                  value="Process" tabindex="9" type="submit">
                                         
                             </div>

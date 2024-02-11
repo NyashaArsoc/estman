@@ -439,14 +439,14 @@ public function processremit(Request $request,$id,$pid,$currency,$lid){
             $trxratedamt = $request->amountprocessed * $exchangerate;
         $trxdescription = 'Remittance for '.$property->streetaddress;
             DB::table('accounttransactions')
-            ->insert(['trxreference'=>$trxid,'trxglaccount'=>$productsubledger
+            ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$productsubledger
                 ,'trxtype'=>'TD','trxcurrencycode'=>$currencycode,
                 'trxamount'=>$request->amountprocessed,'trxratedamount'=>$trxratedamt,
                 'trxexchangerate'=>$exchangerate,'trxdescription'=>$trxdescription,
                 'trxsystemdate'=>$systemdate]);
            //transaction credit
            DB::table('accounttransactions')
-           ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$bankcode
+           ->insert(['trxreference'=>$trxid,'trxglaccount'=>$bankcode
            ,'trxtype'=>'TC','trxcurrencycode'=>$currencycode,'trxamount'=>$request->amountprocessed,
            'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
            'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
@@ -463,7 +463,7 @@ public function processremit(Request $request,$id,$pid,$currency,$lid){
                 'trxsystemdate'=>$systemdate]);
            //transaction credit
            DB::table('accounttransactions')
-           ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$bankcode
+           ->insert(['trxreference'=>$trxid,'trxglaccount'=>$bankcode
            ,'trxtype'=>'TC','trxcurrencycode'=>$currencycode,'trxamount'=>$request->BillCommission,
            'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
            'trxdescription'=>$trxcomdescription,'trxsystemdate'=>$systemdate]);
@@ -474,7 +474,7 @@ public function processremit(Request $request,$id,$pid,$currency,$lid){
        ->with('success', 'remittance processed');
     } catch (\Throwable $th) {
         return  redirect()->route('transact.remit') 
-        ->with('error', 'failed to load property list'.$th);
+        ->with('error', 'failed to load property list');
     }
 }
 public function creditorview(){
@@ -487,7 +487,8 @@ public function creditorview(){
         return  view('transact/creditor-payment')
         ->with($arr);
     } catch (\Throwable $th) {
-        //throw $th;
+        return  redirect()->route('transact.remit') 
+        ->with('error', 'failed to load property list');
     }
 }
 public function getlandlorddetails($id){
@@ -517,7 +518,74 @@ public function getcreditorbal($column,$id){
        return view('transact/get-creditor-balance')
          ->with($arr);
     }catch (QueryException $e) {
-        return 'failed'.$e;
+        return 'failed';
+    }
+}
+public function creditorpayment(Request $request){
+    try {
+        $systemdate             =       $this->systemdate();
+        $trxid                  =       $this->transationid();
+        $basecurrency           =       $this->getbasecurrency();
+        $ledger_bank            =       'bank';
+        $ledger_creditor        =       'creditors';
+        $bankcode               =       $this->getgeneralledger($ledger_bank,$request->ReceiptCurrency);
+        $creditorcode           =       $this->getgeneralledger($ledger_creditor,$request->ReceiptCurrency);
+        /*check if the base currency is the one running 
+                    use exchange rate as 1*/
+        if(trim($basecurrency)==trim($request->ReceiptCurrency)){ $exchangerate =1;}
+        else{ $exchangerate  =  $this->getexchangerate($request->ReceiptCurrency);   }
+
+        if($request->CreditorCode=='otherexp'){$columnname = 'otherexpenses';}
+        else if ($request->CreditorCode=='caretaker'){$columnname = 'caretaker';}
+        else if ($request->CreditorCode=='security'){$columnname = 'security';}
+        else if ($request->CreditorCode=='vat'){$columnname = 'vat';}
+        else if ($request->CreditorCode=='oppcost'){$columnname = 'operationalcost';}
+        else if ($request->CreditorCode=='rates'){$columnname = 'rates';}
+        //get balance for exact product if not in then reject process
+        $creditorbal   = DB::table('propertyremitdeductions')
+        ->where('propertyid',$request->PropertyAddressDesc)
+        ->where('currency',$request->ReceiptCurrency)
+        ->select($columnname)->first();
+        if(is_null($creditorbal)){
+            return  redirect()->route('transact.viewpay') 
+            ->with('error', 'no balance for the creditor');
+        }
+        if($creditorbal->$columnname == 0 || $creditorbal->$columnname ==''){
+            return  redirect()->route('transact.viewpay') 
+            ->with('error', 'no balance for the creditor');
+        }
+        $newcreditorbal = $creditorbal->$columnname -= $request->ReceiptAmount;
+        if($newcreditorbal < 0){
+            return  redirect()->route('transact.viewpay') 
+            ->with('error', 'payment amount exceeds balance');
+        }
+        DB::table('propertyremitdeductions') 
+                ->updateOrInsert(['propertyid'=>$request->PropertyAddressDesc,
+                'currency'=>$request->ReceiptCurrency],[$columnname=>$newcreditorbal]);
+        //insert creditors payment record
+        DB::table('paymentscreditors')
+           ->insert(['reference'=>$trxid,'propertyid'=>$request->PropertyAddressDesc
+           ,'currencycode'=>$request->ReceiptCurrency,$columnname=>$request->ReceiptAmount]);
+        //double entry for creditor balances 
+        $trxratedamt = $request->ReceiptAmount * $exchangerate;
+        $trxdescription = 'Payment for '.$columnname.' reference number '.$trxid;
+            DB::table('accounttransactions')
+            ->insert(['trxreference'=>$trxid,'trxglaccount'=>$creditorcode
+                ,'trxtype'=>'TD','trxcurrencycode'=>$request->ReceiptCurrency,
+                'trxamount'=>$request->ReceiptAmount,'trxratedamount'=>$trxratedamt,
+                'trxexchangerate'=>$exchangerate,'trxdescription'=>$trxdescription,
+                'trxsystemdate'=>$systemdate]);
+           //transaction credit
+           DB::table('accounttransactions')
+           ->insert(['trxreference'=>$trxid,'trxglaccount'=>$bankcode
+           ,'trxtype'=>'TC','trxcurrencycode'=>$request->ReceiptCurrency,'trxamount'=>$request->ReceiptAmount,
+           'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+           'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
+           return  redirect()->route('transact.viewpay') 
+           ->with('success', 'payment processed');
+    } catch (\Throwable $th) {
+        return  redirect()->route('transact.remit') 
+        ->with('error', 'failed to load property list');
     }
 }
 }

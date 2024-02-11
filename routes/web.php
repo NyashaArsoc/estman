@@ -117,4 +117,5 @@ Route::controller(TransactionController::class)->group(function (){
     Route::get('/creditor/payment', 'creditorview')->name('transact.viewpay');
     Route::get('/single-landlord/remit/{id}', 'getlandlorddetails');
     Route::get('/single-creditor/bal/{column}/{id}', 'getcreditorbal');
+    Route::any('/creditor-payment', 'creditorpayment')->name('transact.paycreditor');
 });
