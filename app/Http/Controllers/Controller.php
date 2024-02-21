@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class Controller extends BaseController
@@ -145,6 +147,45 @@ public function getgraceperiod($currencycode){
         else{ return $grace;}
     } catch (QueryException $th) {
         return 'failed';
+    }
+}
+public function getlicensecheck(){
+    try {
+        $licensecheck = DB::table('systmetacheck')
+        ->select('*')->latest('id')->first();
+        if(is_null($licensecheck)){
+            return 'failed';
+        }else{
+            try {
+                $license = Crypt::decrypt($licensecheck->checktil);
+                $systemdate = $this->systemdate();
+                $firstcheck = \Carbon\Carbon::parse($systemdate);
+                $secondcheck = \Carbon\Carbon::parse($license);
+                if($secondcheck >$firstcheck ){ return 'valid';}else{return 'notvalid';}
+            } catch (DecryptException $th) {
+               return 'failed';
+            }
+        }
+    } catch (\Throwable $th) {
+        return 'failed';
+    }
+}
+public function userforcelogout($error){
+    if(session()->has('alluser')){
+        try {
+            $logouttime = date("Y-m-d H:i:s", strtotime('+2 hours', strtotime(now())));
+           $lastlogin = DB::table('systlogins')->where('username',session('alluser'))
+            ->orderBy('id','desc')->first();
+            DB::table('systlogins')->where('id',$lastlogin->id)
+           ->update(['logoutdate' => $logouttime]);
+            session()->pull('alluser');
+            return  redirect()->route('login.signin') 
+                ->with('error', $error);
+        } catch (\Throwable $th) {
+            session()->pull('alluser');
+            return  redirect()->route('login.signin') 
+                ->with('error', $error);
+        }
     }
 }
 }

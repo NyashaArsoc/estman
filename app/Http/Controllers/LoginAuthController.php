@@ -31,12 +31,38 @@ public function userlogin(Request $request){
         }else if($login->username == 'norole'){
             return  redirect()->route('login.signin') 
                 ->with('error', 'no role assigned');
-        }else{ 
+        }else{ //when all credentials are correct
             if(Hash::check($request->password,$login->password)){
                 DB::table('systlogins')->insert(['username'=>$request->username,
                 'attempts'=>0,'isvalid'=>'Y']); 
+                //put session on
                 $request->session()->put('alluser',$login->username);
-                return  redirect()->route('transact.payment');
+                //check if system date is set
+                $systemdate             =       $this->systemdate();
+                if($systemdate == 'failed'){
+                    $error = 'no system date set';
+                   return $this->userforcelogout($error);
+                }else{ 
+                    // check if base currency is set
+                    $basecurrency           =       $this->getbasecurrency();
+                    if($basecurrency =='failed'){
+                        $error = 'no base currency set';
+                       return $this->userforcelogout($error);
+                    }else{ 
+                        //check license
+                        $license    =   $this->getlicensecheck();
+                        if($license=='failed'){
+                            $error = 'invalid license key';
+                           return $this->userforcelogout($error);
+                        }else if($license=='notvalid'){
+                            $error = 'license expired';
+                            return $this->userforcelogout($error);
+                        }else if($license=='valid'){
+                           //valid license
+                            return  redirect()->route('transact.payment');
+                        }
+                    }
+                }   
             }else{//wrong pin
                 $attempts = DB::table('systlogins')->select('attempts')
                 ->where('username',$request->username)->latest('id')->first();
@@ -52,6 +78,7 @@ public function userlogin(Request $request){
         }
         
 }   
+
 public function userlogout(){
     if(session()->has('alluser')){
         try {
@@ -71,4 +98,5 @@ public function userlogout(){
     session()->pull('alluser');
     return  redirect()->route('login.signin');
 }
+
 }

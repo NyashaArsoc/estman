@@ -125,4 +125,5 @@ Route::controller(LoginAuthController::class)->group(function(){
     Route::get('/login', 'signin')->name('login.signin');
     Route::post('/user/login', 'userlogin')->name('login.login');
     Route::any('/logout', 'userlogout')->name('login.signout');
+    Route::any('/licensecheck', 'licensecheck');
 });
