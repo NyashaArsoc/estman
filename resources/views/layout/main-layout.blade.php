@@ -112,7 +112,7 @@
                     <li class="with-sub">
                         <a href="#" class="waves-effect  waves-light">
                             <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-package"></i></span>
+                            <span class="s-icon"><i class="ti-receipt"></i></span>
                             <span class="s-text">Invoice</span>
                         </a>
                         <ul>
@@ -125,7 +125,7 @@
                     <li class="with-sub">
                         <a href="#" class="waves-effect  waves-light">
                             <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-shopping-cart"></i></span>
+                            <span class="s-icon"><i class="ti-money"></i></span>
                             <span class="s-text">Transactions </span>
                         </a>
                         <ul>
@@ -138,54 +138,11 @@
                     <li class="with-sub">
                         <a href="#" class="waves-effect  waves-light">
                             <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-receipt"></i></span>
-                            <span class="s-text">Expenses</span>
-                        </a>
-                        <ul>
-                            <li><a href="add-expense-type.php">Add Expense Type</a></li>
-                            <li><a href="expense-types.php">Manage Expenses Type</a></li>
-                            <li><a href="add-expense.php">Add Expenses Invoice</a></li>
-                            <li><a href="expense-invoices.php">Manage Expenses Invoice</a></li>
-                            <li><a href="paid-expense-invoices.php">Paid Expenses Invoice</a></li>
-                            <li><a href="unpaid-expense-invoices.php">Unpaid Expenses Invoice</a></li>
-                        </ul>
-                    </li>
-
-
-                    <li class="with-sub">
-                        <a href="#" class="waves-effect  waves-light">
-                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-money"></i></span>
-                            <span class="s-text">Loan</span>
-                        </a>
-                        <ul>
-                            <li><a href="add-loaner.php">Add Loaner</a></li>
-                            <li><a href="loaners.php">Manage Loaners</a></li>
-                            <li><a href="add-loan.php">Add Loan</a></li>
-                            <li><a href="loans.php">Manage Loan</a></li>
-                        </ul>
-                    </li>
-                    <li class="with-sub">
-                        <a href="#" class="waves-effect  waves-light">
-                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-user"></i></span>
-                            <span class="s-text">Staff</span>
-                        </a>
-                        <ul>
-                            <li><a href="add-staff.php">Add Staff</a></li>
-                            <li><a href="staff.php">Manage Staff</a></li>
-                        </ul>
-                    </li>
-                    <li class="with-sub">
-                        <a href="#" class="waves-effect  waves-light">
-                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
                             <span class="s-icon"><i class="ti-bar-chart"></i></span>
                             <span class="s-text">Reports</span>
                         </a>
                         <ul>
                             <li><a href="profit_and_loss_ledger.php">Sales Profit/Loss Ledger</a></li>
-                            <li><a href="sales_ledger.php">Sales Ledger</a></li>
-                            <li><a href="expense_ledger.php">Expenses Ledger</a></li>
                         </ul>
                     </li>
                     <li class="with-sub">
@@ -195,17 +152,10 @@
                             <span class="s-text">Setting</span>
                         </a>
                         <ul>
-                            <li><a href="company-info.php">Company Info</a></li>
+                            <li><a href="company-info.php">Profile</a></li>
                             <li> <a href="signout.php">Sign Out</a></li>
                         </ul>
-                    </li>
-                    <li class="compact-hide">
-                        <a href="../Documentation/index.html" target="new" class="waves-effect  waves-light">
-                            <span class="s-icon"><i class="fa fa-circle-o text-primary"></i></span>
-                            <span class="s-text">Documentation</span>
-                        </a>
-                    </li>
-                  
+                    </li>                  
                 </ul>
             </div>
         </div> <!-- Sidebar second -->
