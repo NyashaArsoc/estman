@@ -3,6 +3,7 @@
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LandlordController;
 use App\Http\Controllers\LeaseController;
+use App\Http\Controllers\LoginAuthController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TransactionController;
@@ -22,9 +23,9 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/main-menu', function () {
-    return view('layout.main-layout');
-});
+// Route::get('/main-menu', function () {
+//     return view('layout.main-layout');
+// });
 Route::resource('landlord', LandlordController::class);
 Route::controller(LandlordController::class)->group(function () {
     Route::any('/landlord-banking-details', 'addbanking')->name('landlord.addbanking');
@@ -118,4 +119,10 @@ Route::controller(TransactionController::class)->group(function (){
     Route::get('/single-landlord/remit/{id}', 'getlandlorddetails');
     Route::get('/single-creditor/bal/{column}/{id}', 'getcreditorbal');
     Route::any('/creditor-payment', 'creditorpayment')->name('transact.paycreditor');
+});
+
+Route::controller(LoginAuthController::class)->group(function(){
+    Route::get('/login', 'signin')->name('login.signin');
+    Route::post('/user/login', 'adminlogin')->name('login.login');
+    Route::any('/logout', 'adminlogout')->name('login.signout');
 });
