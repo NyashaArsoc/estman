@@ -153,7 +153,7 @@
                         </a>
                         <ul>
                             <li><a href="company-info.php">Profile</a></li>
-                            <li> <a href="signout.php">Sign Out</a></li>
+                            <li> <a href="{{route('login.signout')}}">Sign Out</a></li>
                         </ul>
                     </li>                  
                 </ul>
@@ -193,7 +193,7 @@
                                 <a class="dropdown-item" href="profile.php">
                                     <i class="ti-user mr-0-5"></i> Profile </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="signout.php"><i class="ti-power-off mr-0-5"></i> Sign
+                                <a class="dropdown-item" href="{{route('login.signout')}}"><i class="ti-power-off mr-0-5"></i> Sign
                                     Out</a>
                             </div>
                         </li>
