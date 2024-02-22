@@ -23,7 +23,7 @@ $description = 'add property to the system...';
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
             <form class="form-material material-primary" id="add property" method="POST"
-            action="{{ route('property.store') }}" > @csrf
+            action="{{ route('property.addproperty') }}" > @csrf
                 <div class="form-group row">
                     <label for="LandlordType" class="col-sm-2 form-control-label">Landlord Type </label>
                     <div class="col-sm-4">

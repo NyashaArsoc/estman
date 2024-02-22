@@ -89,7 +89,7 @@
                             <span class="s-text">Property</span>
                         </a>
                         <ul>
-                            <li><a href="{{route('property.create')}}">Add Property</a></li>
+                            <li><a href="{{route('property.newproperty')}}">Add Property</a></li>
                             <li><a href="{{route('property.pending')}}">Approval</a></li>
                             <li><a href="{{route('property.rejected')}}">Rejected</a></li>
                             <li><a href="{{route('property.remit')}}">Remit</a></li>

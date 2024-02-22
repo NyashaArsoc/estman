@@ -49,7 +49,7 @@
                                     <td>{{ $abc->reasons }}</td>
                                     <td>@php $id= Crypt::encrypt($abc->id); @endphp
                                         <a class="btn btn-secondary btn-sm view" id=""
-                                        href="{{route('property.edit', $id)}}"
+                                        href="{{route('property.editview', $id)}}"
                                         title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>
                                         <a onclick = "deleteproperty(this); return false;"
                                         class="btn btn-danger btn-sm" href="{{route('property.deleterejected', $id)}}"

@@ -21,7 +21,7 @@ class PropertyController extends BaseController
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createnew()
     {
         $arr['type']   = DB::table('clienttype')
         ->select('id','description')->get();
@@ -41,7 +41,7 @@ class PropertyController extends BaseController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function addnewproperty(Request $request)
     {
        try {
         $PropertyID = DB::table('property')
@@ -75,7 +75,7 @@ class PropertyController extends BaseController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function vieweditproperty($id)
     {
         $propertyid = Crypt::decrypt($id);
         try {
