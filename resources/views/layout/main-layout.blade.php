@@ -62,7 +62,7 @@
                             <span class="s-text">Landlord</span>
                         </a>
                         <ul>
-                            <li><a href="{{route('landlord.create')}}">Add Landlord</a></li>
+                            <li><a href="{{route('landlord.newlandlord')}}">Add Landlord</a></li>
                             <li><a href="{{route('landlord.addbanking')}}">Add Banking</a></li>
                             <li><a href="{{route('landlord.pending')}}">Approval</a></li>
                             <li><a href="{{route('landlord.rejected')}}">Rejected</a></li>

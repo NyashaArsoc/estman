@@ -44,7 +44,7 @@
                                     <td>{{ $land->reasons }}</td>
                                     <td>@php $id= Crypt::encrypt($land->id); @endphp
                                      <a class="btn btn-secondary btn-sm view_landlord" id=""
-                                     href="{{route('landlord.edit', $id)}}"
+                                     href="{{route('landlord.editview', $id)}}"
                                      title="view"><i class="ti-pencil mr-0-5"></i>edit</a>
                                      <a onclick = "deletelandlord(this); return false;"
                                      class="btn btn-danger btn-sm" href="{{route('landlord.deleterejected', $id)}}"

@@ -22,7 +22,7 @@ class LandlordController  extends BaseController
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createnew()
     {
         $arr_owner['type']   = DB::table('clienttype')
           ->select('id','description')->get();
@@ -35,7 +35,7 @@ class LandlordController  extends BaseController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function addnewlandlord(Request $request)
     {
         IF (!empty($request->AccountNumber)){ 
             $AccountNumber         =      $request->AccountNumber;
@@ -141,7 +141,7 @@ class LandlordController  extends BaseController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function vieweditlandlord($id)
     {
         $landlordid = Crypt::decrypt($id);
         try {

@@ -27,8 +27,11 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/main-menu', function () {
 //     return view('layout.main-layout');
 // });
-Route::resource('landlord', LandlordController::class);
+//Route::resource('landlord', LandlordController::class);
 Route::controller(LandlordController::class)->group(function () {
+    Route::get('/create/landlord', 'createnew')->name('landlord.newlandlord');
+    Route::post('/new/create/landlord', 'addnewlandlord')->name('landlord.addlandlord');
+    Route::get('/edit/landlord/{id}/view', 'vieweditlandlord')->name('landlord.editview');
     Route::any('/landlord-banking-details', 'addbanking')->name('landlord.addbanking');
     Route::any('/landlord-approval', 'pendingapproval')->name('landlord.pending');
     Route::any('/landlord-rejected', 'rejected')->name('landlord.rejected');
