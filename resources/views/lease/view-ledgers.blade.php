@@ -16,7 +16,7 @@ if ($lease->clienttypeid == 1){
     <div class="container-fluid">
         <h4>{{ $title }}</h4>
         <ol class="breadcrumb no-bg mb-1">
-            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{route('dash.property')}}">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="{{route('lease.list')}}">List</a></li>
             <li class="breadcrumb-item"><a href="{{route('lease.view',$id)}}">Lease</a></li>
             <li class="breadcrumb-item active">{{ $title }}</li>
