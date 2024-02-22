@@ -50,7 +50,7 @@
                                     <td>{{ $ten->reasons }}</td>
                                     <td>@php $id= Crypt::encrypt($ten->id); @endphp
                                         <a class="btn btn-secondary btn-sm view" id=""
-                                        href="{{route('tenant.edit', $id)}}"
+                                        href="{{route('tenant.editview', $id)}}"
                                         title="view"><i class="ti-pencil mr-0-5"></i>edit</a>
                                         <a onclick = "deletelandlord(this); return false;"
                                         class="btn btn-danger btn-sm" href="{{route('landlord.deleterejected', $id)}}"

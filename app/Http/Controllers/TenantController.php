@@ -21,7 +21,7 @@ class TenantController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createnew()
     {
         try {
             $arr_owner['type']   = DB::table('clienttype')
@@ -40,7 +40,7 @@ class TenantController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function addnewtenant(Request $request)
     {
         try{
             if ($request->TenantClientType == 1){//individual
@@ -110,7 +110,7 @@ class TenantController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function viewedittenant($id)
     {
         $tenantid = Crypt::decrypt($id);
         try {

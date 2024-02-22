@@ -19,7 +19,7 @@
             <div class="box box-block bg-white">
                 <h5>{{$title}}</h5>
                 <p class="font-90 text-muted mb-1"> {{$description}}</p>
-                <form class="form-material material-primary" id="addtenant" action="{{ route('tenant.store') }}"
+                <form class="form-material material-primary" id="addtenant" action="{{ route('tenant.addtenant') }}"
                 method="POST" >@csrf
                     <div class="form-group row"> 
                         <label for="ClientType" class="col-sm-2 form-control-label">Type

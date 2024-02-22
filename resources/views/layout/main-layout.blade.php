@@ -76,7 +76,7 @@
                             <span class="s-text">Tenants</span>
                         </a>
                         <ul>
-                            <li><a href="{{route('tenant.create')}}">Add Tenant</a></li>
+                            <li><a href="{{route('tenant.newtenant')}}">Add Tenant</a></li>
                             <li><a href="{{route('tenant.pending')}}">Approval</a></li>
                             <li><a href="{{route('tenant.rejected')}}">Rejected</a></li>
                             <li><a href="{{route('tenant.list')}}">Manage Tenant</a></li>

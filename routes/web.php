@@ -47,8 +47,11 @@ Route::controller(LandlordController::class)->group(function () {
 
     Route::any('/manage-landlord', 'listlandlords')->name('landlord.list');
 });
-Route::resource('tenant', TenantController::class);
+//Route::resource('tenant', TenantController::class);
 Route::controller(TenantController::class)->group(function () {
+    Route::get('/create/tenant', 'createnew')->name('tenant.newtenant');
+    Route::post('/new/create/tenant', 'addnewtenant')->name('tenant.addtenant');
+    Route::get('/edit/tenant/{id}/view', 'viewedittenant')->name('tenant.editview');
     Route::any('/tenant-approval', 'pendingapproval')->name('tenant.pending');
     Route::any('/view-pending-tenant/{id}', 'viewpending')->name('tenant.viewpending');
     Route::any('/approve-tenant/{id}', 'approvetenant')->name('tenant.approve');
