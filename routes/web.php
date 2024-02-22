@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LandlordController;
 use App\Http\Controllers\LeaseController;
@@ -126,4 +127,7 @@ Route::controller(LoginAuthController::class)->group(function(){
     Route::post('/user/login', 'userlogin')->name('login.login');
     Route::any('/logout', 'userlogout')->name('login.signout');
     Route::any('/licensecheck', 'licensecheck');
+});
+Route::controller(DashController::class)->group(function(){
+    Route::get('/dashboard/property', 'propertyview')->name('dash.property');
 });

@@ -49,7 +49,7 @@
                 <ul class="sidebar-menu">
                     <li class="menu-title">Main</li>
                     <li class="with-sub">
-                        <a href="index.php" class="waves-effect  waves-light">
+                        <a href="{{route('dash.property')}}" class="waves-effect  waves-light">
                             <span class="s-caret"><i class="fa fa-angle-down"></i></span>
                             <span class="s-icon"><i class="ti-anchor"></i></span>
                             <span class="s-text">Dashboard</span>
@@ -163,7 +163,7 @@
         <div class="site-header">
             <nav class="navbar navbar-light">
                 <div class="navbar-left">
-                    <a class="navbar-brand" href="index.php">
+                    <a class="navbar-brand" href="{{route('dash.property')}}">
                         <img src="{{ asset('img/estman logo.png') }}" class="logo">
                     </a>
                     <div class="toggle-button light sidebar-toggle-first float-xs-left hidden-md-up">
