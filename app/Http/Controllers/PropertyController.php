@@ -56,10 +56,10 @@ class PropertyController extends BaseController
             DB::table('commissionpercent')
             ->updateOrInsert(['propertyid'=>$PropertyID],['commissiontypeid'=>$request->CommissionType, 
                 'percentage'=>$request->CommissionPercentage]);
-                return  redirect()->route('property.create') 
+                return  redirect()->route('property.newproperty') 
                 ->with('success', 'property added successful');
        } catch (QueryException $e) {
-        return  redirect()->route('property.create') 
+        return  redirect()->route('property.newproperty') 
         ->with('error', 'failed to add property');
        }
     }

@@ -82,10 +82,10 @@ class LandlordController  extends BaseController
                         );
                         $a++;
                     }
-                    return  redirect()->route('landlord.create') 
+                    return  redirect()->route('landlord.newlandlord') 
                     ->with('success', 'landlord added successfully');
                 }else{
-                    return  redirect()->route('landlord.create') 
+                    return  redirect()->route('landlord.newlandlord') 
                     ->with('error', 'failed landlord already exists');
                 }     
             }else{
@@ -115,16 +115,16 @@ class LandlordController  extends BaseController
                         );
                         $a++;
                     }
-                    return  redirect()->route('landlord.create') 
+                    return  redirect()->route('landlord.newlandlord') 
                     ->with('success', 'landlord added successfully');
                 }else{// exist landlord
-                    return  redirect()->route('landlord.create') 
+                    return  redirect()->route('landlord.newlandlord') 
                     ->with('error', 'failed landlord already exists');
                 }
                
             }
         }catch (QueryException $e){
-            return  redirect()->route('landlord.create') 
+            return  redirect()->route('landlord.newlandlord') 
             ->with('error', 'failed to add landlord');
         }
        

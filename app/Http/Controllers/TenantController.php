@@ -60,10 +60,10 @@ class TenantController extends Controller
                         ['cell'=>$request->KeenCell,'lastname'=>$request->KeenLastName,
                         'firstname'=>$request->KeenFirstName,'tenantid'=>$TenantID]
                     );
-                    return  redirect()->route('tenant.create') 
+                    return  redirect()->route('tenant.newtenant') 
                     ->with('success', 'tenant added');
                 }else{
-                    return  redirect()->route('tenant.create') 
+                    return  redirect()->route('tenant.newtenant') 
                     ->with('error', 'failed tenant already exists');
                 }
             }else{// company / corporate
@@ -84,16 +84,16 @@ class TenantController extends Controller
                         ['cell'=>$request->ContactCell,'lastname'=>$request->ContactLastName,
                         'firstname'=>$request->ContactFirstName,'tenantid'=>$TenantID]
                     );
-                    return  redirect()->route('tenant.create') 
+                    return  redirect()->route('tenant.newtenant') 
                     ->with('success', 'tenant added');
                 }else{
-                    return  redirect()->route('tenant.create') 
+                    return  redirect()->route('tenant.newtenant') 
                     ->with('error', 'failed tenant already exists');
                 }
                
             }
         }catch (QueryException $e){
-            return  redirect()->route('tenant.create') 
+            return  redirect()->route('tenant.newtenant') 
             ->with('error', 'failed to add tenant');
         }
        
