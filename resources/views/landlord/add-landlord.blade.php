@@ -192,25 +192,24 @@ $description = 'add landlord to the system...'; @endphp
                             <tr>
                                 <td></td>
                                 <td>
-                                    <select class="js-example-basic-single w-100" name="CurrencyID" id="CurrencyID"
+                                    <select class="js-example-basic-single w-100" name="Currency" id="Currency"
                                         tabindex="1"  >
                                     <option value="">Select Currency </option>
                                     @foreach($currency as $cur)
-                                    <option value="{{ $cur->id }}">  {{ $cur->code }}
+                                    <option value="{{ $cur->code }}">  {{ $cur->code }}
                                     </option>
                                     @endforeach
                                     </select>
-                                    <small id="currencycheck" style="color: red;"> select currency</small>
                                 </td>
                                 <td>
                                     <input name="AccountName" class="form-control" id="AccountName" value=""
                                         tabindex="2" type="text">
-                                        <small id="accountnamecheck" style="color: red;">account name is required</small>
+                                        <small id="accountnamecheck" style="color: red;"></small>
                                 </td>
                                 <td>
                                     <input name="BankName" class="form-control" id="BankName" value=""
                                         tabindex="3" type="text">
-                                        <small id="banknamecheck" style="color: red;">bank name is required</small>
+                                        <small id="banknamecheck" style="color: red;"></small>
                                 </td>
                                 <td>
                                     <input name="Branch" class="form-control " id="Branch" value=""
@@ -219,7 +218,7 @@ $description = 'add landlord to the system...'; @endphp
                                 <td>
                                     <input name="AccountNumber" class="form-control " id="AccountNumber" value=""
                                         tabindex="5" type="text">
-                                        <small id="accountnumbercheck" style="color: red;"> account number is required</small>
+                                        <small id="accountnumbercheck" style="color: red;"></small>
                                 </td>
                                 <td align="center" colspan="2">
                                     <input id="add-banking-item" class="btn btn-info" name="add-banking-item"

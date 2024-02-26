@@ -32,7 +32,8 @@ Route::controller(LandlordController::class)->group(function () {
     Route::get('/create/landlord', 'createnew')->name('landlord.newlandlord');
     Route::post('/new/create/landlord', 'addnewlandlord')->name('landlord.addlandlord');
     Route::get('/edit/landlord/{id}/view', 'vieweditlandlord')->name('landlord.editview');
-    Route::any('/landlord-banking-details', 'addbanking')->name('landlord.addbanking');
+    Route::get('/landlord-banking-details', 'addbanking')->name('landlord.addbanking');
+    Route::post('/create/landlord/bank', 'capturebankingdetails')->name('landlord.addbank');
     Route::any('/landlord-approval', 'pendingapproval')->name('landlord.pending');
     Route::any('/landlord-rejected', 'rejected')->name('landlord.rejected');
     Route::any('/single-landlord/{id}', 'getlandlord')->name('landlord.getlandlord');

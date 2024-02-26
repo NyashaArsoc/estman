@@ -40,9 +40,9 @@ class LandlordController  extends BaseController
         IF (!empty($request->AccountNumber)){ 
             $AccountNumber         =      $request->AccountNumber;
          }Else { $AccountNumber = [0]; }
-         IF (!empty($request->CurrencyID)){ 
-          $CurrencyID         =      $request->CurrencyID;
-          }Else { $CurrencyID = [0];}
+         IF (!empty($request->Currency)){ 
+          $Currency         =      $request->Currency;
+          }Else { $Currency = [0];}
           IF (!empty($request->BankName)){ 
             $BankName         =      $request->BankName;
           }Else {
@@ -58,7 +58,7 @@ class LandlordController  extends BaseController
           }Else {
             $Branch = [0];
           }
-        $NumbersInArray         =       count($CurrencyID);
+          $NumbersInArray         =       count($AccountName);
         $a  = 0;
 
         try{
@@ -75,11 +75,9 @@ class LandlordController  extends BaseController
                     );
                     while ($a   <   $NumbersInArray){
                         DB::table('landlordbank')
-                        ->updateOrInsert(
-                            ['accountnumber'=>$AccountNumber[$a]],
-                            ['branch'=>$Branch[$a],'bankname'=>$BankName[$a],'accountname'=>$AccountName[$a],
-                            'currencyid'=>$CurrencyID[$a],'landlordid'=>$LandlordID,'available'=>'Y']
-                        );
+            ->Insert(['accountnumber'=>$AccountNumber[$a],'branch'=>$Branch[$a],
+            'bankname'=>$BankName[$a],'accountname'=>$AccountName[$a],
+                'currencycode'=>$Currency[$a],'landlordid'=>$LandlordID,'available'=>'Y']);
                         $a++;
                     }
                     return  redirect()->route('landlord.newlandlord') 
@@ -108,11 +106,9 @@ class LandlordController  extends BaseController
                     );
                     while ($a   <   $NumbersInArray){
                         DB::table('landlordbank')
-                        ->updateOrInsert(
-                            ['accountnumber'=>$AccountNumber[$a]],
-                            ['branch'=>$Branch[$a],'bankname'=>$BankName[$a],'accountname'=>$AccountName[$a],
-                            'currencyid'=>$CurrencyID[$a],'landlordid'=>$LandlordID,'available'=>'Y']
-                        );
+                        ->Insert(['accountnumber'=>$AccountNumber[$a],'branch'=>$Branch[$a],
+                            'bankname'=>$BankName[$a],'accountname'=>$AccountName[$a],
+                            'currencycode'=>$Currency[$a],'landlordid'=>$LandlordID,'available'=>'Y']);
                         $a++;
                     }
                     return  redirect()->route('landlord.newlandlord') 
@@ -128,14 +124,6 @@ class LandlordController  extends BaseController
             ->with('error', 'failed to add landlord');
         }
        
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Landlord $landlord)
-    {
-        //
     }
 
     /**
@@ -176,13 +164,6 @@ class LandlordController  extends BaseController
         return $id;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Landlord $landlord)
-    {
-        //
-    }
     public function  addbanking(){
         $arr_owner['type']   = DB::table('clienttype')
         ->select('id','description')->get();
@@ -191,6 +172,48 @@ class LandlordController  extends BaseController
       return view('landlord/banking-details')
       ->with($arr_owner);
     }
+public function capturebankingdetails(Request $request){
+    IF (!empty($request->AccountNumber)){ 
+        $AccountNumber         =      $request->AccountNumber;
+     }Else { $AccountNumber = [0]; }
+     IF (!empty($request->Currency)){ 
+      $Currency         =      $request->Currency;
+      }Else { $Currency = [0];}
+      IF (!empty($request->BankName)){ 
+        $BankName         =      $request->BankName;
+      }Else {
+        $BankName = [0];
+      }
+      IF (!empty($request->AccountName)){ 
+        $AccountName         =      $request->AccountName;
+      }Else {
+        $AccountName = [0];
+      }
+      IF (!empty($request->Branch)){ 
+        $Branch         =      $request->Branch;
+      }Else {
+        $Branch = [0];
+      }
+    //  $arrayData = json_decode($Currency, true);
+    $NumbersInArray         =       count($AccountName);
+    $a  = 0;
+    
+    try {
+        while ($a   <   $NumbersInArray){
+            DB::table('landlordbank')
+            ->Insert(['accountnumber'=>$AccountNumber[$a],'branch'=>$Branch[$a],
+            'bankname'=>$BankName[$a],'accountname'=>$AccountName[$a],
+                'currencycode'=>$Currency[$a],'landlordid'=>$request->LandlordName,'available'=>'Y']);
+            $a++;
+        }
+        return  redirect()->route('landlord.addbanking') 
+                        ->with('success', 'landlord bank added');
+    } catch (\Throwable $th) {
+        return  redirect()->route('landlord.addbanking') 
+        ->with('error', 'failed to add landlord bank');
+    }
+    
+}
     public function  pendingapproval(){
         $arr_owner['landlord']   = DB::table('alllandlord')
         ->where('approval','=' ,'N')
@@ -221,13 +244,11 @@ class LandlordController  extends BaseController
         return view('landlord/list')
         ->with($arr_owner);
     }
-    public function getlandlord(Request $request, $id){
-       // $request->landlordclientid
-      //$id =1;
-        $arr_owner['landlord']   = DB::table('landlord')
+    public function getlandlord($id){
+        $arr_owner['landlord']   = DB::table('alllandlord')
         ->where([['clienttypeid', $id],
         ['available','=' ,'Y']])
-        ->select(DB::raw("concat(firstname,' ',lastname) As fullname"),'id','companyname','clienttypeid')
+        ->select('fullname','id','companyname','clienttypeid')
         ->get();
 
          return view('landlord/get-single-landlord')

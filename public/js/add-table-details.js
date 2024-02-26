@@ -1,4 +1,113 @@
-
+$("#accountnamecheck").hide();
+let accountnameError = true;
+$("#AccountName").keyup(function () {
+    validateAccountName();
+});
+function validateAccountName() {
+    let textValue = $("#AccountName").val();
+    if (textValue.length == "") {
+        $("#accountnamecheck").show();
+        accountnameError = false;
+        return false;
+    } else if (textValue.length < 3) {
+        $("#accountnamecheck").show();
+        $("#accountnamecheck").html("**invalid account name");
+        accountnameError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?~0-9]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#accountnamecheck").show();
+                $("#accountnamecheck").html("**follow the required format abc wzy");
+                accountnameError = false;
+                return false;
+            }else{
+                accountnameError = true;
+                $("#accountnamecheck").hide();
+            }
+    }
+}
+ //valid currency
+ $("#currencycheck").hide();
+ let currencyError = true;
+ $("#Currency").keyup(function () {
+     validateCurrency();
+ });
+ function validateCurrency() {
+     let textValue = $("#Currency").val();
+     if (textValue.length == "") {
+         $("#currencycheck").show();
+         currencyError = false;
+         return false;
+     } else {
+         currencyError = true;
+         $("#currencycheck").hide();
+     }
+ }
+  //valid bankname
+  $("#banknamecheck").hide();
+  let banknameError = true;
+  $("#BankName").keyup(function () {
+      validateBankName();
+  });
+  function validateBankName() {
+     let textValue = $("#BankName").val();
+     if (textValue.length == "") {
+         $("#banknamecheck").show();
+         banknameError = false;
+         return false;
+     } else if (textValue.length < 2) {
+         $("#banknamecheck").show();
+         $("#banknamecheck").html("**invalid account name");
+         banknameError = false;
+         return false;
+     } else {
+         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?~\/s\0-9]/;
+             charscheck =  specialChars.test(textValue);
+             if (charscheck == true){
+                  $("#banknamecheck").show();
+                 $("#banknamecheck").html("**follow the required format");
+                 banknameError = false;
+                 return false;
+             }else{
+                 banknameError = true;
+                 $("#banknamecheck").hide();
+             }
+     }
+ }
+     //valid account number
+     $("#accountnumbercheck").hide();
+     let accountnumberError = true;
+     $("#AccountNumber").keyup(function () {
+         validateAccountNumber();
+     });
+     function validateAccountNumber() { 
+		let textValue = $("#AccountNumber").val();
+		if (textValue.length == "") {
+			$("#accountnumbercheck").show();
+			accountnumberError = false;
+			return false;
+		} else if (textValue.length < 5) {
+			$("#accountnumbercheck").show();
+			$("#accountnumbercheck").html("**invalid account number");
+			accountnumberError = false;
+			return false;
+		} else {
+            const specialChars = /[`!@#$%^&*()_\-+=\[\]{};':"\\|,.<>\/?~a-z/\s/A-Z]/;
+            charscheck         =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#accountnumbercheck").show();
+                $("#accountnumbercheck").html("**follow the required format 063701000123");
+                accountnumberError = false;
+                return false;
+            }else{
+                accountnumberError = true;
+                $("#accountnumbercheck").hide();
+            }
+		}
+	}
+    
 //valid lease item currency
 $("#leaseitemcurrencycheck").hide();
 let leaseitemcurrencyError = true;
@@ -134,21 +243,23 @@ function validateLeaseItemAdminPaid(){
     }
 }
 $('#add-banking-item').on('click', function() {
-	var CurrencyID		=	$('#CurrencyID').val();
+	var CurrencyID		=	$('#Currency').val();
 	var AccountName		=	$('#AccountName').val();
 	var BankName		=	$('#BankName').val();
 	var Branch			=	$('#Branch').val();
 	var AccountNumber	=	$('#AccountNumber').val();
-	var Currency 		=	'';
 	var count = $('#landlordbanking tr').length - 1;
 	
 	if(AccountName!="" && BankName !="" && AccountNumber!=""){
+       /* validateAccountNumber();
+        validateBankName();
+        validateAccountName();
+        validateCurrency();*/
 		try {
-		if (CurrencyID == 1){Currency = "ZWL"}else if (CurrencyID == 2){Currency = "USD"}
 		if(Branch ==''){
 			Branch = 'n/a';
 		}
-		$('#landlordbanking tbody').append('<tr class="child"><td>'+count+'</td><td> <input name="CurrencyID[]" type="hidden" value='+CurrencyID+' readonly/><input name="Currency" class="form-control" value='+Currency+' readonly/></td><td><input name="AccountName[]" class="form-control" value='+AccountName+' readonly /></td><td><input name="BankName[]" class="form-control" value='+BankName+' readonly /></td><td> <input name="Branch[]" class="form-control " value='+Branch+' readonly/></td><td><input name="AccountNumber[]" class="form-control " value='+AccountNumber+' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="Delete" onclick="deleteRow(this)">Delete</button></td></tr>');
+		$('#landlordbanking tbody').append('<tr class="child"><td>'+count+'</td><td><input name="Currency[]" class="form-control" value='+CurrencyID+' readonly/></td><td><input name="AccountName[]" class="form-control" value='+AccountName+' readonly /></td><td><input name="BankName[]" class="form-control" value='+BankName+' readonly /></td><td> <input name="Branch[]" class="form-control " value='+Branch+' readonly/></td><td><input name="AccountNumber[]" class="form-control " value='+AccountNumber+' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="Delete" onclick="deleteRow(this)">Delete</button></td></tr>');
 		$('#AccountName').val('');  $('#BankName').val('');   $('#Branch').val(''); $('#AccountNumber').val(''); 
 		}
 		catch(err) {
