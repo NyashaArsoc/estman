@@ -235,11 +235,11 @@ public function capturebankingdetails(Request $request){
     }
     public function  listlandlords(){
         $arr_owner['landlord']   = DB::table('alllandlord')
-        ->where('approval','=' ,'Y')
-        ->where('available','=' ,'Y')
-        ->orwhere('available','=' ,'R')
+        // ->where('approval','=' ,'Y')
+        // ->where('available','=' ,'Y')
+        // ->orwhere('available','=' ,'R')
         ->select('fullname','id','companyname','nationalID','companynumber',
-        'cell','email','clienttypeid','description','reasons','available')
+        'cell','email','clienttypeid','description','reasons','available','approval')
         ->get();
         return view('landlord/list')
         ->with($arr_owner);
