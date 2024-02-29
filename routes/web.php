@@ -59,10 +59,10 @@ Route::controller(TenantController::class)->group(function () {
     Route::any('/approve-tenant/{id}', 'approvetenant')->name('tenant.approve');
     Route::any('/reject-tenant/{id}', 'rejecttenant')->name('tenant.reject');
     Route::any('/tenant-rejected', 'rejected')->name('tenant.rejected');
-    Route::any('/edit-update-tenant/{id}', 'updatetenant')->name('tenant.editupdate');
     Route::any('/single-tenant/{id}', 'gettenant')->name('tenant.gettenant');
     Route::any('/manage-tenant', 'listtenants')->name('tenant.list');
     Route::get('/single-tenant/details/{id}', 'gettenantdetails')->name('tenant.tenantdetails');
+    Route::get('/update/{id}/edit-tenant', 'updatetenant')->name('tenant.updating');
 });
 //Route::resource('property', PropertyController::class);
 Route::controller(PropertyController::class)->group(function () {

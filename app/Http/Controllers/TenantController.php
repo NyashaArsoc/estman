@@ -122,17 +122,15 @@ class TenantController extends Controller
             ->first();
             $arr['contact']   = DB::table('tenantcontact')
             ->where('tenantid', $tenantid)
-            ->where('approval', '=',2)
-            ->select('email','cell','lastname','firstname')
+            ->select('email','cell','lastname','firstname')->latest('id')
             ->first();
             $arr['keen']   = DB::table('tenantkeen')
             ->where('tenantid', $tenantid)
-            ->where('approval', '=',2)
-            ->select('email','cell','lastname','firstname')
+            ->select('email','cell','lastname','firstname')->latest('id')
             ->first();
             $arr['type']   = DB::table('clienttype')
             ->select('id','description')->get();
-            return view('tenant.edit-tenant')
+            return view('tenant/edit-tenant')
         ->with($arr);
 
         } catch (QueryException $e) {
@@ -141,15 +139,6 @@ class TenantController extends Controller
         }
     
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Tenant $tenant)
-    {
-        //
-    }
-
     /**
      * Remove the specified resource from storage.
      */
@@ -182,8 +171,8 @@ class TenantController extends Controller
             'contactaddress','tel')
             ->first();
             $arr_owner['contact']   = DB::table('tenantcontact')
-            ->where('tenantid', $tenantid)->latest('id')
-            ->select('email','cell','lastname','firstname')
+            ->where('tenantid', $tenantid)
+            ->select('email','cell','lastname','firstname')->latest('id')
             ->first();
             $arr_owner['keen']   = DB::table('tenantkeen')
             ->where('tenantid', $tenantid)
@@ -225,7 +214,7 @@ class TenantController extends Controller
        
         try{
             $tenantid = Crypt::decrypt($id);
-            $update = array('approval' => 2 , 'available'=> 0, 'reasons'=> $request->ReasonsForDecline);
+            $update = array('approval' => 'R' , 'available'=> 'N', 'reasons'=> $request->ReasonsForDecline);
             DB::table('tenant')
             ->where('id',$tenantid)
             ->update($update);
@@ -240,8 +229,8 @@ class TenantController extends Controller
  
     public function  rejected(){
         $arr['tenant']   = DB::table('alltenant')
-        ->where('approval','=' ,2)
-        ->where('available','=' ,0)
+        ->where('approval','=' ,'R')
+        ->where('available','=' ,'N')
         ->select('fullname','id','companyname','nationalID','companynumber',
         'cell','email','clienttypeid','typedescription','reasons')
         ->get();
@@ -260,20 +249,18 @@ class TenantController extends Controller
              'contactaddress'=>$request->ContactAddress,'bpnumber'=>$request->BPNumber,
             'vatnumber'=>$request->VATNumber,'companyname'=>$request->CompanyName,
             'nationalid'=>$request->NationalID,'firstname'=>$request->FirstName,
-            'lastname'=>$request->LastName,'approval' => 0 , 'available'=> 1]  );
+            'lastname'=>$request->LastName,'approval' => 'N' , 'available'=> 'Y']  );
             DB::table('tenantcontact')
                     ->updateOrInsert(
-                        ['email'=>$request->ContactEmail],
+                        ['email'=>$request->ContactEmail,'tenantid'=>$tenantid],
                         ['cell'=>$request->ContactCell,'lastname'=>$request->ContactLastName,
-                        'firstname'=>$request->ContactFirstName,'tenantid'=>$tenantid,
-                        'approval' => 0]
+                        'firstname'=>$request->ContactFirstName]
                     );
             DB::table('tenantkeen')
                     ->updateOrInsert(
-                        ['email'=>$request->ContactEmail],
-                        ['cell'=>$request->ContactCell,'lastname'=>$request->ContactLastName,
-                        'firstname'=>$request->ContactFirstName,'tenantid'=>$tenantid,
-                        'approval' => 0]
+                        ['email'=>$request->KeenEmail,'tenantid'=>$tenantid],
+                        ['cell'=>$request->KeenCell,'lastname'=>$request->KeenLastName,
+                        'firstname'=>$request->KeenFirstName]
                     );
             return  redirect()->route('tenant.rejected') 
             ->with('success', 'submitted for approval');

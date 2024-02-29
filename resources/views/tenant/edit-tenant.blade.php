@@ -13,7 +13,7 @@ if ($tenant->clienttypeid == 1){
     $divcompanyclass      =   'hide';
    } 
 @endphp
-@extends('layout.main-layout')
+@extends('layout.no-menu-layout')
 @section('title', 'Edit Tenant')
 @section('additional css')
     <!-- Additional css Start-->
@@ -35,7 +35,7 @@ if ($tenant->clienttypeid == 1){
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
             <form class="form-material material-primary" id="" method="PUT"
-                action="{{ route('tenant.editupdate', $id)}}">@csrf
+                action="{{route('tenant.updating', $id)}}">@csrf
                 <div class="form-group row">
                     <label for="ClientType" class="col-sm-2 form-control-label">Type</label>
                     <div class="col-sm-4">
