@@ -36,19 +36,42 @@
                             <tbody>@php $count=1;@endphp
                                 @foreach($tenant as $abc)
                                 <tr>
-                                    @php if ($abc->clienttypeid == 1){
+                                    @php
+                                    $id= Crypt::encrypt($abc->id); 
+                                     if ($abc->clienttypeid == 1){
                                         $owner   =  $abc->fullname ;
                                         $registration   =  $abc->nationalid ;
                                      }else{
                                          $owner   =  $abc->companyname ;
                                          $registration   =  $abc->companynumber ;
-                                     }if ($abc->available = 'Y'){
-                                        $status = 'active';
+                                     }
+                                     if (trim($abc->available) == 'Y'){
+                                        $status = 'available';
                                         $badge = "badge badge-pill bg-success badge-secondary";
-                                 }else{
+                                        $buttondeactivate = '<a onclick = "deactivatelandlord(this); 
+                                        return false;" class="btn btn-warning btn-sm" href="' . route('landlord.disable',$id) . '"
+                                     title="disable"><i class="ti-close mr-0-5"></i>deactivate</a>';
+                                     $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('landlord.view',$id) . '"
+                                     title="view"><i class="ti-eye mr-0-5"></i>view</a>';
+                                    }else if (trim($abc->available) == 'D'){//include the deleted status
+                                        $status = 'deleted';
+                                        $badge = 'badge badge-pill bg-danger badge-secondary';
+                                        $buttondeactivate = '';
+                                        $buttonview = '';
+                                    }else{
+                                    if (trim($abc->approval) == 'R'){ 
+                                        $status = 'rejected';
+                                        $badge = 'badge badge-pill bg-danger badge-secondary';
+                                        $buttondeactivate = '';
+                                        $buttonview = '';
+                                    }else{
                                         $status = 'inactive';
                                         $badge = 'badge badge-pill bg-danger badge-secondary';
-                                 } @endphp
+                                        $buttondeactivate ='';
+                                        $buttonview = '';
+                                    }
+                                 }
+                                      @endphp
                                         <td>{{$count ++}}</td>
                                         <td>{{ $abc->typedescription }}</td>
                                         <td>{{ $owner}}</td>
@@ -57,14 +80,8 @@
                                         <td>{{ $abc->email }}</td>
                                         <td><span class="{{ $badge }}">{{$status}}</span></td>
                                         <td>
-                                         <a class="btn btn-info btn-sm" id=""
-                                         title="view"><i class="ti-eye mr-0-5"></i>view</a>
-                                         <a onclick = "DeactivateLandlord(this); return false;"
-                                         class="btn btn-warning btn-sm" href=""
-                                         title="View Landlord"><i class="ti-close mr-0-5"></i>deactivate</a>
-                                         <a onclick = "DeleteLandlord(this); return false;"
-                                         class="btn btn-danger btn-sm" href=" "
-                                         title="View Landlord"><i class="ti-close mr-0-5"></i>delete</a>
+                                     {!! $buttonview !!}
+                                     {!! $buttondeactivate !!}
                                 </td>
                                 </tr>
                                 @endforeach

@@ -46,13 +46,13 @@
                                      title="disable"><i class="ti-close mr-0-5"></i>deactivate</a>';
                                      $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('landlord.view',$id) . '"
                                      title="view"><i class="ti-eye mr-0-5"></i>view</a>';
-                                    }else if (trim($land->available) == 'D'){
+                                    }else if (trim($land->available) == 'D'){//include the deleted status
                                         $status = 'deleted';
                                         $badge = 'badge badge-pill bg-danger badge-secondary';
                                         $buttondeactivate = '';
                                         $buttonview = '';
                                     }else{
-                                    if (trim($land->approval) == 'R'){ //include the deleted status
+                                    if (trim($land->approval) == 'R'){ 
                                         $status = 'rejected';
                                         $badge = 'badge badge-pill bg-danger badge-secondary';
                                         $buttondeactivate = '';

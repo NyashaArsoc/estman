@@ -249,7 +249,7 @@ class TenantController extends Controller
              'contactaddress'=>$request->ContactAddress,'bpnumber'=>$request->BPNumber,
             'vatnumber'=>$request->VATNumber,'companyname'=>$request->CompanyName,
             'nationalid'=>$request->NationalID,'firstname'=>$request->FirstName,
-            'lastname'=>$request->LastName,'approval' => 'N' , 'available'=> 'Y']  );
+            'lastname'=>$request->LastName,'approval' => 'N']  );
             DB::table('tenantcontact')
                     ->updateOrInsert(
                         ['email'=>$request->ContactEmail,'tenantid'=>$tenantid],
@@ -273,9 +273,8 @@ class TenantController extends Controller
     public function  listtenants(){
         try {
             $arr['tenant']   = DB::table('alltenant')
-            ->where('approval','=' ,'Y')
             ->select('fullname','id','companyname','nationalid','companynumber',
-            'cell','email','clienttypeid','typedescription','available')
+            'cell','email','clienttypeid','typedescription','available','approval')
             ->get();
             return view('tenant/list')
             ->with($arr);

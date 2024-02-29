@@ -235,9 +235,6 @@ public function capturebankingdetails(Request $request){
     }
     public function  listlandlords(){
         $arr_owner['landlord']   = DB::table('alllandlord')
-        // ->where('approval','=' ,'Y')
-        // ->where('available','=' ,'Y')
-        // ->orwhere('available','=' ,'R')
         ->select('fullname','id','companyname','nationalID','companynumber',
         'cell','email','clienttypeid','description','reasons','available','approval')
         ->get();
@@ -326,9 +323,9 @@ public function capturebankingdetails(Request $request){
             'lastname'=>$request->LastName,'approval' => 'N']  );
             DB::table('landlordcontact')
                     ->updateOrInsert(
-                        ['email'=>$request->ContactEmail],
+                        ['email'=>$request->ContactEmail,'landlordid'=>$landlordid],
                         ['cell'=>$request->ContactCell,'lastname'=>$request->ContactLastName,
-                        'firstname'=>$request->ContactFirstName,'landlordid'=>$landlordid]
+                        'firstname'=>$request->ContactFirstName]
                     );
             return  redirect()->route('landlord.rejected') 
             ->with('success', 'submitted for approval');
