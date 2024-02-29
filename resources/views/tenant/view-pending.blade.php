@@ -3,10 +3,10 @@ $title = 'Pending Tenant';
 $description = 'approve/reject tenant...'; 
 if ($tenant->clienttypeid == 1){
                                 $owner   =  $tenant->fullname ;
-                                $registration   =  $tenant->nationalID ;
+                                $registration   =  $tenant->nationalid ;
                                 $divclasscompany      =   'dropdwn';
                                 $divclassindividual   =   'show';
-                             }else{
+                             }else{ 
                                  $owner   =  $tenant->companyname ;
                                  $registration   =  $tenant->companynumber ;
                                  $divclasscompany   =   'show';
@@ -14,7 +14,7 @@ if ($tenant->clienttypeid == 1){
                              } 
                              $id= Crypt::encrypt($tenant->id);
 @endphp
-@extends('layout.main-layout')
+@extends('layout.no-menu-layout')
 @section('title', 'Pending Tenant')
 @section('content')
     <!-- Content Start-->
@@ -124,13 +124,13 @@ if ($tenant->clienttypeid == 1){
                         </label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" readonly
-                                value="{{ $contact->lastname ?? ''}}" >
+                                value="{{ $keen->firstname ?? ''}}" >
                             </div> 
                             <label for="LastName" class="col-sm-2 form-control-label">Last Name
                             </label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" readonly
-                                value="{{ $contact->lastname ?? ''}}">
+                                value="{{ $keen->lastname ?? ''}}">
                             </div> 
                     </div>
                     <div class="form-group row">
@@ -138,13 +138,13 @@ if ($tenant->clienttypeid == 1){
                         </label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" readonly
-                                value="{{ $contact->lastname ?? ''}}" > 
+                                value="{{ $keen->cell ?? ''}}" > 
                             </div>
                             <label for="Email" class="col-sm-2 col-form-label">Email
                             </label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" readonly
-                                value="{{ $contact->lastname ?? ''}}" >
+                                value="{{ $keen->email ?? ''}}" >
                             </div>
                     </div>
                 </div> 
@@ -161,7 +161,7 @@ if ($tenant->clienttypeid == 1){
                     <div class="offset-sm-2 col-sm-4">
                         <a onclick = "approvetenant(this); return false;"
                         class="btn btn-success btn-sm" href="{{route('tenant.approve', $id)}}"
-                        title="approve"><i class="ti-check mr-0-5"></i>approve</a>  
+                        title="activate"><i class="ti-check mr-0-5"></i>activate</a>  
                         <button type="submit" class="btn btn-danger btn-sm" id="reject-tenant" 
                         onclick = "rejecttenant(this); return false;"><i class="ti-close mr-0-5">
                             </i>reject</button>

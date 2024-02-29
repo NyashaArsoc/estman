@@ -158,13 +158,18 @@ class TenantController extends Controller
         //
     }
     public function  pendingapproval(){
-        $arr_owner['tenant']   = DB::table('alltenant')
-        ->where('approval','=' ,0)
+        try {
+            $arr_owner['tenant']   = DB::table('alltenant')
+        ->where('approval','=' ,'N')
         ->select('fullname','id','companyname','nationalid','companynumber',
         'cell','email','clienttypeid','typedescription')
         ->get();
         return view('tenant/pending-approval')
         ->with($arr_owner);
+        } catch (\Throwable $th) {
+            return  redirect()->route('dash.property') 
+            ->with('error', 'failed to load');
+        } 
     }
     public function viewpending($id){
         $tenantid = Crypt::decrypt($id);
@@ -177,17 +182,15 @@ class TenantController extends Controller
             'contactaddress','tel')
             ->first();
             $arr_owner['contact']   = DB::table('tenantcontact')
-            ->where('tenantid', $tenantid)
-            ->where('approval', '=',0)
+            ->where('tenantid', $tenantid)->latest('id')
             ->select('email','cell','lastname','firstname')
             ->first();
             $arr_owner['keen']   = DB::table('tenantkeen')
             ->where('tenantid', $tenantid)
-            ->where('approval', '=',0)
-            ->select('email','cell','lastname','firstname')
+            ->select('email','cell','lastname','firstname')->latest('id')
             ->first();
             return view('tenant/view-pending')
-           ->with($arr_owner);
+            ->with($arr_owner);
         } catch (QueryException $e) {
             return  redirect()->route('tenant.pending') 
             ->with('error', 'failed to load'.$e);

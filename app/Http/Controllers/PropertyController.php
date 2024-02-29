@@ -123,7 +123,7 @@ class PropertyController extends BaseController
     }
     public function  pendingapproval(){
         $arr['property']   = DB::table('allproperty')
-        ->where('approval','=' ,0)
+        ->where('approval','=' ,'N')
         ->select('fullname','id','companyname','code','landlordclienttype',
         'location','propertytype','streetaddress')
         ->get();
