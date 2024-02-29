@@ -38,6 +38,7 @@ Route::controller(LandlordController::class)->group(function () {
     Route::any('/landlord-rejected', 'rejected')->name('landlord.rejected');
     Route::any('/single-landlord/{id}', 'getlandlord')->name('landlord.getlandlord');
     Route::any('/approve-landlord/{id}', 'approvelandlord')->name('landlord.approve');
+    Route::any('/disable/{id}/landlord', 'disablelandlord')->name('landlord.disable');
     Route::any('/view-pending-landlord/{id}', 'viewpending')->name('landlord.viewpending');
     Route::any('/reject-landlord/{id}', 'rejectlandlord')->name('landlord.reject');
     Route::any('/edit-update-landlord/{id}', 'updatelandlord')->name('landlord.editupdate');

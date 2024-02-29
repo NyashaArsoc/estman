@@ -128,7 +128,7 @@ if ($landlord->clienttypeid == 1){
                     <div class="offset-sm-2 col-sm-4">
                         <a onclick = "approvelandlord(this); return false;"
                         class="btn btn-success btn-sm" href="{{route('landlord.approve', $id)}}"
-                        title="approve"><i class="ti-check mr-0-5"></i>approve</a>  
+                        title="activate"><i class="ti-check mr-0-5"></i>activate</a>  
                         <button type="submit" class="btn btn-danger btn-sm" id="reject-landlord" 
                         onclick = "rejectlandlord(this); return false;"><i class="ti-close mr-0-5">
                             </i>reject</button>

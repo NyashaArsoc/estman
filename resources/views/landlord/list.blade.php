@@ -2,12 +2,6 @@
       $description = 'list of all landlords...'; @endphp
     @extends('layout.main-layout')
     @section('title', 'Manage Landlords')
-    @section('additional css')
-    <!-- Additional css Start-->
-    <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/select2-bootstrap-theme/select2-bootstrap.min.css') }}">
-    <!-- Additional css End-->
-    @endsection
     @section('content')
         <!-- Content Start-->
         <div class="container-fluid">
@@ -47,9 +41,9 @@
                                  } if (trim($land->available) == 'Y'){
                                         $status = 'available';
                                         $badge = "badge badge-pill bg-success badge-secondary";
-                                        $buttondeactivate = '<a onclick = "DeactivateLandlord(this); 
-                                        return false;" class="btn btn-warning btn-sm" href=""
-                                     title="View"><i class="ti-close mr-0-5"></i>deactivate</a>';
+                                        $buttondeactivate = '<a onclick = "deactivatelandlord(this); 
+                                        return false;" class="btn btn-warning btn-sm" href="' . route('landlord.disable',$id) . '"
+                                     title="disable"><i class="ti-close mr-0-5"></i>deactivate</a>';
                                      $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('landlord.view',$id) . '"
                                      title="view"><i class="ti-eye mr-0-5"></i>view</a>';
                                     }else if (trim($land->available) == 'D'){
@@ -106,9 +100,6 @@
     @endsection
     @section('additional js')
     <!-- Additional JS Start-->
-    <script src="{{ asset('css/select2/select2.min.js') }}"></script>
-        <script src="{{ asset('js/select2.js') }}"></script>
-		<script src="{{ asset('js/dropdown.js') }}"></script>
-		<script src="{{ asset('js/add-banking-details.js') }}"></script> 
+    <script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script> 
     <!-- Additional JS End-->
     @endsection

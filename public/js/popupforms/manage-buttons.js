@@ -68,3 +68,9 @@ function approveprofomaedited(that) {
         window.location = anchor.attr("href");
     }
 }
+function deactivatelandlord(that) {
+    var proceedto = confirm("proceed to disable this landlord?")
+    if (proceedto) {
+        window.location = anchor.attr("href");
+    }
+}
