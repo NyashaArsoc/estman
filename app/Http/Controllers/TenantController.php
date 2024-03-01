@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
-class TenantController extends Controller
+class TenantController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -308,5 +308,56 @@ public function gettenantdetails($id){
     }
     
     
+}
+public function viewindividual($id){
+    $tenantid = Crypt::decrypt($id);
+          
+    try {
+            BaseController::sharetenantid($id);
+            $arr['tenant']   = DB::table('alltenant')
+            ->where('id', $tenantid)
+            ->select('fullname','id','companyname','nationalid','companynumber',
+            'cell','email','clienttypeid','typedescription','vatnumber','bpnumber',
+            'contactaddress','tel')
+            ->first();
+            $arr['contact']   = DB::table('tenantcontact')
+            ->where('tenantid', $tenantid)
+            ->select('email','cell','lastname','firstname')->latest('id')
+            ->first();
+            $arr['keen']   = DB::table('tenantkeen')
+            ->where('tenantid', $tenantid)
+            ->select('email','cell','lastname','firstname')->latest('id')
+            ->first();
+        $arr['type']   = DB::table('clienttype')
+        ->select('id','description')->get();
+        return view('tenant.view-single-tenant')
+    ->with($arr);
+
+    } catch (QueryException $e) {
+        return  redirect()->route('tenant.list') 
+        ->with('error', 'failed to load');
+    }
+}
+public function viewtenantlease($id){
+    $tenantid = Crypt::decrypt($id);
+              
+    try {        
+        $arr['tenant']   = DB::table('alltenant')
+            ->where('id', $tenantid)
+            ->select('fullname','id','companyname','nationalid','companynumber',
+            'cell','email','clienttypeid','typedescription','vatnumber','bpnumber',
+            'contactaddress','tel')
+            ->first();
+        $arr['lease']   = DB::table('alllease')
+            ->where('tenantid', $tenantid)
+            ->select('fullname','companyname','id','clienttypeid','validfrom','available',
+            'validto','propertydescription','rentalcurrency','rental','propertyid','approval','expiry')
+            ->get();
+        return view('tenant.view-tenant-leases')
+    ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('tenant.list') 
+        ->with('error', 'failed to load');
+    }
 }
 }

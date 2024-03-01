@@ -63,6 +63,8 @@ Route::controller(TenantController::class)->group(function () {
     Route::any('/manage-tenant', 'listtenants')->name('tenant.list');
     Route::get('/single-tenant/details/{id}', 'gettenantdetails')->name('tenant.tenantdetails');
     Route::get('/update/{id}/edit-tenant', 'updatetenant')->name('tenant.updating');
+    Route::get('/tenant/{id}/view', 'viewindividual')->name('tenant.view');
+    Route::get('/tenant/{id}/view-leases', 'viewtenantlease')->name('tenant.viewlease');
 });
 //Route::resource('property', PropertyController::class);
 Route::controller(PropertyController::class)->group(function () {

@@ -355,8 +355,6 @@ public function capturebankingdetails(Request $request){
         $landlordid = Crypt::decrypt($id);
               
         try {
-                
-               
                 BaseController::sharelandlordid($id);
             $arr['landlord']   = DB::table('alllandlord')
             ->where('id', $landlordid)
