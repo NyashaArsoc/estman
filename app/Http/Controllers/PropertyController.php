@@ -54,11 +54,11 @@ class PropertyController extends BaseController
             'lettablearea'=> $request->LettableArea,'ratesqm'=> $request->ExpectedRate,'expectedrental'=> $request->ExpectedRental
         ]);
             DB::table('commissionpercent')
-            ->updateOrInsert(['propertyid'=>$PropertyID],['commissiontypeid'=>$request->CommissionType, 
+            ->updateOrInsert(['propertyid'=>$PropertyID],['interestoptionid'=>$request->CommissionType, 
                 'percentage'=>$request->CommissionPercentage]);
                 return  redirect()->route('property.newproperty') 
                 ->with('success', 'property added successful');
-       } catch (QueryException $e) {
+       } catch (\Throwable $e) {
         return  redirect()->route('property.newproperty') 
         ->with('error', 'failed to add property');
        }
@@ -87,14 +87,14 @@ class PropertyController extends BaseController
         ->select('id','description')->get();
         $arr['propertytype']   = DB::table('propertytype')
         ->select('id','description')->get();
-        $arr['commission']   = DB::table('commissiontype')
+         $arr['commission']   = DB::table('interestoptions')
         ->select('id','description')->get();
             $arr['property']   = DB::table('allproperty')
             ->where('id', $propertyid)
             ->select('fullname','id','companyname','code','location','province',
             'propertytype','streetaddress','standnumber','comments','rooms','landlordtype',
             'bedrooms','bathrooms','stories','totalarea','lettablearea','ratesqm',
-            'expectedrental','propertytypeid','percentage','commissiontype','landlordclienttype',
+            'expectedrental','propertytypeid','commissionpercentage','commissionon','landlordclienttype',
             'commissionid','currencyid','propertytype','provinceid','city','landlordid')
             ->first();
             return view('property.edit-property')
@@ -122,13 +122,19 @@ class PropertyController extends BaseController
         //
     }
     public function  pendingapproval(){
-        $arr['property']   = DB::table('allproperty')
+        try {
+            $arr['property']   = DB::table('allproperty')
         ->where('approval','=' ,'N')
         ->select('fullname','id','companyname','code','landlordclienttype',
         'location','propertytype','streetaddress')
         ->get();
         return view('property/pending-approval')
         ->with($arr);
+        } catch (\Throwable $th) {
+            return  redirect()->route('dash.property') 
+            ->with('error', 'failed to load');
+        }
+        
     }
     public function viewpending($id){
         $propertyid = Crypt::decrypt($id);
@@ -138,12 +144,12 @@ class PropertyController extends BaseController
             ->select('fullname','id','companyname','code','location','province',
             'propertytype','streetaddress','city','standnumber','comments','rooms',
             'bedrooms','bathrooms','stories','totalarea','lettablearea','ratesqm',
-            'expectedrental','propertytypeid','percentage','commissiontype','landlordclienttype')
+            'expectedrental','propertytypeid','commissionpercentage','commissionon','landlordclienttype')
             ->first();
             return view('property/view-pending')
            ->with($arr);
         } catch (QueryException $e) {
-            return  redirect()->route('landlord.pending') 
+            return  redirect()->route('property.pending') 
             ->with('error', 'failed to load');
         }
         
@@ -226,7 +232,7 @@ class PropertyController extends BaseController
                 'lettablearea'=> $request->LettableArea,'ratesqm'=> $request->ExpectedRate,'expectedrental'=> $request->ExpectedRental
             ,'approval' => 'N' , 'available'=> 'N']);
                 DB::table('commissionpercent')
-                ->updateOrInsert(['propertyid'=>$propertyid],['commissiontypeid'=>$request->CommissionType, 
+                ->updateOrInsert(['propertyid'=>$propertyid],['interestoptionid'=>$request->CommissionType, 
                     'percentage'=>$request->CommissionPercentage]);
                     return  redirect()->route('property.rejected') 
                     ->with('success', 'property updated successful');
@@ -266,9 +272,8 @@ class PropertyController extends BaseController
     public function  listproperties(){
         try {
             $arr['property']   = DB::table('allproperty')
-            ->where('approval','=' ,'Y')
             ->select('fullname','id','companyname','code','landlordclienttype',
-            'location','propertytype','streetaddress','available')
+            'location','propertytype','streetaddress','available','approval')
             ->get();
             return view('property/list')
             ->with($arr);
@@ -279,8 +284,7 @@ class PropertyController extends BaseController
     }
 
 public function viewindividual($id){
-    $propertyid = Crypt::decrypt($id);
-              
+    $propertyid = Crypt::decrypt($id);    
         try {
                 BaseController::sharepropertyid($id);
                 $arr['property']   = DB::table('allproperty')
@@ -288,14 +292,14 @@ public function viewindividual($id){
                 ->select('fullname','id','companyname','code','location','province',
                 'propertytype','streetaddress','city','standnumber','comments','rooms',
                 'bedrooms','bathrooms','stories','totalarea','lettablearea','ratesqm',
-                'expectedrental','propertytypeid','percentage','commissiontype','landlordclienttype')
+                'expectedrental','propertytypeid','commissionpercentage','commissionon','landlordclienttype')
                 ->first();
             return view('property.view-single-property')
         ->with($arr);
 
         } catch (QueryException $e) {
             return  redirect()->route('property.list') 
-            ->with('error', 'failed to load');
+            ->with('error', 'failed to load'.$e);
         }
     }
 public function viewledgers($id){

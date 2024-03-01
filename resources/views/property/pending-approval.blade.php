@@ -51,7 +51,7 @@
                                         title="view"><i class="ti-eye mr-0-5"></i>view</a>
                                         <a onclick = "approveproperty(this); return false;"
                                         class="btn btn-success btn-sm" href="{{route('property.approve', $id)}}"
-                                        title="approve"><i class="ti-check mr-0-5"></i>approve</a>
+                                        title="activate"><i class="ti-check mr-0-5"></i>activate</a>
                             </td>
                             </tr>
                             @endforeach

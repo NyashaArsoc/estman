@@ -14,7 +14,7 @@ if ($property->landlordclienttype == 1){//individual
     $divclassresidential   =   'dropdwn';
  }
 @endphp
-@extends('layout.main-layout')
+@extends('layout.no-menu-layout')
 @section('title', 'Edit Property')
 @section('additional css')
     <!-- Additional css Start-->
@@ -206,9 +206,9 @@ if ($property->landlordclienttype == 1){//individual
                     <label for="CommissionType" class="col-sm-2 form-control-label">Commission Type</label>
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="CommissionType" id="CommissionType" />
-                        <option value="{{ $property->commissionid }}">{{ $property->commissiontype }}</option>
-                        @foreach ($commission as $com)
-                            <option value="{{ $com->id }}"> {{ $com->description }}
+                        <option value="{{ $property->commissionid }}">{{ $property->commissionon }}</option>
+                        @foreach ($commission as $abc)
+                            <option value="{{ $abc->id }}"> {{ $abc->description }}
                             </option>
                         @endforeach
                         </select>
@@ -217,7 +217,7 @@ if ($property->landlordclienttype == 1){//individual
                     <label for="CommissionPercentage" class="col-sm-2 col-form-label">Commission (%) </label>
                     <div class="col-sm-2">
                         <input type="text" class="form-control" id="CommissionPercentage" name="CommissionPercentage"
-                        value="{{ $property->percentage ?? ''}}" autocomplete="off">
+                        value="{{ $property->commissionpercentage ?? ''}}" autocomplete="off">
                         <small id="commissionpercentcheck" style="color: red;"> % of commission is required</small>
                     </div>
                 </div>

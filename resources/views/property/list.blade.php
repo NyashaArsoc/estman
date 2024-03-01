@@ -35,16 +35,36 @@
                             </thead>
                             <tbody>@php $count=1;@endphp
                                 @foreach($property as $abc)
-                            <tr>@php if ($abc->landlordclienttype == 1){//individual
+                            <tr>@php $id= Crypt::encrypt($abc->id); 
+                            if ($abc->landlordclienttype == 1){//individual
                                 $owner   =  $abc->fullname ;
                              }else{
                                  $owner   =  $abc->companyname ;
-                             } if ($abc->available = 'Y'){
-                                        $status = 'active';
+                             } if (trim($abc->available) == 'Y'){
+                                        $status = 'available';
                                         $badge = "badge badge-pill bg-success badge-secondary";
-                                 }else{
+                                        $buttondeactivate = '<a onclick = "deactivatelandlord(this); 
+                                        return false;" class="btn btn-warning btn-sm" href="' . route('landlord.disable',$id) . '"
+                                     title="disable"><i class="ti-close mr-0-5"></i>deactivate</a>';
+                                     $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('property.view',$id) . '"
+                                     title="view"><i class="ti-eye mr-0-5"></i>view</a>';
+                                    }else if (trim($abc->available) == 'D'){//include the deleted status
+                                        $status = 'deleted';
+                                        $badge = 'badge badge-pill bg-danger badge-secondary';
+                                        $buttondeactivate = '';
+                                        $buttonview = '';
+                                    }else{
+                                    if (trim($abc->approval) == 'R'){ 
+                                        $status = 'rejected';
+                                        $badge = 'badge badge-pill bg-danger badge-secondary';
+                                        $buttondeactivate = '';
+                                        $buttonview = '';
+                                    }else{
                                         $status = 'inactive';
                                         $badge = 'badge badge-pill bg-danger badge-secondary';
+                                        $buttondeactivate ='';
+                                        $buttonview = '';
+                                    }
                                  }@endphp
                                     <td>{{$count ++}}</td>
                                     <td>{{ $owner}}</td>
@@ -53,13 +73,9 @@
                                     <td>{{ $abc->location }}</td>
                                     <td>{{ $abc->streetaddress }}</td>
                                     <td><span class="{{ $badge }}">{{$status}}</span></td>
-                                    <td>@php $id= Crypt::encrypt($abc->id); @endphp
-                                        <a class="btn btn-info btn-sm " id=""
-                                        href="{{route('property.view', $id)}}"
-                                        title="view"><i class="ti-eye mr-0-5"></i>view</a>
-                                        <a onclick = "approveproperty(this); return false;"
-                                        class="btn btn-success btn-sm" href="{{route('property.approve', $id)}}"
-                                        title="approve"><i class="ti-check mr-0-5"></i>approve</a>
+                                    <td>
+                                        {!! $buttonview !!}
+                                        {!! $buttondeactivate !!}
                             </td>
                             </tr>
                             @endforeach

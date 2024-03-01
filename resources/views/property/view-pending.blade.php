@@ -16,7 +16,7 @@ if ($property->landlordclienttype == 1){
  }
 $id= Crypt::encrypt($property->id);
 @endphp
-@extends('layout.main-layout')
+@extends('layout.no-menu-layout')
 @section('title', 'Approve Property')
 
 @section('content')
@@ -129,14 +129,14 @@ $id= Crypt::encrypt($property->id);
                         <input type="text" class="form-control" value="{{ $property->code ?? ''}}"
                          readonly>
                     </div>
-                    <div id="CommercialBottom" class="dropdwn">
+                    <div id="CommercialBottom" class="{{$divclasscompany}}">
                         <label for="Bedrooms" class="col-sm-2 col-form-label">Expected Rate/sqm</label>
                         <div class="col-sm-2">
                             <input type="text" class="form-control"  value="{{ $property->ratesqm ?? ''}}"
                                 readonly>
                         </div>
                     </div>
-                    <div id="ResidentialBottom" class="dropdwn">
+                    <div id="ResidentialBottom" class="{{$divclassindividual}}">
                         <label for="Bedrooms" class="col-sm-2 col-form-label">Expected Rental</label>
                         <div class="col-sm-2">
                             <input type="text" class="form-control" value="{{ $property->expectedrental ?? ''}}"
@@ -146,14 +146,14 @@ $id= Crypt::encrypt($property->id);
                 </div><br />
                 <h5>commissions</h5>
                 <div class="form-group row">
-                    <label for="CommissionType" class="col-sm-2 form-control-label">Commission Type</label>
+                    <label for="CommissionType" class="col-sm-2 form-control-label">Commission On</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" value="{{ $property->commissiontype ?? ''}}"
+                        <input type="text" class="form-control" value="{{ $property->commissionon ?? ''}}"
                         readonly>
                     </div>
                     <label for="CommissionPercentage" class="col-sm-2 col-form-label">Commission (%) </label>
                     <div class="col-sm-2">
-                        <input type="text" class="form-control"  value="{{ $property->percentage ?? ''}}"
+                        <input type="text" class="form-control"  value="{{ $property->commissionpercentage ?? ''}}"
                         readonly >
                     </div>
                 </div>
@@ -170,7 +170,7 @@ $id= Crypt::encrypt($property->id);
                     <div class="offset-sm-2 col-sm-10">
                         <a onclick = "approveproperty(this); return false;"
                         class="btn btn-success btn-sm" href="{{route('property.approve', $id)}}"
-                        title="approve"><i class="ti-check mr-0-5"></i>approve</a>  
+                        title="activate"><i class="ti-check mr-0-5"></i>activate</a>  
                     <button type="submit" class="btn btn-danger btn-sm" id="reject-property" 
                             onclick = "rejectproperty(this); return false;"><i class="ti-close mr-0-5">
                                 </i>reject</button>

@@ -128,14 +128,14 @@ if ($property->landlordclienttype == 1){
                         <input type="text" class="form-control" value="{{ $property->code ?? ''}}"
                          readonly>
                     </div>
-                    <div id="CommercialBottom" class="dropdwn">
+                    <div id="CommercialBottom" class="{{$divclasscompany}}">
                         <label for="Bedrooms" class="col-sm-2 col-form-label">Expected Rate/sqm</label>
                         <div class="col-sm-2">
                             <input type="text" class="form-control"  value="{{ $property->ratesqm ?? ''}}"
                                 readonly>
                         </div>
                     </div>
-                    <div id="ResidentialBottom" class="dropdwn">
+                    <div id="ResidentialBottom" class="{{$divclassindividual}}">
                         <label for="Bedrooms" class="col-sm-2 col-form-label">Expected Rental</label>
                         <div class="col-sm-2">
                             <input type="text" class="form-control" value="{{ $property->expectedrental ?? ''}}"
@@ -145,14 +145,14 @@ if ($property->landlordclienttype == 1){
                 </div><br />
                 <h5>commissions</h5>
                 <div class="form-group row">
-                    <label for="CommissionType" class="col-sm-2 form-control-label">Commission Type</label>
+                    <label for="CommissionType" class="col-sm-2 form-control-label">Commission TyOn</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" value="{{ $property->commissiontype ?? ''}}"
+                        <input type="text" class="form-control" value="{{ $property->commissionon ?? ''}}"
                         readonly>
                     </div>
                     <label for="CommissionPercentage" class="col-sm-2 col-form-label">Commission (%) </label>
                     <div class="col-sm-2">
-                        <input type="text" class="form-control"  value="{{ $property->percentage ?? ''}}"
+                        <input type="text" class="form-control"  value="{{ $property->commissionpercentage ?? ''}}"
                         readonly >
                     </div>
                 </div>
