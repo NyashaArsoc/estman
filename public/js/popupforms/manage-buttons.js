@@ -74,3 +74,9 @@ function deactivatelandlord(that) {
         window.location = anchor.attr("href");
     }
 }
+function deactivatetenant(that) {
+    var proceedto = confirm("proceed to disable this tenant?")
+    if (proceedto) {
+        window.location = anchor.attr("href");
+    }
+}

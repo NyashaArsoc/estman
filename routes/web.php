@@ -46,7 +46,6 @@ Route::controller(LandlordController::class)->group(function () {
     Route::any('/landlord/{id}/view', 'viewindividual')->name('landlord.view');
     Route::get('/landlord/{id}/view-ledgers', 'viewledgers')->name('landlord.ledgers');
     Route::post('/landlord/{id}/sub-ledgers/{product}', 'createsubledgers')->name('landlord.createsub');
-
     Route::any('/manage-landlord', 'listlandlords')->name('landlord.list');
 });
 //Route::resource('tenant', TenantController::class);
@@ -65,6 +64,7 @@ Route::controller(TenantController::class)->group(function () {
     Route::get('/update/{id}/edit-tenant', 'updatetenant')->name('tenant.updating');
     Route::get('/tenant/{id}/view', 'viewindividual')->name('tenant.view');
     Route::get('/tenant/{id}/view-leases', 'viewtenantlease')->name('tenant.viewlease');
+    Route::any('/disable/{id}/tenant', 'disabletenant')->name('tenant.disable');
 });
 //Route::resource('property', PropertyController::class);
 Route::controller(PropertyController::class)->group(function () {

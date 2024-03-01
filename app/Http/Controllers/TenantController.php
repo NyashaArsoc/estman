@@ -360,4 +360,26 @@ public function viewtenantlease($id){
         ->with('error', 'failed to load');
     }
 }
+public function disabletenant($id){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        $update = array('approval' => 'N' , 'available'=> 'N');
+        $lease = DB::table('alllease')->where('tenantid',$tenantid)
+        ->where('available', '=','Y')->select('id')->first();
+        if(is_null($lease)){
+            DB::table('tenant')
+            ->where('id',$tenantid)
+            ->update($update);
+            return  redirect()->route('tenant.list') 
+            ->with('success', 'tenant disabled');
+        }else{
+            return  redirect()->route('tenant.list') 
+            ->with('error', 'tenant attached to active leases');
+        }
+        
+    } catch(QueryException $e){
+        return  redirect()->route('tenant.list') 
+        ->with('error', 'failed to disable lease');
+    }
+}
 }

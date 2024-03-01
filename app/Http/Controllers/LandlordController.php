@@ -458,7 +458,7 @@ public function disablelandlord($id){
         
     } catch(QueryException $e){
         return  redirect()->route('landlord.list') 
-        ->with('error', 'failed to disable landlord'.$e);
+        ->with('error', 'failed to disable landlord');
     }
 }
 }
