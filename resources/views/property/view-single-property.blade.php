@@ -145,7 +145,7 @@ if ($property->landlordclienttype == 1){
                 </div><br />
                 <h5>commissions</h5>
                 <div class="form-group row">
-                    <label for="CommissionType" class="col-sm-2 form-control-label">Commission TyOn</label>
+                    <label for="CommissionType" class="col-sm-2 form-control-label">Commission On</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" value="{{ $property->commissionon ?? ''}}"
                         readonly>

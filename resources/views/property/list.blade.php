@@ -2,12 +2,6 @@
       $description = 'list of all properties...'; @endphp
     @extends('layout.main-layout')
     @section('title', 'Manage Property')
-    @section('additional css')
-    <!-- Additional css Start-->
-    <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/select2-bootstrap-theme/select2-bootstrap.min.css') }}">
-    <!-- Additional css End-->
-    @endsection
     @section('content')
         <!-- Content Start-->
         <div class="container-fluid">
@@ -43,8 +37,8 @@
                              } if (trim($abc->available) == 'Y'){
                                         $status = 'available';
                                         $badge = "badge badge-pill bg-success badge-secondary";
-                                        $buttondeactivate = '<a onclick = "deactivatelandlord(this); 
-                                        return false;" class="btn btn-warning btn-sm" href="' . route('landlord.disable',$id) . '"
+                                        $buttondeactivate = '<a onclick = "deactivateproperty(this); 
+                                        return false;" class="btn btn-warning btn-sm" href="' . route('property.disable',$id) . '"
                                      title="disable"><i class="ti-close mr-0-5"></i>deactivate</a>';
                                      $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('property.view',$id) . '"
                                      title="view"><i class="ti-eye mr-0-5"></i>view</a>';
@@ -101,9 +95,6 @@
     @endsection
     @section('additional js')
     <!-- Additional JS Start-->
-    <script src="{{ asset('css/select2/select2.min.js') }}"></script>
-        <script src="{{ asset('js/select2.js') }}"></script>
-		<script src="{{ asset('js/dropdown.js') }}"></script>
-		<script src="{{ asset('js/add-banking-details.js') }}"></script> 
+    <script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script> 
     <!-- Additional JS End-->
     @endsection

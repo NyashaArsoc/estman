@@ -379,7 +379,7 @@ public function disabletenant($id){
         
     } catch(QueryException $e){
         return  redirect()->route('tenant.list') 
-        ->with('error', 'failed to disable lease');
+        ->with('error', 'failed to disable tenant');
     }
 }
 }

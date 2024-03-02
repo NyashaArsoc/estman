@@ -80,3 +80,9 @@ function deactivatetenant(that) {
         window.location = anchor.attr("href");
     }
 }
+function deactivateproperty(that) {
+    var proceedto = confirm("proceed to disable this property?")
+    if (proceedto) {
+        window.location = anchor.attr("href");
+    }
+}

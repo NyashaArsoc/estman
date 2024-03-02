@@ -164,10 +164,10 @@ class PropertyController extends BaseController
             ->update($update);
 
             return  redirect()->route('property.pending') 
-            ->with('success', 'property approved');
+            ->with('success', 'property activated');
         } catch(QueryException $e){
             return  redirect()->route('property.pending') 
-            ->with('error', 'failed to approve property');
+            ->with('error', 'failed to activate property');
         }
     }
     
@@ -459,5 +459,27 @@ public function addpreremit(Request $request,$id,$currency){
         ->with('error', 'failed to set remittance');
     }
     
+}
+public function disableproperty($id){
+    try{
+        $propertyid = Crypt::decrypt($id);
+        $update = array('approval' => 'N' , 'available'=> 'N');
+        $lease = DB::table('alllease')->where('propertyid',$propertyid)
+        ->where('available', '=','Y')->select('id')->first();
+        if(is_null($lease)){
+            DB::table('property')
+            ->where('id',$propertyid)
+            ->update($update);
+            return  redirect()->route('property.list') 
+            ->with('success', 'property disabled');
+        }else{
+            return  redirect()->route('property.list') 
+            ->with('error', 'property attached to active tenants');
+        }
+        
+    } catch(QueryException $e){
+        return  redirect()->route('property.list') 
+        ->with('error', 'failed to disable property');
+    }
 }
 }

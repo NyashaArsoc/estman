@@ -89,8 +89,7 @@ Route::controller(PropertyController::class)->group(function () {
     Route::any('/genarate-preremit', 'compilepreremitlist');
     Route::get('/property/{id}/remit/{currency}/{period}', 'prepareremittance')->name('property.remitprepare');
     Route::any('/remit/{id}/property/{currency}', 'addpreremit')->name('property.preremit');
-
-    
+    Route::any('/property/{id}/disable', 'disableproperty')->name('property.disable');
 });
 //Route::resource('lease', LeaseController::class);
 Route::controller(LeaseController::class)->group(function () {
