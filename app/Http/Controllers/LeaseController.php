@@ -537,13 +537,13 @@ try {
           ->where('leaseid', $leaseid)
           ->select('*')->orderBy('id','desc')->first();
           //procedure deleted, the reason being to restructure 
-          $arr['balances'] = DB::select('EXEC spGetleasecurrentbillrates ?',[$leaseid]);
+          $arr['balances'] = DB::select('EXEC spGetunpostedleaserates ?',[$leaseid]);
        return view('lease.view-single-lease')
             ->with($arr);
     
             } catch (QueryException $e) {
                 return  redirect()->route('lease.list') 
-                ->with('error', 'failed to load');
+                ->with('error', 'failed to load'.$e);
             }
         }
 
