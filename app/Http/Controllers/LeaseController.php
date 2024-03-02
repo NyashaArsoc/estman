@@ -326,9 +326,8 @@ class LeaseController extends BaseController
     public function  listleases(){
         try {
             $arr['lease']   = DB::table('alllease')
-            ->where('approval','=' ,'Y')
             ->select('fullname','companyname','id','clienttypeid','validfrom','available',
-            'validto','propertydescription','rentalcurrency','rental','propertyid')
+            'validto','propertydescription','rentalcurrency','rental','propertyid','approval')
             ->get();
             return view('lease/list')
             ->with($arr);
@@ -467,8 +466,7 @@ class LeaseController extends BaseController
             $LeaseID    = DB::table('lease')
             ->insertGetId(['tenantid'=>$request->TenantName,'propertyid'=>$request->PropertyAddress,
                         'validfrom'=>$request->LeaseValidFrom, 'validto'=>$request->LeaseValidTo,
-                        'areataken'=>$request->AreaTaken,'rates'=>$request->RatesCost,'operatingcosts'
-                        =>$request->OperationalCost,'rental'=>$rental,'rentalcurrencyid'=>
+                        'areataken'=>$request->AreaTaken,'rental'=>$rental,'rentalcurrencyid'=>
                         $request->RentCurrency,'propertydescription'=>$request->PropertyDescription,
                     'ratesqm'=>$request->RateSqm]);
             DB::table('propertyinspection')
@@ -492,7 +490,7 @@ class LeaseController extends BaseController
             ->with('success', 'lease added');
         }catch (QueryException $e) {
             return  redirect()->route('lease.addcreate') 
-            ->with('error', 'failed to add lease');
+            ->with('error', 'failed to add lease'.$e);
         }
     }
 
@@ -611,4 +609,19 @@ public function createsubledgers($id,$product){
                         ->with('error', 'failed to load'.$e);
             }
         } 
+public function disablelease($id){
+            try{
+                $leaseid = Crypt::decrypt($id);
+                $update = array('approval' => 'N' , 'available'=> 'N');
+                DB::table('lease')
+                    ->where('id',$leaseid)
+                    ->update($update);
+                    return  redirect()->route('lease.list') 
+                    ->with('success', 'lease disabled');
+                
+            } catch(QueryException $e){
+                return  redirect()->route('lease.list') 
+                ->with('error', 'failed to disable lease');
+            }
+        }
 }

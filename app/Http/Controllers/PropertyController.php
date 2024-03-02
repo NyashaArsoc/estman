@@ -247,7 +247,7 @@ class PropertyController extends BaseController
         $arr['property']   = DB::table('allproperty')
         ->where([['propertytypeid', $id],
         ['available','=' ,'Y']])
-        ->orwhere([['occupation','=', 2],['occupation','=',1]])
+        ->orwhere([['occupation','=', 'E'],['occupation','=','P']])
         ->select('id','streetaddress','propertytypeid')
         ->get();
          return view('property/get-single-property')

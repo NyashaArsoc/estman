@@ -86,3 +86,9 @@ function deactivateproperty(that) {
         window.location = anchor.attr("href");
     }
 }
+function deactivatelease(that) {
+    var proceedto = confirm("proceed to disable this lease?")
+    if (proceedto) {
+        window.location = anchor.attr("href");
+    }
+}

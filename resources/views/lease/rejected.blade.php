@@ -50,7 +50,7 @@
                                 <td>{{ $abc->reasons }}</td>
                                 @php $id= Crypt::encrypt($abc->id); @endphp
                                     <td><a class="btn btn-secondary btn-sm" 
-                                        href="{{route('lease.edit', $id)}}"
+                                        href="{{route('lease.editupdate', $id)}}"
                                      title="edit"><i class="ti-pencil mr-0-5"></i>Edit</a> 
                                      <a onclick = "DeleteLandlord(this); return false;"
                                      class="btn btn-danger btn-sm" href=" "

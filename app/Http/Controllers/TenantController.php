@@ -190,24 +190,17 @@ class TenantController extends BaseController
     public function approvetenant($id){
         try{
             $tenantid = Crypt::decrypt($id);
-            $updatetenant = array('approval' => 1 , 'available'=> 1);
-            $updatecontact = array('approval' => 1 , 'available'=> 1);
-            $updatekeen = array('approval' => 1 , 'available'=> 1);
+            $updatetenant = array('approval' => 'Y' , 'available'=> 'Y');
+
             DB::table('tenant')
             ->where('id',$tenantid)
             ->update($updatetenant);
-            DB::table('tenantcontact')
-            ->where('id',$tenantid)
-            ->update($updatecontact);
-            DB::table('tenantkeen')
-            ->where('id',$tenantid)
-            ->update($updatekeen);
 
             return  redirect()->route('tenant.pending') 
-            ->with('success', 'tenant approved');
+            ->with('success', 'tenant activated');
         } catch(QueryException $e){
             return  redirect()->route('tenant.pending') 
-            ->with('error', 'failed to approve tenant');
+            ->with('error', 'failed to activate tenant');
         }
     }
     public function rejecttenant($id, Request $request){

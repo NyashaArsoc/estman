@@ -135,7 +135,7 @@ $("#LeaseItemBDamount").keyup(function() {
 function validateLeaseItemBDamount(){
     let textValue         = $("#LeaseItemBDamount").val();
     if(textValue!=''){
-        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        const specialChars = /[`!@#$%^&*()_+\=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
         charscheck =  specialChars.test(textValue);
         if (charscheck == true){
             $("#leaseitembdamountcheck").show();

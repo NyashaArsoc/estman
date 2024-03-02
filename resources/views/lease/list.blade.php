@@ -2,12 +2,6 @@
       $description = 'list of all leases...'; @endphp
     @extends('layout.main-layout')
     @section('title', 'Manage Lease')
-    @section('additional css')
-    <!-- Additional css Start-->
-    <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/select2-bootstrap-theme/select2-bootstrap.min.css') }}">
-    <!-- Additional css End-->
-    @endsection
     @section('content')
         <!-- Content Start-->
         <div class="container-fluid">
@@ -35,19 +29,39 @@
                             </thead>
                             <tbody> @php $count=1;@endphp
                                 @foreach($lease as $abc)
-                                <tr> @php //if ($abc->available = 'o'){
-                                    if (trim($abc->available) =='Y'){
-                                        $status = 'active'; 
-                                        $badge = "badge badge-pill bg-success badge-secondary";
-                                     }else{
-                                        $status = 'inactive';
-                                        $badge = 'badge badge-pill bg-danger badge-secondary'; 
-                                    } 
+                                <tr> @php 
+                                    $id= Crypt::encrypt($abc->id);
                                 if ($abc->clienttypeid == 1){//individual
                                     $tenantname   =  $abc->fullname ;
                                  }else{
                                      $tenantname   =  $abc->companyname ;
                                  } 
+                                 if (trim($abc->available) == 'Y'){
+                                        $status = 'available';
+                                        $badge = "badge badge-pill bg-success badge-secondary";
+                                        $buttondeactivate = '<a onclick = "deactivatelease(this); 
+                                        return false;" class="btn btn-warning btn-sm" href="' . route('lease.disable',$id) . '"
+                                     title="disable"><i class="ti-close mr-0-5"></i>deactivate</a>';
+                                     $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('lease.view',$id) . '"
+                                     title="view"><i class="ti-eye mr-0-5"></i>view</a>';
+                                    }else if (trim($abc->available) == 'D'){//include the deleted status
+                                        $status = 'deleted';
+                                        $badge = 'badge badge-pill bg-danger badge-secondary';
+                                        $buttondeactivate = '';
+                                        $buttonview = '';
+                                    }else{
+                                    if (trim($abc->approval) == 'R'){ 
+                                        $status = 'rejected';
+                                        $badge = 'badge badge-pill bg-danger badge-secondary';
+                                        $buttondeactivate = '';
+                                        $buttonview = '';
+                                    }else{
+                                        $status = 'inactive';
+                                        $badge = 'badge badge-pill bg-danger badge-secondary';
+                                        $buttondeactivate ='';
+                                        $buttonview = '';
+                                    }
+                                 }
                                  @endphp 
                                  
                                     <td>{{$count ++}}</td>
@@ -57,15 +71,8 @@
                                     <td>{{ $abc->validto }}</td>
                                     <td>{{ $abc->rentalcurrency.' '.number_format($abc->rental, 2) }}</td>
                                     <td><span class="{{ $badge }}">{{$status}}</span></td>
-                                    <td>@php $id= Crypt::encrypt($abc->id); @endphp
-                                     <a class="btn btn-info btn-sm" href="{{route('lease.view', $id)}}"
-                                     title="view"><i class="ti-eye mr-0-5"></i>view</a>
-                                     <a onclick = "DeactivateLandlord(this); return false;"
-                                     class="btn btn-warning btn-sm" href=""
-                                     title="View Landlord"><i class="ti-close mr-0-5"></i>deactivate</a>
-                                     <a onclick = "DeleteLandlord(this); return false;"
-                                     class="btn btn-danger btn-sm" href=" "
-                                     title="View Landlord"><i class="ti-close mr-0-5"></i>delete</a>
+                                    <td>{!! $buttonview !!}
+                                     {!! $buttondeactivate !!}
                             </td>
                             </tr>
                             @endforeach
@@ -91,9 +98,6 @@
     @endsection
     @section('additional js')
     <!-- Additional JS Start-->
-    <script src="{{ asset('css/select2/select2.min.js') }}"></script>
-        <script src="{{ asset('js/select2.js') }}"></script>
-		<script src="{{ asset('js/dropdown.js') }}"></script>
-		<script src="{{ asset('js/add-banking-details.js') }}"></script> 
+    <script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script> 
     <!-- Additional JS End-->
     @endsection

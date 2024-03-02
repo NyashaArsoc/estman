@@ -155,7 +155,7 @@
             <div class="offset-sm-2 col-sm-10">
                 <a onclick = "approvelease(this); return false;"
                 class="btn btn-success btn-sm" href="{{route('lease.approve',['id'=>$id,'pid'=>$pid,'product'=>$product])}}"
-                title="approve"><i class="ti-check mr-0-5"></i>approve</a>  
+                title="activate"><i class="ti-check mr-0-5"></i>activate</a>  
             <button type="submit" class="btn btn-danger btn-sm" id="reject-lease" 
                     onclick = "rejectlease(this); return false;"><i class="ti-close mr-0-5">
                         </i>reject</button>
