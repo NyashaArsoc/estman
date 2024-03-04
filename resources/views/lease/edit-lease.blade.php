@@ -14,7 +14,7 @@ if ($lease->clienttypeid == 1){//individual
     $divclassresidential   =   'dropdwn';
  }
 @endphp
-@extends('layout.main-layout')
+@extends('layout.no-menu-layout')
 @section('title', 'Edit Lease')
 @section('additional css')
     <!-- Additional css Start-->
@@ -178,80 +178,35 @@ if ($lease->clienttypeid == 1){//individual
                     name="AvailableLettableArea" readonly hidden>
                 </div>
             </div>
-        </div><br/>
-        <div class="form-group row">
-            <label for="TotalArea" class="col-sm-2 col-form-label">Operation Cost</label>
-            <div class="col-sm-2">
-                <select class="js-example-basic-single w-100" name="OperationCurrency" id="OperationCurrency" />
-                <option value="{{ $lease->operatingcostcurrencyid ??'' }}">{{ $lease->operatingcostcurrency ??'' }} </option>
-                @foreach ($currency as $cur)
-                <option value="{{ $cur->id }}"> {{ $cur->code }}
-                </option>
-            @endforeach
-                </select>
-                <small id="operationcurrencycheck" style="color: red;">currency is required</small>
-            </div>
-            <div class="col-sm-2">
-                <input type="text" class="form-control" id="OperationalCost" name="OperationalCost"
-                value="{{ number_format($lease->operatingcosts,2) ??''}}">
-                <small id="operationalcostcheck" style="color: red;">operational cost required</small>
-            </div>
-            <label for="Stories" class="col-sm-2 col-form-label">Rates/Utilities</label>
-            <div class="col-sm-2">
-                <select class="js-example-basic-single w-100" name="RatesCurrency" id="RatesCurrency" />
-                <option value="{{ $lease->ratescurrencyid ??'' }}">{{ $lease->ratescurrency ??'' }} </option>
-                @foreach ($currency as $cur)
-                <option value="{{ $cur->id }}"> {{ $cur->code }}
-                </option>
-            @endforeach
-                </select>
-                <small id="ratescurrencycheck" style="color: red;">currency is required</small>
-            </div>
-            <div class="col-sm-2">
-                <input type="text" class="form-control" id="RatesCost" name="RatesCost" 
-                value="{{ number_format($lease->rates,2) ??'' }}">
-                <small id="ratescostcheck" style="color: red;">amount is required</small>
-            </div>
         </div>
-        <h5>Deposit</h5>
-        <div class="form-group row">
-            <label for="" class="col-sm-2 col-form-label">Currency</label>
-            <div class="col-sm-4">
-                <select class="js-example-basic-single w-100" name="DepositCurrency" id="DepositCurrency" />
-                <option value="{{ $lease->depositcurrencyid ??'' }}">{{ $lease->depositcurrency ??'' }} </option>
-                @foreach ($currency as $cur)
-                <option value="{{ $cur->id }}"> {{ $cur->code }}
-                </option>
-            @endforeach
-                </select>
-                <small id="depositcurrencycheck" style="color: red;"> deposit currency is required</small>
-            </div>
-            <label for="" class="col-sm-2 col-form-label">Deposit Paid</label>
-            <div class="col-sm-2">
-                <input type="text" class="form-control" id="DepositPaid" name="DepositPaid" 
-                value="{{ number_format($lease->deposit,2) ??'' }}">
-                <small id="depositpaidcheck" style="color: red;">deposit paid is required</small>
-            </div>
-        </div><br />
-        <div class="form-group row">
-            <label for="" class="col-sm-2 col-form-label">Balance b/d Currency</label>
-            <div class="col-sm-4">
-                <select class="js-example-basic-single w-100" name="BalanceBDCurrency" id="BalanceBDCurrency" />
-                <option value="{{ $lease->balancebdcurrencyid ??'' }}">{{ $lease->balbdcurrency ??'' }} </option>
-                @foreach ($currency as $cur)
-                            <option value="{{ $cur->id }}"> {{ $cur->code }}
-                            </option>
-                        @endforeach
-                </select>
-                <small id="bdcurrencycheck" style="color: red;"> balance bd currency is required</small>
-            </div>
-            <label for="" class="col-sm-2 col-form-label">Balance b/d </label>
-            <div class="col-sm-2">
-                <input type="text" class="form-control" id="BDamount" name="BDamount" 
-                value="{{ number_format($lease->balancebd,2) ??'' }}">
-                <small id="bdamountcheck" style="color: red;"> balance bd is required</small>
-            </div>
-        </div><br />
+        <h5>Additional Details  </h5>
+        <div class="table-responsive" style="margin-top: 15px;">
+            <table class="table table-bordered table-hover" id="leaseitems">
+                <thead>
+                    <tr>
+                    <th class="text-center">No</th>
+                    <th class="text-center">Curreny</th>
+                    <th class="text-center">Balance b/d</th>
+                    <th class="text-center">Rates/Utilities</th>
+                    <th class="text-center">Operation Cost</th>
+                    <th class="text-center">Deposit Paid</th>
+                    </tr>
+                </thead>
+                <tbody>@php $count=1;@endphp
+                    @foreach($balances as $abc)
+                    <tr>
+                    <td>{{$count ++}}</td>
+                    <td>{{ $abc->code }}</td>
+                    <td>{{ number_format($abc->balancebd,2) }}</td>
+                    <td>{{ number_format($abc->ratescosts,2) }}</td>
+                    <td>{{ number_format($abc->operationalcosts,2) }}</td>
+                    <td>{{ number_format($abc->deposit,2) }}</td>                                     
+                    </tr>  
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <br />
         <div class="form-group row">
             <div class="offset-sm-2 col-sm-10">
                 <button type="submit" class="btn btn-primary" id="btn-edit-lease" value="{{ $title }}">

@@ -140,7 +140,7 @@ class LeaseController extends BaseController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function vieweditlease($id)
     {
         $leaseid = Crypt::decrypt($id);
         try {
@@ -168,6 +168,7 @@ class LeaseController extends BaseController
         ->select('*')
         ->orderBy('id','desc')
         ->first();
+        $arr['balances'] = DB::select('EXEC spGetunpostedleaserates ?',[$leaseid]);
         return view('lease.edit-lease')
         ->with($arr);
     } catch (QueryException $e) {
@@ -370,12 +371,8 @@ class LeaseController extends BaseController
             ->updateOrInsert(['id'=>$leaseid],
             ['tenantid'=>$request->TenantName,'propertyid'=>$request->PropertyAddress,
             'validfrom'=>$request->LeaseValidFrom, 'validto'=>$request->LeaseValidTo,
-            'areataken'=>$request->AreaTaken,'rates'=>$request->RatesCost,'operatingcosts'
-            =>$request->OperationalCost,'rental'=>$rental,'rentalcurrencyid'=>
-            $request->RentCurrency,'deposit'=>$request->DepositPaid,'depositcurrencyid'=>$request
-            ->DepositCurrency,'balancebdcurrencyid'=>$request->BalanceBDCurrency,
-            'balancebd'=>$request->BDamount,'ratescurrencyid'=>$request->RatesCurrency,
-            'operatingcostcurrencyid'=>$request->OperationCurrency,'ratesqm'=>
+            'areataken'=>$request->AreaTaken,'rental'=>$rental,'rentalcurrencyid'=>
+            $request->RentCurrency,'ratesqm'=>
             $request->RateSqm,'propertydescription'=>$request->PropertyDescription
             ,'approval' => 'N' , 'available'=> 'N']);
 

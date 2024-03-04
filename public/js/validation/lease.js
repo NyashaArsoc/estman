@@ -540,13 +540,11 @@ $("#btn-edit-lease").click(function () {
         validateTenantType();validateTenantName(); validatePropertyType();
         validatePropertyAddress(); validateInspection(); validateRentReview();
         validateValidFrom(); validateValidTo();validateRentCurrency();
-        validatePropertyDescription();validateOperationCostCurrency();
-        validateRatesCostCurrency();validateDepositAmtCurrency();validateBalbdAmtCurrency();
+        validatePropertyDescription();
         if(tenanttypeError==true && tenantnameError==true && propertytypeError==true &&
             propertyaddressError==true && inspectionsError==true && rentreviewError==true &&
             validfromError==true && validtoError==true && rentalcurrencyError==true &&
-            propertydescriptionError == true &&  operationcostcurrencyError ==true &&
-            ratescostcurrencyError==true && depositamtcurrencyError==true && balbdamtcurrencyError==true){
+            propertydescriptionError == true  ){
                 //valid response
                 var PropertyTypeVal            = $("#LeasePropertyType").val();
                 var LeaseFromVal               = $("#LeaseValidFrom").val();
