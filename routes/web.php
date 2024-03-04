@@ -107,6 +107,8 @@ Route::controller(LeaseController::class)->group(function () {
     Route::post('/lease/{id}/sub-ledgers/{product}', 'createsubledgers')->name('lease.createsub');
     Route::get('/lease-list', 'listleases')->name('lease.list');
     Route::any('/lease/{id}/disable', 'disablelease')->name('lease.disable');
+    Route::get('/lease/{id}/view/renew', 'viewrenewal')->name('lease.viewrenew');
+    Route::post('/renew/lease/{id}', 'singlerenewal')->name('lease.singlerenew');
 });
 
 Route::controller(InvoiceController::class)->group(function (){

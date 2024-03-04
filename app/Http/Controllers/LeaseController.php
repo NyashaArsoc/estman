@@ -327,7 +327,7 @@ class LeaseController extends BaseController
     public function  listleases(){
         try {
             $arr['lease']   = DB::table('alllease')
-            ->select('fullname','companyname','id','clienttypeid','validfrom','available',
+            ->select('fullname','companyname','id','clienttypeid','validfrom','available','expiry',
             'validto','propertydescription','rentalcurrency','rental','propertyid','approval')
             ->get();
             return view('lease/list')
@@ -540,7 +540,7 @@ try {
     
             } catch (QueryException $e) {
                 return  redirect()->route('lease.list') 
-                ->with('error', 'failed to load'.$e);
+                ->with('error', 'failed to load');
             }
         }
 
@@ -621,4 +621,39 @@ public function disablelease($id){
                 ->with('error', 'failed to disable lease');
             }
         }
+public function viewrenewal($id){
+            $leaseid = Crypt::decrypt($id);   
+        try {
+                 $arr['lease']   = DB::table('alllease')
+                  ->where('id', $leaseid)
+                  ->select('*')->first();
+                  $arr['inspection'] = DB::table('propertyinspection')
+                  ->where('leaseid', $leaseid)
+                  ->select('*')
+                  ->orderBy('id','desc')->first();
+                  $arr['review'] = DB::table('rentreview')
+                  ->where('leaseid', $leaseid)
+                  ->select('*')->orderBy('id','desc')->first();
+                  //procedure deleted, the reason being to restructure 
+                  $arr['balances'] = DB::select('EXEC spGetunpostedleaserates ?',[$leaseid]);
+               return view('lease.view-single-lease-renewal')
+                    ->with($arr);
+            
+                    } catch (QueryException $e) {
+                        return  redirect()->route('lease.list') 
+                        ->with('error', 'failed to load');
+                    }
+}
+public function singlerenewal($id, Request $request){
+    $leaseid = Crypt::decrypt($id);  
+    try {
+        DB::select('EXEC spPutSingleLeaseRenewal
+        ?,?,?',array($leaseid,$request->LeaseValidFrom,$request->LeaseValidTo));
+        return  redirect()->route('lease.list') 
+        ->with('success', 'lease renewed');
+    } catch (\Throwable $th) {
+        return  redirect()->route('lease.list') 
+        ->with('error', 'failed to load'.$th);
+    }
+}
 }

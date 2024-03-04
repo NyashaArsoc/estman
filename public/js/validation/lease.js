@@ -636,4 +636,30 @@ $("#btn-submit-lease-new").click(function () {
         return false;
     }
 });
+// btn edit 
+$("#btn-renew-lease").click(function () {
+    try {
+        validateValidFrom(); validateValidTo();
+        if( validfromError==true && validtoError==true){
+                //valid response
+                var LeaseFromVal               = $("#LeaseValidFrom").val();
+                var LeaseToVal                 = $("#LeaseValidTo").val();
+                var Date_LeaseFromVal          = new Date(LeaseFromVal);
+                var Date_LeaseToVal            = new Date(LeaseToVal);
+                if (Date_LeaseFromVal >= Date_LeaseToVal){
+                    $("#validfromcheck").show();
+                    $("#validfromcheck").html("**invalid lease period**");
+                    return false;
+                }else{
+                    $("#validfromcheck").hide();
+                    return true;
+                }
+            }else{//invalid response
+            return false;
+        }   
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
 });
