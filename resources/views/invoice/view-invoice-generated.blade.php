@@ -1,6 +1,6 @@
 @php
-    $title = 'Profoma Invoice ';
-    $description = 'invoice to be generated...';
+    $title = 'Invoice ';
+    $description = 'invoice generated...';
     if ($invoice->clienttypeid == 1){
     $tname   =  $invoice->fullname ;
    }else{
@@ -12,7 +12,7 @@
                                 $invoice->balancebd + $invoice->interestbd + $invoice->vat);
 @endphp
 @extends('layout.no-menu-layout')
-@section('title', 'Profoma')
+@section('title', 'Invoice')
 @section('additional css')
     <!-- Additional css Start-->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
@@ -26,7 +26,7 @@
         <h4>{{ $title }}</h4>
         <ol class="breadcrumb no-bg mb-1">
             <li class="breadcrumb-item"><a href="{{route('dash.property')}}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{route('invoice.listpre')}}">Pending</a></li>
+            <li class="breadcrumb-item"><a href="{{route('invoice.listinv')}}">List</a></li>
             <li class="breadcrumb-item active">{{ $title }}</li>
         </ol>
         <div class="box box-block bg-white">

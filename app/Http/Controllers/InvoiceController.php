@@ -370,8 +370,7 @@ public function printgeneratedinvoice($id,$lease){
             $invoice->balancebd + $invoice->interestbd);
                $totalvatincl = ($invoice->rental + $invoice->rates + $invoice->operationalcost +
                $invoice->balancebd + $invoice->interestbd + $invoice->vat);
-    // data for email 
-    $data["CCemail"]        = "kudzchitz@gmail.com";
+    // data for export 
     $data["title"]          = "Invoice for ".$tenantname;
     $data["tenantname"]     = $tenantname;
     $data["propdesc"]       = $invoice->propertydescription;
@@ -394,6 +393,6 @@ public function printgeneratedinvoice($id,$lease){
     $data["deposit"]        = number_format($invoice->deposit,2); 
     $invoicepdf =   PDF::loadView('toprint/generated-invoice',$data);
 
-     return $invoicepdf->stream('reportjs.pdf');
+     return $invoicepdf->stream(''.$data["title"].'.pdf');
 }
 }

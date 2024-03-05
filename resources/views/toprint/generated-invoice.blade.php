@@ -111,7 +111,7 @@
                             Eastgate, Harare 
                             </td>
                             <td class="title">
-                                <img src="img/estman logo.png" class="logo">
+                                <img src="img/intpro logo 2020.png" class="logo">
                             </td>
                         </tr>
                         <tr class="information">
