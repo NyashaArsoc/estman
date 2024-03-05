@@ -4,7 +4,7 @@
 <head>
     <!-- Meta tags -->
     <meta charset="utf-8">
-    <link rel="icon" type="image/svg" href="{{ asset('img/top.svg') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('img/ESTMAN ICON.png') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
@@ -119,7 +119,7 @@
                         <ul>
                             <li><a href="{{route('invoice.listpre')}}">Profoma Billed</a></li>
                             <li><a href="{{route('invoice.listeditedprofoma')}}">Profoma Edited</a></li>
-                            <li><a href="warehouse.php">Generated</a></li>
+                            <li><a href="{{route('invoice.listinv')}}">Generated</a></li>
                             <li><a href="warehouse.php">Rejected</a></li>
                         </ul>
                     </li>

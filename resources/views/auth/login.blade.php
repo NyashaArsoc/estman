@@ -7,8 +7,8 @@
                 <div class="col-md-4 offset-md-4 px-3">
                     <div class="box b-a-0">
                         <div class="p-2 text-xs-center">
-                             <img src="{{ asset('img/logo est.svg') }}" alt="" title=""
-                            width="160px" height="85px"> 
+                             <img src="{{ asset('img/ESTMANLOGO.png') }}" alt="" title=""
+                             width="217px" height="154px"> 
                             {{-- <img src="{{ asset('img/login logo.png') }}" alt="" title=""> --}}
                         </div>
                         <form class="form-material material-primary" id="" action="{{ route('login.login') }}" 

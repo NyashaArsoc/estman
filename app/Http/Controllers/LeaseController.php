@@ -305,7 +305,7 @@ class LeaseController extends BaseController
             }
         } catch(QueryException $e){
             return  redirect()->route('lease.pending') 
-            ->with('error', 'failed to approve lease'.$e);
+            ->with('error', 'failed to approve lease');
         }
     }
     public function  rejected(){

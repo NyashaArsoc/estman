@@ -113,7 +113,7 @@ Route::controller(LeaseController::class)->group(function () {
 
 Route::controller(InvoiceController::class)->group(function (){
     Route::any('/genaratepre-preinvoice', 'compilepreinvoice')->name('invoice.compilepre');
-    Route::any('/pre-invoice', 'listpreinvoice')->name('invoice.listpre');
+    Route::get('/pre-invoice', 'listpreinvoice')->name('invoice.listpre');
     Route::any('/view-pro-foma/{id}', 'viewprofoma')->name('invoice.viewpro');
     Route::any('/edit-pro-foma/{id}', 'vieweditprofomamount')->name('invoice.editviewpro');
     Route::any('/update-view-pro-foma/{id}', 'updateprofoma')->name('invoice.updateviewpro');
@@ -121,6 +121,9 @@ Route::controller(InvoiceController::class)->group(function (){
     Route::get('/view-edited-pro-foma/{id}', 'vieweditedprofoma')->name('invoice.editedviewpro');
     Route::any('/approve-edited-pro-foma/{id}', 'approveeditedprofoma')->name('invoice.approveeditedprofoma');
     Route::any('/approve/{id}/pro-foma/{lease}', 'approveprofoma')->name('invoice.approveprofoma');
+    Route::get('/invoice/generated', 'listinvoice')->name('invoice.listinv');
+    Route::get('/invoice/view/{id}/generated', 'viewgeneratedinvoice')->name('invoice.viewgen');
+    Route::get('/invoice/{id}/print{lease}', 'printgeneratedinvoice')->name('invoice.print');
 });
 
 Route::controller(TransactionController::class)->group(function (){
