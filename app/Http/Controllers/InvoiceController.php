@@ -376,7 +376,7 @@ public function printgeneratedinvoice($id,$lease){
     $data["propdesc"]       = $invoice->propertydescription;
     $data["period"]         = $invoice->period;
     $data["tenantvatnumber"] = $tenant->vatnumber;
-    $data["invoicenumber"]  = $invoice->id;
+    $data["invoicenumber"]  = $invoice->invoicenumber;
     $data["balancebd"]      = number_format($invoice->balancebd,2);
     $data["currencycode"]   = $invoice->currencycode;
     $data["rent"]           = number_format($invoice->rental,2);
@@ -394,5 +394,31 @@ public function printgeneratedinvoice($id,$lease){
     $invoicepdf =   PDF::loadView('toprint/generated-invoice',$data);
 
      return $invoicepdf->stream(''.$data["title"].'.pdf');
+}
+public function listfailedprofoma(){
+    try {
+        $arr['invoice']   = DB::table('preinvoicefailed')
+        ->select('*')
+        ->get();
+        return view('invoice/failed-invoice-list')
+        ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('lease.pending') 
+        ->with('error', 'failed to load');
+    }
+}
+public function viewfailedgeneratedprofoma($id){
+    $invoiceid = Crypt::decrypt($id);
+    try {
+        $arr['invoice']   = DB::table('preinvoicefailed')
+        ->where('id',$invoiceid)
+        ->select('*')
+        ->first();
+        return view('invoice/view-profoma-failed')
+        ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('invoice.listpre') 
+        ->with('error', 'failed to load');
+    }
 }
 }

@@ -120,7 +120,7 @@
                             <li><a href="{{route('invoice.listpre')}}">Profoma Billed</a></li>
                             <li><a href="{{route('invoice.listeditedprofoma')}}">Profoma Edited</a></li>
                             <li><a href="{{route('invoice.listinv')}}">Generated</a></li>
-                            <li><a href="warehouse.php">Rejected</a></li>
+                            <li><a href="{{route('invoice.listfailed')}}">Failed</a></li>
                         </ul>
                     </li>
                     <li class="with-sub">

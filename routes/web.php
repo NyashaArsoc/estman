@@ -124,6 +124,8 @@ Route::controller(InvoiceController::class)->group(function (){
     Route::get('/invoice/generated', 'listinvoice')->name('invoice.listinv');
     Route::get('/invoice/view/{id}/generated', 'viewgeneratedinvoice')->name('invoice.viewgen');
     Route::get('/invoice/{id}/print{lease}', 'printgeneratedinvoice')->name('invoice.print');
+    Route::get('/profoma/generated/failed', 'listfailedprofoma')->name('invoice.listfailed');
+    Route::get('/failed/view/{id}/profoma', 'viewfailedgeneratedprofoma')->name('invoice.viewfailed');
 });
 
 Route::controller(TransactionController::class)->group(function (){
