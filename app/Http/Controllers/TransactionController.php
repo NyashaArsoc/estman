@@ -150,7 +150,6 @@ public function postnewleasebalances($id,$code,$name){
 public function receipting(){
     try {
         $arr['lease']   = DB::table('alllease')
-        ->where('expiry','=','N')->where('approval','=','Y')
         ->where('available','=','Y')
         ->select('*')
         ->get();

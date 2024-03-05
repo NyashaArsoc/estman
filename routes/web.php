@@ -6,6 +6,7 @@ use App\Http\Controllers\LandlordController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\LoginAuthController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
@@ -150,4 +151,10 @@ Route::controller(LoginAuthController::class)->group(function(){
 });
 Route::controller(DashController::class)->group(function(){
     Route::get('/dashboard/property', 'propertyview')->name('dash.property');
+});
+Route::controller(ReportController::class)->group(function(){
+    Route::get('/report/landlord', 'viewlandlord')->name('report.viewland');
+    Route::get('/report/property', 'viewproperty')->name('report.viewprop');
+    Route::get('/report/property/occupancy', 'viewpropertyoccupancy')->name('report.propoccu');
+    Route::get('/print/property/occupancy', 'printpropertyoccupancy')->name('report.printoccu');
 });

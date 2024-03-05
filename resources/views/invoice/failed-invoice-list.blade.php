@@ -1,9 +1,9 @@
-@php $title = 'Invoice Billed'; 
-      $description = 'invoice pending generation...'; 
+@php $title = 'Failed Invoice Billed'; 
+      $description = 'invoice failed generation...'; 
     
 @endphp
     @extends('layout.main-layout')
-    @section('title', 'Invoice Billed')
+    @section('title', 'Failed Profoma')
     @section('additional css')
     <!-- Additional css Start-->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
