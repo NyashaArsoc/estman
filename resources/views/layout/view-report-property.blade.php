@@ -4,7 +4,7 @@
 <head>
     <!-- Meta tags -->
     <meta charset="utf-8">
-    <link rel="icon" type="image/svg" href="{{ asset('img/top.svg') }}" />
+    <link rel="icon" type="image/svg" href="{{ asset('img/icon.svg') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
@@ -53,11 +53,12 @@
                     <li class="with-sub">
                         <a href="#" class="waves-effect  waves-light">
                             <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-settings"></i></span>
-                            <span class="s-text">Configs</span>
+                            <span class="s-icon"><i class="ti-bar-chart"></i></span>
+                            <span class="s-text">Reports</span>
                         </a>
                         <ul>
                             <li><a href="{{route('report.propoccu')}}">Occupany</a></li>
+                            <li><a href="{{route('report.proprol')}}">Rent Roll</a></li>
                         </ul>
                     </li>
                 </ul>

@@ -157,4 +157,5 @@ Route::controller(ReportController::class)->group(function(){
     Route::get('/report/property', 'viewproperty')->name('report.viewprop');
     Route::get('/report/property/occupancy', 'viewpropertyoccupancy')->name('report.propoccu');
     Route::get('/print/property/occupancy', 'printpropertyoccupancy')->name('report.printoccu');
+    Route::get('/report/rent-roll/property', 'viewrentrollist')->name('report.proprol');
 });
