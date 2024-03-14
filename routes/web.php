@@ -160,4 +160,5 @@ Route::controller(ReportController::class)->group(function(){
     Route::get('/report/rent-roll/property', 'viewrentrollist')->name('report.proprol');
     Route::get('/report/property/roll', 'printpropertyrentroll')->name('report.printrol');
     Route::get('/report/tenant', 'viewtenant')->name('report.viewtenant');
+    Route::get('/report/lease', 'viewlease')->name('report.viewlease');
 });

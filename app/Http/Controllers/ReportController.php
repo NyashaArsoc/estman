@@ -119,5 +119,18 @@ public function viewtenant(){
         ->with('error', 'failed to load property list');
     }
 }
+public function viewlease(){
+    try {
+        $arr['lease']   = DB::table('alllease')
+            ->select('fullname','companyname','id','clienttypeid','validfrom','available','expiry',
+            'validto','propertydescription','rentalcurrency','rental','propertyid','approval')
+            ->get();
+        return view('report/lease/list')
+        ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('property.rejected') 
+        ->with('error', 'failed to load property list');
+    }
+}
 }
     

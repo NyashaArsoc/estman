@@ -49,93 +49,7 @@
             <div class="custom-scroll custom-scroll-dark">
                 <ul class="sidebar-menu">
                     <li class="menu-title">Main</li>
-                    <li class="with-sub">
-                        <a href="{{route('dash.property')}}" class="waves-effect  waves-light">
-                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-anchor"></i></span>
-                            <span class="s-text">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="with-sub">
-                        <a href="#" class="waves-effect  waves-light">
-                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-user"></i></span>
-                            <span class="s-text">Landlord</span>
-                        </a>
-                        <ul>
-                            <li><a href="{{route('landlord.newlandlord')}}">Add Landlord</a></li>
-                            <li><a href="{{route('landlord.addbanking')}}">Add Banking</a></li>
-                            <li><a href="{{route('landlord.pending')}}">Approval</a></li>
-                            <li><a href="{{route('landlord.rejected')}}">Rejected</a></li>
-                            <li><a href="{{route('landlord.list')}}">Manage Landlord</a></li>
-                        </ul>
-                    </li>
-                    <li class="with-sub">
-                        <a href="#" class="waves-effect  waves-light">
-                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-user"></i></span>
-                            <span class="s-text">Tenants</span>
-                        </a>
-                        <ul>
-                            <li><a href="{{route('tenant.newtenant')}}">Add Tenant</a></li>
-                            <li><a href="{{route('tenant.pending')}}">Approval</a></li>
-                            <li><a href="{{route('tenant.rejected')}}">Rejected</a></li>
-                            <li><a href="{{route('tenant.list')}}">Manage Tenant</a></li>
-                        </ul>
-                    </li>
-                    <li class="with-sub">
-                        <a href="#" class="waves-effect  waves-light">
-                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-layout"></i></span>
-                            <span class="s-text">Property</span>
-                        </a>
-                        <ul>
-                            <li><a href="{{route('property.newproperty')}}">Add Property</a></li>
-                            <li><a href="{{route('property.pending')}}">Approval</a></li>
-                            <li><a href="{{route('property.rejected')}}">Rejected</a></li>
-                            <li><a href="{{route('property.remit')}}">Remit</a></li>
-                            <li><a href="{{route('property.list')}}">Manage Property</a></li>
-                        </ul>
-                    </li>
-                    <li class="with-sub">
-                        <a href="#" class="waves-effect  waves-light">
-                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-pencil-alt"></i></span>
-                            <span class="s-text">Lease</span>
-                        </a>
-                        <ul>
-                            <li><a href="{{route('lease.addcreate')}}">Add Lease</a></li>
-                            <li><a href="{{route('lease.pending')}}">Approval</a></li>
-                            <li><a href="{{route('lease.rejected')}}">Rejected</a></li>
-                            <li><a href="{{route('lease.list')}}">Manage Lease</a></li>
-                        </ul>
-                    </li>
-                    <li class="with-sub">
-                        <a href="#" class="waves-effect  waves-light">
-                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-receipt"></i></span>
-                            <span class="s-text">Invoice</span>
-                        </a>
-                        <ul>
-                            <li><a href="{{route('invoice.listpre')}}">Profoma Billed</a></li>
-                            <li><a href="{{route('invoice.listeditedprofoma')}}">Profoma Edited</a></li>
-                            <li><a href="{{route('invoice.listinv')}}">Generated</a></li>
-                            <li><a href="{{route('invoice.listfailed')}}">Failed</a></li>
-                        </ul>
-                    </li>
-                    <li class="with-sub">
-                        <a href="#" class="waves-effect  waves-light">
-                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-money"></i></span>
-                            <span class="s-text">Transactions </span>
-                        </a>
-                        <ul>
-                            <li><a href="{{route('transact.newbal')}}">Leases Rates</a></li>
-                            <li><a href="{{route('transact.payment')}}">Receipt</a></li>
-                            <li><a href="{{route('transact.remit')}}">Remittance</a></li>
-                            <li><a href="{{route('transact.viewpay')}}">Pay Creditor</a></li>
-                        </ul>
-                    </li>
+
                     <li class="with-sub">
                         <a href="#" class="waves-effect  waves-light">
                             <span class="s-caret"><i class="fa fa-angle-down"></i></span>
@@ -143,24 +57,10 @@
                             <span class="s-text">Reports</span>
                         </a>
                         <ul>
-                            <li><a href="{{route('report.viewland')}}">Landlord</a></li>
-                            <li><a href="{{route('report.viewprop')}}">Property</a></li>
-                            <li><a href="{{route('report.viewtenant')}}">Tenant</a></li>
-                            <li><a href="{{route('report.viewlease')}}">Lease</a></li>
-                            <li><a href="{{route('report.viewland')}}">Transaction</a></li>
+                            <li><a href="{{route('report.propoccu')}}">Status</a></li>
+                            <li><a href="{{route('report.proprol')}}">Rent Roll</a></li>
                         </ul>
                     </li>
-                    <li class="with-sub">
-                        <a href="#" class="waves-effect  waves-light">
-                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-settings"></i></span>
-                            <span class="s-text">Setting</span>
-                        </a>
-                        <ul>
-                            <li><a href="company-info.php">Profile</a></li>
-                            <li> <a href="{{route('login.signout')}}">Sign Out</a></li>
-                        </ul>
-                    </li>                  
                 </ul>
             </div>
         </div> <!-- Sidebar second -->
@@ -168,7 +68,7 @@
         <div class="site-header">
             <nav class="navbar navbar-light">
                 <div class="navbar-left">
-                    <a class="navbar-brand" href="{{route('dash.property')}}">
+                    <a class="navbar-brand" href="#">
                         <img src="{{ asset('img/ESTMANLOGO.png') }}" class="logo">
                     </a>
                     <div class="toggle-button light sidebar-toggle-first float-xs-left hidden-md-up">
@@ -183,6 +83,7 @@
                     </div>
                 </div>
                 <div class="navbar-right navbar-toggleable-sm collapse" id="collapse-1">
+
                     <div class="toggle-button sidebar-toggle-second float-xs-left hidden-sm-down light">
                         <span class="hamburger"></span>
                     </div>
@@ -198,7 +99,7 @@
                                 <a class="dropdown-item" href="profile.php">
                                     <i class="ti-user mr-0-5"></i> Profile </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{route('login.signout')}}"><i class="ti-power-off mr-0-5"></i> Sign
+                                <a class="dropdown-item" href="signout.php"><i class="ti-power-off mr-0-5"></i> Sign
                                     Out</a>
                             </div>
                         </li>
