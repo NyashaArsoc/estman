@@ -53,11 +53,12 @@
                     <li class="with-sub">
                         <a href="#" class="waves-effect  waves-light">
                             <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-settings"></i></span>
-                            <span class="s-text">Configs</span>
+                            <span class="s-icon"><i class="ti-bar-chart"></i></span>
+                            <span class="s-text">Reports</span>
                         </a>
                         <ul>
-                            <li><a href="{{$sharedroute}}">leases</a></li>
+                            <li><a href="{{route('report.propoccu')}}">Status</a></li>
+                            <li><a href="{{route('report.proprol')}}">Rent Roll</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -127,7 +128,7 @@
                 <div class="container-fluid">
                     <div class="row text-xs-center">
                         <div class="col-sm-5 text-sm-left mb-0-5 mb-sm-0">
-                            2023 © <a class="nav-link text-black" target="new"
+                            2024 © <a class="nav-link text-black" target="new"
                                 href="https://www.arsoc.co.zw"> Arsoc</a> - All rights reserved
                         </div>
                         <div class="col-sm-7 text-sm-right">

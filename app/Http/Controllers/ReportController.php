@@ -10,7 +10,17 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class ReportController extends Controller
 {
 public function viewlandlord(){
-    return 'landlord report';
+    try {
+        $arr['landlord']   = DB::table('alllandlord')
+        ->select('fullname','id','companyname','nationalID','companynumber',
+        'cell','email','clienttypeid','description','reasons','available','approval')
+        ->get();
+        return view('report/landlord/list')
+        ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('property.rejected') 
+        ->with('error', 'failed to load property list');
+    }
 }
 public function viewproperty(){
     try {
