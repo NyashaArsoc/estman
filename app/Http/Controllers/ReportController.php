@@ -106,5 +106,18 @@ public function printrentrollsingleproperty($currency,$period,$propertyid){
         ->with('error', 'failed to load');
     }
 }
+public function viewtenant(){
+    try {
+        $arr['tenant']   = DB::table('alltenant')
+        ->select('fullname','id','companyname','nationalid','companynumber',
+        'cell','email','clienttypeid','typedescription','available','approval')
+        ->get();
+        return view('report/tenant/list')
+        ->with($arr);
+    } catch (QueryException $e) {
+        return  redirect()->route('property.rejected') 
+        ->with('error', 'failed to load property list');
+    }
+}
 }
     

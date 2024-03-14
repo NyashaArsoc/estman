@@ -145,7 +145,7 @@
                         <ul>
                             <li><a href="{{route('report.viewland')}}">Landlord</a></li>
                             <li><a href="{{route('report.viewprop')}}">Property</a></li>
-                            <li><a href="{{route('report.viewland')}}">Tenant</a></li>
+                            <li><a href="{{route('report.viewtenant')}}">Tenant</a></li>
                             <li><a href="{{route('report.viewland')}}">Lease</a></li>
                             <li><a href="{{route('report.viewland')}}">Transaction</a></li>
                         </ul>
