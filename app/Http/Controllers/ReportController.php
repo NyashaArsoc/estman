@@ -59,6 +59,8 @@ public function viewrentrollist(){
     ->where('isinvoicerun','=' ,1)
     ->select('period')->distinct()
     ->get();
+    $arr['code']   = DB::table('currency')
+    ->select('*')->get();
     return view('report/property/rent-roll')
     ->with($arr);
 } catch (\Throwable $th) {
@@ -66,4 +68,33 @@ public function viewrentrollist(){
     ->with('error', 'failed to load property rent roll'.$th);
 }
 }
+public function printpropertyrentroll(Request $request){
+    if ($request->PropertyAddress == 'all'){
+       // return 'all';
+        return  redirect()->route('report.viewprop') 
+        ->with('error', 'failed to load');
+    }else{
+        return $this->printrentrollsingleproperty($request->RollCurrency,$request->RollPeriod
+    ,$request->PropertyAddress);
+    }
 }
+public function printrentrollsingleproperty($currency,$period,$propertyid){
+    try {
+        ini_set('max_execution_time', 200);
+        $data['currencycode']   = $currency;
+        $data['period']         = $period;
+        $data['property']       = DB::table('property')
+        ->where('id',$propertyid)->select('streetaddress')->first();
+        $data['roll'] =DB::select('EXEC spReportRollSingleProperty ?,?,?', 
+        array($currency,$period,$propertyid));
+        $data['date'] = date('d-M-Y');
+        $reportpdf =   PDF::loadView('report/property/print/rent-roll-single',$data);
+
+        return $reportpdf->stream('roll.pdf');
+    } catch (\Throwable $th) {
+        return  redirect()->route('report.viewprop') 
+        ->with('error', 'failed to load');
+    }
+}
+}
+    

@@ -33,10 +33,27 @@ $("#rollperiodcheck").hide();
           $("#rollperiodcheck").hide();
       }
   } 
+//rent-roll period
+$("#rollcurrencycheck").hide();
+  let rollcurrencyError = true;
+  $("#RollCurrency").keyup(function () {
+      validateRollCurrency();
+  });
+  function validateRollCurrency() {
+      let textValue = $("#RollCurrency").val();
+      if (textValue.length == "") {
+          $("#rollcurrencycheck").show();
+          rollcurrencyError = false;
+          return false;
+      } else {
+        rollcurrencyError = true;
+          $("#rollcurrencycheck").hide();
+      }
+  } 
 // button property rent roll
 $("#btn-prop-roll").click(function () {
-    validateRollPeriod(); validatePropertyAddress();
-    if(rollperiodError == true && propertyaddressError==true){
+    validateRollPeriod(); validatePropertyAddress();validateRollCurrency();
+    if(rollperiodError == true && propertyaddressError==true && rollcurrencyError==true){
         //valid
         return true;
     }else{
