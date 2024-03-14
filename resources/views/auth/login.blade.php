@@ -7,7 +7,7 @@
                 <div class="col-md-4 offset-md-4 px-3">
                     <div class="box b-a-0">
                         <div class="p-2 text-xs-center">
-                             <img src="{{ asset('img/ESTMANLOGO.png') }}" alt="" title=""
+                             <img src="{{ asset('img/ESTMANLOGIN.png') }}" alt="" title=""
                              width="217px" height="154px"> 
                             {{-- <img src="{{ asset('img/login logo.png') }}" alt="" title=""> --}}
                         </div>

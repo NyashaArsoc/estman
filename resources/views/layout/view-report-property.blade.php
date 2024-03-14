@@ -69,7 +69,7 @@
             <nav class="navbar navbar-light">
                 <div class="navbar-left">
                     <a class="navbar-brand" href="#">
-                        <img src="{{ asset('img/estman logo.png') }}" class="logo">
+                        <img src="{{ asset('img/ESTMANLOGO.png.png') }}" class="logo">
                     </a>
                     <div class="toggle-button light sidebar-toggle-first float-xs-left hidden-md-up">
                         <span class="hamburger"></span>
