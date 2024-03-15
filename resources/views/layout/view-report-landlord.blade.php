@@ -58,7 +58,6 @@
                         </a>
                         <ul>
                             <li><a href="{{route('report.printlandstatus')}}">Status</a></li>
-                            <li><a href="{{route('report.proprol')}}">Rent Roll</a></li>
                         </ul>
                     </li>
                 </ul>

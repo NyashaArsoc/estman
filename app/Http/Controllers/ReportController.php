@@ -141,11 +141,26 @@ public function printlandlordstatus(){
          $reportpdf =   PDF::loadView('report/landlord/print/status',$data);
 
         return $reportpdf->stream('landlord status.pdf');
-        //return view('report/landlord/print/status')
-        //->with($data); 
     } catch (\Throwable $th) {
         return  redirect()->route('report.viewprop') 
-        ->with('error', 'failed to load'.$th);
+        ->with('error', 'failed to load');
+    }
+}
+public function printpropertystatus(){
+    try {
+        ini_set('max_execution_time', 200);
+        $data['status']  =DB::select('EXEC spReportAllPropertyStatus');
+        $data['date'] = date('d-M-Y');
+        $data['activeproperty']   = DB::table('allproperty')
+        ->where('available','=' ,'Y')->get()->count();
+        $data['allproperty']   = DB::table('allproperty')->get()->count();
+         $reportpdf =   PDF::loadView('report/property/print/status',$data);
+      return $reportpdf->stream('property status.pdf');
+        // return view('report/property/print/status')
+       // ->with($data); 
+    } catch (\Throwable $th) {
+        return  redirect()->route('report.viewprop') 
+        ->with('error', 'failed to load');
     }
 }
 }
