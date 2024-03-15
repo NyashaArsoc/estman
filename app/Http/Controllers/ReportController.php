@@ -132,5 +132,21 @@ public function viewlease(){
         ->with('error', 'failed to load property list');
     }
 }
+public function printlandlordstatus(){
+    try {
+        ini_set('max_execution_time', 200);
+    
+        $data['status']  =DB::select('EXEC spReportAllLandlordStatus');
+        $data['date'] = date('d-M-Y');
+         $reportpdf =   PDF::loadView('report/landlord/print/status',$data);
+
+        return $reportpdf->stream('landlord status.pdf');
+        //return view('report/landlord/print/status')
+        //->with($data); 
+    } catch (\Throwable $th) {
+        return  redirect()->route('report.viewprop') 
+        ->with('error', 'failed to load'.$th);
+    }
+}
 }
     

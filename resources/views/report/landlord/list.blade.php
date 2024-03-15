@@ -1,6 +1,6 @@
 @php $title = 'Landlord Reports'; 
       $description = 'generating landlord reports...'; @endphp
-    @extends('layout.view-report-property')
+    @extends('layout.view-report-landlord')
     @section('title', 'Landlord Reports')
     @section('content')
         <!-- Content Start-->

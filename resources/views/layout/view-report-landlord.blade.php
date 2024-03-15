@@ -57,7 +57,7 @@
                             <span class="s-text">Reports</span>
                         </a>
                         <ul>
-                            <li><a href="{{route('report.propoccu')}}">Status</a></li>
+                            <li><a href="{{route('report.printlandstatus')}}">Status</a></li>
                             <li><a href="{{route('report.proprol')}}">Rent Roll</a></li>
                         </ul>
                     </li>
