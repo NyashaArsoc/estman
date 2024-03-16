@@ -164,4 +164,5 @@ Route::controller(ReportController::class)->group(function(){
     Route::get('/report/landlord/status', 'printlandlordstatus')->name('report.printlandstatus');
     Route::get('/report/property/status', 'printpropertystatus')->name('report.printpropstatus');
     Route::get('/report/tenant/status', 'printtenantstatus')->name('report.printtenstatus');
+    Route::get('/report/lease/status', 'printleasestatus')->name('report.printleasestatus');
 });

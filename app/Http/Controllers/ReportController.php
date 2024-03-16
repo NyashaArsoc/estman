@@ -177,5 +177,21 @@ public function printtenantstatus(){
         ->with('error', 'failed to load');
     }
 }
+public function printleasestatus(){
+    try {
+        ini_set('max_execution_time', 200);
+        $data['status']   = DB::table('alllease')
+        ->select('fullname','companyname','id','clienttypeid','validfrom','available','expiry',
+        'validto','propertydescription','rentalcurrency','rental','propertyid','approval')
+        ->get();
+        $data['date'] = date('d-M-Y');
+         $reportpdf =   PDF::loadView('report/lease/print/status',$data);
+
+        return $reportpdf->stream('lease status.pdf');
+    } catch (\Throwable $th) {
+        return  redirect()->route('report.viewprop') 
+        ->with('error', 'failed to load');
+    }
+}
 }
     
