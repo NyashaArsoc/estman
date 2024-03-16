@@ -163,5 +163,19 @@ public function printpropertystatus(){
         ->with('error', 'failed to load');
     }
 }
+public function printtenantstatus(){
+    try {
+        ini_set('max_execution_time', 200);
+    
+        $data['status']  =DB::select('EXEC spReportAllTenantStatus');
+        $data['date'] = date('d-M-Y');
+         $reportpdf =   PDF::loadView('report/tenant/print/status',$data);
+
+        return $reportpdf->stream('tenant status.pdf');
+    } catch (\Throwable $th) {
+        return  redirect()->route('report.viewprop') 
+        ->with('error', 'failed to load');
+    }
+}
 }
     
