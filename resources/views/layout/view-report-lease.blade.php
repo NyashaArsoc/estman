@@ -58,7 +58,7 @@
                         </a>
                         <ul>
                             <li><a href="{{route('report.printleasestatus')}}">Status</a></li>
-                            <li><a href="{{route('report.proprol')}}">Statement</a></li>
+                            <li><a href="{{route('report.leastatement')}}">Statement</a></li>
                         </ul>
                     </li>
                 </ul>

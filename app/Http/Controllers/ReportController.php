@@ -6,6 +6,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Crypt;
 
 class ReportController extends Controller
 {
@@ -75,7 +76,7 @@ public function viewrentrollist(){
     ->with($arr);
 } catch (\Throwable $th) {
     return  redirect()->route('report.viewprop') 
-    ->with('error', 'failed to load property rent roll'.$th);
+    ->with('error', 'failed to load property rent roll');
 }
 }
 public function printpropertyrentroll(Request $request){
@@ -191,6 +192,49 @@ public function printleasestatus(){
     } catch (\Throwable $th) {
         return  redirect()->route('report.viewprop') 
         ->with('error', 'failed to load');
+    }
+}
+public function viewleasestatement(){
+    try {
+        $arr['lease']   = DB::table('alllease')
+        ->select('*')
+        ->get();
+        $arr['code']   = DB::table('currency')
+        ->select('*')->get();
+        return view('report/lease/statement')
+        ->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('report.viewprop') 
+        ->with('error', 'failed to load property rent roll');
+    }
+}
+public function printleasestatement(Request $request){
+    try {
+        ini_set('max_execution_time', 200);
+        $data['status']  =DB::select('EXEC spGetSingleLeaseTrax ?,?',
+        array($request->PropertyAddress,$request->RollCurrency));
+        $data['day10']  =collect(DB::select('EXEC spGetSingleLease10DayDue ?,?',
+        array($request->PropertyAddress,$request->RollCurrency)))->first();
+        $data['day30']  =collect(DB::select('EXEC spGetSingleLease30DayDue ?,?',
+        array($request->PropertyAddress,$request->RollCurrency)))->first();
+        $data['day60']  =collect(DB::select('EXEC spGetSingleLease60DayDue ?,?',
+        array($request->PropertyAddress,$request->RollCurrency)))->first();
+        $data['day90']  =collect(DB::select('EXEC spGetSingleLease90DayDue ?,?',
+        array($request->PropertyAddress,$request->RollCurrency)))->first();
+        $data['dayabove90']  =collect(DB::select('EXEC spGetSingleLease90DayAboveDue ?,?',
+        array($request->PropertyAddress,$request->RollCurrency)))->first();
+        $data['lease']   = DB::table('alllease')->where('id', $request->PropertyAddress)
+        ->select('*')->first();
+
+       $data['date'] = date('d-M-Y');
+       $data['currencycode'] = $request->RollCurrency;
+      // return view('report/lease/print/statement')->with($data);
+        $reportpdf =   PDF::loadView('report/lease/print/statement',$data);
+
+         return $reportpdf->stream('lease statement.pdf');
+    } catch (\Throwable $th) {
+        return  redirect()->route('report.viewlease') 
+        ->with('error', 'failed to load property rent roll'.$th);
     }
 }
 }
