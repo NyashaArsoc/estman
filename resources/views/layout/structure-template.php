@@ -275,7 +275,7 @@
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right animated fadeInUp">
-                                <a class="dropdown-item" href="profile.php">
+                                <a class="dropdown-item" href="{{route('login.profile')}}">
                                     <i class="ti-user mr-0-5"></i> Profile </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="signout.php"><i class="ti-power-off mr-0-5"></i> Sign

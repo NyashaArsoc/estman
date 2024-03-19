@@ -32,6 +32,31 @@ function validatePassword() {
         $("#passwordcheck").hide();
     }
 }
+//password check
+$("#confirmpasswordcheck").hide();
+let confirmpasswordError = true;
+$("#ConfirmPassword").keyup(function () {
+    validateConfirmPassword();
+});
+function validateConfirmPassword() {
+    let textValue       = $("#ConfirmPassword").val();
+    let passwordValue   = $("#password").val();
+    if (textValue.length == "") {
+        $("#confirmpasswordcheck").show();
+        confirmpasswordError = false;
+        return false;
+    }else {
+        if(textValue != passwordValue){
+           $("#confirmpasswordcheck").show();
+           $("#confirmpasswordcheck").html("**password mismatch");
+           confirmpasswordError = false;
+        }else{
+           confirmpasswordError = true;
+            $("#confirmpasswordcheck").hide();
+        }
+       
+    }
+}
 //button signin
 $("#btn-submit-login").click(function () {
     validatePassword();validateUsername();
@@ -46,3 +71,17 @@ $("#btn-submit-login").click(function () {
         return false;
     }
 });
+ //change password
+ $("#btn-user-profile").click(function () {
+    validateConfirmPassword();validatePassword();
+     try {
+         if (confirmpasswordError==true && passwordError== true ){
+             return true;
+         }else{
+              return false;
+         }
+     } catch (err) {
+         alert(err.message);
+         return false;
+     }
+ });

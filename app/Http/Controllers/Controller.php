@@ -188,4 +188,23 @@ public function userforcelogout($error){
         }
     }
 }
+public function userdetail(){
+    if(session()->has('alluser')){
+        try {
+           $user = DB::table('systusers')->select('*')
+           ->where('username',session('alluser'))
+            ->orderBy('id','desc')->first();
+            return $user;
+        } catch (\Throwable $th) {
+         return 'failed';
+        }
+    }
+}
+public function passwordvalidto(){
+    // $this->ValidFrom      =       date("Y-m-d H:i:s");
+     $timeoriginal  =       strtotime(now());
+     $timeadd       =       $timeoriginal + ((3600*24)*30); //add seconds of one 30 days
+    $validtil       =       date("Y-m-d H:i:s", $timeadd);
+    return $validtil;
+ }
 }

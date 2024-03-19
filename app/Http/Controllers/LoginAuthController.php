@@ -59,7 +59,7 @@ public function userlogin(Request $request){
                             return $this->userforcelogout($error);
                         }else if($license=='valid'){
                            //valid license
-                            return  redirect()->route('transact.payment');
+                            return  redirect()->route('dash.property');
                         }
                     }
                 }   
@@ -97,6 +97,36 @@ public function userlogout(){
     }
     session()->pull('alluser');
     return  redirect()->route('login.signin');
+}
+public function profileview(){
+    try {
+        $user = $this->userdetail();
+        $arr['user'] = DB::table('systusers')->select('*')->where('username',session('alluser'))
+        ->first();
+        $arr['role'] = DB::table('systroles')->select('*')->where('id',$user->roleid)
+        ->first();
+        return view('auth/user-profile')
+        ->with($arr);
+    } catch (\Throwable $th) {
+        session()->pull('alluser');
+    return  redirect()->route('login.signin');
+    }
+}
+public function profilepassword(Request $request){
+    try {
+         $user = $this->userdetail();
+        DB::table('systauth')->insert([
+            'userid' => $user->id,
+            'password' => Hash::make($request->Password),
+            'validto' => $this->passwordvalidto()
+        ]);
+        return  redirect()->route('login.profile') 
+            ->with('success', 'password changed');  
+    } catch (\Throwable $th) {
+        return  redirect()->route('login.profile') 
+        ->with('error', 'failed to load');
+    }
+    
 }
 
 }

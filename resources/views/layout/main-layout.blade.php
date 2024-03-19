@@ -147,7 +147,7 @@
                             <li><a href="{{route('report.viewprop')}}">Property</a></li>
                             <li><a href="{{route('report.viewtenant')}}">Tenant</a></li>
                             <li><a href="{{route('report.viewlease')}}">Lease</a></li>
-                            <li><a href="{{route('report.viewland')}}">Transaction</a></li>
+                            {{-- <li><a href="{{route('report.viewland')}}">Transaction</a></li> --}}
                         </ul>
                     </li>
                     <li class="with-sub">
@@ -157,7 +157,7 @@
                             <span class="s-text">Setting</span>
                         </a>
                         <ul>
-                            <li><a href="company-info.php">Profile</a></li>
+                            <li><a href="{{route('login.profile')}}">Profile</a></li>
                             <li> <a href="{{route('login.signout')}}">Sign Out</a></li>
                         </ul>
                     </li>                  
@@ -195,7 +195,7 @@
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right animated fadeInUp">
-                                <a class="dropdown-item" href="profile.php">
+                                <a class="dropdown-item" href="{{route('login.profile')}}">
                                     <i class="ti-user mr-0-5"></i> Profile </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{route('login.signout')}}"><i class="ti-power-off mr-0-5"></i> Sign

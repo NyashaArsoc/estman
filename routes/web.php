@@ -148,6 +148,8 @@ Route::controller(LoginAuthController::class)->group(function(){
     Route::post('/user/login', 'userlogin')->name('login.login');
     Route::any('/logout', 'userlogout')->name('login.signout');
     Route::any('/licensecheck', 'licensecheck');
+    Route::get('/user/profile', 'profileview')->name('login.profile');
+    Route::post('/profile/edit', 'profilepassword')->name('login.editprofile');
 });
 Route::controller(DashController::class)->group(function(){
     Route::get('/dashboard/property', 'propertyview')->name('dash.property');
