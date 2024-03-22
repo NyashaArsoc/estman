@@ -17,12 +17,14 @@ class Controller extends BaseController
     public function systemdate(){
         try {      
             $sysdate   = DB::table('sysdates')
-            ->select('*')->where('OpenClose','=','O')
-            ->latest('id')->first();
+            ->select('*')->latest('id')->first();
             if(is_null($sysdate)){
                 return 'failed';
-            }else{
+            }else if(trim($sysdate->OpenClose)=='O'){
                 return $sysdate->systemdate;
+            }
+            else{
+                return 'failed';
             }
         } catch (QueryException $th) {
            return 'failed';
