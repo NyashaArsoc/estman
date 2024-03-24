@@ -140,12 +140,13 @@ public function vieweditprofomamount($id){
 }
 public function updateprofoma($id, Request $request){
     try {
+        $user = $this->userdetail();
         $invoiceid = Crypt::decrypt($id);
         DB::table('preinvoice')
             ->updateOrInsert(['id'=>$invoiceid],
            [ 'rental'=>$request->Rental,'rates'=>
             $request->RatesLevies,'operationalcost'=>$request->OperationCosts
-            ,'isedited' => 'Y' ]);
+            ,'isedited' => 'Y','editedby'=>$user->username ]);
             return  redirect()->route('invoice.listpre') 
             ->with('success', 'invoice updated');
     } catch (QueryException $e) {
@@ -182,11 +183,12 @@ public function vieweditedprofoma($id){
 }
 public function approveeditedprofoma($id, Request $request){
     try {
+        $user = $this->userdetail();
         $todaydate = date('Y-m-d H:i:s');
         $invoiceid = Crypt::decrypt($id);
         DB::table('preinvoice')
             ->updateOrInsert(['id'=>$invoiceid],
-           [ 'isedited' => 'N','approvedon'=>$todaydate]);
+           [ 'isedited' => 'N','approvedon'=>$todaydate,'approvedby'=>$user->username]);
             return  redirect()->route('invoice.listeditedprofoma') 
             ->with('success', 'invoice updated');
     } catch (QueryException $e) {
@@ -195,6 +197,7 @@ public function approveeditedprofoma($id, Request $request){
     }
 }
 public function approveprofoma($id,$lease){
+    $user = $this->userdetail();
     $invoiceid = Crypt::decrypt($id);
     $leaseid =  Crypt::decrypt($lease);
     $productcolumn          =       'leaseid';
@@ -281,14 +284,16 @@ public function approveprofoma($id,$lease){
                 ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$productsubledger
                  ,'trxtype'=>'TD','trxcurrencycode'=>$invoice->currencycode,'trxamount'=>$totalvatincl,
                     'trxratedamount'=>$totalvatincltrxratedamt,'trxexchangerate'=>$exchangerate,
-                    'trxdescription'=>$trxdescriptionclient,'trxsystemdate'=>$systemdate]);
+                    'trxdescription'=>$trxdescriptionclient,'trxsystemdate'=>$systemdate,
+                    'trxcreatedby'=>$user->username]);
                 //transaction credit rental
                 if($invoice->rental <> 0 || $invoice->rental < 0){
                     DB::table('accounttransactions')
                     ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$rentalsubledger
                     ,'trxtype'=>'TC','trxcurrencycode'=>$invoice->currencycode,'trxamount'=>$invoice->rental,
                     'trxratedamount'=>$rentaltrxratedamt,'trxexchangerate'=>$exchangerate,
-                    'trxdescription'=>$trxdescriptionclient,'trxsystemdate'=>$systemdate]);
+                    'trxdescription'=>$trxdescriptionclient,'trxsystemdate'=>$systemdate,
+                    'trxcreatedby'=>$user->username]);
                 }
                 //transaction credit vat
                 if($invoice->vat <> 0 || $invoice->vat < 0){
@@ -296,7 +301,8 @@ public function approveprofoma($id,$lease){
                     ->insert(['trxreference'=>$trxid,'trxglaccount'=>$vatcode
                     ,'trxtype'=>'TC','trxcurrencycode'=>$invoice->currencycode,'trxamount'=>$invoice->vat,
                     'trxratedamount'=>$vattrxratedamt,'trxexchangerate'=>$exchangerate,
-                    'trxdescription'=>$trxdescriptionclient,'trxsystemdate'=>$systemdate]);
+                    'trxdescription'=>$trxdescriptionclient,'trxsystemdate'=>$systemdate,
+                    'trxcreatedby'=>$user->username]);
                 }
                  //transaction credit rates
                  if($invoice->vat <> 0 || $invoice->vat < 0){
@@ -304,7 +310,8 @@ public function approveprofoma($id,$lease){
                     ->insert(['trxreference'=>$trxid,'trxglaccount'=>$creditorscode
                     ,'trxtype'=>'TC','trxcurrencycode'=>$invoice->currencycode,'trxamount'=>$invoice->rates,
                     'trxratedamount'=>$ratestrxratedamt,'trxexchangerate'=>$exchangerate,
-                    'trxdescription'=>$trxdescriptionrates,'trxsystemdate'=>$systemdate]);
+                    'trxdescription'=>$trxdescriptionrates,'trxsystemdate'=>$systemdate,
+                    'trxcreatedby'=>$user->username]);
                 }
                 //transaction credit opperational costs
                 if($invoice->operationalcost <> 0 || $invoice->operationalcost < 0){
@@ -312,7 +319,8 @@ public function approveprofoma($id,$lease){
                 ->insert(['trxreference'=>$trxid,'trxglaccount'=>$creditorscode
                 ,'trxtype'=>'TC','trxcurrencycode'=>$invoice->currencycode,'trxamount'=>$invoice->operationalcost,
                 'trxratedamount'=>$oppcoststrxratedamt,'trxexchangerate'=>$exchangerate,
-                'trxdescription'=>$trxdescriptionoppcst,'trxsystemdate'=>$systemdate]);
+                'trxdescription'=>$trxdescriptionoppcst,'trxsystemdate'=>$systemdate,
+                'trxcreatedby'=>$user->username]);
                 }
              //post data into invoices & arrear details and clear preinvoice 
              DB::select ('EXEC spPostGenerateInvoiceAndArrears ?,?',array($invoiceid,$systemdate));
