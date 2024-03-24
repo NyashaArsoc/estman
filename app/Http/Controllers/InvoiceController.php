@@ -17,7 +17,7 @@ class InvoiceController extends Controller
     private $nextperiod;
 
     public function __construct(){
-
+        $this->middleware(['loginauth']);
     }
     /**
      * Display a listing of the resource.
