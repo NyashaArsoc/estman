@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginAuthController extends Controller
 {
+     public function __construct(){
+        $this->middleware(['alreadyloggedin']);
+    }
     public function signin(){
         return view('auth/login');
     }
