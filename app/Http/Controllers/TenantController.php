@@ -45,6 +45,7 @@ public function __construct(){
      */
     public function addnewtenant(Request $request)
     {
+        $user = $this->userdetail();
         try{
             if ($request->TenantClientType == 1){//individual
                 $ExistTenant = DB::table('tenant')
@@ -54,7 +55,7 @@ public function __construct(){
                     ->insertGetId(
                         ['nationalid'=>$request->NationalID,'clienttypeid'=>$request->TenantClientType,
                          'firstname'=>$request->FirstName,'cell'=>$request->Cell,
-                        'email'=>$request->Email,'tel'=>$request->Tel, 
+                        'email'=>$request->Email,'tel'=>$request->Tel,'operatorid'=>$user->username,
                         'lastname'=>$request->LastName, 'contactaddress'=>$request->ContactAddress]
                     );
                     DB::table('tenantkeen')
@@ -75,7 +76,7 @@ public function __construct(){
                 if ($ExistTenant->isEmpty()){
                     $TenantID = DB::table('tenant')
                     ->insertGetId(
-                        ['companynumber'=>$request->CompanyNumber,
+                        ['companynumber'=>$request->CompanyNumber,'operatorid'=>$user->username,
                         'clienttypeid'=>$request->TenantClientType,
                         'email'=>$request->Email,'tel'=>$request->Tel, 'cell'=>$request->Cell,
                          'contactaddress'=>$request->ContactAddress,'bpnumber'=>$request->BPNumber,

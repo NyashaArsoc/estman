@@ -77,7 +77,7 @@ class LeaseController extends BaseController
     public function store(Request $request)
     {
         try {
-            
+            $user = $this->userdetail();
             // inspection schedule
             if($request->InspectionPeriod == 'monthly') {
                $inspectionperiod   = $this->monthlyvalue;
@@ -413,6 +413,7 @@ class LeaseController extends BaseController
     }
     public function addstore(Request $request)
     {
+        $user = $this->userdetail();
         try {
             IF (!empty($request->LeaseItemCurrencyID)){ 
                 $CurrencyID         =      $request->LeaseItemCurrencyID;
@@ -467,7 +468,7 @@ class LeaseController extends BaseController
                         'validfrom'=>$request->LeaseValidFrom, 'validto'=>$request->LeaseValidTo,
                         'areataken'=>$request->AreaTaken,'rental'=>$rental,'rentalcurrencyid'=>
                         $request->RentCurrency,'propertydescription'=>$request->PropertyDescription,
-                    'ratesqm'=>$request->RateSqm]);
+                        'operatorid'=>$user->username,'ratesqm'=>$request->RateSqm]);
             DB::table('propertyinspection')
             ->insert(['leaseid'=>$LeaseID,'nextinspectiondate'=>$inspectionperiod]);
             DB::table('rentreview')

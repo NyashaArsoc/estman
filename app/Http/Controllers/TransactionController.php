@@ -26,6 +26,7 @@ public function __construct(){
     }
 
 public function postnewleasebalances($id,$code,$name){
+    $user = $this->userdetail();
         /* required general ledgers 
                 bank, deposits, administration,DebtorsGL */
         $productcolumn          =       'leaseid';
@@ -91,13 +92,13 @@ public function postnewleasebalances($id,$code,$name){
                                         DB::table('accounttransactions')
                                         ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$productsubledger
                                         ,'trxtype'=>'TD','trxcurrencycode'=>$currencycode,'trxamount'=>$unposted->balancebd,
-                                        'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+                                        'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,'trxcreatedby'=>$user->username,
                                         'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
                                         //transaction credit
                                         DB::table('accounttransactions')
                                         ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$rentalsubledger
                                         ,'trxtype'=>'TC','trxcurrencycode'=>$currencycode,'trxamount'=>$unposted->balancebd,
-                                        'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+                                        'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,'trxcreatedby'=>$user->username,
                                         'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
                                     }
                                     //post admin fees
@@ -107,13 +108,13 @@ public function postnewleasebalances($id,$code,$name){
                                         DB::table('accounttransactions')
                                         ->insert(['trxreference'=>$trxid,'trxglaccount'=>$bankcode
                                         ,'trxtype'=>'TD','trxcurrencycode'=>$currencycode,'trxamount'=>$unposted->adminpaid,
-                                        'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+                                        'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,'trxcreatedby'=>$user->username,
                                         'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
                                         //transaction credit
                                         DB::table('accounttransactions')
                                         ->insert(['trxreference'=>$trxid,'trxglaccount'=>$admincode
                                         ,'trxtype'=>'TC','trxcurrencycode'=>$currencycode,'trxamount'=>$unposted->adminpaid,
-                                        'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+                                        'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,'trxcreatedby'=>$user->username,
                                         'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
                                     }
                                     //post deposit paid
@@ -123,13 +124,13 @@ public function postnewleasebalances($id,$code,$name){
                                         DB::table('accounttransactions')
                                         ->insert(['trxreference'=>$trxid,'trxglaccount'=>$bankcode
                                         ,'trxtype'=>'TD','trxcurrencycode'=>$currencycode,'trxamount'=>$unposted->deposit,
-                                        'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+                                        'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,'trxcreatedby'=>$user->username,
                                         'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
                                         //transaction credit
                                         DB::table('accounttransactions')
                                         ->insert(['trxreference'=>$trxid,'trxglaccount'=>$depositcode
                                         ,'trxtype'=>'TC','trxcurrencycode'=>$currencycode,'trxamount'=>$unposted->deposit,
-                                        'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+                                        'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,'trxcreatedby'=>$user->username,
                                         'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
                                      }
                                     /*3. call a procedure to clear balances 
@@ -218,6 +219,7 @@ public function addreceipts(Request $request){
 
 public function processreceipt(Request $request){
     try {
+        $user = $this->userdetail();
         $systemdate             =       $this->systemdate();
         $trxid                  =       $this->transationid();
         $basecurrency           =       $this->getbasecurrency();
@@ -319,14 +321,14 @@ public function processreceipt(Request $request){
         DB::table('payments')
         ->insert(['receiptnumber'=>$trxid,'leaseid'=>$request->PropertyAddressDesc
         ,'currencycode'=>$request->ReceiptCurrency,'amountpaid'=>$request->ReceiptAmount,
-        'receiptdate'=>$request->ReceiptDate,
+        'receiptdate'=>$request->ReceiptDate,'operatorid'=>$user->username,
             'receiptreference'=>$request->ReceiptReference,'systemdate'=>$systemdate]);
           //completing double entry 
           $trxratedamt = $request->ReceiptAmount * $exchangerate;
           $trxdescription = 'Receipt Number '.$trxid;
           DB::table('accounttransactions')
           ->insert(['trxreference'=>$trxid,'trxglaccount'=>$bankcode
-              ,'trxtype'=>'TD','trxcurrencycode'=>$request->ReceiptCurrency,
+              ,'trxtype'=>'TD','trxcurrencycode'=>$request->ReceiptCurrency,'trxcreatedby'=>$user->username,
               'trxamount'=>$request->ReceiptAmount,'trxratedamount'=>$trxratedamt,
               'trxexchangerate'=>$exchangerate,'trxdescription'=>$trxdescription,
               'trxsystemdate'=>$systemdate]);
@@ -334,7 +336,7 @@ public function processreceipt(Request $request){
              DB::table('accounttransactions')
              ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$productsubledger
              ,'trxtype'=>'TC','trxcurrencycode'=>$request->ReceiptCurrency,'trxamount'=>$request->ReceiptAmount,
-             'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+             'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,'trxcreatedby'=>$user->username,
              'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
         return redirect()->route('transact.payment') 
         ->with('success', 'balance updated');
@@ -402,6 +404,7 @@ public function processremit(Request $request,$id,$pid,$currency,$lid){
         else{ $exchangerate  =  $this->getexchangerate($currency);   }
    
     try {
+        $user = $this->userdetail();
         if($request->amountprocessed <0 || $request->amountprocessed > $request->totalremittance){
             return  redirect()->route('transact.scheduleremit',$id) 
         ->with('error', 'total remittance is less/more');
@@ -442,7 +445,7 @@ public function processremit(Request $request,$id,$pid,$currency,$lid){
         $trxdescription = 'Remittance for '.$property->streetaddress;
             DB::table('accounttransactions')
             ->insert(['trxreference'=>$trxid,'trxsubglaccount'=>$productsubledger
-                ,'trxtype'=>'TD','trxcurrencycode'=>$currencycode,
+                ,'trxtype'=>'TD','trxcurrencycode'=>$currencycode,'trxcreatedby'=>$user->username,
                 'trxamount'=>$request->amountprocessed,'trxratedamount'=>$trxratedamt,
                 'trxexchangerate'=>$exchangerate,'trxdescription'=>$trxdescription,
                 'trxsystemdate'=>$systemdate]);
@@ -450,7 +453,7 @@ public function processremit(Request $request,$id,$pid,$currency,$lid){
            DB::table('accounttransactions')
            ->insert(['trxreference'=>$trxid,'trxglaccount'=>$bankcode
            ,'trxtype'=>'TC','trxcurrencycode'=>$currencycode,'trxamount'=>$request->amountprocessed,
-           'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+           'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,'trxcreatedby'=>$user->username,
            'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
         }
         // for comission
@@ -459,7 +462,7 @@ public function processremit(Request $request,$id,$pid,$currency,$lid){
         $trxcomdescription = 'Commission for '.$property->streetaddress;
             DB::table('accounttransactions')
             ->insert(['trxreference'=>$trxid,'trxglaccount'=>$comissioncode
-                ,'trxtype'=>'TD','trxcurrencycode'=>$currencycode,
+                ,'trxtype'=>'TD','trxcurrencycode'=>$currencycode,'trxcreatedby'=>$user->username,
                 'trxamount'=>$request->BillCommission,'trxratedamount'=>$trxratedamt,
                 'trxexchangerate'=>$exchangerate,'trxdescription'=>$trxcomdescription,
                 'trxsystemdate'=>$systemdate]);
@@ -467,7 +470,7 @@ public function processremit(Request $request,$id,$pid,$currency,$lid){
            DB::table('accounttransactions')
            ->insert(['trxreference'=>$trxid,'trxglaccount'=>$bankcode
            ,'trxtype'=>'TC','trxcurrencycode'=>$currencycode,'trxamount'=>$request->BillCommission,
-           'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+           'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,'trxcreatedby'=>$user->username,
            'trxdescription'=>$trxcomdescription,'trxsystemdate'=>$systemdate]);
         }
   
@@ -525,6 +528,7 @@ public function getcreditorbal($column,$id){
 }
 public function creditorpayment(Request $request){
     try {
+        $user                   =       $this->userdetail();
         $systemdate             =       $this->systemdate();
         $trxid                  =       $this->transationid();
         $basecurrency           =       $this->getbasecurrency();
@@ -573,7 +577,7 @@ public function creditorpayment(Request $request){
         $trxdescription = 'Payment for '.$columnname.' reference number '.$trxid;
             DB::table('accounttransactions')
             ->insert(['trxreference'=>$trxid,'trxglaccount'=>$creditorcode
-                ,'trxtype'=>'TD','trxcurrencycode'=>$request->ReceiptCurrency,
+                ,'trxtype'=>'TD','trxcurrencycode'=>$request->ReceiptCurrency,'trxcreatedby'=>$user->username,
                 'trxamount'=>$request->ReceiptAmount,'trxratedamount'=>$trxratedamt,
                 'trxexchangerate'=>$exchangerate,'trxdescription'=>$trxdescription,
                 'trxsystemdate'=>$systemdate]);
@@ -581,7 +585,7 @@ public function creditorpayment(Request $request){
            DB::table('accounttransactions')
            ->insert(['trxreference'=>$trxid,'trxglaccount'=>$bankcode
            ,'trxtype'=>'TC','trxcurrencycode'=>$request->ReceiptCurrency,'trxamount'=>$request->ReceiptAmount,
-           'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,
+           'trxratedamount'=>$trxratedamt,'trxexchangerate'=>$exchangerate,'trxcreatedby'=>$user->username,
            'trxdescription'=>$trxdescription,'trxsystemdate'=>$systemdate]);
            return  redirect()->route('transact.viewpay') 
            ->with('success', 'payment processed');

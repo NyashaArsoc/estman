@@ -40,6 +40,7 @@ public function __construct(){
      */
     public function addnewlandlord(Request $request)
     {
+        $user = $this->userdetail();
         IF (!empty($request->AccountNumber)){ 
             $AccountNumber         =      $request->AccountNumber;
          }Else { $AccountNumber = [0]; }
@@ -73,7 +74,7 @@ public function __construct(){
                     ->insertGetId(
                         ['nationalID'=>$request->NationalID,'clienttypeid'=>$request->LandlordClientType,
                          'firstname'=>$request->FirstName,'cell'=>$request->Cell,
-                        'email'=>$request->Email,'tel'=>$request->Tel, 
+                        'email'=>$request->Email,'tel'=>$request->Tel,'operatorid'=>$user->username,
                         'lastname'=>$request->LastName, 'contactaddress'=>$request->ContactAddress]
                     );
                     while ($a   <   $NumbersInArray){
@@ -95,7 +96,7 @@ public function __construct(){
                 if ( $ExistLandlord->isEmpty() ) {
                     $LandlordID = DB::table('landlord')
                     ->insertGetId(
-                        ['companynumber'=>$request->CompanyNumber,
+                        ['companynumber'=>$request->CompanyNumber,'operatorid'=>$user->username,
                         'clienttypeid'=>$request->LandlordClientType,
                         'email'=>$request->Email,'tel'=>$request->Tel, 'cell'=>$request->Cell,
                          'contactaddress'=>$request->ContactAddress,'bpnumber'=>$request->BPNumber,
@@ -176,6 +177,7 @@ public function __construct(){
       ->with($arr_owner);
     }
 public function capturebankingdetails(Request $request){
+    $user = $this->userdetail();
     IF (!empty($request->AccountNumber)){ 
         $AccountNumber         =      $request->AccountNumber;
      }Else { $AccountNumber = [0]; }
@@ -206,7 +208,8 @@ public function capturebankingdetails(Request $request){
             DB::table('landlordbank')
             ->Insert(['accountnumber'=>$AccountNumber[$a],'branch'=>$Branch[$a],
             'bankname'=>$BankName[$a],'accountname'=>$AccountName[$a],
-                'currencycode'=>$Currency[$a],'landlordid'=>$request->LandlordName,'available'=>'Y']);
+                'currencycode'=>$Currency[$a],'landlordid'=>$request->LandlordName,'available'=>'Y',
+                'operatorid'=>$user->username]);
             $a++;
         }
         return  redirect()->route('landlord.addbanking') 

@@ -46,6 +46,7 @@ public function __construct(){
      */
     public function addnewproperty(Request $request)
     {
+        $user = $this->userdetail();
        try {
         $PropertyID = DB::table('property')
         ->insertGetId([
@@ -54,7 +55,8 @@ public function __construct(){
             'streetaddress' => $request->PropertyAddress, 'standnumber'=> $request->StandNumber,
             'comments'=> $request->Highlights, 'rooms'=> $request->Rooms, 'bedrooms'=> $request->Bedrooms,
             'bathrooms'=> $request->Bathrooms, 'stories'=> $request->Stories, 'totalarea'=> $request->TotalArea,
-            'lettablearea'=> $request->LettableArea,'ratesqm'=> $request->ExpectedRate,'expectedrental'=> $request->ExpectedRental
+            'lettablearea'=> $request->LettableArea,'ratesqm'=> $request->ExpectedRate,
+            'operatorid'=>$user->username,'expectedrental'=> $request->ExpectedRental
         ]);
             DB::table('commissionpercent')
             ->updateOrInsert(['propertyid'=>$PropertyID],['interestoptionid'=>$request->CommissionType, 
