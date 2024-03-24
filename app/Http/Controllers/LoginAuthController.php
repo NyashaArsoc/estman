@@ -132,6 +132,6 @@ public function profilepassword(Request $request){
     
 }
 public function defaultport(){
-    return  redirect()->route('login.signin');
+    return view('auth/login');
 }
 }
