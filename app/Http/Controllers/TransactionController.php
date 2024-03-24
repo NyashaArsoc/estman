@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
+public function __construct(){
+        $this->middleware(['loginauth']);
+}
     public function viewnewbalances(){
         try {
                 $arr['balances'] = DB::select('EXEC spGetallunpostedleaserates');

@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class DashController extends Controller
 {
+        public function __construct(){
+                $this->middleware(['loginauth']);
+            }
 public function propertyview(){
     $systemdate     = $this->systemdate();
     $leasedue = Carbon::parse($systemdate)->addDays(35);

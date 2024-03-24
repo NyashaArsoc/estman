@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class LeaseController extends BaseController
 {
+
     private $monthlyvalue;
     private $addmonthlyvalue;
     private $quarterlyvalue;
@@ -32,6 +33,7 @@ class LeaseController extends BaseController
         $this->quarterlyvalue  = date("Y-m-d", $this->addquarterlyvalue);
         $this->halfyearlyvalue  = date("Y-m-d", $this->addhalfyearlyvalue);
         $this->yearlyvalue  = date("Y-m-d", $this->addyearlyvalue);
+        $this->middleware(['loginauth']);
     }
     public function getDate(){
          $todayvalue         = now()->format('Y-m-d');
@@ -39,7 +41,7 @@ class LeaseController extends BaseController
     }
          /* Display a listing of the resource.
      */
-    public function index()
+     public function index()
     {
         //
     }

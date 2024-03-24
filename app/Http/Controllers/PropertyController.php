@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class PropertyController extends BaseController
 {
+public function __construct(){
+        $this->middleware(['loginauth']);
+}
     /**
      * Display a listing of the resource.
      */

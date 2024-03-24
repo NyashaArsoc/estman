@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Crypt;
 
 class ReportController extends Controller
 {
+public function __construct(){
+        $this->middleware(['loginauth']);
+}
 public function viewlandlord(){
     try {
         $arr['landlord']   = DB::table('alllandlord')

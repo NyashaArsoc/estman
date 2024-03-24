@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Validator;
 
 class LandlordController  extends BaseController
 {
+public function __construct(){
+        $this->middleware(['loginauth']);
+}
     /**
      * Display a listing of the resource.
      */
