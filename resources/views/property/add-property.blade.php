@@ -204,7 +204,7 @@ $description = 'add property to the system...';
                         <small id="commissionpercentcheck" style="color: red;"> % of commission is required</small>
                     </div>
                 </div>
-                <h5>attachments </h5>
+                {{-- <h5>attachments </h5>
                 <div class="form-group row">
                     <label for="Mandate" class="col-sm-2 col-form-label">Signed Mandate</label>
                     <div class="col-sm-4">
@@ -214,7 +214,7 @@ $description = 'add property to the system...';
                     <div class="col-sm-4">
                         <input type="file" class="form-control" id="OtherAttachment" name="OtherAttachment" />
                     </div>
-                </div>
+                </div> --}}
                 <div class="form-group row">
                     <div class="offset-sm-2 col-sm-10">
                         <button type="submit" class="btn btn-primary" id="btn-submit-add" value="{{ $title }}">
