@@ -102,7 +102,7 @@
                 </div><br />
   
         <br />
-        <h5>rental information </h5>
+        <h5>rental information (VAT excl)</h5>
         <div class="form-group row">
             <label for="City" class="col-sm-2 col-form-label">Rent Review Period</label>
             <div class="col-sm-4">
@@ -156,9 +156,9 @@
                         autocomplete="off">
                     <small id="areatakencheck" style="color: red;">area taken is required</small>
                 </div>
-                <label for="Stories" class="col-sm-2 col-form-label">Occupied Area (Sqm)</label>
+                {{-- <label for="Stories" class="col-sm-2 col-form-label">Occupied Area (Sqm)</label> --}}
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="OccupiedArea" name="OccupiedArea" readonly/>
+                    <input type="text" class="form-control" id="OccupiedArea" name="OccupiedArea" readonly hidden/>
                     <input type="text" class="form-control" id="AvailableLettableArea" 
                     name="AvailableLettableArea" readonly hidden>
                 </div>

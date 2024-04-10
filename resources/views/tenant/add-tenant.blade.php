@@ -96,10 +96,10 @@
                                     placeholder="VAT Number" autocomplete="off" >
                                 </div> 
     
-                                <label for="BPNumber" class="col-sm-2 form-control-label">BP Number</label>
+                                <label for="" class="col-sm-2 form-control-label">TIN Number</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" id="BPNumber" name="BPNumber"
-                                    placeholder="BP Number" autocomplete="off" >
+                                    placeholder="TIN Number" autocomplete="off" >
                                 </div> 
                         </div>
                     </div>
