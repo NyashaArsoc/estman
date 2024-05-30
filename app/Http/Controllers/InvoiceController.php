@@ -237,7 +237,8 @@ public function approveprofoma($id,$lease){
                     $totalvatincl = ($invoice->rental + $invoice->rates + $invoice->operationalcost +
                     $invoice->balancebd + $invoice->interestbd + $invoice->vat);
                 // data for email 
-                $data["email"]          = $tenant->email;
+                //$data["email"]          = $tenant->email;
+                $data["email"]          = "propman@intpro.co.zw";
                 $data["CCemail"]        = "kudzchitz@gmail.com";
                 $data["title"]          = "Invoice for ".$tenantname;
                 $data["tenantname"]     = $tenantname;
