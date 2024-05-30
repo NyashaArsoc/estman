@@ -81,9 +81,12 @@ public function postnewleasebalances($id,$code,$name){
                                     ->select('*')->where('currencycode',$currencycode)
                                     ->latest('id')->first();
                                     if(is_null($graceperiod)){ //when grace period is not set
-                                        return  redirect()->route('transact.newbal') 
-                                        ->with('error', 'grace period not set');
+                                        $balancebdperiod = 10;
+                                        // return  redirect()->route('transact.newbal') 
+                                        // ->with('error', 'grace period not set');
                                     }else{ //when grace period is set
+                                        $balancebdperiod = $graceperiod->balancebdperiod;
+                                    }
                                    //2. post transactions with Debit (TD) and Credit (TC) to the transaction table
                                     //post balance bd
                                     if($unposted->balancebd <> 0){
@@ -137,10 +140,10 @@ public function postnewleasebalances($id,$code,$name){
                                     post in lease arrears, post in prepayments post in lease billrates*/
                                     DB::select('EXEC spPostSingleLeaseBalAndBill
                                     ?,?,?,?,?',array($systemdate,$leaseid,$currencycode,
-                                    $graceperiod->balancebdperiod,$unposted->balancebd));
+                                    $balancebdperiod,$unposted->balancebd));
                                         return  redirect()->route('transact.newbal') 
                                         ->with('success', 'lease rates posted');
-                                    }
+                                    
                                 } catch (QueryException $th) {
                                     return  redirect()->route('transact.newbal') 
                                     ->with('error', 'failed to load');
