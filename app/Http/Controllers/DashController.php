@@ -28,4 +28,15 @@ public function propertyview(){
     $arr['activeproperty']   = DB::table('allproperty')->where('available','=' ,'Y')->get()->count();
    return view('dash/property-view')->with($arr);
 }
+public function maindashboard(){
+    try {
+        $arr['user'] = DB::table('systusers')->select('*')->where('username',session('alluser'))
+        ->first();
+        return view('dash/main-dash')->with($arr);
+    } catch (\Throwable $th) {
+        $error = 'failed to display dashboard';
+        return $this->userforcelogout($error);
+    }
+       
+}
 }

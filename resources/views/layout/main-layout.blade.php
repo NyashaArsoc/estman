@@ -11,7 +11,7 @@
     <meta name="author" content="">
 
     <!-- Title -->
-    <title>@yield('title', 'ESTMAN')</title>
+    <title>ESTMAN | @yield('title')</title>
 
     <!-- estman CSS -->
     <link rel="stylesheet" href="{{ asset('css/home/bootstrap.min.css') }}">
@@ -168,7 +168,7 @@
         <div class="site-header">
             <nav class="navbar navbar-light">
                 <div class="navbar-left">
-                    <a class="navbar-brand" href="{{route('dash.property')}}">
+                    <a class="navbar-brand" href="{{route('dash.main')}}">
                         <img src="{{ asset('img/ESTMANLOGO.png') }}" class="logo">
                     </a>
                     <div class="toggle-button light sidebar-toggle-first float-xs-left hidden-md-up">
@@ -227,7 +227,7 @@
                 <div class="container-fluid">
                     <div class="row text-xs-center">
                         <div class="col-sm-5 text-sm-left mb-0-5 mb-sm-0">
-                            2024 © <a class="nav-link text-black" target="new"
+                            © <a class="nav-link text-black" target="new"
                                 href="https://www.arsoc.co.zw"> Arsoc</a> - All rights reserved
                         </div>
                         <div class="col-sm-7 text-sm-right">

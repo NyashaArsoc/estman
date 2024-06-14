@@ -129,7 +129,7 @@
                 <div class="container-fluid">
                     <div class="row text-xs-center">
                         <div class="col-sm-5 text-sm-left mb-0-5 mb-sm-0">
-                            2024 © <a class="nav-link text-black" target="new"
+                            © <a class="nav-link text-black" target="new"
                                 href="https://www.arsoc.co.zw"> Arsoc</a> - All rights reserved
                         </div>
                         <div class="col-sm-7 text-sm-right">
