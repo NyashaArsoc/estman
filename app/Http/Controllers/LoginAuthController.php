@@ -62,7 +62,7 @@ public function userlogin(Request $request){
                             return $this->userforcelogout($error);
                         }else if($license=='valid'){
                            //valid license
-                            return  redirect()->route('dash.main');
+                            return  redirect()->route('dash.val');
                         }
                     }
                 }   

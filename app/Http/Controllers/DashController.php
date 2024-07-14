@@ -39,4 +39,7 @@ public function maindashboard(){
     }
        
 }
+public function valuationdashboard(){
+    return view('dash/val-dash');
+}
 }

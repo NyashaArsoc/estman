@@ -155,6 +155,7 @@ Route::controller(LoginAuthController::class)->group(function(){
 Route::controller(DashController::class)->group(function(){
     Route::get('/dashboard/property', 'propertyview')->name('dash.property');
     Route::get('/welcome', 'maindashboard')->name('dash.main');
+    Route::get('/valuation/dashboard', 'valuationdashboard')->name('dash.val');
 });
 Route::controller(ReportController::class)->group(function(){
     Route::get('/report/landlord', 'viewlandlord')->name('report.viewland');
