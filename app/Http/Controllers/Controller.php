@@ -15,20 +15,22 @@ class Controller extends BaseController
     use AuthorizesRequests, ValidatesRequests;
 //current system date
     public function systemdate(){
-        try {      
-            $sysdate   = DB::table('sysdates')
-            ->select('*')->latest('id')->first();
-            if(is_null($sysdate)){
-                return 'failed';
-            }else if(trim($sysdate->OpenClose)=='O'){
-                return $sysdate->systemdate;
-            }
-            else{
-                return 'failed';
-            }
-        } catch (QueryException $th) {
-           return 'failed';
-        }
+        // try {      
+        //     $sysdate   = DB::table('sysdates')
+        //     ->select('*')->latest('id')->first();
+        //     if(is_null($sysdate)){
+        //         return 'failed';
+        //     }else if(trim($sysdate->OpenClose)=='O'){
+        //         return $sysdate->systemdate;
+        //     }
+        //     else{
+        //         return 'failed';
+        //     }
+        // } catch (QueryException $th) {
+        //    return 'failed';
+        // }
+       return date_format(now(),"Y-m-d");
+        
        
     }
 // take the transaction id for all transactions
