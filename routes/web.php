@@ -9,6 +9,7 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ValIntakeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -172,4 +173,7 @@ Route::controller(ReportController::class)->group(function(){
     Route::get('/report/lease/status', 'printleasestatus')->name('report.printleasestatus');
     Route::get('/report/lease/statament', 'viewleasestatement')->name('report.leastatement');
     Route::get('/print/lease/statement', 'printleasestatement')->name('report.printstatement');
+});
+Route::controller(ValIntakeController::class)->group(function(){
+    Route::get('/add/client', 'addclientdetails')->name('valin.addclient');
 });
