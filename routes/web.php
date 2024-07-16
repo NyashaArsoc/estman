@@ -10,6 +10,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ValIntakeController;
+use App\Http\Controllers\ValManageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -176,5 +177,9 @@ Route::controller(ReportController::class)->group(function(){
 });
 Route::controller(ValIntakeController::class)->group(function(){
     Route::get('/val/add/client', 'addclientdetails')->name('valin.addclient');
-    Route::get('/val/list/client', 'listallclient')->name('valin.listclient');
+});
+Route::controller(ValManageController::class)->group(function(){
+    Route::get('/val/list/client', 'listallclient')->name('valman.listclient');
+    Route::get('/val/{id}/client/edit', 'editsingleclient')->name('valman.editclient');
+    Route::get('/val/{id}/client/view', 'viewsingleclient')->name('valman.viewclient');
 });

@@ -12,9 +12,5 @@ public function addclientdetails(){
           ->select('id','description')->get();
    return view('val.intake.add-client-details')->with($arr);
 }
-public function listallclient(){
-    $arr['client']   = DB::table('clienttype')
-          ->select('*')->get();
-   return view('val.manage.list-client')->with($arr);
-}
+
 }

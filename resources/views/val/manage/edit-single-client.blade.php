@@ -1,8 +1,8 @@
 @php 
-$title = 'Add Client';
-$description = 'add new client to the system...'; @endphp
-@extends('layout.val-main-menu')
-@section('title', 'Add CLient')
+$title = 'Edit Client';
+$description = 'update client details...'; @endphp
+@extends('layout.no-menu-layout')
+@section('title', 'Edit Client')
 @section('additional css')
     <!-- Additional css Start-->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
@@ -15,7 +15,8 @@ $description = 'add new client to the system...'; @endphp
     <div class="container-fluid">
         <h4>{{ $title }}</h4>
         <ol class="breadcrumb no-bg mb-1">
-            <li class="breadcrumb-item"><a href="{{route('dash.val')}}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('dash.val') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('valman.listclient') }}">List</a></li>
             <li class="breadcrumb-item active">{{ $title }}</li>
         </ol>
         <div class="box box-block bg-white">
