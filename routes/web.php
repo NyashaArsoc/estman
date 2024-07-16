@@ -177,6 +177,7 @@ Route::controller(ReportController::class)->group(function(){
 });
 Route::controller(ValIntakeController::class)->group(function(){
     Route::get('/val/add/client', 'addclientdetails')->name('valin.addclient');
+    Route::get('/val/add/property', 'addpropertydetails')->name('valin.addprop');
 });
 Route::controller(ValManageController::class)->group(function(){
     Route::get('/val/list/client', 'listallclient')->name('valman.listclient');

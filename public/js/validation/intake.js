@@ -293,6 +293,122 @@ function validateContactCell() {
             }
 		}
 }
+ //valid client name
+ $("#propertyclientnamecheck").hide();
+ let propertyclientnameError = true;
+ $("#propertyclientname").keyup(function () {
+    validatePropertyClientName();
+ });
+ function validatePropertyClientName() {
+     let textValue = $("#propertyclientname").val();
+     if (textValue.length == "") {
+         $("#propertyclientnamecheck").show();
+         propertyclientnameError = false;
+         return false;
+     } else {
+        propertyclientnameError = true;
+         $("#propertyclientnamecheck").hide();
+     }
+ }
+ //valid property type
+ $("#propertytypecheck").hide();
+ let propertytypeError = true;
+ $("#propertytype").keyup(function () {
+     validatePropertyType();
+ });
+ function validatePropertyType() {
+     let textValue = $("#propertytype").val();
+     if (textValue.length == "") {
+         $("#propertytypecheck").show();
+         propertytypeError = false;
+         return false;
+     } else {
+        propertytypeError = true;
+         $("#propertytypecheck").hide();
+     }
+ }
+  //valid property province
+  $("#propertyprovincecheck").hide();
+  let propertyprovinceError = true;
+  $("#propertyprovince").keyup(function () {
+     validatePropertyProvince();
+  });
+  function validatePropertyProvince() {
+      let textValue = $("#propertyprovince").val();
+      if (textValue.length == "") {
+          $("#propertyprovincecheck").show();
+          propertyprovinceError = false;
+          return false;
+      } else {
+        propertyprovinceError = true;
+          $("#propertyprovincecheck").hide();
+      }
+  }
+   //valid property town
+   $("#propertytowncheck").hide();
+   let propertytownError = true;
+   $("#propertytown").keyup(function () {
+      validatePropertyTown();
+   });
+   function validatePropertyTown() {
+       let textValue = $("#propertytown").val();
+       if (textValue.length == "") {
+           $("#propertytowncheck").show();
+           propertytownError = false;
+           return false;
+       } else {
+        propertytownError = true;
+           $("#propertytowncheck").hide();
+       }
+   }
+    //valid property surbub
+    $("#propertysurbubcheck").hide();
+    let propertysurbubError = true;
+    $("#propertysurbub").keyup(function () {
+       validatePropertySurbub();
+    });
+    function validatePropertySurbub() {
+        let textValue = $("#propertysurbub").val();
+        if (textValue.length == "") {
+            $("#propertysurbubcheck").show();
+            propertysurbubError = false;
+            return false;
+        } else {
+            propertysurbubError = true;
+            $("#propertysurbubcheck").hide();
+        }
+}
+//valid property address
+$("#propertyaddresscheck").hide();
+    let propertyaddressError = true;
+    $("#propertyaddress").keyup(function () {
+        validatePropertyAddress();
+});
+function validatePropertyAddress() {
+		let textValue = $("#propertyaddress").val();
+		if (textValue.length == "") {
+			$("#propertyaddresscheck").show();
+			propertyaddressError = false;
+			return false;
+		} else if (textValue.length < 5) {
+			$("#propertyaddresscheck").show();
+			$("#propertyaddresscheck").html("**invalid address");
+			propertyaddressError = false;
+			return false;
+		} else {
+            const specialChars = /[`!@#$%^&*()_\-=\[\]{};':"\\|,.<>?~\/]/;
+            charscheck         =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#propertyaddresscheck").show();
+                $("#propertyaddresscheck").html("**remove special chars");
+                propertyaddressError = false;
+                return false;
+            }else{
+                propertyaddressError = true;
+                $("#propertyaddresscheck").hide();
+            }
+		}
+}
 /*---------------------button submit------------------------------------------*/
 // add val new client
 $("#btn-val-new-client").click(function () {
@@ -336,6 +452,43 @@ $("#btn-val-new-client").click(function () {
         return false;
     }
 });
+// add val save new property on table
+$("#add-new-property").click(function () {
+    var propertyaddress				=	$('#propertyaddress').val();
+	var propertytype				=	$('#propertytype').val();
+	var propertyprovince			=	$('#propertyprovince').val();
+	var propertytown			    =	$('#propertytown').val();
+	var propertysurbub				=	$('#propertysurbub').val();
+    var count = $('#tblnewpropertydetails tr').length - 1;
+
+    validatePropertyType();validatePropertyTown();validatePropertyProvince();
+    validatePropertySurbub();validatePropertyAddress();
+    try {
+        if (propertyaddressError == true && propertyprovinceError==true && propertysurbubError==true
+            && propertytownError== true && propertytypeError== true ){
+        $('#tblnewpropertydetails tbody').append('<tr class="child"><td>'+count+'</td><td><input name="propertytype[]" class="form-control" value='+propertytype+' readonly/></td><td><input name="propertyprovince[]" class="form-control" value='+propertyprovince+' readonly /></td><td><input name="propertytown[]" class="form-control" value='+propertytown+' readonly /></td><td> <input name="propertysurbub[]" class="form-control " value='+propertysurbub+' readonly/></td><td><textarea name="propertyaddress[]" class="form-control" rows="2" cols="4" readonly>'+propertyaddress+'</textarea></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="Delete" onclick="deletenewpropertyrow(this)">Delete</button></td></tr>');
+		$('#propertyaddress').val('');$('#propertytype').val('');$('#propertyprovince').val(''); $('#propertytown').val(''); $('#propertysurbub').val(''); 
+		
+        return true;
+        }else{
+             //-------------invalid input-----------
+             return false;
+        }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+function deletenewpropertyrow(t) {
+    var a = $("#tblnewpropertydetails > tbody > tr").length;
+    if (1 == a) alert("There only one row you can't delete.");
+    else {
+        var e = t.parentNode.parentNode;
+        e.parentNode.removeChild(e);
+    }
+}
+var count = 2,
+limits = 20;
      
 
   
