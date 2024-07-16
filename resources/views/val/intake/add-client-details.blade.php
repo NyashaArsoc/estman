@@ -26,15 +26,15 @@ $description = 'add new client to the system...'; @endphp
                 <div class="form-group row">
                     <label for="ClientType" class="col-sm-2 form-control-label">Type<i class="text-danger">*</i></label>
                     <div class="col-sm-4">
-                        <select class="js-example-basic-single w-100" name="LandlordClientType" id="LandlordClientType"
+                        <select class="js-example-basic-single w-100" name="clienttype" id="clienttype"
                             onchange="LandlordCreationType(this)" />
                         <option value="">Select Client Type</option>
-                        @foreach($type as $typ)
-                        <option value="{{ $typ->id }}">  {{ $typ->description }}
+                        @foreach($type as $abc)
+                        <option value="{{ $abc->id }}">  {{ $abc->description }}
                         </option>
                         @endforeach
                         </select>
-                        <small id="landlordtypecheck" style="color: red;"> select landlord type </small>
+                        <small id="clientypecheck" style="color: red;"> select client type </small>
                     </div>
                 </div>
                 <div id="IndividualGroup" class="dropdwn">
@@ -43,7 +43,7 @@ $description = 'add new client to the system...'; @endphp
                             <i class="text-danger">*</i>
                         </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="FirstName" name="FirstName"
+                            <input type="text" class="form-control" id="firstname" name="firstname"
                                 placeholder="First Name" autocomplete="off">
                         <small id="firstnamecheck" style="color: red;"> first name is required</small>
                         </div>
@@ -51,7 +51,7 @@ $description = 'add new client to the system...'; @endphp
                             <i class="text-danger">*</i>
                         </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="LastName" name="LastName"
+                            <input type="text" class="form-control" id="lastname" name="lastname"
                                 placeholder="Last Name" autocomplete="off">
                         <small id="lastnamecheck" style="color: red;"> last name is required</small>
                         </div>
@@ -63,7 +63,7 @@ $description = 'add new client to the system...'; @endphp
                             <i class="text-danger">*</i>
                         </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="CompanyName" name="CompanyName"
+                            <input type="text" class="form-control" id="companyname" name="companyname"
                                 placeholder="Company Name" autocomplete="off">
                                 <small id="companynamecheck" style="color: red;"> company name is required</small>
                         </div>
@@ -74,7 +74,7 @@ $description = 'add new client to the system...'; @endphp
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="Cell" name="Cell" placeholder="Cell"
+                        <input type="text" class="form-control" id="cell" name="cell" placeholder="cell"
                             autocomplete="off">
                             <small id="cellcheck" style="color: red;"> cell number is required</small>
                     </div>
@@ -91,11 +91,10 @@ $description = 'add new client to the system...'; @endphp
                             id="ContactAddress"></textarea>
                     </div>
                     <label for="Email" class="col-sm-2 col-form-label">Email
-                        <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="Email" name="Email" placeholder="Email"
-                            autocomplete="off">
+                        <input type="text" class="form-control" id="email" name="email" 
+                        placeholder="example@example.com" autocomplete="off">
                             <small id="emailcheck" style="color: red;"> email is required</small>
                     </div>
                 </div>
@@ -107,8 +106,8 @@ $description = 'add new client to the system...'; @endphp
                             <i class="text-danger">*</i>
                         </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="ContactFirstName" 
-                            name="ContactFirstName"  placeholder="First Name" autocomplete="off">
+                            <input type="text" class="form-control" id="contactfirstname" 
+                            name="contactfirstname"  placeholder="First Name" autocomplete="off">
                             <small id="contactfirstnamecheck" style="color: red;">first name 
                                 is required</small>
                         </div>
@@ -117,8 +116,8 @@ $description = 'add new client to the system...'; @endphp
                             <i class="text-danger">*</i>
                         </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="ContactLastName" 
-                            name="ContactLastName" placeholder="Last Name" autocomplete="off">
+                            <input type="text" class="form-control" id="contactlastname" 
+                            name="contactlastname" placeholder="Last Name" autocomplete="off">
                             <small id="contactlastnamecheck" style="color: red;"> last name 
                                 is required</small>
                         </div>
@@ -128,7 +127,7 @@ $description = 'add new client to the system...'; @endphp
                             <i class="text-danger">*</i>
                         </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="ContactCell" name="ContactCell"
+                            <input type="text" class="form-control" id="contactcell" name="contactcell"
                              placeholder="Cell" autocomplete="off">
                              <small id="contactcellcheck" style="color: red;">cell is required</small>
                         </div>
@@ -136,7 +135,7 @@ $description = 'add new client to the system...'; @endphp
                             <i class="text-danger">*</i>
                         </label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="ContactEmail" name="ContactEmail"
+                            <input type="text" class="form-control" id="contactemail" name="contactemail"
                                 placeholder="example@example.com" onkeypress='' autocomplete="off">
                                 <small id="contactemailcheck" style="color: red;">email is required</small>
                         </div>
@@ -145,7 +144,7 @@ $description = 'add new client to the system...'; @endphp
                 <div class="form-group row">
                     @if (in_array(1,$arraycontrolids))
                     <div class="offset-sm-2 col-sm-10">
-                        <button type="submit" class="btn btn-primary" id="btn-submit" >
+                        <button type="submit" class="btn btn-primary" id="btn-val-new-client" >
                             submit</button>
                     </div>
                     @endif
@@ -158,11 +157,9 @@ $description = 'add new client to the system...'; @endphp
 
 @endsection
 @section('additional js')
-<script src="{{ asset('js/validation/landlord.js') }}"></script>
+<script src="{{ asset('js/validation/intake.js') }}"></script>
     <script src="{{ asset('css/select2/select2.min.js') }}"></script>
     <script src="{{ asset('js/select2.js') }}"></script>
     <script src="{{ asset('js/dropdown.js') }}"></script>
-    <script src="{{ asset('js/add-table-details.js') }}"></script>
-    
     <!-- Additional JS End-->
 @endsection

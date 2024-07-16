@@ -218,6 +218,7 @@
 
     <script src="{{ asset('js/manage/search/responsive-search.js') }}"></script><!-- Search -->
     <script type="text/javascript" src="{{ asset('js/popupforms/manage-buttons.js') }}"></script>
+    <script src="{{ asset('js/validation/form.js') }}"></script>
     @yield ('additional js')
 
 </body>
