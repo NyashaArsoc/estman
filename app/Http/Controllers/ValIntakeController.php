@@ -17,5 +17,9 @@ public function addpropertydetails(){
           ->select('id','description')->get();
    return view('val.intake.add-new-property')->with($arr);
 }
-
+public function createportfolio(){
+    $arr['type']   = DB::table('clienttype')
+          ->select('id','description')->get();
+   return view('val.intake.create-new-portfolio')->with($arr);
+}
 }

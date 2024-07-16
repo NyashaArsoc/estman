@@ -22,7 +22,7 @@ $description = 'add property to the system...';
         <div class="box box-block bg-white">
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
-            <form class="form-material material-primary" id="add property" method="POST"
+            <form class="form-material material-primary" id="defaultform" method="POST"
             action="{{ route('property.addproperty') }}" > @csrf
                 <div class="form-group row">
                     <label for="" class="col-sm-2 form-control-label">Client Type </label>
