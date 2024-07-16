@@ -143,10 +143,12 @@ $description = 'add new client to the system...'; @endphp
                     </div>
                 </div>
                 <div class="form-group row">
+                    @if (in_array(1,$arraycontrolids))
                     <div class="offset-sm-2 col-sm-10">
                         <button type="submit" class="btn btn-primary" id="btn-submit" >
                             submit</button>
                     </div>
+                    @endif
                 </div>
                 @include('layout.arlet')
             </form>
