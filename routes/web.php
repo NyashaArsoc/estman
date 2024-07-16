@@ -175,5 +175,6 @@ Route::controller(ReportController::class)->group(function(){
     Route::get('/print/lease/statement', 'printleasestatement')->name('report.printstatement');
 });
 Route::controller(ValIntakeController::class)->group(function(){
-    Route::get('/add/client', 'addclientdetails')->name('valin.addclient');
+    Route::get('/val/add/client', 'addclientdetails')->name('valin.addclient');
+    Route::get('/val/list/client', 'listallclient')->name('valin.listclient');
 });
