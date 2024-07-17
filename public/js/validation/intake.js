@@ -524,7 +524,40 @@ function validateNoOfPortfolioProperty() {
             }
     }
 }
- 
+//valid valuationpaymentagreement
+$("#valuernamecheck").hide();
+let valuernameError = true;
+$("#valuername").keyup(function () {
+   validateValuationValuerName();
+});
+function validateValuationValuerName() {
+    let textValue = $("#valuername").val();
+    if (textValue.length == "") {
+        $("#valuernamecheck").show();
+        valuernameError = false;
+        return false;
+    } else {
+        valuernameError = true;
+        $("#valuernamecheck").hide();
+    }
+}
+//valid valuationpaymentagreement
+$("#portfolionamecheck").hide();
+let portfolionameError = true;
+$("#portfolioname").keyup(function () {
+   validateInstructionPortfolioName();
+});
+function validateInstructionPortfolioNames() {
+    let textValue = $("#portfolioname").val();
+    if (textValue.length == "") {
+        $("#portfolionamecheck").show();
+        portfolionameError = false;
+        return false;
+    } else {
+        portfolionameError = true;
+        $("#portfolionamecheck").hide();
+    }
+}
 
 /*---------------------button submit------------------------------------------*/
 // add val new client
@@ -615,6 +648,35 @@ $("#btn-val-new-portfolio").click(function () {
         if(portfolioduedateError==true && totalnumberpropertyportfolioError==true &&
             valuationpaymentagreementError==true && valuationpurposeError==true && 
             valuationtypeError==true && clientcontactnameError==true )
+            { return true; }
+        else{ return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+// add val new normal instruction
+$("#btn-val-instr-normal-1").click(function () {
+    validateValuationValuerName();
+    validateValuationPaymentAgreement();validateValuationPurpose();
+    validateValuationType();validateClientContactName();
+    try {
+        if(valuernameError==true &&valuationpaymentagreementError==true &&
+             valuationpurposeError==true &&  valuationtypeError==true && 
+             clientcontactnameError==true )
+            { return true; }
+        else{ return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+// add val new portfolio instruction
+$("#btn-val-instr-normal-1").click(function () {
+    validateValuationValuerName();
+    validateInstructionPortfolioName();
+    try {
+        if(valuernameError==true &&portfolionameError==true  )
             { return true; }
         else{ return false; }
     } catch (err) {

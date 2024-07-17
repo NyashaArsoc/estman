@@ -1,9 +1,9 @@
 @php
-$title = 'Add Portfolio';
-$description = 'create new portfolio...';
+$title = 'Portfolio Instruction';
+$description = 'create new normal instruction...';
 @endphp
 @extends('layout.val-main-menu')
-@section('title', 'Add Portfolio')
+@section('title', 'Portfolio Instruction')
 @section('additional css')
     <!-- Additional css Start-->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
@@ -82,7 +82,7 @@ $description = 'create new portfolio...';
                 </div><br/>
                 <div class="form-group row">
                     <label for="" class="col-sm-2 form-control-label">Payment Agreement</label>
-                    <div class="col-sm-2">
+                    <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="valuationpaymentagreement"
                             id="valuationpaymentagreement" />
                         <option value="">payment agreement</option>
@@ -93,22 +93,19 @@ $description = 'create new portfolio...';
                         </select>
                         <small id="valuationpaymentagreementcheck" style="color: red;">required</small>
                     </div>
-                    <label for="" class="col-sm-2 col-form-label">No of Properties</label>
-                <div class="col-sm-2">
-                    <input type="text" class="form-control" id="totalnumberpropertyportfolio"
-                     name="totalnumberpropertyportfolio" placeholder="0" autocomplete="off">
-                    <small id="totalnumberpropertyportfoliocheck" style="color: red;">required</small>
-                </div>
-                <label for="ClientType" class="col-sm-2 form-control-label">Due Date</label>
-                    <div class="col-sm-2">
-                        <input type="date" class="form-control" id="portfolioduedate" name="portfolioduedate">
-                        <small id="portfolioduedatecheck" style="color: red;"> date is required</small>
+                    <label for="" class="col-sm-2 col-form-label">Valuer Name </label>
+                    <div class="col-sm-4">
+                        <select class="js-example-basic-single w-100" name="valuername" id="valuername" />
+                        <option value="">select valuer name </option>
+                        <option value=""> </option>
+                        </select>
+                        <small id="valuernamecheck" style="color: red;">required</small>
                     </div>
                 </div>
                     <div class="form-group row">
                         <div class="offset-sm-2 col-sm-10">
-                            <button type="submit" class="btn btn-primary" id="btn-val-new-portfolio" >
-                                submit</button>
+                            <button type="submit" class="btn btn-primary" id="btn-val-instr-normal-1" >
+                                <i class="ti-arrow-right mr-0-5"></i> next</button>
                         </div>
                     </div>
                 @include('layout.arlet')

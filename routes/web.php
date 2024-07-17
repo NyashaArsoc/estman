@@ -179,6 +179,10 @@ Route::controller(ValIntakeController::class)->group(function(){
     Route::get('/val/add/client', 'addclientdetails')->name('valin.addclient');
     Route::get('/val/add/property', 'addpropertydetails')->name('valin.addprop');
     Route::get('/val/add/new/portfolio', 'createportfolio')->name('valin.crtportfoli');
+    Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');
+    Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');
+    Route::get('/val/{id}/new/{valuerid}/instruction/{typeid}', 'listpropertyallocatesteptwo')->name('valin.lstpropallo');
+    
 });
 Route::controller(ValManageController::class)->group(function(){
     Route::get('/val/list/client', 'listallclient')->name('valman.listclient');

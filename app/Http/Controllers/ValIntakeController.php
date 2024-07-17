@@ -22,4 +22,19 @@ public function createportfolio(){
           ->select('id','description')->get();
    return view('val.intake.create-new-portfolio')->with($arr);
 }
+public function addinstructionportfolio(){
+    $arr['type']   = DB::table('clienttype')
+          ->select('id','description')->get();
+   return view('val.intake.new-instruction-portfolio-1')->with($arr);
+}
+public function addinstructionnormal(){
+    $arr['type']   = DB::table('clienttype')
+    ->select('id','description')->get();
+return view('val.intake.new-instruction-normal-1')->with($arr);
+}
+public function listpropertyallocatesteptwo($id,$valuerid,$portfolioid){
+    $arr['type']   = DB::table('clienttype')
+    ->select('id','description')->get();
+return view('val.intake.new-instruction-step-2')->with($arr);
+}
 }
