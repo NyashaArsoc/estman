@@ -9,6 +9,7 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ValApprovalController;
 use App\Http\Controllers\ValIntakeController;
 use App\Http\Controllers\ValManageController;
 use Illuminate\Support\Facades\Route;
@@ -182,10 +183,14 @@ Route::controller(ValIntakeController::class)->group(function(){
     Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');
     Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');
     Route::get('/val/{id}/new/{valuerid}/instruction/{typeid}', 'listpropertyallocatesteptwo')->name('valin.lstpropallo');
-    
+       
 });
 Route::controller(ValManageController::class)->group(function(){
     Route::get('/val/list/client', 'listallclient')->name('valman.listclient');
     Route::get('/val/{id}/client/edit', 'editsingleclient')->name('valman.editclient');
     Route::get('/val/{id}/client/view', 'viewsingleclient')->name('valman.viewclient');
+});
+Route::controller(ValApprovalController::class)->group(function(){
+    Route::get('/val/list/acknowledgement', 'listallinstructionacknowledgement')->name('valapp.listackn');
+    
 });
