@@ -24,6 +24,7 @@ $description = 'acknowledge instruction ...';
                                     <th>Contact</th>
                                     <th>Property Type</th>
                                     <th>Address</th>
+                                    <th>Status</th>
                                     <th>Option</th>
                                 </tr>
                             </thead>
@@ -31,6 +32,7 @@ $description = 'acknowledge instruction ...';
                                 @foreach($type as $abc)
                                    <tr>
                                     <td>{{$count ++}}</td>
+                                    <td>{{$abc->id}}</td>
                                     <td>{{$abc->id}}</td>
                                     <td>{{$abc->id}}</td>
                                     <td>{{$abc->id}}</td>
@@ -53,6 +55,7 @@ $description = 'acknowledge instruction ...';
                                     <th>Contact</th>
                                     <th>Property Type</th>
                                     <th>Address</th>
+                                    <th>Status</th>
                                     <th>Option</th>
                                 </tr>
                             </tfoot>

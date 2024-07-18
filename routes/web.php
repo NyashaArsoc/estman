@@ -192,5 +192,5 @@ Route::controller(ValManageController::class)->group(function(){
 });
 Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/list/acknowledgement', 'listallinstructionacknowledgement')->name('valapp.listackn');
-    
+    Route::get('/val/{propid}/view-single/{instr_id}/acknowledgement', 'viewsingleacknowledge')->name('valapp.viewsinglackn');
 });

@@ -12,4 +12,10 @@ public function listallinstructionacknowledgement(){
     ->select('id','description')->get();
 return view('val.approval.list-instruct-acknowledge')->with($arr);
 }
+public function viewsingleacknowledge($proid,$instrid){
+    $arr['type']   = DB::table('clienttype')
+    ->select('id','description')->get();
+return view('val.approval.view-single-instruct-acknowledge-port')->with($arr);
+//return view('val.approval.view-single-instruct-acknowledge-norm')->with($arr);
+}
 }
