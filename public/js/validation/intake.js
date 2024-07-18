@@ -493,7 +493,7 @@ function validatePortfolioDueDate() {
         $("#portfolioduedatecheck").hide();
     }
 }
-//valid area taken
+//valid total number of portfolio
 $("#totalnumberpropertyportfoliocheck").hide();
 let totalnumberpropertyportfolioError = true;
 $("#totalnumberpropertyportfolio").keyup(function () {
