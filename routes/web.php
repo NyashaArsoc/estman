@@ -199,4 +199,6 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/{propid}/view-single/{instr_id}/quality/check', 'viewsinglequalitycheck')->name('valapp.viewsinglqlty');
     Route::get('/val/list/final-approve', 'listallinstructionfinalapproval')->name('valapp.listallappro');
     Route::get('/val/{propid}/view-single/{instr_id}/final/approval', 'viewsinglefinalapproval')->name('valapp.viewsinglfinapr');
+    Route::get('/val/list/printing', 'listallinstructionprint')->name('valapp.listprint');
+    Route::get('/val/{propid}/view-single/{instr_id}/printing', 'viewsingleprint')->name('valapp.viewsinglpri');
 });

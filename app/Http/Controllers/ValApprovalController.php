@@ -50,4 +50,14 @@ public function viewsinglefinalapproval($proid,$instrid){
     ->select('id','description')->get();
 return view('val.approval.view-single-instruct-final-approval')->with($arr);
 }
+public function listallinstructionprint(){
+    $arr['type']   = DB::table('clienttype')
+    ->select('id','description')->get();
+return view('val.approval.list-instruct-printing')->with($arr);
+}
+public function viewsingleprint($proid,$instrid){
+    $arr['type']   = DB::table('clienttype')
+    ->select('id','description')->get();
+return view('val.approval.view-single-printing')->with($arr);
+}
 }
