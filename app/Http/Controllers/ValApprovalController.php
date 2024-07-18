@@ -60,4 +60,16 @@ public function viewsingleprint($proid,$instrid){
     ->select('id','description')->get();
 return view('val.approval.view-single-printing')->with($arr);
 }
+public function listallinstructioninvoice(){
+    $arr['type']   = DB::table('clienttype')
+    ->select('id','description')->get();
+return view('val.approval.list-instruct-invoicing')->with($arr);
+}
+public function viewsingleinvoicing($proid,$instrid){
+    $arr['type']   = DB::table('clienttype')
+    ->select('id','description')->get();
+    $arr['currency']   = DB::table('currency')
+            ->select('id','code')->get();
+return view('val.approval.view-single-invoicing')->with($arr);
+}
 }
