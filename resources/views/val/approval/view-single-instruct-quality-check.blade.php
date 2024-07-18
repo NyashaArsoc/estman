@@ -1,11 +1,11 @@
 @php
-$title = 'Compile Instruction';
-$description = 'instruction compilation details .';
+$title = 'Instruction Quality Check';
+$description = 'report quality check .';
 $status = 'portfolio instruction';
  $badge = "badge badge-pill bg-success badge-secondary";
 @endphp
 @extends('layout.no-menu-layout')
-@section('title', 'Compile')
+@section('title', 'Quality Check')
 @section('additional css')
 <link rel="stylesheet" type="text/css" href="{{ asset('css/select2/select2.min.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('css/select2-bootstrap-theme/select2-bootstrap.min.css') }}" />
@@ -16,7 +16,7 @@ $status = 'portfolio instruction';
     <h4>{{ $title }}</h4>
     <ol class="breadcrumb no-bg mb-1">
         <li class="breadcrumb-item"><a href="{{ route('dash.val') }}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('valapp.listackn') }}">List</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('valapp.listquality') }}">List</a></li>
         <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
     <div class="box box-block bg-white">
@@ -107,7 +107,19 @@ $status = 'portfolio instruction';
                             <td>$client->idnumber ?? </td>
                         </tr>
                         <tr>
+                            <td><strong>Stand Number:</strong></td>
+                            <td>$client->gender ?? </td>
+                        </tr>
+                        <tr>
                             <td><strong>Street Address:</strong></td>
+                            <td>$client->gender ?? </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Report document:</strong></td>
+                            <td>$client->gender ?? </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Report Schedule:</strong></td>
                             <td>$client->gender ?? </td>
                         </tr>
                     </tbody>
@@ -129,27 +141,13 @@ $status = 'portfolio instruction';
                 </thead>
                 <tbody>
                     <tr>
-                        <td><input type="text" class="form-control" id="marketvalue" name="marketvalue"
-                            placeholder="50" autocomplete="off">
-                            <small id="marketvaluecheck" style="color: red;">required</small> </td>
-                        <td><input type="text" class="form-control" id="rentalvalue" name="rentalvalue"
-                            placeholder="50"  autocomplete="off">
-                            <small id="rentalvaluecheck" style="color: red;">required</small></td>
-                        <td><input type="text" class="form-control" id="forcedsalestimate" name="forcedsalestimate"
-                            placeholder="50"  autocomplete="off">
-                            <small id="forcedsalestimatecheck" style="color: red;">required</small></td>
-                        <td><input type="text" class="form-control" id="fairvalue" name="fairvalue"
-                            placeholder="50"  autocomplete="off">
-                            <small id="fairvaluecheck" style="color: red;">required</small> </td>
-                        <td><input type="text" class="form-control" id="landvalue" name="landvalue"
-                            placeholder="50"  autocomplete="off">
-                            <small id="landvaluecheck" style="color: red;">required</small> </td>
-                        <td><input type="text" class="form-control" id="drc" name="drc"
-                            placeholder="50"  autocomplete="off">
-                            <small id="drccheck" style="color: red;">required</small> </td>
-                        <td><input type="text" class="form-control" id="grc" name="grc"
-                                placeholder="50"  autocomplete="off">
-                                <small id="grccheck" style="color: red;">required</small> </td>
+                        <td>required</td>
+                        <td>required</td>
+                        <td>required</td>
+                        <td>required </td>
+                        <td>required </td>
+                        <td>required </td>
+                        <td>required </td>
                     </tr>
                 </tbody>
             </table>
@@ -163,22 +161,14 @@ $status = 'portfolio instruction';
                 accept=".doc">
                  <small id="reportdocumentcheck" style="color: red;">required</small>
             </div>
-            <label for="Email" class="col-sm-2 col-form-label">Schedule
+            <label for="" class="col-sm-2 col-form-label">Last Comment
             </label>
             <div class="col-sm-4">
-                <input type="file" class="form-control" id="reportschedule" name="reportschedule"
-                accept=".Xls">
-                    <small id="reportschedulecheck" style="color: red;">required</small>
+                <small id="" style="color: red;">required</small>
             </div>
         </div>
         <div class="form-group row">
-            <label for="" class="col-sm-2 col-form-label">Standa Number
-            </label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" name="standnumber" 
-                id="standnumber" />
-                <small id="standnumbercheck" style="color: red;">required</small>
-            </div>
+            
         </div>
         <div class="form-group row">
             <label for="" class="col-sm-2 col-form-label">Comments/Highlights
@@ -189,11 +179,13 @@ $status = 'portfolio instruction';
             </div>
         </div>
         <div class="form-group row">
-            <div class="form-group row">
-                <div class="offset-sm-2 col-sm-10">
-                    <button type="submit" class="btn btn-primary" id="btn-val-compile" >
-                        submit</button>
-                </div>
+            <div class="offset-sm-2 col-sm-4">
+                <a onclick = "approvetenant(this); return false;"
+                class="btn btn-success btn-sm" href="#"
+                title="accept"><i class="ti-check mr-0-5"></i>submit</a>  
+                <button type="submit" class="btn btn-danger btn-sm" id="reject-tenant" 
+                onclick = "rejecttenant(this); return false;"><i class="ti-close mr-0-5">
+                    </i>decline</button>
             </div>
         </div>
         </form>

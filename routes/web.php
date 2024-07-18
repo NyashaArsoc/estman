@@ -195,4 +195,6 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/{propid}/view-single/{instr_id}/acknowledgement', 'viewsingleacknowledge')->name('valapp.viewsinglackn');
     Route::get('/val/list/compilation', 'listallinstructioncompile')->name('valapp.listcomp');
     Route::get('/val/{propid}/view-single/{instr_id}/compile', 'viewsinglecompile')->name('valapp.viewsinglacomp');
+    Route::get('/val/list/quality-check', 'listallinstructionqualitycheck')->name('valapp.listquality');
+    Route::get('/val/{propid}/view-single/{instr_id}/quality/check', 'viewsinglequalitycheck')->name('valapp.viewsinglqlty');
 });
