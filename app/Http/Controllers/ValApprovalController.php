@@ -26,7 +26,7 @@ return view('val.approval.list-instruct-compile')->with($arr);
 public function viewsinglecompile($proid,$instrid){
     $arr['type']   = DB::table('clienttype')
     ->select('id','description')->get();
-return view('val.approval.view-single-instruct-compile')->with($arr);
+return view('val.approval.view-single-instruct-compilation')->with($arr);
 //return view('val.approval.view-single-instruct-acknowledge-norm')->with($arr);
 }
 public function listallinstructionqualitycheck(){
@@ -39,5 +39,15 @@ public function viewsinglequalitycheck($proid,$instrid){
     ->select('id','description')->get();
 return view('val.approval.view-single-instruct-quality-check')->with($arr);
 //return view('val.approval.view-single-instruct-acknowledge-norm')->with($arr);
+}
+public function listallinstructionfinalapproval(){
+    $arr['type']   = DB::table('clienttype')
+    ->select('id','description')->get();
+return view('val.approval.list-instruct-final-approval')->with($arr);
+}
+public function viewsinglefinalapproval($proid,$instrid){
+    $arr['type']   = DB::table('clienttype')
+    ->select('id','description')->get();
+return view('val.approval.view-single-instruct-final-approval')->with($arr);
 }
 }
