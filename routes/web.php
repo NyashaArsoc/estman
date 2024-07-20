@@ -208,4 +208,6 @@ Route::controller(ValApprovalController::class)->group(function(){
 Route::controller(ValDeclinedController::class)->group(function(){
     Route::get('/val/list/acknowledgement/declined', 'listalldeclinedacknowledgement')->name('valdec.listackn');
     Route::get('/declined/val/{propid}/view-single/{instr_id}/acknowledgement', 'viewdeclinedsingleacknowledge')->name('valdec.viewsinglackn');
+    Route::get('/val/list/quality-check/declined', 'listalldeclinedinstructionqualitycheck')->name('valdec.listquality');
+    Route::get('/declined/val/{propid}/view-single/{instr_id}/quality', 'viewdeclinedsinglequalitycheck')->name('valdec.viewsinglqlty');
 });
