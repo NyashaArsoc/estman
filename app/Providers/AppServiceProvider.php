@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\View\Composer\MenuComposer;
 use App\Http\View\Composer\RolePermission;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -22,5 +23,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer(views:'*',callback:RolePermission::class);
+        View::composer(views:['layout.val-main-menu'],callback:MenuComposer::class);
     }
 }

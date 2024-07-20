@@ -29,8 +29,8 @@ class Controller extends BaseController
         // } catch (QueryException $th) {
         //    return 'failed';
         // }
-       return date_format(now(),"Y-m-d");
-        
+        return date_format(now(),"Y-m-d");
+       
        
     }
 // take the transaction id for all transactions
@@ -165,7 +165,7 @@ public function getlicensecheck(){
                 $systemdate = $this->systemdate();
                 $firstcheck = \Carbon\Carbon::parse($systemdate);
                 $secondcheck = \Carbon\Carbon::parse($license);
-                if($secondcheck >$firstcheck ){ return 'valid';}else{return 'notvalid';}
+                if($secondcheck >$firstcheck ){ return 'valid';}else{return 'notvalid'. $secondcheck .'>'. $firstcheck;}
             } catch (DecryptException $th) {
                return 'failed';
             }

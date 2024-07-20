@@ -63,7 +63,22 @@
                             <span class="s-text">Intake</span>
                         </a>
                         <ul>
-                            <li><a href="#">Add Property</a></li>
+                            @foreach ($valintake as $abc)
+                            <li><a href="{{url (trim($abc->descriptionroute)) }}">
+                                {{$abc->eventdescription}}</a></li>
+                            @endforeach                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <a href="#" class="waves-effect  waves-light">
+                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-receipt"></i></span>
+                            <span class="s-text">Approval</span>
+                        </a>
+                        <ul>
+                            @foreach ($valapprove as $abc)
+                            <li><a href="{{url (trim($abc->descriptionroute)) }}">
+                                {{$abc->eventdescription}}</a></li>
+                            @endforeach
                         </ul>
                     </li>
                     <li class="with-sub">
@@ -73,17 +88,10 @@
                             <span class="s-text">Declined</span>
                         </a>
                         <ul>
-                            <li><a href="#">Add Lease</a></li>
-                        </ul>
-                    </li>
-                    <li class="with-sub">
-                        <a href="#" class="waves-effect  waves-light">
-                            <span class="s-caret"><i class="fa fa-angle-down"></i></span>
-                            <span class="s-icon"><i class="ti-receipt"></i></span>
-                            <span class="s-text">Approval</span>
-                        </a>
-                        <ul>
-                            <li><a href="#">Profoma Billed</a></li>
+                            @foreach ($valdecline as $abc)
+                            <li><a href="{{url (trim($abc->descriptionroute)) }}">
+                                {{$abc->eventdescription}}</a></li>
+                            @endforeach
                         </ul>
                     </li>
                     <li class="with-sub">
@@ -93,7 +101,10 @@
                             <span class="s-text">Manage </span>
                         </a>
                         <ul>
-                            <li><a href="#">Leases Rates</a></li>
+                            @foreach ($valmanage as $abc)
+                            <li><a href="{{url (trim($abc->descriptionroute)) }}">
+                                {{$abc->eventdescription}}</a></li>
+                            @endforeach
                         </ul>
                     </li>
                     <li class="with-sub">

@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 class ValManageController extends Controller
 {
+public function __construct(){
+   $this->middleware(['loginauth']);
+}
 public function listallclient(){
         $arr['client']   = DB::table('clienttype')
               ->select('*')->get();

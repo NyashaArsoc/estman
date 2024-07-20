@@ -1,7 +1,7 @@
 @php
     $title = 'Dashboard';
 @endphp
-@extends('layout.main-layout')
+@extends('layout.val-main-menu')
 @section('title', 'Valuations Dashboard')
 
 @section('content')

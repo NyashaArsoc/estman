@@ -204,6 +204,8 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/{propid}/view-single/{instr_id}/printing', 'viewsingleprint')->name('valapp.viewsinglpri');
     Route::get('/val/list/invoicing', 'listallinstructioninvoice')->name('valapp.listinvoice');
     Route::get('/val/{propid}/view-single/{instr_id}/invoice', 'viewsingleinvoicing')->name('valapp.viewsinglinvo');
+    Route::get('/val/{propid}/view-single/{instr_id}/acknowledgement', 'viewsingleacknowledge')->name('valapp.viewsinglackn');
+   
 });
 Route::controller(ValDeclinedController::class)->group(function(){
     Route::get('/val/list/acknowledgement/declined', 'listalldeclinedacknowledgement')->name('valdec.listackn');

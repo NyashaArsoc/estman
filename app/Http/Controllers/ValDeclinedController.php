@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 class ValDeclinedController extends Controller
 {
+public function __construct(){
+ $this->middleware(['loginauth']);
+}
 public function listalldeclinedacknowledgement(){
     $arr['type']   = DB::table('clienttype')
     ->select('id','description')->get();

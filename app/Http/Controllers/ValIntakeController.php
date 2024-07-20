@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 class ValIntakeController extends Controller
 {
+public function __construct(){
+    $this->middleware(['loginauth']);
+}
 public function addclientdetails(){
     $arr['type']   = DB::table('clienttype')
           ->select('id','description')->get();

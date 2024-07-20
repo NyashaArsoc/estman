@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class ValApprovalController extends Controller
 {
+public function __construct(){
+     $this->middleware(['loginauth']);
+}
+
 public function listallinstructionacknowledgement(){
     $arr['type']   = DB::table('clienttype')
     ->select('id','description')->get();
