@@ -10,6 +10,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ValApprovalController;
+use App\Http\Controllers\ValDeclinedController;
 use App\Http\Controllers\ValIntakeController;
 use App\Http\Controllers\ValManageController;
 use Illuminate\Support\Facades\Route;
@@ -203,4 +204,8 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/{propid}/view-single/{instr_id}/printing', 'viewsingleprint')->name('valapp.viewsinglpri');
     Route::get('/val/list/invoicing', 'listallinstructioninvoice')->name('valapp.listinvoice');
     Route::get('/val/{propid}/view-single/{instr_id}/invoice', 'viewsingleinvoicing')->name('valapp.viewsinglinvo');
+});
+Route::controller(ValDeclinedController::class)->group(function(){
+    Route::get('/val/list/acknowledgement/declined', 'listalldeclinedacknowledgement')->name('valdec.listackn');
+    Route::get('/declined/val/{propid}/view-single/{instr_id}/acknowledgement', 'viewdeclinedsingleacknowledge')->name('valdec.viewsinglackn');
 });
