@@ -568,8 +568,7 @@ $("#btn-val-new-client").click(function () {
             var ClientTypeVal = $("#clienttype").val();
             if(ClientTypeVal == 1){
                 //------------individual------------//
-                validateFirstName(); validateLastName();  validateNationalID();
-                validateCell();validateEmail(); 
+                validateFirstName(); validateLastName(); validateCell();validateEmail(); 
                 if(firstnameError == true && lastnameError == true &&
                     cellError == true && emailError == true){
                         //--------------valid input-----------

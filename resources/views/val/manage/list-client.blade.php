@@ -29,19 +29,24 @@ $description = 'list of all clients ...';
                             </thead>
                             <tbody>@php $count=1;@endphp
                                 @foreach($client as $abc)
-                                   <tr>
+                                   <tr>@php
+                                    if ($abc->clienttypeid == 1){
+                                        $fullname   =  $abc->firstname.' '.$abc->lastname ;
+                                     }else{
+                                         $fullname   =  $abc->companyname;
+                                     }@endphp
                                     <td>{{$count ++}}</td>
-                                    <td>{{$abc->id}}</td>
-                                    <td>{{$abc->id}}</td>
-                                    <td>{{$abc->id}}</td>
-                                    <td>{{$abc->id}}</td>
+                                    <td>{{$abc->description}}</td>
+                                    <td>{{$fullname}}</td>
+                                    <td>{{$abc->cell}}</td>
+                                    <td>{{$abc->email}}</td>
                                     @php $id= Crypt::encrypt($abc->id); @endphp
-                                    <td><a class="btn btn-info btn-sm " id=""
-                                        href=""
-                                        title="assign"><i class="ti-eye mr-0-5"></i>view</a>
-                                        <a class="btn btn-secondary btn-sm " id=""
-                                        href=""
-                                        title="assign"><i class="ti-pencil mr-0-5"></i>edit</a>
+                                    <td>@if (in_array(3,$arraycontrolids))<a class="btn btn-info btn-sm 
+                                        " id=""href="{{route('valman.viewclient', $id)}}"
+                                        title="view"><i class="ti-eye mr-0-5"></i>view</a>@endif
+                                        {{-- @if (in_array(2,$arraycontrolids))<a class="btn btn-secondary btn-sm 
+                                        " id=""href="{{route('valman.editclient', $id)}}"
+                                        title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>@endif --}}
                                     </td>
                                 </tr>
                                 @endforeach

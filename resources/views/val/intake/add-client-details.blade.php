@@ -22,9 +22,9 @@ $description = 'add new client to the system...'; @endphp
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
             <form class="form-material material-primary" id="defaultform" method="POST"
-                action="{{ route('landlord.addlandlord') }}">@csrf
+                action="{{ route('valin.addnewclient') }}">@csrf
                 <div class="form-group row">
-                    <label for="ClientType" class="col-sm-2 form-control-label">Type<i class="text-danger">*</i></label>
+                    <label for="ClientType" class="col-sm-2 form-control-label">Type</label>
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="clienttype" id="clienttype"
                             onchange="LandlordCreationType(this)" />
@@ -40,7 +40,7 @@ $description = 'add new client to the system...'; @endphp
                 <div id="IndividualGroup" class="dropdwn">
                     <div class="form-group row">
                         <label for="FirstName" class="col-sm-2 form-control-label">First Name
-                            <i class="text-danger">*</i>
+                            
                         </label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="firstname" name="firstname"
@@ -48,7 +48,7 @@ $description = 'add new client to the system...'; @endphp
                         <small id="firstnamecheck" style="color: red;"> first name is required</small>
                         </div>
                         <label for="LastName" class="col-sm-2 form-control-label">Last Name
-                            <i class="text-danger">*</i>
+                            
                         </label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="lastname" name="lastname"
@@ -60,7 +60,7 @@ $description = 'add new client to the system...'; @endphp
                 <div id="CorporateGroup" class="dropdwn">
                     <div class="form-group row">
                         <label for="CompanyName" class="col-sm-2 form-control-label">Company Name 
-                            <i class="text-danger">*</i>
+                            
                         </label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="companyname" name="companyname"
@@ -71,7 +71,7 @@ $description = 'add new client to the system...'; @endphp
                 </div>
                 <div class="form-group row">
                     <label for="Cell" class="col-sm-2 col-form-label">Cell
-                        <i class="text-danger">*</i>
+                        
                     </label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="cell" name="cell" placeholder="cell"
@@ -80,15 +80,15 @@ $description = 'add new client to the system...'; @endphp
                     </div>
                     <label for="Tel" class="col-sm-2 col-form-label">Tel</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="Tel" name="Tel"
+                        <input type="text" class="form-control" id="tel" name="tel"
                             placeholder="024456787/9" onkeypress='' autocomplete="off">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="ContactAddress" class="col-sm-2 col-form-label">Contact Address</label>
                     <div class="col-sm-4">
-                        <textarea type="text" class="form-control" name="ContactAddress" rows="2" cols="3"
-                            id="ContactAddress"></textarea>
+                        <textarea type="text" class="form-control" name="contactaddress" rows="2" cols="3"
+                            id="contactaddress"></textarea>
                     </div>
                     <label for="Email" class="col-sm-2 col-form-label">Email
                     </label>
@@ -103,7 +103,7 @@ $description = 'add new client to the system...'; @endphp
                     <h5>company contact person </h5>
                     <div class="form-group row">
                         <label for="FirstName" class="col-sm-2 form-control-label">First Name
-                            <i class="text-danger">*</i>
+                            
                         </label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="contactfirstname" 
@@ -113,7 +113,7 @@ $description = 'add new client to the system...'; @endphp
                         </div>
 
                         <label for="LastName" class="col-sm-2 form-control-label">Last Name
-                            <i class="text-danger">*</i>
+                            
                         </label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="contactlastname" 
@@ -124,7 +124,7 @@ $description = 'add new client to the system...'; @endphp
                     </div>
                     <div class="form-group row">
                         <label for="Cell" class="col-sm-2 col-form-label">Cell
-                            <i class="text-danger">*</i>
+                            
                         </label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="contactcell" name="contactcell"
@@ -132,7 +132,7 @@ $description = 'add new client to the system...'; @endphp
                              <small id="contactcellcheck" style="color: red;">cell is required</small>
                         </div>
                         <label for="Email" class="col-sm-2 col-form-label">Email
-                            <i class="text-danger">*</i>
+                            
                         </label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="contactemail" name="contactemail"

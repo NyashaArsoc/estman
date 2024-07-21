@@ -1,6 +1,10 @@
 @php
 $title = 'View Client Details';
 $description = 'Below are the details of the client.';
+if ($client->clienttypeid == 1){
+$fullname   =  $client->firstname.' '.$client->lastname ;
+  }else{
+  $fullname   =  $client->companyname; }
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'View Client Details')
@@ -38,23 +42,23 @@ $description = 'Below are the details of the client.';
                     <tbody>
                         <tr>
                             <td><strong>Name:</strong></td>
-                            <td>$client->firstname ?? </td>
+                            <td>{{$fullname ?? ''}}</td>
                         </tr>
                         <tr>
                             <td><strong>Contact Cell:</strong></td>
-                            <td>$client->middlename ?? </td>
+                            <td>{{$client->cell ?? ''}}</td>
                         </tr>
                         <tr>
                             <td><strong>Tel:</strong></td>
-                            <td>$client->lastname ?? </td>
+                            <td>{{$client->tel ?? ''}} </td>
                         </tr>
                         <tr>
                             <td><strong>Email:</strong></td>
-                            <td>$client->idnumber ?? </td>
+                            <td>{{$client->email ?? ''}} </td>
                         </tr>
                         <tr>
                             <td><strong>Contact Address:</strong></td>
-                            <td>$client->gender ?? </td>
+                            <td>{{$client->contactaddress ?? ''}} </td>
                         </tr>
                     </tbody>
                 </table>
@@ -69,17 +73,28 @@ $description = 'Below are the details of the client.';
                             <th>Cell</th>
                             <th>Email</th>
                             <th>Status</th>
-                            <th>Option</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody>@php $count=1;@endphp
+                        @foreach($contact as $abc)
                         <tr>
-                            <td>$employ->ecnumber ?? </td>
-                            <td>$employ->ecnumber ?? </td>
-                            <td>$employ->ecnumber ?? </td>
-                            <td>$employ->ecnumber ?? </td>
-                            <td>$employ->ecnumber ?? </td>
+                            @php
+                            $id = Crypt::encrypt($abc->id);
+                            if(trim($abc->isavailable)=='Y'){
+                                $status = 'available';
+                                $badge = 'badge badge-pill bg-success badge-secondary';
+                            }else{
+                                $status = 'inactive';
+                                $badge = 'badge badge-pill bg-danger badge-secondary';
+                            }
+                        @endphp
+                            <td>{{$count ++}}</td>
+                            <td>{{$abc->firstname }} {{$abc->lastname }}</td>
+                            <td>{{$abc->cell}} </td>
+                            <td>{{$abc->email}} </td>
+                            <td><span class="{{ $badge }}">{{ $status }}</span></td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

@@ -178,7 +178,9 @@ Route::controller(ReportController::class)->group(function(){
     Route::get('/print/lease/statement', 'printleasestatement')->name('report.printstatement');
 });
 Route::controller(ValIntakeController::class)->group(function(){
-    Route::get('/val/add/client', 'addclientdetails')->name('valin.addclient');
+    Route::get('/val/add/client', 'addclientdetails')->name('valin.addclient'); /*done*/
+    Route::any('/val/add/new/client', 'addnewclientdetails')->name('valin.addnewclient');/*done*/
+
     Route::get('/val/add/property', 'addpropertydetails')->name('valin.addprop');
     Route::get('/val/add/new/portfolio', 'createportfolio')->name('valin.crtportfoli');
     Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');
@@ -187,9 +189,9 @@ Route::controller(ValIntakeController::class)->group(function(){
        
 });
 Route::controller(ValManageController::class)->group(function(){
-    Route::get('/val/list/client', 'listallclient')->name('valman.listclient');
+    Route::get('/val/list/client', 'listallclient')->name('valman.listclient');/*done*/
     Route::get('/val/{id}/client/edit', 'editsingleclient')->name('valman.editclient');
-    Route::get('/val/{id}/client/view', 'viewsingleclient')->name('valman.viewclient');
+    Route::get('/val/{id}/client/view', 'viewsingleclient')->name('valman.viewclient');/*done*/
 });
 Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/list/acknowledgement', 'listallinstructionacknowledgement')->name('valapp.listackn');
