@@ -327,40 +327,8 @@ function validateContactCell() {
          $("#propertytypecheck").hide();
      }
  }
-  //valid property province
-  $("#propertyprovincecheck").hide();
-  let propertyprovinceError = true;
-  $("#propertyprovince").keyup(function () {
-     validatePropertyProvince();
-  });
-  function validatePropertyProvince() {
-      let textValue = $("#propertyprovince").val();
-      if (textValue.length == "") {
-          $("#propertyprovincecheck").show();
-          propertyprovinceError = false;
-          return false;
-      } else {
-        propertyprovinceError = true;
-          $("#propertyprovincecheck").hide();
-      }
-  }
-   //valid property town
-   $("#propertytowncheck").hide();
-   let propertytownError = true;
-   $("#propertytown").keyup(function () {
-      validatePropertyTown();
-   });
-   function validatePropertyTown() {
-       let textValue = $("#propertytown").val();
-       if (textValue.length == "") {
-           $("#propertytowncheck").show();
-           propertytownError = false;
-           return false;
-       } else {
-        propertytownError = true;
-           $("#propertytowncheck").hide();
-       }
-   }
+
+
     //valid property surbub
     $("#propertysurbubcheck").hide();
     let propertysurbubError = true;
@@ -605,18 +573,15 @@ $("#btn-val-new-client").click(function () {
 $("#add-new-property").click(function () {
     var propertyaddress				=	$('#propertyaddress').val();
 	var propertytype				=	$('#propertytype').val();
-	var propertyprovince			=	$('#propertyprovince').val();
-	var propertytown			    =	$('#propertytown').val();
 	var propertysurbub				=	$('#propertysurbub').val();
     var count = $('#tblnewpropertydetails tr').length - 1;
 
-    validatePropertyType();validatePropertyTown();validatePropertyProvince();
+    validatePropertyType();
     validatePropertySurbub();validatePropertyAddress();
     try {
-        if (propertyaddressError == true && propertyprovinceError==true && propertysurbubError==true
-            && propertytownError== true && propertytypeError== true ){
-        $('#tblnewpropertydetails tbody').append('<tr class="child"><td>'+count+'</td><td><input name="propertytype[]" class="form-control" value='+propertytype+' readonly/></td><td><input name="propertyprovince[]" class="form-control" value='+propertyprovince+' readonly /></td><td><input name="propertytown[]" class="form-control" value='+propertytown+' readonly /></td><td> <input name="propertysurbub[]" class="form-control " value='+propertysurbub+' readonly/></td><td><textarea name="propertyaddress[]" class="form-control" rows="2" cols="4" readonly>'+propertyaddress+'</textarea></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="Delete" onclick="deletenewpropertyrow(this)">Delete</button></td></tr>');
-		$('#propertyaddress').val('');$('#propertytype').val('');$('#propertyprovince').val(''); $('#propertytown').val(''); $('#propertysurbub').val(''); 
+        if (propertyaddressError == true && propertysurbubError==true && propertytypeError== true ){
+        $('#tblnewpropertydetails tbody').append('<tr class="child"><td>'+count+'</td><td><input name="propertytype[]" class="form-control" value='+propertytype+' readonly/></td><td> <input name="propertysurbub[]" class="form-control " value='+propertysurbub+' readonly/></td><td><textarea name="propertyaddress[]" class="form-control" rows="2" cols="4" readonly>'+propertyaddress+'</textarea></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="Delete" onclick="deletenewpropertyrow(this)">Delete</button></td></tr>');
+		$('#propertyaddress').val('');$('#propertytype').val(''); $('#propertysurbub').val(''); 
 		
         return true;
         }else{
@@ -676,6 +641,18 @@ $("#btn-val-instr-normal-1").click(function () {
     validateInstructionPortfolioName();
     try {
         if(valuernameError==true &&portfolionameError==true  )
+            { return true; }
+        else{ return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+// add val new property
+$("#btn-val-new-property").click(function () {
+    validatePropertyClientName();
+    try {
+        if(propertyclientnameError )
             { return true; }
         else{ return false; }
     } catch (err) {

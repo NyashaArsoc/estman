@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ValIntakeController extends Controller
 {
@@ -58,10 +59,53 @@ public function addnewclientdetails(Request $request){
         ->with('error', 'failed to load');
     }
 }
+/*get client by clienttype id*/
+public function getsingleclient($id){
+    $arr['client']   =DB::table('valclientdetail')->where('clienttypeid',$id)
+          ->select('*')->get();
+   return view('val.intake.get-all-clients')->with($arr);
+}
 public function addpropertydetails(){
-    $arr['type']   = DB::table('clienttype')
+    try {
+        $arr['type']   = DB::table('clienttype')
           ->select('id','description')->get();
+    $arr['proptype']   = DB::table('propertytype')
+          ->select('id','description')->get();
+    $arr['town']   = DB::table('vallocations')
+          ->select('*')->get();
    return view('val.intake.add-new-property')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.val') 
+            ->with('error', 'failed to load');
+    }
+}
+public function addnewpropertydetails(Request $request){
+try {
+    // $validaddress = Validator::make($request->all(), [
+    //     'propertyaddress' => 'required|min:5|max:255'
+    // ]);
+    // if ($validaddress->fails()) {
+    //     return  redirect()->route('valin.addprop') 
+    //     ->with('error', 'address is required');
+    // }
+    $numbersinarray         =       count($request->propertyaddress);
+    $a = 0;
+            while ($a   <   $numbersinarray){
+                $propertytypeid = strstr($request->propertytype[$a], "-", true);
+                $suburbid = strstr($request->propertysurbub[$a], "-", true);
+                DB::table('valclientproperty')
+                ->insert(['clientid'=>$request->propertyclientname,'propertytypeid'=>$propertytypeid,
+                    'suburbid'=>$suburbid,'streetaddress'=>$request->propertyaddress[$a],
+                'operatorid'=>session('alluser')]);
+                $a++;
+            }
+        return  redirect()->route('valin.addprop') 
+            ->with('success', 'properties added'); 
+
+} catch (\Throwable $th) {
+    return  redirect()->route('valin.addprop') 
+        ->with('error', 'failed to load'.$th);
+}
 }
 public function createportfolio(){
     $arr['type']   = DB::table('clienttype')

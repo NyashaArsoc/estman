@@ -8,7 +8,7 @@
                     <div class="box b-a-0">
                         <div class="p-2 text-xs-center">
                             <h3>PAGE FORBIDDEN</h3>
-                            <a class="btn btn-warning btn-sm "  href="{{route('dash.property')}}"
+                            <a class="btn btn-warning btn-sm "  href="{{route('dash.val')}}"
                                 title="back"><i class="ti-back-left mr-0-5"></i>back</a>
                         </div>
                         

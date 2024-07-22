@@ -107,3 +107,14 @@ function getCreditorBalance() {
         	}
 	});
 }
+// get val active clients
+function getvalclient() {
+    var textValue = $("#clienttype").val();
+	$.ajax({          
+        	type: "GET",
+        	url: "/val/"+textValue+"/client/type", 
+        	success: function(data){
+        		$("#propertyclientname").html(data);
+        	}
+	});
+}

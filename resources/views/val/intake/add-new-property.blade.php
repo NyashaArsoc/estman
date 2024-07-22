@@ -23,12 +23,12 @@ $description = 'add property to the system...';
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
             <form class="form-material material-primary" id="defaultform" method="POST"
-            action="{{ route('property.addproperty') }}" > @csrf
+            action="{{ route('valin.addnewprop') }}" > @csrf
                 <div class="form-group row">
                     <label for="" class="col-sm-2 form-control-label">Client Type </label>
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="clienttype"
-                            id="clienttype" />
+                            id="clienttype" onchange="getvalclient();"/>
                         <option value="">Select Client Type</option>
                         @foreach ($type as $typ)
                             <option value="{{ $typ->id }}"> {{ $typ->description }}
@@ -52,8 +52,6 @@ $description = 'add property to the system...';
 								<tr>
 								<th class="text-center">No</th>
 								<th class="text-center">Type</th>
-								<th class="text-center">Province</th>
-								<th class="text-center">Town</th>
 								<th class="text-center">Surbub</th>
 								<th class="text-center"> Street   Address</th>
 								<th class="text-center">Option</th>
@@ -65,45 +63,25 @@ $description = 'add property to the system...';
 									<select class="js-example-basic-single w-100" name="propertytype"
 								id="propertytype"  tabindex="1"/>
                                 <option value="">Type</option>
-                                @foreach($type as $abc)
-                                <option value="{{ $abc->id }}">  {{ $abc->description }}
+                                @foreach($proptype as $abc)
+                                <option value="{{ $abc->id.'-'.$abc->description }}">  {{ $abc->description }}
                                 </option>@endforeach
                                 </select>
                                 <small id="propertytypecheck" style="color: red;">required</small>
                                     </td>
                                     <td>
-                                        <select class="js-example-basic-single w-100" name="propertyprovince"
-                                        id="propertyprovince" />
-                                        <option value="">Province </option>
-                                        @foreach($type as $abc)
-                                        <option value="{{ $abc->id }}">  {{ $abc->description }}
-                                        </option>@endforeach
-                                        </select>
-                                        <small id="propertyprovincecheck" style="color: red;">required</small>
-                                    </td>
-                                    <td>
-                                        <select class="js-example-basic-single w-100" name="propertytown"
-                                        id="propertytown"/>
-                                        <option value="">Town </option>
-                                        @foreach($type as $abc)
-                                        <option value="{{ $abc->id }}">  {{ $abc->description }}
-                                        </option>@endforeach
-                                        </select>
-                                        <small id="propertytowncheck" style="color: red;">required</small>
-                                    </td>
-                                    <td>
                                         <select class="js-example-basic-single w-100" name="propertysurbub"
                                         id="propertysurbub"/>
-                                        <option value="">Surbub </option>
-                                        @foreach($type as $abc)
-                                        <option value="{{ $abc->id }}">  {{ $abc->description }}
+                                        <option value="">Suburb </option>
+                                        @foreach($town as $abc)
+                                        <option value="{{ $abc->id.'-'.$abc->suburb}}">  {{ trim($abc->suburb.' - '.$abc->town) }} 
                                         </option>@endforeach
                                         </select>
                                         <small id="propertysurbubcheck" style="color: red;">required </small>
                                     </td>   
                                     <td>
                                         <textarea type="text" class="form-control" 
-                                        name="propertyaddress" rows="2" cols="4" id="propertyaddress"></textarea>
+                                        name="propertyaddress" rows="2" cols="12" id="propertyaddress"></textarea>
                                             <small id="propertyaddresscheck" style="color: red;"> required</small>
                                     </td>                                       
 									<td align="center" colspan="2">
@@ -118,10 +96,12 @@ $description = 'add property to the system...';
 						</table>
 					</div><br />
                     <div class="form-group row">
+                        @if (in_array(1,$arraycontrolids))
                         <div class="offset-sm-2 col-sm-10">
                             <button type="submit" class="btn btn-primary" id="btn-val-new-property" >
                                 submit</button>
                         </div>
+                        @endif
                     </div>
                 @include('layout.arlet')
             </form>

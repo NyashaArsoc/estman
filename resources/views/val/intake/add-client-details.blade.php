@@ -88,7 +88,7 @@ $description = 'add new client to the system...'; @endphp
                     <label for="ContactAddress" class="col-sm-2 col-form-label">Contact Address</label>
                     <div class="col-sm-4">
                         <textarea type="text" class="form-control" name="contactaddress" rows="2" cols="3"
-                            id="contactaddress"></textarea>
+                            id="ContactAddress"></textarea>
                     </div>
                     <label for="Email" class="col-sm-2 col-form-label">Email
                     </label>

@@ -180,8 +180,9 @@ Route::controller(ReportController::class)->group(function(){
 Route::controller(ValIntakeController::class)->group(function(){
     Route::get('/val/add/client', 'addclientdetails')->name('valin.addclient'); /*done*/
     Route::any('/val/add/new/client', 'addnewclientdetails')->name('valin.addnewclient');/*done*/
-
-    Route::get('/val/add/property', 'addpropertydetails')->name('valin.addprop');
+    Route::get('/val/{id}/client/type', 'getsingleclient');/*done*/
+    Route::any('/val/add/property', 'addpropertydetails')->name('valin.addprop');/*done*/
+    Route::any('/val/add/new/property', 'addnewpropertydetails')->name('valin.addnewprop');
     Route::get('/val/add/new/portfolio', 'createportfolio')->name('valin.crtportfoli');
     Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');
     Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');
