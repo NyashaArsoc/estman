@@ -165,7 +165,7 @@ public function getlicensecheck(){
                 $systemdate = $this->systemdate();
                 $firstcheck = \Carbon\Carbon::parse($systemdate);
                 $secondcheck = \Carbon\Carbon::parse($license);
-                if($secondcheck >$firstcheck ){ return 'valid';}else{return 'notvalid'. $secondcheck .'>'. $firstcheck;}
+                if($secondcheck >$firstcheck ){ return 'valid';}else{return 'notvalid';}
             } catch (DecryptException $th) {
                return 'failed';
             }

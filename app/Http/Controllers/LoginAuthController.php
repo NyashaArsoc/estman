@@ -18,7 +18,7 @@ public function userlogin(Request $request){
         try {
           // get the login validation
         $login = collect(DB::select('EXEC  spPostUserLogin ?',
-        array($request->username)))->first();
+        [$request->username]))->first();
         if($login->username == 'blocked'){
             return  redirect()->route('login.signin') 
                 ->with('error', 'user blocked');
@@ -54,15 +54,18 @@ public function userlogin(Request $request){
                     }else{ 
                         //check license
                         $license    =   $this->getlicensecheck();
-                        if($license=='failed'){
-                            $error = 'invalid license key';
-                           return $this->userforcelogout($error);
-                        }else if($license=='notvalid'){
-                            $error = 'license expired';
+                        switch ($license){
+                            case 'failed':
+                                $error = 'invalid license key';
+                                return $this->userforcelogout($error);
+                            case 'notvalid':
+                                $error = 'license expired';
+                                return $this->userforcelogout($error);
+                            case 'valid':
+                                return  redirect()->route('dash.val');
+                            default:
+                            $error = 'invalid login';
                             return $this->userforcelogout($error);
-                        }else if($license=='valid'){
-                           //valid license
-                            return  redirect()->route('dash.val');
                         }
                     }
                 }   

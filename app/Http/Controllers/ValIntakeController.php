@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -65,6 +67,11 @@ public function getsingleclient($id){
           ->select('*')->get();
    return view('val.intake.get-all-clients')->with($arr);
 }
+public function getsingleclientcontact($id){
+    $arr['client']   =DB::table('valclientcontactperson')->where('clientid',$id)
+    ->where('isavailable','=','Y')  ->select('*')->get();
+   return view('val.intake.get-all-client-contacts')->with($arr);
+}
 public function addpropertydetails(){
     try {
         $arr['type']   = DB::table('clienttype')
@@ -81,13 +88,6 @@ public function addpropertydetails(){
 }
 public function addnewpropertydetails(Request $request){
 try {
-    // $validaddress = Validator::make($request->all(), [
-    //     'propertyaddress' => 'required|min:5|max:255'
-    // ]);
-    // if ($validaddress->fails()) {
-    //     return  redirect()->route('valin.addprop') 
-    //     ->with('error', 'address is required');
-    // }
     $numbersinarray         =       count($request->propertyaddress);
     $a = 0;
             while ($a   <   $numbersinarray){
@@ -104,7 +104,7 @@ try {
 
 } catch (\Throwable $th) {
     return  redirect()->route('valin.addprop') 
-        ->with('error', 'failed to load'.$th);
+        ->with('error', 'failed to load');
 }
 }
 public function createportfolio(){
@@ -120,11 +120,81 @@ public function addinstructionportfolio(){
 public function addinstructionnormal(){
     $arr['type']   = DB::table('clienttype')
     ->select('id','description')->get();
+    $arr['purpose']   = DB::table('valpurpose')
+    ->select('id','description')->get();
+    $arr['valtype']   = DB::table('valtype')
+    ->select('id','description')->get();
+    $arr['payment']   = DB::table('valpaymentagreement')
+    ->select('id','description')->get();
+    $arr['valuer'] = DB::select('EXEC spValGetValuers');
 return view('val.intake.new-instruction-normal-1')->with($arr);
 }
-public function listpropertyallocatesteptwo($id,$valuerid,$portfolioid){
-    $arr['type']   = DB::table('clienttype')
-    ->select('id','description')->get();
-return view('val.intake.new-instruction-step-2')->with($arr);
+public function addinstructionnormalsubmit(Request $request){
+        try{
+        $id = Crypt::encrypt($request->propertyclientname);
+        $vid = Crypt::encrypt($request->valuername);
+        $cid = Crypt::encrypt($request->clientcontactname);
+        $pid = Crypt::encrypt($request->valuationpurpose);
+        $tid = Crypt::encrypt($request->valuationtype);
+        $payid = Crypt::encrypt($request->valuationpaymentagreement);
+        return  redirect()->route('valin.lstpropallo',[$id,$vid,$cid,$pid,$tid,$payid]);
+     } catch (DecryptException $th) {
+         return  redirect()->route('valin.addinstnom') 
+                 ->with('error', 'failed to load');
+     }
+}
+public function addinstructionnormalsteptwo($id,$vid,$cid,$pid,$tid,$payid){
+    try{
+        $clientid = Crypt::decrypt($id);
+        $valuerid = Crypt::decrypt($vid);
+        $contactid = Crypt::decrypt($cid);
+        $purposeid = Crypt::decrypt($pid);
+        $typeid = Crypt::decrypt($tid);
+        $paymentid = Crypt::decrypt($payid);
+        try {
+            $arr['user']   = DB::table('systusers')->where('id',$valuerid)
+            ->select('*')->first();
+        $arr['contact']   = DB::table('valclientcontactperson')->where('id',$contactid)
+        ->select('*')->first();
+        $arr['purpose']   = DB::table('valpurpose')->where('id',$purposeid)
+        ->select('*')->first();
+        $arr['valtype']   = DB::table('valtype')->where('id',$typeid)
+        ->select('*')->first();
+        $arr['payment']   = DB::table('valpaymentagreement')->where('id',$paymentid)
+        ->select('*')->first();
+            $arr['property'] = DB::select('EXEC spValGetInstrPropertyToCapture ?',[$clientid]);
+        return view('val.intake.new-instruction-step-2')->with($arr);
+        } catch (\Throwable $th) {
+            return  redirect()->route('valin.addinstnom') 
+                ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+        return  redirect()->route('valin.addinstnom') 
+                ->with('error', 'failed to load');
+    }
+}
+public function addnewinstructionnormal(Request $request){
+    try {  
+        $selectedids = $request->input('selectedids');
+        $NumbersInArray         =       count($selectedids);
+        $a  = 0;
+        while ($a   <   $NumbersInArray){
+            $id = DB::table('valinstructions') ->insertGetId(['allocatedto'=>$request
+            ->allocateto,'propertyid'=>$selectedids[$a],'operatorid'=>session('alluser'), 
+            'purpose'=>$request->purpose,'type'=>$request->valtype,'paymentterms'=>$request->payment,
+            'contactid'=>$request->contact]);
+
+            DB::table('valinstracknowledgement')
+            ->insert(['instructionid'=>$id,'operatorid'=>session('alluser'),
+            'allocatedto'=>$request->user,]);
+            $a++;
+        }
+        return  redirect()->route('valin.addinstnom') 
+            ->with('success', 'instruction created');
+        
+    } catch (\Throwable $th) {
+        return  redirect()->route('valin.addinstnom') 
+                ->with('error', 'failed to load');
+    }
 }
 }

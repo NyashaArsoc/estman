@@ -118,3 +118,14 @@ function getvalclient() {
         	}
 	});
 }
+// get val client contact person 
+function getvalclientcontact() {
+    var textValue = $("#propertyclientname").val();
+	$.ajax({          
+        	type: "GET",
+        	url: "/val/"+textValue+"/client/contact", 
+        	success: function(data){
+        		$("#clientcontactname").html(data);
+        	}
+	});
+}

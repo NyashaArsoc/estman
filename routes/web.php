@@ -181,12 +181,15 @@ Route::controller(ValIntakeController::class)->group(function(){
     Route::get('/val/add/client', 'addclientdetails')->name('valin.addclient'); /*done*/
     Route::any('/val/add/new/client', 'addnewclientdetails')->name('valin.addnewclient');/*done*/
     Route::get('/val/{id}/client/type', 'getsingleclient');/*done*/
+    Route::get('/val/{id}/client/contact', 'getsingleclientcontact');/*done*/
     Route::any('/val/add/property', 'addpropertydetails')->name('valin.addprop');/*done*/
-    Route::any('/val/add/new/property', 'addnewpropertydetails')->name('valin.addnewprop');
+    Route::any('/val/add/new/property', 'addnewpropertydetails')->name('valin.addnewprop');/*done*/
     Route::get('/val/add/new/portfolio', 'createportfolio')->name('valin.crtportfoli');
-    Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');
-    Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');
-    Route::get('/val/{id}/new/{valuerid}/instruction/{typeid}', 'listpropertyallocatesteptwo')->name('valin.lstpropallo');
+    Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');/*done*/
+    Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');/*done*/
+    Route::any('/val/submit/page/normal-instr', 'addinstructionnormalsubmit')->name('valin.subnom');/*done*/
+    Route::get('/val/{id}/nom/{vid}/inst/{cid}/pur/{pid}/typ/{tid}/pay/{payid}', 'addinstructionnormalsteptwo')->name('valin.lstpropallo');
+    Route::any('/val/add/new/normal-instr', 'addnewinstructionnormal')->name('valin.addnewnom');/*done*/
        
 });
 Route::controller(ValManageController::class)->group(function(){

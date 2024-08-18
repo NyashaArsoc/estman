@@ -245,7 +245,7 @@ function validateContactEmail() {
         contactemailError = false;
         return false;
     } else {
-        const emailvalid = document.getElementById("ContactEmail");
+        const emailvalid = document.getElementById("contactemail");
         emailvalid.addEventListener("blur", () => {
             let regex =
             /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;

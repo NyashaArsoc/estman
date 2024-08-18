@@ -1,4 +1,4 @@
-<option value="" >select client</option>
+<option value="" >pick client</option>
 @foreach($client as $abc)
     @php
         if ($abc->clienttypeid == 1){

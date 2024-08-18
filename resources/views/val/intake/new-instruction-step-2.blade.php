@@ -1,6 +1,6 @@
 @php
 $title = 'Allocate Property';
-$description = 'select properties to allocate...';
+$description = 'select properties to allocate...'; 
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', $title)
@@ -16,20 +16,20 @@ $description = 'select properties to allocate...';
     <h4>{{ $title }}</h4>
     <ol class="breadcrumb no-bg mb-1">
         <li class="breadcrumb-item"><a href="{{route('dash.val')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{route('valin.addinstnom')}}">Initiate</a></li>
         <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
     <div class="box box-block bg-white">
 
         <div class="d-flex flex-row justify-content-between">
             <div>
-                <h5>Valuer Name: </h5>
+                <h5>Valuer Name: {{ $user->firstname }} {{ $user->lastname }}</h5>
                 <p class="font-90 text-muted mb-1">Check the items you want to allocate</p>
             </div>
         </div>
-        <form action="" method="POST" id="defaultform" enctype="multipart/form-data">
-            @csrf
+        <form method="POST" id="defaultform"  action="{{ route('valin.addnewnom') }}" />@csrf
             <div>
-                <button type="submit" class="btn btn-primary" id="btn-upload-stkbatch">Allocate
+                <button type="submit" class="btn btn-primary" id="btn-allocate">Allocate
                     <span id="selected-items-info"></span>
                 </button>
             </div>
@@ -48,14 +48,14 @@ $description = 'select properties to allocate...';
                     </thead>
                     <tbody>
                         @php $count = 1; @endphp
-                        @foreach($type as $abc)
+                        @foreach($property as $abc)
                         <tr>
                             <td>{{ $count++ }}</td>
-                            <td>{{ $abc->description }}</td>
-                            <td>{{ $abc->description }}</td>
-                            <td>{{ $abc->description }}</td>
+                            <td>{{ $abc->propertytype }}</td>
+                            <td>{{ $abc->town }}</td>
+                            <td>{{ $abc->streetaddress }}</td>
                             <td>
-                                <input type="checkbox" name="selected_serials[]" value="{{ $abc->id }}" class="select-item">
+                                <input type="checkbox" name="selectedids[]" value="{{ $abc->id }}" class="select-item">
                             </td>
                         </tr>
                         @endforeach
@@ -71,6 +71,11 @@ $description = 'select properties to allocate...';
                     </tfoot>
                 </table>
             </div>
+            <input type="text" name="purpose" value="{{$purpose->description}}" hidden><input type="text"
+             name="valtype" value="{{$valtype->description}}" hidden><input type="text" name="payment" 
+             value="{{$payment->description}}" hidden><input type="text" name="contact" 
+             value="{{$contact->id}}" hidden><input type="text" name="user" value="{{$user->id}}" hidden>
+             <input type="text" name="allocateto" value="{{$user->username}}" hidden>
         </form>
         <!-- <div class="mt-3"></div> -->
         @include('layout.arlet')
@@ -83,29 +88,7 @@ $description = 'select properties to allocate...';
 <script src="{{ asset('js/validation/intake.js') }}"></script>
 <script src="{{ asset('css/select2/select2.min.js') }}"></script>
 <script src="{{ asset('js/select2.js') }}"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const selectAllCheckbox = document.getElementById('select-all');
-        const itemCheckboxes = document.querySelectorAll('.select-item');
-        const selectedItemsInfo = document.getElementById('selected-items-info');
-        const allocateButton = document.getElementById('btn-upload-stkbatch');
+<script src="{{ asset('js/button-select-multiple.js') }}"></script>
 
-        function updateSelectedItemsInfo() {
-            const selectedCount = document.querySelectorAll('.select-item:checked').length;
-            // selectedItemsInfo.style.display = selectedCount > 0 ? 'block' : 'none';
-            selectedItemsInfo.textContent = selectedCount > 0 ? `${selectedCount} items selected` : '';
-            allocateButton.disabled = selectedCount === 0;
-        }
-
-        selectAllCheckbox.addEventListener('change', function() {
-            itemCheckboxes.forEach(checkbox => checkbox.checked = selectAllCheckbox.checked);
-            updateSelectedItemsInfo();
-        });
-
-        itemCheckboxes.forEach(checkbox => checkbox.addEventListener('change', updateSelectedItemsInfo));
-
-        updateSelectedItemsInfo(); // Initial check
-    });
-</script>
 <!-- Additional JS End-->
 @endsection
