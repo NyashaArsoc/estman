@@ -109,8 +109,30 @@ try {
 }
 public function createportfolio(){
     $arr['type']   = DB::table('clienttype')
-          ->select('id','description')->get();
+    ->select('id','description')->get();
+    $arr['purpose']   = DB::table('valpurpose')
+    ->select('id','description')->get();
+    $arr['valtype']   = DB::table('valtype')
+    ->select('id','description')->get();
+    $arr['payment']   = DB::table('valpaymentagreement')
+    ->select('id','description')->get();
    return view('val.intake.create-new-portfolio')->with($arr);
+}
+public function createnewportfolio(Request $request){
+    try {  
+        DB::table('valinstrportfolio') ->insert(['datedue'=>$request
+        ->portfolioduedate,'totalproperties'=>$request->totalnumberpropertyportfolio,'operatorid'
+        =>session('alluser'), 'purpose'=>$request->valuationpurpose,'type'=>$request->valuationtype,
+        'paymentterms'=>$request->valuationpaymentagreement,
+        'clientcontactid'=>$request->clientcontactname,'clientid'=>$request->propertyclientname]);
+       
+        return  redirect()->route('valin.crtportfoli') 
+            ->with('success', 'portfolio created');
+        
+    } catch (\Throwable $th) {
+        return  redirect()->route('valin.crtportfoli') 
+                ->with('error', 'failed to load');
+    }
 }
 public function addinstructionportfolio(){
     $arr['type']   = DB::table('clienttype')

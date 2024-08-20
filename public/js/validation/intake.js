@@ -636,11 +636,14 @@ $("#btn-val-instr-normal-1").click(function () {
     }
 });
 // add val new portfolio instruction
-$("#btn-val-instr-normal-1").click(function () {
-    validateValuationValuerName();
-    validateInstructionPortfolioName();
+$("#btn-val-new-portfolio").click(function () {
+    validateValuationPaymentAgreement();validateValuationPurpose();
+    validateValuationType();validateClientContactName();
+    validateInstructionPortfolioName();validateNoOfPortfolioProperty();validatePortfolioDueDate();
     try {
-        if(valuernameError==true &&portfolionameError==true  )
+        if(totalnumberpropertyportfolioError==true && valuationpaymentagreementError==true &&
+            valuationpurposeError==true &&  valuationtypeError==true && clientcontactnameError==true &&
+            portfolioduedateError==true )
             { return true; }
         else{ return false; }
     } catch (err) {

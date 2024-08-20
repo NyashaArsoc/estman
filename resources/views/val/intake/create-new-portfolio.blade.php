@@ -23,12 +23,12 @@ $description = 'create new portfolio...';
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
             <form class="form-material material-primary" id="defaultform" method="POST"
-            action="{{ route('property.addproperty') }}" > @csrf
+            action="{{ route('valin.crtmewport') }}" > @csrf
                 <div class="form-group row">
                     <label for="" class="col-sm-2 form-control-label">Client Type</label>
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="clienttype"
-                            id="clienttype" />
+                            id="clienttype" onchange="getvalclient();"/>
                         <option value="">select client type</option>
                         @foreach ($type as $typ)
                             <option value="{{ $typ->id }}"> {{ $typ->description }}
@@ -40,7 +40,8 @@ $description = 'create new portfolio...';
                 <div class="form-group row">
                     <label for="" class="col-sm-2 col-form-label">Client Name </label>
                     <div class="col-sm-4">
-                        <select class="js-example-basic-single w-100" name="propertyclientname" id="propertyclientname" />
+                        <select class="js-example-basic-single w-100" name="propertyclientname" 
+                        id="propertyclientname" onchange="getvalclientcontact();"/>
                         <option value="">select client name </option>
                         <option value=""> </option>
                         </select>
@@ -60,10 +61,10 @@ $description = 'create new portfolio...';
                         <select class="js-example-basic-single w-100" name="valuationtype"
                             id="valuationtype" />
                         <option value="">select valuation type</option>
-                        @foreach ($type as $typ)
-                            <option value="{{ $typ->id }}"> {{ $typ->description }}
-                            </option>
-                        @endforeach
+                            @foreach ($valtype as $abc)
+                                <option value="{{ $abc->description }}"> {{ $abc->description }}
+                                </option>
+                            @endforeach
                         </select>
                         <small id="valuationtypecheck" style="color: red;">required</small>
                     </div>
@@ -72,8 +73,8 @@ $description = 'create new portfolio...';
                         <select class="js-example-basic-single w-100" name="valuationpurpose"
                             id="valuationpurpose" />
                         <option value="">select purpose</option>
-                        @foreach ($type as $typ)
-                            <option value="{{ $typ->id }}"> {{ $typ->description }}
+                        @foreach ($purpose as $abc)
+                            <option value="{{ $abc->description }}"> {{ $abc->description }}
                             </option>
                         @endforeach
                         </select>
@@ -86,8 +87,8 @@ $description = 'create new portfolio...';
                         <select class="js-example-basic-single w-100" name="valuationpaymentagreement"
                             id="valuationpaymentagreement" />
                         <option value="">payment agreement</option>
-                        @foreach ($type as $typ)
-                            <option value="{{ $typ->id }}"> {{ $typ->description }}
+                        @foreach ($payment as $abc)
+                            <option value="{{ $abc->description }}"> {{ $abc->description }}
                             </option>
                         @endforeach
                         </select>

@@ -184,7 +184,8 @@ Route::controller(ValIntakeController::class)->group(function(){
     Route::get('/val/{id}/client/contact', 'getsingleclientcontact');/*done*/
     Route::any('/val/add/property', 'addpropertydetails')->name('valin.addprop');/*done*/
     Route::any('/val/add/new/property', 'addnewpropertydetails')->name('valin.addnewprop');/*done*/
-    Route::get('/val/add/new/portfolio', 'createportfolio')->name('valin.crtportfoli');
+    Route::get('/val/add/new/portfolio', 'createportfolio')->name('valin.crtportfoli');/*done*/
+    Route::post('/val/create/new/portfolio', 'createnewportfolio')->name('valin.crtmewport');/*done*/
     Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');/*done*/
     Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');/*done*/
     Route::any('/val/submit/page/normal-instr', 'addinstructionnormalsubmit')->name('valin.subnom');/*done*/
