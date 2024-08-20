@@ -135,9 +135,75 @@ public function createnewportfolio(Request $request){
     }
 }
 public function addinstructionportfolio(){
-    $arr['type']   = DB::table('clienttype')
-          ->select('id','description')->get();
-   return view('val.intake.new-instruction-portfolio-1')->with($arr);
+    $arr['valuer'] = DB::select('EXEC spValGetValuers');
+    $arr['port'] = DB::table('valinstrlistportfolio')->where('totalproperties', '>', DB::raw(
+        'ISNULL(CAST(propertiescaptured AS INT),0)'))->select('*')->get();
+            return view('val.intake.new-instruction-portfolio-1')->with($arr);
+}
+public function addinstructionportsubmit(Request $request){
+    try{
+    $id = Crypt::encrypt($request->portfolioname);
+    $vid = Crypt::encrypt($request->valuername);
+    return  redirect()->route('valin.portlstpropallo',[$id,$vid]);
+ } catch (DecryptException $th) {
+     return  redirect()->route('valin.addinstport') 
+             ->with('error', 'failed to load');
+ }
+}
+public function addinstructionportsteptwo($id,$vid){
+    try{
+        $portfolioid = Crypt::decrypt($id);
+        $valuerid = Crypt::decrypt($vid);
+        try {
+        $arr['valuer']   = DB::table('systusers')->where('id',$valuerid)
+            ->select('*')->first();        
+        $arr['port']   = DB::table('valinstrlistportfolio')->where('id',$portfolioid)
+        ->select('*')->first();
+        $arr['property'] = DB::select('EXEC spValGetInstrPropertyToCapture ?',[$arr['port']->clientid]);
+        return view('val.intake.new-instruction-port-step-2')->with($arr);
+        
+        } catch (\Throwable $th) {
+            return  redirect()->route('valin.addinstport') 
+                ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+        return  redirect()->route('valin.addinstport') 
+                ->with('error', 'failed to load');
+    }
+}
+public function addnewinstructionport(Request $request){
+    try {  
+        $port   = DB::table('valinstrlistportfolio')->where('id',$request->portfolio)
+        ->select('*')->first();
+
+        $selectedids = $request->input('selectedids');
+        $NumbersInArray         =       count($selectedids);
+        $a  = 0;
+        $capturedproperties = $port->propertiescaptured + $NumbersInArray;
+        $allproperties = $port->totalproperties -  $capturedproperties;
+        if($allproperties >= 0){
+            while ($a   <   $NumbersInArray){
+                $id = DB::table('valinstructions') ->insertGetId(['allocatedto'=>$request
+                ->allocateto,'propertyid'=>$selectedids[$a],'operatorid'=>session('alluser'), 
+                'portfolioid'=>$request->portfolio,'isportfolio'=>'Y']);
+    
+                DB::table('valinstracknowledgement')
+                ->insert(['instructionid'=>$id,'operatorid'=>session('alluser'),
+                'allocatedto'=>$request->user,]);
+                DB::table('valinstrportfolio')->where('id', $request->portfolio)
+            ->update(['propertiescaptured'=>$capturedproperties]);
+                $a++;
+            }
+            return  redirect()->route('valin.addinstport') 
+                ->with('success', 'instruction created');
+        }else{
+            return  redirect()->route('valin.addinstport') 
+            ->with('error', 'more properties than expected');
+        }
+    } catch (\Throwable $th) {
+        return  redirect()->route('valin.addinstport') 
+                ->with('error', 'failed to load');
+    }
 }
 public function addinstructionnormal(){
     $arr['type']   = DB::table('clienttype')
@@ -174,7 +240,7 @@ public function addinstructionnormalsteptwo($id,$vid,$cid,$pid,$tid,$payid){
         $typeid = Crypt::decrypt($tid);
         $paymentid = Crypt::decrypt($payid);
         try {
-            $arr['user']   = DB::table('systusers')->where('id',$valuerid)
+            $arr['valuer']   = DB::table('systusers')->where('id',$valuerid)
             ->select('*')->first();
         $arr['contact']   = DB::table('valclientcontactperson')->where('id',$contactid)
         ->select('*')->first();
