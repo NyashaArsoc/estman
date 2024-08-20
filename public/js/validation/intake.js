@@ -515,7 +515,7 @@ let portfolionameError = true;
 $("#portfolioname").keyup(function () {
    validateInstructionPortfolioName();
 });
-function validateInstructionPortfolioNames() {
+function validateInstructionPortfolioName() {
     let textValue = $("#portfolioname").val();
     if (textValue.length == "") {
         $("#portfolionamecheck").show();
@@ -656,6 +656,18 @@ $("#btn-val-new-property").click(function () {
     validatePropertyClientName();
     try {
         if(propertyclientnameError )
+            { return true; }
+        else{ return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+// add val new portfolio instruction
+$("#btn-val-instr-portfolio-1").click(function () {
+    validateValuationValuerName();validateInstructionPortfolioName();
+    try {
+        if(valuernameError && portfolionameError==true )
             { return true; }
         else{ return false; }
     } catch (err) {

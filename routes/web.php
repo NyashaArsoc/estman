@@ -187,6 +187,9 @@ Route::controller(ValIntakeController::class)->group(function(){
     Route::get('/val/add/new/portfolio', 'createportfolio')->name('valin.crtportfoli');/*done*/
     Route::post('/val/create/new/portfolio', 'createnewportfolio')->name('valin.crtmewport');/*done*/
     Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');/*done*/
+    Route::any('/val/submit/page/port-instr', 'addinstructionportsubmit')->name('valin.subport');/*done*/
+    Route::get('/val/{id}/port/{vid}/inst', 'addinstructionportsteptwo')->name('valin.portlstpropallo');/*done*/
+    Route::any('/val/add/new/port-instr', 'addnewinstructionport')->name('valin.addnewport');
     Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');/*done*/
     Route::any('/val/submit/page/normal-instr', 'addinstructionnormalsubmit')->name('valin.subnom');/*done*/
     Route::get('/val/{id}/nom/{vid}/inst/{cid}/pur/{pid}/typ/{tid}/pay/{payid}', 'addinstructionnormalsteptwo')->name('valin.lstpropallo');

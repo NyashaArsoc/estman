@@ -16,7 +16,7 @@ $description = 'select properties to allocate...';
     <h4>{{ $title }}</h4>
     <ol class="breadcrumb no-bg mb-1">
         <li class="breadcrumb-item"><a href="{{route('dash.val')}}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{route('valin.addinstnom')}}">Initiate</a></li>
+        <li class="breadcrumb-item"><a href="{{route('valin.addinstport')}}">Initiate</a></li>
         <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
     <div class="box box-block bg-white">
@@ -27,7 +27,7 @@ $description = 'select properties to allocate...';
                 <p class="font-90 text-muted mb-1">Check the items you want to allocate</p>
             </div>
         </div>
-        <form method="POST" id="defaultform"  action="{{ route('valin.addnewnom') }}" />@csrf
+        <form method="POST" id="defaultform"  action="{{ route('valin.addnewport') }}" />@csrf
             <div>
                 <button type="submit" class="btn btn-primary" id="btn-allocate">Allocate
                     <span id="selected-items-info"></span>
@@ -70,11 +70,7 @@ $description = 'select properties to allocate...';
                         </tr>
                     </tfoot>
                 </table>
-            </div>
-            <input type="text" name="purpose" value="{{$purpose->description}}" hidden><input type="text"
-             name="valtype" value="{{$valtype->description}}" hidden><input type="text" name="payment" 
-             value="{{$payment->description}}" hidden><input type="text" name="contact" 
-             value="{{$contact->id}}" hidden><input type="text" name="user" value="{{$valuer->id}}" hidden>
+            </div><input type="text" name="portfolio" value="{{$port->id}}" hidden><input type="text" name="user" value="{{$valuer->id}}" hidden>
              <input type="text" name="allocateto" value="{{$valuer->username}}" hidden>
         </form>
         <!-- <div class="mt-3"></div> -->

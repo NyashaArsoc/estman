@@ -23,15 +23,15 @@ $description = 'create new portfolio instruction...';
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
             <form class="form-material material-primary" id="defaultform" method="POST"
-            action="{{ route('property.addproperty') }}" > @csrf
+            action="{{ route('valin.subport') }}" > @csrf
                 <div class="form-group row">
                     <label for="" class="col-sm-2 form-control-label">Portfolio</label>
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="portfolioname"
                             id="portfolioname" />
                         <option value="">select portfolio</option>
-                        @foreach ($type as $typ)
-                            <option value="{{ $typ->id }}"> {{ $typ->description }}
+                        @foreach ($port as $abc)
+                            <option value="{{ $abc->id }}"> {{ $abc->fullname ?? ''}} {{ $abc->companyname ?? ''}} - {{ $abc->contactperson ?? '' }}
                             </option>
                         @endforeach
                         </select>
@@ -41,7 +41,10 @@ $description = 'create new portfolio instruction...';
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="valuername" id="valuername" />
                         <option value="">select valuer name </option>
-                        <option value=""> </option>
+                        @foreach ($valuer as $abc)
+                        <option value="{{ $abc->userid }}"> {{ $abc->fullname }}
+                        </option>
+                        @endforeach
                         </select>
                         <small id="valuernamecheck" style="color: red;">required</small>
                     </div>
