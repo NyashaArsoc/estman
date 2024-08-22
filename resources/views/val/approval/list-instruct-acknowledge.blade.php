@@ -29,20 +29,26 @@ $description = 'acknowledge instruction ...';
                                 </tr>
                             </thead>
                             <tbody>@php $count=1;@endphp
-                                @foreach($type as $abc)
+                                @foreach($acknow as $abc)
                                    <tr>
+                                    @php
+                                    $status = trim($abc->datestamp)<=trim($abc->datedue) ? 
+                                    '<span class="badge badge-pill bg-danger">overdue</span>'
+                                    : '<span class="badge badge-pill bg-success">pending</span>';  
+                                  @endphp
                                     <td>{{$count ++}}</td>
-                                    <td>{{$abc->id}}</td>
-                                    <td>{{$abc->id}}</td>
-                                    <td>{{$abc->id}}</td>
-                                    <td>{{$abc->id}}</td>
-                                    <td>{{$abc->id}}</td>
-                                    @php $id= Crypt::encrypt($abc->id); @endphp
+                                    <td>{{$abc->companyname ?? ''}} {{$abc->clientfullname ?? ''}}</td>
+                                    <td>{{$abc->contactname}}</td>
+                                    <td>{{$abc->propertytype}}</td>
+                                    <td>{{$abc->streetaddress}}</td>
+                                    <td> {!! $status !!} </td>
+                                    @php $id= Crypt::encrypt($abc->id);$to_id= Crypt::encrypt($abc->allocatedto);
+                                    $instr_id= Crypt::encrypt($abc->instructionid); @endphp
                                     <td><a class="btn btn-info btn-sm " id=""
-                                        href=""
+                                        href="{{route('valapp.viewsinglackn',[$id,$instr_id])}}"
                                         title="view"><i class="ti-eye mr-0-5"></i>view</a>
                                         <a class="btn btn-success btn-sm " id=""
-                                        href=""
+                                        href="{{route('valapp.accptacknow',[$id,$instr_id,$to_id])}}"
                                         title="accept"><i class="ti-check mr-0-5"></i>accept</a>
                                     </td>
                                 </tr>

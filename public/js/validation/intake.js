@@ -526,6 +526,37 @@ function validateInstructionPortfolioName() {
         $("#portfolionamecheck").hide();
     }
 }
+$("#reasonscheck").hide();
+let reasonsError = true;
+$("#reasonsfordecline").keyup(function () {
+    validateReasonsComment();
+});
+function validateReasonsComment() {
+    let textValue = $("#reasonsfordecline").val();
+    if (textValue.length == "") {
+        $("#reasonscheck").show();
+        reasonsError = false;
+        return false;
+    } else if (textValue.length < 3) {
+        $("#reasonscheck").show();
+        $("#reasonscheck").html("**write a proper comment");
+        reasonsError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#reasonscheck").show();
+                $("#reasonscheck").html("**follow the required format");
+                reasonsError = false;
+                return false;
+            }else{
+              reasonsError = true;
+                $("#reasonscheck").hide();
+            }
+    }
+}
+// btn submit 
 
 /*---------------------button submit------------------------------------------*/
 // add val new client
@@ -667,7 +698,7 @@ $("#btn-val-new-property").click(function () {
 $("#btn-val-instr-portfolio-1").click(function () {
     validateValuationValuerName();validateInstructionPortfolioName();
     try {
-        if(valuernameError && portfolionameError==true )
+        if(valuernameError==true && portfolionameError==true )
             { return true; }
         else{ return false; }
     } catch (err) {
@@ -675,6 +706,19 @@ $("#btn-val-instr-portfolio-1").click(function () {
         return false;
     }
 });
+// add val new portfolio instruction
+$("#reject-instruction-ack").click(function () {
+    validateReasonsComment();
+    try {
+        if(reasonsError==true)
+            { return true; }
+        else{ return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+
 
   
   

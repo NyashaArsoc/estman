@@ -189,7 +189,7 @@ Route::controller(ValIntakeController::class)->group(function(){
     Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');/*done*/
     Route::any('/val/submit/page/port-instr', 'addinstructionportsubmit')->name('valin.subport');/*done*/
     Route::get('/val/{id}/port/{vid}/inst', 'addinstructionportsteptwo')->name('valin.portlstpropallo');/*done*/
-    Route::any('/val/add/new/port-instr', 'addnewinstructionport')->name('valin.addnewport');
+    Route::any('/val/add/new/port-instr', 'addnewinstructionport')->name('valin.addnewport');/*done*/
     Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');/*done*/
     Route::any('/val/submit/page/normal-instr', 'addinstructionnormalsubmit')->name('valin.subnom');/*done*/
     Route::get('/val/{id}/nom/{vid}/inst/{cid}/pur/{pid}/typ/{tid}/pay/{payid}', 'addinstructionnormalsteptwo')->name('valin.lstpropallo');
@@ -202,8 +202,10 @@ Route::controller(ValManageController::class)->group(function(){
     Route::get('/val/{id}/client/view', 'viewsingleclient')->name('valman.viewclient');/*done*/
 });
 Route::controller(ValApprovalController::class)->group(function(){
-    Route::get('/val/list/acknowledgement', 'listallinstructionacknowledgement')->name('valapp.listackn');
-    Route::get('/val/{propid}/view-single/{instr_id}/acknowledgement', 'viewsingleacknowledge')->name('valapp.viewsinglackn');
+    Route::get('/val/list/acknowledgement', 'listallinstructionacknowledgement')->name('valapp.listackn');/*done*/
+    Route::get('/val/{id}/view-single/{instr_id}/acknowledgement', 'viewsingleacknowledge')->name('valapp.viewsinglackn');
+    Route::any('/val/{id}/acknow/{instr_id}/decline', 'declineacknowledgement')->name('valapp.declacknow');/*done*/
+    Route::any('/val/{id}/acknow/{instr_id}/accept/{to_id}', 'acceptacknowledgement')->name('valapp.accptacknow');/*done*/
     Route::get('/val/list/compilation', 'listallinstructioncompile')->name('valapp.listcomp');
     Route::get('/val/{propid}/view-single/{instr_id}/compile', 'viewsinglecompile')->name('valapp.viewsinglacomp');
     Route::get('/val/list/quality-check', 'listallinstructionqualitycheck')->name('valapp.listquality');

@@ -92,3 +92,9 @@ function deactivatelease(that) {
         window.location = anchor.attr("href");
     }
 }
+function rejectapproval(that) {
+    var proceedto = confirm("proceed to decline?")
+    if (proceedto) {
+        window.location = anchor.attr("href");
+    }
+}
