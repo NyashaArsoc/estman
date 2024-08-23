@@ -4,8 +4,8 @@ $description = 'below are instruction details .';
  $status = trim($instr->isportfolio)=='N' ? 
 '<span class="badge badge-pill bg-primary">normal instruction</span>'
     : '<span class="badge badge-pill bg-info">portfolio instruction</span>';
-$id= Crypt::encrypt($instr->id);
-$instr_id= Crypt::encrypt($acknow->instructionid);
+$id= Crypt::encrypt($acknow->id);
+$instr_id= Crypt::encrypt($instr->id);
 $to_id= Crypt::encrypt($acknow->allocatedto);
 @endphp
 @extends('layout.no-menu-layout')

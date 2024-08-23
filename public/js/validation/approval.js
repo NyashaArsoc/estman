@@ -29,6 +29,37 @@ function validateMarketValue() {
             }
     }
 }
+//valid DPN value
+$("#depreciationvaluecheck").hide();
+let depreciationvalueError = true;
+$("#depreciationvalue").keyup(function () {
+    validateDepreciationValue();
+});
+function validateDepreciationValue() {
+    let textValue = $("#depreciationvalue").val();
+    if (textValue.length == "") {
+        $("#depreciationvaluecheck").show();
+        depreciationvalueError = false;
+        return false;
+    } else if (textValue.length < 1) {
+        $("#depreciationvaluecheck").show();
+        $("#depreciationvaluecheck").html("**invalid input");
+        depreciationvalueError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#depreciationvaluecheck").show();
+                $("#depreciationvaluecheck").html("**digits only or (35)");
+                depreciationvalueError = false;
+                return false;
+            }else{
+                depreciationvalueError = true;
+                $("#depreciationvaluecheck").hide();
+            }
+    }
+}
 //valid rental value
 $("#rentalvaluecheck").hide();
 let rentalvalueError = true;
@@ -294,11 +325,11 @@ function validateStandNumber() {
 $("#btn-val-compile").click(function () {
     validateDRC();validateStandNumber();validateFairValue();
     validateForcedSaleEstimate();validateGRC();validateLandValue();
-   validateMarketValue();validateRentalValue();
+   validateMarketValue();validateRentalValue();validateDepreciationValue();
     validateReportDocument();validateReportSchedule();
     try {
         if(drcError==true && standnumberError==true &&
-            fairvalueError==true && forcedsalestimateError==true && 
+            fairvalueError==true && forcedsalestimateError==true && depreciationvalueError==true &&
             grcError==true && landvalueError==true && marketvalueError==true && rentalvalueError==true 
         && reportdocumentError==true && reportscheduleError==true )
             { return true; }

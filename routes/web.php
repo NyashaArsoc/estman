@@ -207,7 +207,8 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::any('/val/{id}/acknow/{instr_id}/decline', 'declineacknowledgement')->name('valapp.declacknow');/*done*/
     Route::any('/val/{id}/acknow/{instr_id}/accept/{to_id}', 'acceptacknowledgement')->name('valapp.accptacknow');/*done*/
     Route::get('/val/list/compilation', 'listallinstructioncompile')->name('valapp.listcomp');
-    Route::get('/val/{propid}/view-single/{instr_id}/compile', 'viewsinglecompile')->name('valapp.viewsinglacomp');
+    Route::get('/val/{id}/view-single/{instr_id}/compile', 'viewsinglecompile')->name('valapp.viewsinglacomp');
+    Route::any('/val/{id}/compile/{instr_id}/{propid}', 'submitcompilation')->name('valapp.sbtcomp');/*done*/
     Route::get('/val/list/quality-check', 'listallinstructionqualitycheck')->name('valapp.listquality');
     Route::get('/val/{propid}/view-single/{instr_id}/quality/check', 'viewsinglequalitycheck')->name('valapp.viewsinglqlty');
     Route::get('/val/list/final-approve', 'listallinstructionfinalapproval')->name('valapp.listallappro');
