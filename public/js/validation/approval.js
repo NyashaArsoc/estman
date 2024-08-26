@@ -339,3 +339,15 @@ $("#btn-val-compile").click(function () {
         return false;
     }
 });
+// add quality check 
+$("#btn-val-quality").click(function () {
+    validateReportDocument();
+    try {
+        if(reportdocumentError==true )
+            { return true; }
+        else{ return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});

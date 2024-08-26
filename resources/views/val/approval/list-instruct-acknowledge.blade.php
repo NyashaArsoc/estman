@@ -32,7 +32,7 @@ $description = 'acknowledge instruction ...';
                                 @foreach($acknow as $abc)
                                    <tr>
                                     @php
-                                    $status = trim($abc->datestamp)<=trim($abc->datedue) ? 
+                                    $status = trim(now())>=trim($abc->datedue) ? 
                                     '<span class="badge badge-pill bg-danger">overdue</span>'
                                     : '<span class="badge badge-pill bg-success">pending</span>';  
                                   @endphp

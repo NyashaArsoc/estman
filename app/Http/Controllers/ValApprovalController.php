@@ -177,11 +177,11 @@ public function viewsinglecompile($id,$instrid){
             };
             return view('val.approval.view-single-instruct-compilation')->with($arr);
         } catch (\Throwable $th) {
-            return redirect()->route('valapp.listackn')
+            return redirect()->route('valapp.listcomp')
         ->with('error', 'failed to load');
         }
     } catch (DecryptException $th) {
-    return redirect()->route('valapp.listackn')
+    return redirect()->route('valapp.listcomp')
         ->with('error', 'failed to load');
     }
 }
@@ -217,16 +217,103 @@ public function submitcompilation(Request $request,$id,$instr_id,$propid){
         ->with('error', 'failed to load');
     }
 }
+/*quality check */
 public function listallinstructionqualitycheck(){
-    $arr['type']   = DB::table('clienttype')
-    ->select('id','description')->get();
-return view('val.approval.list-instruct-quality-check')->with($arr);
+    try{
+        $nom['normal'] = DB::select('EXEC spValGetInstQualityNormal');
+        $port['portfolio'] = DB::select('EXEC spValGetInstQualityPortfolio');
+        $arr['acknow'] = array_merge($nom['normal'], $port['portfolio']); 
+    return view('val.approval.list-instruct-quality-check')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.val');
+    }
 }
-public function viewsinglequalitycheck($proid,$instrid){
-    $arr['type']   = DB::table('clienttype')
-    ->select('id','description')->get();
-return view('val.approval.view-single-instruct-quality-check')->with($arr);
-//return view('val.approval.view-single-instruct-acknowledge-norm')->with($arr);
+public function viewsinglequalitycheck($id,$instrid){
+try {
+    $qualityid = Crypt::decrypt($id);
+    $instructionid = Crypt::decrypt($instrid);
+    try {
+        $arr['type']   = DB::table('clienttype')
+            ->select('id','description')->get();
+        $arr['instr']   = DB::table('valinstructions')->where('id',$instructionid)
+            ->select('*')->first();
+        $arr['prevstage']   = DB::table('valinstrcompile')->where('instructionid',$instructionid)
+            ->select('*')->orderBy('id', 'desc')->first();;
+        $arr['currstage']   = DB::table('valinstrqualitycheck')->where('id',$qualityid)
+            ->select('*')->first();
+        $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
+        ,[$arr['instr']->propertyid]))->first();
+    
+        $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
+            'N' => DB::table('valinstructions') ->where('id', $instructionid)
+                ->select('*') ->first(),
+            default => DB::table('valinstrportfolio')
+                ->where('id', $arr['instr']->portfolioid)
+                ->select('*')->first(),
+        };
+        $arr['client'] = match (trim($arr['instr']->isportfolio)) {
+            'N' => DB::table('valclientcontactperson')->join('valclientdetail', 
+            'valclientcontactperson.clientid','=', 'valclientdetail.id')
+            ->where('valclientcontactperson.id', $arr['instr']->contactid)
+                ->select('valclientdetail.companyname','valclientdetail.lastname',
+                'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
+                ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
+                'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
+            default => DB::table('valclientcontactperson')->join('valclientdetail', 
+            'valclientcontactperson.clientid','=', 'valclientdetail.id')
+            ->where('valclientcontactperson.id', $arr['purpose']->clientcontactid)
+                ->select('valclientdetail.companyname','valclientdetail.lastname',
+                'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
+                ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
+                'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
+        };
+        return view('val.approval.view-single-instruct-quality-check')->with($arr);
+    } catch (\Throwable $th) {
+        return redirect()->route('valapp.listquality')
+    ->with('error', 'failed to load');
+    }
+} catch (DecryptException $th) {
+return redirect()->route('valapp.listquality')
+    ->with('error', 'failed to load');
+}
+}
+public function submitqualitycheck(Request $request,$id,$instr_id,$propid){
+    try{
+        $qualityid = Crypt::decrypt($id);
+        $instructionid = Crypt::decrypt($instr_id);
+        $propertyid = Crypt::decrypt($propid);
+        try{
+        $isprint = (is_null($request->isprintreport)) ? 'N' : 'Y' ;
+           
+        $approvaldatestamp =     DB::table('valinstrfinalapproval')
+        ->where('status','=','P')->select('*')->orderBy('id', 'desc')->first();
+        $invoicedatestamp =     DB::table('valinstrinvoicing')
+        ->where('status','=','P')->select('*')->orderBy('id', 'desc')->first();
+
+        $newapprovaldatestamp = is_null($approvaldatestamp) ? now() : $approvaldatestamp->datestamp;
+        $newinvoicedatestamp  = is_null($invoicedatestamp) ? now() : $invoicedatestamp->datestamp;
+        $approvaldatedue = Carbon::parse($newapprovaldatestamp)->addMinutes(60);
+        $invoicedatedue  = Carbon::parse($newinvoicedatestamp)->addMinutes(60);
+
+        DB::table('valinstrqualitycheck')->where('id', $qualityid)
+        ->update(['completedby' => session('alluser'),'status' => 'C',
+        'completedon' => now(),'comments'=>$request->commentshighlights]);
+       
+        DB::table('valinstrinvoicing') ->insert(['instructionid'=>$instructionid,'operatorid'=>
+        session('alluser'),'datedue'=>$invoicedatedue]);
+        DB::table('valinstrfinalapproval') ->insert(['instructionid'=>$instructionid,'operatorid'=>
+        session('alluser'),'datedue'=>$approvaldatedue,'isprint'=>$isprint]);
+
+            return redirect()->route('valapp.listquality')
+            ->with('success', 'instruction updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listquality')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+        return redirect()->route('valapp.listquality')
+        ->with('error', 'failed to load');
+    }
 }
 public function listallinstructionfinalapproval(){
     $arr['type']   = DB::table('clienttype')
