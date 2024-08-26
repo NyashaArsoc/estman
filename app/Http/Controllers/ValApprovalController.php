@@ -315,15 +315,103 @@ public function submitqualitycheck(Request $request,$id,$instr_id,$propid){
         ->with('error', 'failed to load');
     }
 }
+/*-----------report approval ----------------- */
 public function listallinstructionfinalapproval(){
-    $arr['type']   = DB::table('clienttype')
-    ->select('id','description')->get();
-return view('val.approval.list-instruct-final-approval')->with($arr);
+    try{
+        $nom['normal'] = DB::select('EXEC spValGetInstFinalApprovalNormal');
+        $port['portfolio'] = DB::select('EXEC spValGetInstFinalApprovalPortfolio');
+        $arr['stage'] = array_merge($nom['normal'], $port['portfolio']); 
+    return view('val.approval.list-instruct-final-approval')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.val');
+    }
 }
-public function viewsinglefinalapproval($proid,$instrid){
-    $arr['type']   = DB::table('clienttype')
-    ->select('id','description')->get();
-return view('val.approval.view-single-instruct-final-approval')->with($arr);
+public function viewsinglefinalapproval($id,$instrid){
+    try {
+        $qualityid = Crypt::decrypt($id);
+        $instructionid = Crypt::decrypt($instrid);
+        try {
+            $arr['type']   = DB::table('clienttype')
+                ->select('id','description')->get();
+            $arr['instr']   = DB::table('valinstructions')->where('id',$instructionid)
+                ->select('*')->first();
+            $arr['prevstage']   = DB::table('valinstrcompile')->where('instructionid',$instructionid)
+                ->select('*')->orderBy('id', 'desc')->first();
+            $arr['currstage']   = DB::table('valinstrfinalapproval')->where('id',$qualityid)
+                ->select('*')->first();
+            $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
+            ,[$arr['instr']->propertyid]))->first();
+        
+            $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
+                'N' => DB::table('valinstructions') ->where('id', $instructionid)
+                    ->select('*') ->first(),
+                default => DB::table('valinstrportfolio')
+                    ->where('id', $arr['instr']->portfolioid)
+                    ->select('*')->first(),
+            };
+            $arr['client'] = match (trim($arr['instr']->isportfolio)) {
+                'N' => DB::table('valclientcontactperson')->join('valclientdetail', 
+                'valclientcontactperson.clientid','=', 'valclientdetail.id')
+                ->where('valclientcontactperson.id', $arr['instr']->contactid)
+                    ->select('valclientdetail.companyname','valclientdetail.lastname',
+                    'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
+                    ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
+                    'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
+                default => DB::table('valclientcontactperson')->join('valclientdetail', 
+                'valclientcontactperson.clientid','=', 'valclientdetail.id')
+                ->where('valclientcontactperson.id', $arr['purpose']->clientcontactid)
+                    ->select('valclientdetail.companyname','valclientdetail.lastname',
+                    'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
+                    ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
+                    'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
+            };
+            return view('val.approval.view-single-instruct-final-approval')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listallappro')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('valapp.listallappro')
+        ->with('error', 'failed to load');
+    }
+}
+public function submitfinaleapproval(Request $request,$id,$instr_id){
+    try{
+        $approvalid = Crypt::decrypt($id);
+        $instructionid = Crypt::decrypt($instr_id);
+        try{
+        $datestamp =     DB::table('valinstrprinting')
+        ->where('status','=','P')->select('*')->orderBy('id', 'desc')->first();
+        $compileid =     DB::table('valinstrcompile')
+        ->where('instructionid',$instructionid)->select('id')->orderBy('id', 'desc')->first();
+        $isprint     =     DB::table('valinstrfinalapproval')->where('id', $approvalid)
+        ->select('*')->first();
+        $newdatestamp = is_null($datestamp) ? now() : $datestamp->datestamp;
+        $datedue = Carbon::parse($newdatestamp)->addMinutes(60);
+        if (trim($isprint->isprint)=='Y'){
+            DB::table('valinstrprinting') ->insert(['instructionid'=>$instructionid,'operatorid'=>
+            session('alluser'),'datedue'=>$datedue]);
+        }
+        DB::table('valinstrcompile')->where('id', $compileid->id)
+        ->update(['marketvalue'=>$request->marketvalue,'grc'=>$request->grc,'forcedsale'=>
+        $request->forcedsalestimate,'depreciation' =>$request->depreciationvalue,'rentalvalue'=>
+        $request->rentalvalue,'landvalue' =>$request->landvalue,'drc'=>$request->drc,'fairvalue'=>
+        $request->fairvalue]);
+       
+        DB::table('valinstrfinalapproval')->where('id', $approvalid)
+        ->update(['completedby' => session('alluser'),'status' => 'C',
+        'completedon' => now()]);
+
+        return redirect()->route('valapp.listcomp')
+            ->with('success', 'instruction updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listcomp')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+        return redirect()->route('valapp.listcomp')
+        ->with('error', 'failed to load');
+    }
 }
 public function listallinstructionprint(){
     $arr['type']   = DB::table('clienttype')
