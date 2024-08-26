@@ -413,15 +413,91 @@ public function submitfinaleapproval(Request $request,$id,$instr_id){
         ->with('error', 'failed to load');
     }
 }
+/*------------printing reports-----------------------------*/ 
 public function listallinstructionprint(){
-    $arr['type']   = DB::table('clienttype')
-    ->select('id','description')->get();
-return view('val.approval.list-instruct-printing')->with($arr);
+    try{
+        $nom['normal'] = DB::select('EXEC spValGetInstPrintNormal');
+        $port['portfolio'] = DB::select('EXEC spValGetInstPrintPortfolio');
+        $arr['stage'] = array_merge($nom['normal'], $port['portfolio']); 
+    return view('val.approval.list-instruct-printing')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.val');
+    }
 }
-public function viewsingleprint($proid,$instrid){
-    $arr['type']   = DB::table('clienttype')
-    ->select('id','description')->get();
-return view('val.approval.view-single-printing')->with($arr);
+public function viewsingleprint($id,$instrid){
+    try {
+        $qualityid = Crypt::decrypt($id);
+        $instructionid = Crypt::decrypt($instrid);
+        try {
+            $arr['type']   = DB::table('clienttype')
+                ->select('id','description')->get();
+            $arr['instr']   = DB::table('valinstructions')->where('id',$instructionid)
+                ->select('*')->first();
+            $arr['prevstage']   = DB::table('valinstrcompile')->where('instructionid',$instructionid)
+                ->select('*')->orderBy('id', 'desc')->first();
+            $arr['currstage']   = DB::table('valinstrfinalapproval')->where('id',$qualityid)
+                ->select('*')->first();
+            $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
+            ,[$arr['instr']->propertyid]))->first();
+        
+            $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
+                'N' => DB::table('valinstructions') ->where('id', $instructionid)
+                    ->select('*') ->first(),
+                default => DB::table('valinstrportfolio')
+                    ->where('id', $arr['instr']->portfolioid)
+                    ->select('*')->first(),
+            };
+            $arr['client'] = match (trim($arr['instr']->isportfolio)) {
+                'N' => DB::table('valclientcontactperson')->join('valclientdetail', 
+                'valclientcontactperson.clientid','=', 'valclientdetail.id')
+                ->where('valclientcontactperson.id', $arr['instr']->contactid)
+                    ->select('valclientdetail.companyname','valclientdetail.lastname',
+                    'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
+                    ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
+                    'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
+                default => DB::table('valclientcontactperson')->join('valclientdetail', 
+                'valclientcontactperson.clientid','=', 'valclientdetail.id')
+                ->where('valclientcontactperson.id', $arr['purpose']->clientcontactid)
+                    ->select('valclientdetail.companyname','valclientdetail.lastname',
+                    'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
+                    ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
+                    'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
+            };
+            return view('val.approval.view-single-printing')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listallappro')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('valapp.listallappro')
+        ->with('error', 'failed to load');
+    }
+}
+public function submitprinting(Request $request,$id,$instr_id){
+    try{
+        $printid = Crypt::decrypt($id);
+        $instructionid = Crypt::decrypt($instr_id);
+        try{
+        $datestamp =     DB::table('valinstrdispatch')
+        ->where('status','=','P')->select('*')->orderBy('id', 'desc')->first();
+       
+        $newdatestamp = is_null($datestamp) ? now() : $datestamp->datestamp;
+        $datedue = Carbon::parse($newdatestamp)->addMinutes(60);
+        DB::table('valinstrprinting')->where('id', $printid)
+        ->update(['completedby' => session('alluser'),'status' => 'C',
+        'completedon' => now()]);
+        DB::table('valinstrdispatch') ->insert(['instructionid'=>$instructionid,'operatorid'=>
+        session('alluser'),'datedue'=>$datedue]);
+        return redirect()->route('valapp.listprint')
+            ->with('success', 'instruction updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listprint')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+        return redirect()->route('valapp.listprint')
+        ->with('error', 'failed to load');
+    }
 }
 public function listallinstructioninvoice(){
     $arr['type']   = DB::table('clienttype')

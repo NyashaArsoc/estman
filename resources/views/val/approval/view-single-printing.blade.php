@@ -1,12 +1,16 @@
 @php
-$title = 'Compile Instruction';
-$description = 'instruction compilation details .';
-$status = 'portfolio instruction';
- $badge = "badge badge-pill bg-success badge-secondary";
+$title = 'Print Report';
+$description = 'report printing & instruction details .';
+$status = trim($instr->isportfolio)=='N' ? 
+'<span class="badge badge-pill bg-primary">normal instruction</span>'
+    : '<span class="badge badge-pill bg-info">portfolio instruction</span>';
+$id= Crypt::encrypt($currstage->id);
+$instr_id= Crypt::encrypt($instr->id);
 @endphp
 @extends('layout.no-menu-layout')
-@section('title', 'Compile')
+@section('title', 'Print')
 @section('additional css')
+<link rel="stylesheet" type="text/css" href="{{ asset ('css/display.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('css/select2/select2.min.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('css/select2-bootstrap-theme/select2-bootstrap.min.css') }}" />
 @endsection
@@ -22,7 +26,7 @@ $status = 'portfolio instruction';
     <div class="box box-block bg-white">
         <h5>{{ $title }}</h5>
         <p class="font-90 text-muted mb-1">{{ $description }}</p>
-         <span class="{{ $badge }}">{{$status}}</span><hr/>
+        {!! $status !!}<hr/>
         <!-- Tabs Navigation -->
         <ul class="nav nav-tabs" id="clientTab" role="tablist">
             <li class="nav-item">
@@ -36,7 +40,7 @@ $status = 'portfolio instruction';
             </li>
         </ul>
         <form class="form-material material-primary" id="defaultform" method="POST"
-                action="{{ route('landlord.addlandlord') }}">@csrf
+                action="{{ route('valapp.sbtprint',[$id,$instr_id]) }}">@csrf
         <!-- Tabs Content -->
         <div class="tab-content" id="clientTabContent">
             <div class="tab-pane fade" id="instruction-info" role="tabpanel" aria-labelledby="instruction-info-tab">
@@ -44,19 +48,15 @@ $status = 'portfolio instruction';
                     <tbody>
                         <tr>
                             <td><strong>Date Received:</strong></td>
-                            <td>$client->firstname ?? </td>
-                        </tr>
+                            <td>{{ Carbon\Carbon::parse($purpose->datestamp)->format('F j, Y') ?? ''}} </td>
+                       </tr>
                         <tr>
                             <td><strong>Valuation Purpose:</strong></td>
-                            <td>$client->middlename ?? </td>
+                            <td>{{$purpose->purpose ?? ''}} </td>
                         </tr>
                         <tr>
                             <td><strong>Valuation Type:</strong></td>
-                            <td>$client->lastname ?? </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Date Due:</strong></td>
-                            <td>$client->idnumber ?? </td>
+                            <td>{{$purpose->type ?? ''}} </td>
                         </tr>
                     </tbody>
                 </table>
@@ -66,23 +66,24 @@ $status = 'portfolio instruction';
                     <tbody>
                         <tr>
                             <td><strong>Name:</strong></td>
-                            <td>$client->firstname ?? </td>
+                            <td>{{$client->companyname ?? ''}} {{$client->lastname ?? ''}}
+                                {{$client->firstname ?? ''}}</td>
                         </tr>
                         <tr>
-                            <td><strong>Contact Cell:</strong></td>
-                            <td>$client->middlename ?? </td>
+                            <td><strong>Contact Person:</strong></td>
+                            <td>{{$client->contactfirstname ?? ''}} {{$client->contactlastname ?? ''}}</td>
                         </tr>
                         <tr>
-                            <td><strong>Tel:</strong></td>
-                            <td>$client->lastname ?? </td>
+                            <td><strong>Cell:</strong></td>
+                            <td>{{$client->cell ?? ''}} </td>
                         </tr>
                         <tr>
                             <td><strong>Email:</strong></td>
-                            <td>$client->idnumber ?? </td>
+                            <td>{{$client->email ?? ''}}</td>
                         </tr>
                         <tr>
                             <td><strong>Contact Address:</strong></td>
-                            <td>$client->gender ?? </td>
+                            <td>{{$client->contactddress ?? ''}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -92,27 +93,27 @@ $status = 'portfolio instruction';
                     <tbody>
                         <tr>
                             <td><strong>Property Type:</strong></td>
-                            <td>$client->firstname ?? </td>
+                            <td>{{$properties->propertytype ?? ''}} </td>
                         </tr>
                         <tr>
                             <td><strong>Province:</strong></td>
-                            <td>$client->middlename ?? </td>
+                            <td>{{$properties->province ?? ''}} </td>
                         </tr>
                         <tr>
                             <td><strong>Town:</strong></td>
-                            <td>$client->lastname ?? </td>
+                            <td>{{$properties->town ?? ''}} </td>
                         </tr>
                         <tr>
                             <td><strong>Surbub:</strong></td>
-                            <td>$client->idnumber ?? </td>
+                            <td>{{$properties->suburb ?? ''}} </td>
                         </tr>
                         <tr>
                             <td><strong>Stand Number:</strong></td>
-                            <td>$client->gender ?? </td>
+                            <td>{{$properties->standnumber ?? ''}} </td>
                         </tr>
                         <tr>
                             <td><strong>Street Address:</strong></td>
-                            <td>$client->gender ?? </td>
+                            <td>{{$properties->streetaddress ?? ''}} </td>
                         </tr>
                         <tr>
                             <td><strong>Report document:</strong></td>
@@ -127,15 +128,16 @@ $status = 'portfolio instruction';
                 <small>Report printed ?</small></label> 
             <div class="col-sm-4">
                 <label class="switchToggle">
-                    <input type="checkbox" name="requireserialnumber"
-                    id="requireserialnumber" checked />
+                    <input type="checkbox" name="isreportprint"
+                    id="isreportprint" />
                     <span class="sliderswitchToggle round"></span> </label>
+                <small id="isreportprintcheck" style="color: red;">required</small>
             </div>
         </div>
         <div class="form-group row">
             <div class="form-group row">
                 <div class="offset-sm-2 col-sm-10">
-                    <button type="submit" class="btn btn-primary" id="btn-val-compile" >
+                    <button type="submit" class="btn btn-primary" id="btn-val-isprinted" >
                         submit</button>
                 </div>
             </div>

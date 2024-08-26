@@ -216,7 +216,8 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/{id}/view-single/{instr_id}/final/approval', 'viewsinglefinalapproval')->name('valapp.viewsinglfinapr');
     Route::any('/val/{id}/instruction/{instr_id}/approval', 'submitfinaleapproval')->name('valapp.sbtfinalap');
     Route::get('/val/list/printing', 'listallinstructionprint')->name('valapp.listprint');
-    Route::get('/val/{propid}/view-single/{instr_id}/printing', 'viewsingleprint')->name('valapp.viewsinglpri');
+    Route::get('/val/{id}/view-single/{instr_id}/printing', 'viewsingleprint')->name('valapp.viewsinglpri');
+    Route::any('/val/{id}/report/{instr_id}/print', 'submitprinting')->name('valapp.sbtprint');
     Route::get('/val/list/invoicing', 'listallinstructioninvoice')->name('valapp.listinvoice');
     Route::get('/val/{propid}/view-single/{instr_id}/invoice', 'viewsingleinvoicing')->name('valapp.viewsinglinvo');
     Route::get('/val/{propid}/view-single/{instr_id}/acknowledgement', 'viewsingleacknowledge')->name('valapp.viewsinglackn');

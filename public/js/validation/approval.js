@@ -321,6 +321,19 @@ function validateStandNumber() {
             }
 		}
 }
+let isprintedError = true;
+$("#isreportprintcheck").hide();
+function validateReportPrint(){
+    if (!$("#isreportprint").is(":checked")) {
+        $("#isreportprintcheck").show();
+        isprintedError = false;
+		return false;
+    }
+    $("#isreportprintcheck").hide();
+    isprintedError = true;
+    return true;
+}
+/*------------------------------------submit buttons -----------------*/
 // add comple and submit
 $("#btn-val-compile").click(function () {
     validateDRC();validateStandNumber();validateFairValue();
@@ -361,6 +374,18 @@ $("#btn-val-final-approve").click(function () {
         if(drcError==true && fairvalueError==true && forcedsalestimateError==true &&
              depreciationvalueError==true && grcError==true && landvalueError==true &&
               marketvalueError==true && rentalvalueError==true && reportdocumentError==true )
+            { return true; }
+        else{ return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+// report printed 
+$("#btn-val-isprinted").click(function () {
+    validateReportPrint();
+    try {
+        if(isprintedError==true )
             { return true; }
         else{ return false; }
     } catch (err) {
