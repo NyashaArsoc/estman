@@ -579,4 +579,81 @@ public function submitinvoicing(Request $request,$id){
         ->with('error', 'failed to load');
     }
 }
+/*--------------------dispatch ----------------*/
+public function listallinstructiondispatch(){
+    try{
+        $nom['normal'] = DB::select('EXEC spValGetInstDispatchNormal');
+        $port['portfolio'] = DB::select('EXEC spValGetInstDispatchPortfolio');
+        $arr['stage'] = array_merge($nom['normal'], $port['portfolio']); 
+    return view('val.approval.list-instruct-dispatch')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.val');
+    }
+}
+public function viewsingledispatch($id,$instr_id){
+    try {
+        $printid = Crypt::decrypt($id);
+        $instructionid = Crypt::decrypt($instr_id);
+        try {
+            $arr['type']   = DB::table('clienttype')
+                ->select('id','description')->get();
+            $arr['instr']   = DB::table('valinstructions')->where('id',$instructionid)
+                ->select('*')->first();
+            $arr['currstage']   = DB::table('valinstrdispatch')->where('id',$printid)
+                ->select('*')->first();
+            $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
+            ,[$arr['instr']->propertyid]))->first();
+        
+            $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
+                'N' => DB::table('valinstructions') ->where('id', $instructionid)
+                    ->select('*') ->first(),
+                default => DB::table('valinstrportfolio')
+                    ->where('id', $arr['instr']->portfolioid)
+                    ->select('*')->first(),
+            };
+            $arr['client'] = match (trim($arr['instr']->isportfolio)) {
+                'N' => DB::table('valclientcontactperson')->join('valclientdetail', 
+                'valclientcontactperson.clientid','=', 'valclientdetail.id')
+                ->where('valclientcontactperson.id', $arr['instr']->contactid)
+                    ->select('valclientdetail.companyname','valclientdetail.lastname',
+                    'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
+                    ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
+                    'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
+                default => DB::table('valclientcontactperson')->join('valclientdetail', 
+                'valclientcontactperson.clientid','=', 'valclientdetail.id')
+                ->where('valclientcontactperson.id', $arr['purpose']->clientcontactid)
+                    ->select('valclientdetail.companyname','valclientdetail.lastname',
+                    'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
+                    ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
+                    'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
+            };
+            return view('val.approval.view-single-dispatch')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listinvoice')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('valapp.listinvoice')
+        ->with('error', 'failed to load');
+    }
+}
+public function submitdispatch($id){
+    try{
+        $printid = Crypt::decrypt($id);
+        try{
+       
+        DB::table('valinstrdispatch')->where('id', $printid)
+        ->update(['completedby' => session('alluser'),'status' => 'C',
+        'completedon' => now()]);
+        return redirect()->route('valapp.listdispatch')
+            ->with('success', 'instruction updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listdispatch')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+        return redirect()->route('valapp.listdispatch')
+        ->with('error', 'failed to load');
+    }
+}
 }

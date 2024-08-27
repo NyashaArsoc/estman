@@ -219,8 +219,11 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/{id}/view-single/{instr_id}/printing', 'viewsingleprint')->name('valapp.viewsinglpri');
     Route::any('/val/{id}/report/{instr_id}/print', 'submitprinting')->name('valapp.sbtprint');
     Route::get('/val/list/invoicing', 'listallinstructioninvoice')->name('valapp.listinvoice');
-    Route::get('/val/{propid}/view-single/{instr_id}/invoice', 'viewsingleinvoicing')->name('valapp.viewsinglinvo');
+    Route::get('/val/{id}/view-single/{instr_id}/invoice', 'viewsingleinvoicing')->name('valapp.viewsinglinvo');
     Route::any('/val/{id}/report/invoicing', 'submitinvoicing')->name('valapp.sbtinvoic');
+    Route::get('/val/list/dispatch', 'listallinstructiondispatch')->name('valapp.listdispatch');
+    Route::get('/val/{id}/view-single/{instr_id}/invoice', 'viewsingledispatch')->name('valapp.viewsingldisp');
+    Route::any('/val/{id}/report/dispatch', 'submitdispatch')->name('valapp.sbtidisp');
 });
 Route::controller(ValDeclinedController::class)->group(function(){
     Route::get('/val/list/acknowledgement/declined', 'listalldeclinedacknowledgement')->name('valdec.listackn');
