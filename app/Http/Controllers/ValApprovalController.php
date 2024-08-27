@@ -281,7 +281,6 @@ public function submitqualitycheck(Request $request,$id,$instr_id,$propid){
     try{
         $qualityid = Crypt::decrypt($id);
         $instructionid = Crypt::decrypt($instr_id);
-        $propertyid = Crypt::decrypt($propid);
         try{
         $isprint = (is_null($request->isprintreport)) ? 'N' : 'Y' ;
            
@@ -328,7 +327,7 @@ public function listallinstructionfinalapproval(){
 }
 public function viewsinglefinalapproval($id,$instrid){
     try {
-        $qualityid = Crypt::decrypt($id);
+        $approvalid = Crypt::decrypt($id);
         $instructionid = Crypt::decrypt($instrid);
         try {
             $arr['type']   = DB::table('clienttype')
@@ -337,7 +336,7 @@ public function viewsinglefinalapproval($id,$instrid){
                 ->select('*')->first();
             $arr['prevstage']   = DB::table('valinstrcompile')->where('instructionid',$instructionid)
                 ->select('*')->orderBy('id', 'desc')->first();
-            $arr['currstage']   = DB::table('valinstrfinalapproval')->where('id',$qualityid)
+            $arr['currstage']   = DB::table('valinstrfinalapproval')->where('id',$approvalid)
                 ->select('*')->first();
             $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
             ,[$arr['instr']->propertyid]))->first();
@@ -426,7 +425,7 @@ public function listallinstructionprint(){
 }
 public function viewsingleprint($id,$instrid){
     try {
-        $qualityid = Crypt::decrypt($id);
+        $printid = Crypt::decrypt($id);
         $instructionid = Crypt::decrypt($instrid);
         try {
             $arr['type']   = DB::table('clienttype')
@@ -435,7 +434,7 @@ public function viewsingleprint($id,$instrid){
                 ->select('*')->first();
             $arr['prevstage']   = DB::table('valinstrcompile')->where('instructionid',$instructionid)
                 ->select('*')->orderBy('id', 'desc')->first();
-            $arr['currstage']   = DB::table('valinstrfinalapproval')->where('id',$qualityid)
+            $arr['currstage']   = DB::table('valinstrprinting')->where('id',$printid)
                 ->select('*')->first();
             $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
             ,[$arr['instr']->propertyid]))->first();
@@ -499,16 +498,85 @@ public function submitprinting(Request $request,$id,$instr_id){
         ->with('error', 'failed to load');
     }
 }
+/*------------- report invoicing ----------------- */
 public function listallinstructioninvoice(){
-    $arr['type']   = DB::table('clienttype')
-    ->select('id','description')->get();
-return view('val.approval.list-instruct-invoicing')->with($arr);
+    try{
+        $nom['normal'] = DB::select('EXEC spValGetInstInvoicingNormal');
+        $port['portfolio'] = DB::select('EXEC spValGetInstInvoicingPortfolio');
+        $arr['stage'] = array_merge($nom['normal'], $port['portfolio']); 
+    return view('val.approval.list-instruct-invoicing')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.val');
+    }
 }
-public function viewsingleinvoicing($proid,$instrid){
-    $arr['type']   = DB::table('clienttype')
-    ->select('id','description')->get();
-    $arr['currency']   = DB::table('currency')
+public function viewsingleinvoicing($id,$instrid){
+    try {
+        $printid = Crypt::decrypt($id);
+        $instructionid = Crypt::decrypt($instrid);
+        try {
+            $arr['type']   = DB::table('clienttype')
+                ->select('id','description')->get();
+            $arr['instr']   = DB::table('valinstructions')->where('id',$instructionid)
+                ->select('*')->first();
+            $arr['prevstage']   = DB::table('valinstrcompile')->where('instructionid',$instructionid)
+                ->select('*')->orderBy('id', 'desc')->first();
+            $arr['currstage']   = DB::table('valinstrprinting')->where('id',$printid)
+                ->select('*')->first();
+            $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
+            ,[$arr['instr']->propertyid]))->first();
+        
+            $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
+                'N' => DB::table('valinstructions') ->where('id', $instructionid)
+                    ->select('*') ->first(),
+                default => DB::table('valinstrportfolio')
+                    ->where('id', $arr['instr']->portfolioid)
+                    ->select('*')->first(),
+            };
+            $arr['client'] = match (trim($arr['instr']->isportfolio)) {
+                'N' => DB::table('valclientcontactperson')->join('valclientdetail', 
+                'valclientcontactperson.clientid','=', 'valclientdetail.id')
+                ->where('valclientcontactperson.id', $arr['instr']->contactid)
+                    ->select('valclientdetail.companyname','valclientdetail.lastname',
+                    'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
+                    ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
+                    'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
+                default => DB::table('valclientcontactperson')->join('valclientdetail', 
+                'valclientcontactperson.clientid','=', 'valclientdetail.id')
+                ->where('valclientcontactperson.id', $arr['purpose']->clientcontactid)
+                    ->select('valclientdetail.companyname','valclientdetail.lastname',
+                    'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
+                    ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
+                    'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
+            };
+            $arr['currency']   = DB::table('currency')
             ->select('id','code')->get();
-return view('val.approval.view-single-invoicing')->with($arr);
+            return view('val.approval.view-single-invoicing')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listinvoice')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('valapp.listinvoice')
+        ->with('error', 'failed to load');
+    }
+}
+public function submitinvoicing(Request $request,$id){
+    try{
+        $invoiceid = Crypt::decrypt($id);
+        try{
+        DB::table('valinstrinvoicing')->where('id', $invoiceid)
+        ->update(['completedby' => session('alluser'),'status' => 'C', 'completedon' 
+        => now(),'currencycode'=>$request->currencycode,'amountinvoiced'=>$request->invoicedamount]);
+
+        return redirect()->route('valapp.listinvoice')
+            ->with('success', 'instruction updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listinvoice')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+        return redirect()->route('valapp.listinvoice')
+        ->with('error', 'failed to load');
+    }
 }
 }
