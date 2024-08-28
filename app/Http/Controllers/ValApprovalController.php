@@ -401,14 +401,14 @@ public function submitfinaleapproval(Request $request,$id,$instr_id){
         ->update(['completedby' => session('alluser'),'status' => 'C',
         'completedon' => now()]);
 
-        return redirect()->route('valapp.listcomp')
+        return redirect()->route('valapp.listallappro')
             ->with('success', 'instruction updated');
         } catch (\Throwable $th) {
-            return redirect()->route('valapp.listcomp')
+            return redirect()->route('valapp.listallappro')
         ->with('error', 'failed to load');
         }
     } catch (DecryptException $th) {
-        return redirect()->route('valapp.listcomp')
+        return redirect()->route('valapp.listallappro')
         ->with('error', 'failed to load');
     }
 }
@@ -520,7 +520,7 @@ public function viewsingleinvoicing($id,$instrid){
                 ->select('*')->first();
             $arr['prevstage']   = DB::table('valinstrcompile')->where('instructionid',$instructionid)
                 ->select('*')->orderBy('id', 'desc')->first();
-            $arr['currstage']   = DB::table('valinstrprinting')->where('id',$printid)
+            $arr['currstage']   = DB::table('valinstrinvoicing')->where('id',$printid)
                 ->select('*')->first();
             $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
             ,[$arr['instr']->propertyid]))->first();

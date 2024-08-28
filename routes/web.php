@@ -26,13 +26,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-// Route::get('/main-menu', function () {
-//     return view('layout.main-layout');
-// });
-//Route::resource('landlord', LandlordController::class);
 Route::controller(LandlordController::class)->group(function () {
     Route::get('/create/landlord', 'createnew')->name('landlord.newlandlord');
     Route::post('/new/create/landlord', 'addnewlandlord')->name('landlord.addlandlord');
@@ -222,7 +215,7 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/{id}/view-single/{instr_id}/invoice', 'viewsingleinvoicing')->name('valapp.viewsinglinvo');
     Route::any('/val/{id}/report/invoicing', 'submitinvoicing')->name('valapp.sbtinvoic');
     Route::get('/val/list/dispatch', 'listallinstructiondispatch')->name('valapp.listdispatch');
-    Route::get('/val/{id}/view-single/{instr_id}/invoice', 'viewsingledispatch')->name('valapp.viewsingldisp');
+    Route::get('/val/{id}/view-single/{instr_id}/dispatch', 'viewsingledispatch')->name('valapp.viewsingldisp');
     Route::any('/val/{id}/report/dispatch', 'submitdispatch')->name('valapp.sbtidisp');
 });
 Route::controller(ValDeclinedController::class)->group(function(){
