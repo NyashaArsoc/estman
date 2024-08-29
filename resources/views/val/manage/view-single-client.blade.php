@@ -58,7 +58,7 @@ $fullname   =  $client->firstname.' '.$client->lastname ;
                         </tr>
                         <tr>
                             <td><strong>Contact Address:</strong></td>
-                            <td>{{$client->contactaddress ?? ''}} </td>
+                            <td>{{$client->contactddress ?? ''}} </td>
                         </tr>
                     </tbody>
                 </table>

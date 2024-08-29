@@ -109,8 +109,10 @@ public function acceptacknowledgement($id,$instr_id,$to_id){
             ->select('*') ->first();
         $datestamp =     DB::table('valinstrcompile')->where('allocatedto', $user->id)
         ->where('status','=','P')->select('*')->orderBy('id', 'desc')->first();
-        $newdatestamp = is_null($datestamp) ? now() : $datestamp->datestamp;
-        $datedue = Carbon::parse($newdatestamp)->addMinutes($minsexpected->minsexpectedtocompile);
+        $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
+        //check if due date is current or old
+        $currentdatedue = $newdatestamp <= now() ? now() : $newdatestamp;
+        $datedue = Carbon::parse($currentdatedue)->addMinutes($minsexpected->minsexpectedtocompile);
         DB::table('valinstracknowledgement')->where('id', $acknowledgeid)
         ->update(['completedby' => session('alluser'),'status' => 'C','completedon' => now()]);
         DB::table('valinstrcompile') ->insert(['instructionid'=>$instructionid,'operatorid'=>
@@ -193,8 +195,10 @@ public function submitcompilation(Request $request,$id,$instr_id,$propid){
         try{
         $datestamp =     DB::table('valinstrqualitycheck')
         ->where('status','=','P')->select('*')->orderBy('id', 'desc')->first();
-        $newdatestamp = is_null($datestamp) ? now() : $datestamp->datestamp;
-        $datedue = Carbon::parse($newdatestamp)->addMinutes(60);
+        $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
+        //check if due date is current or old
+        $currentdatedue = $newdatestamp <= now() ? now() : $newdatestamp;
+        $datedue = Carbon::parse($currentdatedue)->addMinutes(60);
         DB::table('valinstrcompile')->where('id', $compileid)
         ->update(['completedby' => session('alluser'),'status' => 'C','completedon' => now(),
         'marketvalue'=>$request->marketvalue,'grc'=>$request->grc,'forcedsale'=>$request->forcedsalestimate,

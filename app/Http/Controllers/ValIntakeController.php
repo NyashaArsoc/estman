@@ -251,7 +251,7 @@ public function addinstructionnormalsteptwo($id,$vid,$cid,$pid,$tid,$payid){
         $arr['payment']   = DB::table('valpaymentagreement')->where('id',$paymentid)
         ->select('*')->first();
             $arr['property'] = DB::select('EXEC spValGetInstrPropertyToCapture ?',[$clientid]);
-        return view('val.intake.new-instruction-step-2')->with($arr);
+        return view('val.intake.new-instruction-normal-step-2')->with($arr);
         } catch (\Throwable $th) {
             return  redirect()->route('valin.addinstnom') 
                 ->with('error', 'failed to load');
