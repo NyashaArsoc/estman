@@ -193,6 +193,25 @@ public function submitcompilation(Request $request,$id,$instr_id,$propid){
         $instructionid = Crypt::decrypt($instr_id);
         $propertyid = Crypt::decrypt($propid);
         try{
+            $request->validate([
+                'reportdocument' => 'required',
+                'reportschedule' => 'required',
+            ]);
+            $properties   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
+            ,[$propertyid]))->first();
+            //checking if the attachment is there 
+            if ($request->hasFile('reportdocument')) {
+                $reportdoc = $request->file('reportdocument');
+                $reportdocname = $properties->streetaddress . '.' . $reportdoc->getClientOriginalExtension();
+                $reportdoc->storeAs('public/documents/val/doc', $reportdocname);
+            }else{$reportdocname = '';}
+
+            if ($request->hasFile('reportschedule')) {
+                $reportexcel = $request->file('reportschedule');
+                $reportexcelname = $properties->streetaddress . '.' . $reportexcel->getClientOriginalExtension();
+                $reportexcel->storeAs('public/documents/val/excel', $reportexcelname);
+            }else{$reportexcelname = '';}
+
         $datestamp =     DB::table('valinstrqualitycheck')
         ->where('status','=','P')->select('*')->orderBy('id', 'desc')->first();
         $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
@@ -210,6 +229,8 @@ public function submitcompilation(Request $request,$id,$instr_id,$propid){
        
         DB::table('valinstrqualitycheck') ->insert(['instructionid'=>$instructionid,'operatorid'=>
         session('alluser'),'datedue'=>$datedue]);
+        DB::table('valinstruploads') ->insert(['instructionid'=>$instructionid,'reportdoc'=>
+        $reportdocname,'reportexcel'=>$reportexcelname]);
             return redirect()->route('valapp.listcomp')
             ->with('success', 'instruction updated');
         } catch (\Throwable $th) {
@@ -293,8 +314,8 @@ public function submitqualitycheck(Request $request,$id,$instr_id,$propid){
         $invoicedatestamp =     DB::table('valinstrinvoicing')
         ->where('status','=','P')->select('*')->orderBy('id', 'desc')->first();
 
-        $newapprovaldatestamp = is_null($approvaldatestamp) ? now() : $approvaldatestamp->datestamp;
-        $newinvoicedatestamp  = is_null($invoicedatestamp) ? now() : $invoicedatestamp->datestamp;
+        $newapprovaldatestamp = is_null($approvaldatestamp) ? now() : $approvaldatestamp->datedue;
+        $newinvoicedatestamp  = is_null($invoicedatestamp) ? now() : $invoicedatestamp->datedue;
         $approvaldatedue = Carbon::parse($newapprovaldatestamp)->addMinutes(60);
         $invoicedatedue  = Carbon::parse($newinvoicedatestamp)->addMinutes(60);
 
@@ -389,7 +410,7 @@ public function submitfinaleapproval(Request $request,$id,$instr_id){
         ->where('instructionid',$instructionid)->select('id')->orderBy('id', 'desc')->first();
         $isprint     =     DB::table('valinstrfinalapproval')->where('id', $approvalid)
         ->select('*')->first();
-        $newdatestamp = is_null($datestamp) ? now() : $datestamp->datestamp;
+        $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
         $datedue = Carbon::parse($newdatestamp)->addMinutes(60);
         if (trim($isprint->isprint)=='Y'){
             DB::table('valinstrprinting') ->insert(['instructionid'=>$instructionid,'operatorid'=>
@@ -484,7 +505,7 @@ public function submitprinting(Request $request,$id,$instr_id){
         $datestamp =     DB::table('valinstrdispatch')
         ->where('status','=','P')->select('*')->orderBy('id', 'desc')->first();
        
-        $newdatestamp = is_null($datestamp) ? now() : $datestamp->datestamp;
+        $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
         $datedue = Carbon::parse($newdatestamp)->addMinutes(60);
         DB::table('valinstrprinting')->where('id', $printid)
         ->update(['completedby' => session('alluser'),'status' => 'C',

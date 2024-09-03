@@ -39,7 +39,7 @@ $propid= Crypt::encrypt($instr->propertyid);
                 <a class="nav-link active" id="property-info-tab" data-toggle="tab" href="#property-info" role="tab" aria-controls="property-info" aria-selected="false">Property Details</a>
             </li>
         </ul>
-        <form class="form-material material-primary" id="defaultform" method="POST"
+        <form class="form-material material-primary" id="defaultform" method="POST" enctype="multipart/form-data"
                 action="{{ route('valapp.sbtcomp',[$id,$instr_id,$propid]) }}">@csrf
         <!-- Tabs Content -->
         <div class="tab-content" id="clientTabContent">
