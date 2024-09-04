@@ -204,7 +204,7 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::any('/val/{id}/compile/{instr_id}/{propid}', 'submitcompilation')->name('valapp.sbtcomp');/*done*/
     Route::get('/val/list/quality-check', 'listallinstructionqualitycheck')->name('valapp.listquality');
     Route::get('/val/{id}/view-single/{instr_id}/quality/check', 'viewsinglequalitycheck')->name('valapp.viewsinglqlty');
-    Route::any('/val/{id}/quality/{instr_id}/{propid}', 'submitqualitycheck')->name('valapp.sbtqty');
+    Route::any('/val/{id}/quality/{instr_id}', 'submitqualitycheck')->name('valapp.sbtqty');
     Route::get('/val/list/final-approve', 'listallinstructionfinalapproval')->name('valapp.listallappro');
     Route::get('/val/{id}/view-single/{instr_id}/final/approval', 'viewsinglefinalapproval')->name('valapp.viewsinglfinapr');
     Route::any('/val/{id}/instruction/{instr_id}/approval', 'submitfinaleapproval')->name('valapp.sbtfinalap');
@@ -217,6 +217,10 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/list/dispatch', 'listallinstructiondispatch')->name('valapp.listdispatch');
     Route::get('/val/{id}/view-single/{instr_id}/dispatch', 'viewsingledispatch')->name('valapp.viewsingldisp');
     Route::any('/val/{id}/report/dispatch', 'submitdispatch')->name('valapp.sbtidisp');
+    /*-----------download reports-------------------- */
+    Route::any('/val-report/{instr_id}/download/doc', 'downloadreportword')->name('valapp.dwndoc');
+    Route::any('/val-report/{instr_id}/excel/download', 'downloadreportexcel')->name('valapp.dwnexc');
+    /*-----------end download reports-------------------- */
 });
 Route::controller(ValDeclinedController::class)->group(function(){
     Route::get('/val/list/acknowledgement/declined', 'listalldeclinedacknowledgement')->name('valdec.listackn');

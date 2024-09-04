@@ -7,6 +7,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ValApprovalController extends Controller
 {
@@ -268,6 +269,8 @@ try {
             ->select('*')->first();
         $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
         ,[$arr['instr']->propertyid]))->first();
+        $arr['upload']   = DB::table('valinstruploads')->where('instructionid',$instructionid)
+            ->select('*')->first();
     
         $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
             'N' => DB::table('valinstructions') ->where('id', $instructionid)
@@ -302,11 +305,25 @@ return redirect()->route('valapp.listquality')
     ->with('error', 'failed to load');
 }
 }
-public function submitqualitycheck(Request $request,$id,$instr_id,$propid){
+public function submitqualitycheck(Request $request,$id,$instr_id){
     try{
         $qualityid = Crypt::decrypt($id);
         $instructionid = Crypt::decrypt($instr_id);
         try{
+            $request->validate([
+                'reportdocument' => 'required',
+            ]);
+            $filename   = DB::table('valinstruploads')->where('instructionid',$instructionid)
+            ->select('reportdoc')->first();
+            if (!is_null($filename)) {
+             $this->deletereportdoc($filename->reportdoc);
+            }
+            if ($request->hasFile('reportdocument')) {
+                $reportdoc = $request->file('reportdocument');
+                $reportdocname = $request->propertyaddress . '.' . $reportdoc->getClientOriginalExtension();
+                $reportdoc->storeAs('public/documents/val/doc', $reportdocname);
+            }else{$reportdocname = '';}
+
         $isprint = (is_null($request->isprintreport)) ? 'N' : 'Y' ;
            
         $approvaldatestamp =     DB::table('valinstrfinalapproval')
@@ -327,6 +344,9 @@ public function submitqualitycheck(Request $request,$id,$instr_id,$propid){
         session('alluser'),'datedue'=>$invoicedatedue]);
         DB::table('valinstrfinalapproval') ->insert(['instructionid'=>$instructionid,'operatorid'=>
         session('alluser'),'datedue'=>$approvaldatedue,'isprint'=>$isprint]);
+
+        DB::table('valinstruploads')->where('instructionid',$instructionid)
+        ->update(['reportdoc'=>$reportdocname]);
 
             return redirect()->route('valapp.listquality')
             ->with('success', 'instruction updated');
@@ -681,4 +701,58 @@ public function submitdispatch($id){
         ->with('error', 'failed to load');
     }
 }
+/*------------------start download reports------------------------ */
+public function downloadreportword($instr_id) {
+    try {
+        $instructionid = Crypt::decrypt($instr_id);
+        try {
+            $upload   = DB::table('valinstruploads')->where('instructionid',$instructionid)
+            ->select('*')->first();
+        } catch (\Throwable $th) {
+            return redirect()->route('dash.val');
+        }
+            if($upload->reportdoc =='' || is_null($upload->reportdoc)){
+                return abort(400);
+            }
+            //check the existance of receipt first
+            if (!Storage::disk('public')->exists("documents/val/doc/{$upload->reportdoc}")) {
+                return abort(404);
+            }
+            return response()->download(storage_path("app/public/documents/val/doc/{$upload->reportdoc}"));
+
+    } catch (DecryptException $th) {
+        return redirect()->route('dash.val');
+    }
+}
+public function downloadreportexcel($instr_id) {
+    try {
+        $instructionid = Crypt::decrypt($instr_id);
+        try {
+            $upload   = DB::table('valinstruploads')->where('instructionid',$instructionid)
+            ->select('*')->first();
+        } catch (\Throwable $th) {
+            return redirect()->route('dash.val');
+        }
+            if($upload->reportexcel =='' || is_null($upload->reportexcel)){
+                return abort(400);
+            }
+            //check the existance of receipt first
+            if (!Storage::disk('public')->exists("documents/val/excel/{$upload->reportexcel}")) {
+                return abort(404);
+            }
+            return response()->download(storage_path("app/public/documents/val/excel/{$upload->reportexcel}"));
+
+    } catch (DecryptException $th) {
+        return redirect()->route('dash.val');
+    }
+}
+public function deletereportdoc($filename) {
+    //check the existance of receipt first
+      if (Storage::disk('public')->exists("documents/val/doc/{$filename}")) {
+        Storage::disk('public')->delete("documents/val/doc/{$filename}");
+        return 'success';
+     }else{return 'notfound';}
+   
+}
+/*------------------end download reports------------------------ */
 }
