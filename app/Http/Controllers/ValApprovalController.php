@@ -322,7 +322,7 @@ public function submitqualitycheck(Request $request,$id,$instr_id){
                 $reportdoc = $request->file('reportdocument');
                 $reportdocname = $request->propertyaddress . '.' . $reportdoc->getClientOriginalExtension();
                 $reportdoc->storeAs('public/documents/val/doc', $reportdocname);
-            }else{$reportdocname = '';}
+            }else{$reportdocname = null;}
 
         $isprint = (is_null($request->isprintreport)) ? 'N' : 'Y' ;
            
@@ -385,6 +385,8 @@ public function viewsinglefinalapproval($id,$instrid){
                 ->select('*')->first();
             $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
             ,[$arr['instr']->propertyid]))->first();
+            $arr['upload']   = DB::table('valinstruploads')->where('instructionid',$instructionid)
+            ->select('*')->first();
         
             $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
                 'N' => DB::table('valinstructions') ->where('id', $instructionid)
@@ -419,11 +421,25 @@ public function viewsinglefinalapproval($id,$instrid){
         ->with('error', 'failed to load');
     }
 }
-public function submitfinaleapproval(Request $request,$id,$instr_id){
+public function submitfinalapproval(Request $request,$id,$instr_id){
     try{
         $approvalid = Crypt::decrypt($id);
         $instructionid = Crypt::decrypt($instr_id);
         try{
+            $request->validate([
+                'reportdocument' => 'required',
+            ]);
+            $filename   = DB::table('valinstruploads')->where('instructionid',$instructionid)
+            ->select('reportdoc')->first();
+            if (!is_null($filename)) {
+             $this->deletereportdoc($filename->reportdoc);
+            }
+            if ($request->hasFile('reportdocument')) {
+                $reportdoc = $request->file('reportdocument');
+                $reportdocname = $request->propertyaddress . '.' . $reportdoc->getClientOriginalExtension();
+                $reportdoc->storeAs('public/documents/val/doc', $reportdocname);
+            }else{$reportdocname = null;}
+
         $datestamp =     DB::table('valinstrprinting')
         ->where('status','=','P')->select('*')->orderBy('id', 'desc')->first();
         $compileid =     DB::table('valinstrcompile')
@@ -445,6 +461,8 @@ public function submitfinaleapproval(Request $request,$id,$instr_id){
         DB::table('valinstrfinalapproval')->where('id', $approvalid)
         ->update(['completedby' => session('alluser'),'status' => 'C',
         'completedon' => now()]);
+        DB::table('valinstruploads')->where('instructionid',$instructionid)
+        ->update(['reportdoc'=>$reportdocname]);
 
         return redirect()->route('valapp.listallappro')
             ->with('success', 'instruction updated');
@@ -483,6 +501,8 @@ public function viewsingleprint($id,$instrid){
                 ->select('*')->first();
             $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
             ,[$arr['instr']->propertyid]))->first();
+            $arr['upload']   = DB::table('valinstruploads')->where('instructionid',$instructionid)
+            ->select('*')->first();
         
             $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
                 'N' => DB::table('valinstructions') ->where('id', $instructionid)
@@ -569,6 +589,8 @@ public function viewsingleinvoicing($id,$instrid){
                 ->select('*')->first();
             $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
             ,[$arr['instr']->propertyid]))->first();
+            $arr['upload']   = DB::table('valinstruploads')->where('instructionid',$instructionid)
+            ->select('*')->first();
         
             $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
                 'N' => DB::table('valinstructions') ->where('id', $instructionid)

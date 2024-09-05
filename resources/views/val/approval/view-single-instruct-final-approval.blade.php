@@ -7,6 +7,10 @@ $status = trim($instr->isportfolio)=='N' ?
 $id= Crypt::encrypt($currstage->id);
 $instr_id= Crypt::encrypt($instr->id);
 $propid= Crypt::encrypt($instr->propertyid);
+$attachementdoc = ($upload !== null && !is_null($upload->reportdoc)) ? 'download report' : '';
+$attachementexcel = ($upload !== null && !is_null($upload->reportexcel)) ? 'download schedule' : '';
+$reportdoc = ($upload !== null && !is_null($upload->reportdoc)) ? route('valapp.dwndoc',[$instr_id]) : '';
+$reportexc = ($upload !== null && !is_null($upload->reportexcel)) ? route('valapp.dwnexc',[$instr_id]) : '';
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'Approval')
@@ -39,8 +43,8 @@ $propid= Crypt::encrypt($instr->propertyid);
                 <a class="nav-link active" id="property-info-tab" data-toggle="tab" href="#property-info" role="tab" aria-controls="property-info" aria-selected="false">Property Details</a>
             </li>
         </ul>
-        <form class="form-material material-primary" id="defaultform" method="POST"
-                action="{{ route('valapp.sbtfinalap',[$id,$instr_id]) }}">@csrf
+        <form class="form-material material-primary" id="defaultform" enctype="multipart/form-data"
+        method="POST"  action="{{ route('valapp.sbtfinalap',[$id,$instr_id]) }}">@csrf
         <!-- Tabs Content -->
         <div class="tab-content" id="clientTabContent">
             <div class="tab-pane fade" id="instruction-info" role="tabpanel" aria-labelledby="instruction-info-tab">
@@ -117,11 +121,11 @@ $propid= Crypt::encrypt($instr->propertyid);
                         </tr>
                         <tr>
                             <td><strong>Report document:</strong></td>
-                            <td>$client->gender ?? </td>
+                            <td><a href="{{ $reportdoc }}">{{ $attachementdoc}}</a> </td>
                         </tr>
                         <tr>
                             <td><strong>Report Schedule:</strong></td>
-                            <td>$client->gender ?? </td>
+                            <td><a href="{{ $reportexc }}">{{ $attachementexcel}}</a> </td>
                         </tr>
                     </tbody>
                 </table>
@@ -178,6 +182,8 @@ $propid= Crypt::encrypt($instr->propertyid);
             <div class="col-sm-4">
                 <input type="file" class="form-control" id="reportdocument" name="reportdocument"
                 accept=".doc">
+                <input type="text" class="form-control" name="propertyaddress" 
+                value="{{$properties->streetaddress ?? ''}}" hidden/>
                  <small id="reportdocumentcheck" style="color: red;">required</small>
             </div>
         </div>

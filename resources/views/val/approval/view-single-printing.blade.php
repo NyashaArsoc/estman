@@ -6,6 +6,8 @@ $status = trim($instr->isportfolio)=='N' ?
     : '<span class="badge badge-pill bg-info">portfolio instruction</span>';
 $id= Crypt::encrypt($currstage->id);
 $instr_id= Crypt::encrypt($instr->id);
+$attachementdoc = ($upload !== null && !is_null($upload->reportdoc)) ? 'download report' : '';
+$reportdoc = ($upload !== null && !is_null($upload->reportdoc)) ? route('valapp.dwndoc',[$instr_id]) : '';
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'Print')
@@ -117,7 +119,7 @@ $instr_id= Crypt::encrypt($instr->id);
                         </tr>
                         <tr>
                             <td><strong>Report document:</strong></td>
-                            <td>$client->gender ?? </td>
+                            <td><a href="{{ $reportdoc }}">{{ $attachementdoc}}</a> </td>
                         </tr>
                     </tbody>
                 </table>

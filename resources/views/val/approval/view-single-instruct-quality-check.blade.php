@@ -10,10 +10,6 @@ $attachementdoc = ($upload !== null && !is_null($upload->reportdoc)) ? 'download
 $attachementexcel = ($upload !== null && !is_null($upload->reportexcel)) ? 'download schedule' : '';
 $reportdoc = ($upload !== null && !is_null($upload->reportdoc)) ? route('valapp.dwndoc',[$instr_id]) : '';
 $reportexc = ($upload !== null && !is_null($upload->reportexcel)) ? route('valapp.dwnexc',[$instr_id]) : '';
-// $attachementdoc = is_null($upload->reportdoc) ? '' : 'download report';
-// $attachementexcel = is_null($upload->reportexcel) ? '' : 'download schedule';
-// $reportdoc = is_null($upload->reportdoc) ? route('dash.val') : route('valapp.dwndoc',[$instr_id]);
-// $reportexc = is_null($upload->reportexcel) ? '' : route('valapp.dwnexc',[$instr_id]);
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'Quality Check')
