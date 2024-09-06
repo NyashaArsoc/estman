@@ -777,4 +777,25 @@ public function deletereportdoc($filename) {
    
 }
 /*------------------end download reports------------------------ */
+/* ----------------compile portfolio---------------------------------*/
+public function listallportfoliocompile(){
+    try {
+        $arr['portfolio'] = DB::select('EXEC spValGetPortfolioCompilation');
+        return view('val.approval.list-instruct-compile-port')->with($arr);
+    } catch (\Throwable $th) {
+        return redirect()->route('dash.val');
+    }
+}
+public function listallinstructionportfoliocompile($id){
+    try {
+        $portfolioid = Crypt::decrypt($id);
+        try {
+            
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listportcomp');
+        }
+    } catch (DecryptException $th) {
+        return redirect()->route('valapp.listportcomp');
+    }
+}
 }

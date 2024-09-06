@@ -217,6 +217,8 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/list/dispatch', 'listallinstructiondispatch')->name('valapp.listdispatch');
     Route::get('/val/{id}/view-single/{instr_id}/dispatch', 'viewsingledispatch')->name('valapp.viewsingldisp');
     Route::any('/val/{id}/report/dispatch', 'submitdispatch')->name('valapp.sbtidisp');
+    Route::get('/val/list/portfolio/compilation', 'listallportfoliocompile')->name('valapp.listportcomp');
+    Route::get('/val/portfolio/{id}/compilation', 'listallinstructionportfoliocompile')->name('valapp.viewsinglportfoli');
     /*-----------download reports-------------------- */
     Route::any('/val-report/{instr_id}/download/doc', 'downloadreportword')->name('valapp.dwndoc');
     Route::any('/val-report/{instr_id}/excel/download', 'downloadreportexcel')->name('valapp.dwnexc');

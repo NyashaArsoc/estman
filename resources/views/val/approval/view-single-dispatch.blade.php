@@ -19,7 +19,7 @@ $id= Crypt::encrypt($currstage->id);
     <h4>{{ $title }}</h4>
     <ol class="breadcrumb no-bg mb-1">
         <li class="breadcrumb-item"><a href="{{ route('dash.val') }}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('valapp.listallappro') }}">List</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('valapp.listdispatch') }}">List</a></li>
         <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
     <div class="box box-block bg-white">
@@ -113,10 +113,6 @@ $id= Crypt::encrypt($currstage->id);
                         <tr>
                             <td><strong>Street Address:</strong></td>
                             <td>{{$properties->streetaddress ?? ''}} </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Report document:</strong></td>
-                            <td>$client->gender ?? </td>
                         </tr>
                     </tbody>
                 </table>
