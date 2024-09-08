@@ -98,3 +98,9 @@ function rejectapproval(that) {
         window.location = anchor.attr("href");
     }
 }
+function closeportfolio(that) {
+    var proceedto = confirm("proceed to close portfolio?")
+    if (proceedto) {
+        window.location = anchor.attr("href");
+    }
+}
