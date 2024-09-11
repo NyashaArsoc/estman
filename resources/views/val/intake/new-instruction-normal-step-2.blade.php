@@ -76,6 +76,7 @@ $description = 'select properties to allocate...';
              value="{{$payment->description}}" hidden><input type="text" name="contact" 
              value="{{$contact->id}}" hidden><input type="text" name="user" value="{{$valuer->id}}" hidden>
              <input type="text" name="allocateto" value="{{$valuer->username}}" hidden>
+             <input type="text" name="accessdatetime" value="{{$access}}" hidden>
         </form>
         <!-- <div class="mt-3"></div> -->
         @include('layout.arlet')

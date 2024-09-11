@@ -185,7 +185,7 @@ Route::controller(ValIntakeController::class)->group(function(){
     Route::any('/val/add/new/port-instr', 'addnewinstructionport')->name('valin.addnewport');/*done*/
     Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');/*done*/
     Route::any('/val/submit/page/normal-instr', 'addinstructionnormalsubmit')->name('valin.subnom');/*done*/
-    Route::get('/val/{id}/nom/{vid}/inst/{cid}/pur/{pid}/typ/{tid}/pay/{payid}', 'addinstructionnormalsteptwo')->name('valin.lstpropallo');
+    Route::get('/val/{id}/nom/{vid}/inst/{cid}/pur/{pid}/typ/{tid}/pay/{payid}/{accessdate}', 'addinstructionnormalsteptwo')->name('valin.lstpropallo');
     Route::any('/val/add/new/normal-instr', 'addnewinstructionnormal')->name('valin.addnewnom');/*done*/
        
 });

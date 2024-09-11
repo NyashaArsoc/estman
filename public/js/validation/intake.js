@@ -652,11 +652,11 @@ $("#btn-val-new-portfolio").click(function () {
 });
 // add val new normal instruction
 $("#btn-val-instr-normal-1").click(function () {
-    validateValuationValuerName();
+    validateValuationValuerName();validatePortfolioDueDate();
     validateValuationPaymentAgreement();validateValuationPurpose();
     validateValuationType();validateClientContactName();
     try {
-        if(valuernameError==true &&valuationpaymentagreementError==true &&
+        if(valuernameError==true &&valuationpaymentagreementError==true && portfolioduedateError==true &&
              valuationpurposeError==true &&  valuationtypeError==true && 
              clientcontactnameError==true )
             { return true; }

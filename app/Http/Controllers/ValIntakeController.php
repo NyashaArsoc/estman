@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class ValIntakeController extends Controller
 {
@@ -225,13 +226,14 @@ public function addinstructionnormalsubmit(Request $request){
         $pid = Crypt::encrypt($request->valuationpurpose);
         $tid = Crypt::encrypt($request->valuationtype);
         $payid = Crypt::encrypt($request->valuationpaymentagreement);
-        return  redirect()->route('valin.lstpropallo',[$id,$vid,$cid,$pid,$tid,$payid]);
+        $accessdate = Crypt::encrypt($request->accessdatetime);
+        return  redirect()->route('valin.lstpropallo',[$id,$vid,$cid,$pid,$tid,$payid,$accessdate]);
      } catch (DecryptException $th) {
          return  redirect()->route('valin.addinstnom') 
                  ->with('error', 'failed to load');
      }
 }
-public function addinstructionnormalsteptwo($id,$vid,$cid,$pid,$tid,$payid){
+public function addinstructionnormalsteptwo($id,$vid,$cid,$pid,$tid,$payid,$accessdate){
     try{
         $clientid = Crypt::decrypt($id);
         $valuerid = Crypt::decrypt($vid);
@@ -239,6 +241,7 @@ public function addinstructionnormalsteptwo($id,$vid,$cid,$pid,$tid,$payid){
         $purposeid = Crypt::decrypt($pid);
         $typeid = Crypt::decrypt($tid);
         $paymentid = Crypt::decrypt($payid);
+        $accessdatetime = Crypt::decrypt($accessdate);
         try {
             $arr['valuer']   = DB::table('systusers')->where('id',$valuerid)
             ->select('*')->first();
@@ -250,6 +253,7 @@ public function addinstructionnormalsteptwo($id,$vid,$cid,$pid,$tid,$payid){
         ->select('*')->first();
         $arr['payment']   = DB::table('valpaymentagreement')->where('id',$paymentid)
         ->select('*')->first();
+        $arr['access'] = $accessdatetime;
             $arr['property'] = DB::select('EXEC spValGetInstrPropertyToCapture ?',[$clientid]);
         return view('val.intake.new-instruction-normal-step-2')->with($arr);
         } catch (\Throwable $th) {
@@ -265,12 +269,13 @@ public function addnewinstructionnormal(Request $request){
     try {  
         $selectedids = $request->input('selectedids');
         $NumbersInArray         =       count($selectedids);
+        $accessdatetime = Carbon::parse($request->accessdatetime);
         $a  = 0;
         while ($a   <   $NumbersInArray){
             $id = DB::table('valinstructions') ->insertGetId(['allocatedto'=>$request
             ->allocateto,'propertyid'=>$selectedids[$a],'operatorid'=>session('alluser'), 
             'purpose'=>$request->purpose,'type'=>$request->valtype,'paymentterms'=>$request->payment,
-            'contactid'=>$request->contact]);
+            'contactid'=>$request->contact,'datedueaccessdate'=>$accessdatetime]);
 
             DB::table('valinstracknowledgement')
             ->insert(['instructionid'=>$id,'operatorid'=>session('alluser'),
@@ -282,7 +287,7 @@ public function addnewinstructionnormal(Request $request){
         
     } catch (\Throwable $th) {
         return  redirect()->route('valin.addinstnom') 
-                ->with('error', 'failed to load');
+                ->with('error', 'failed to load'.$th);
     }
 }
 }

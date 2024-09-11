@@ -36,6 +36,12 @@ $description = 'create new normal instruction...';
                         @endforeach
                         </select>
                     </div>
+                    <label for="" class="col-sm-2 form-control-label">Access Date</label>
+                    <div class="col-sm-2">
+                        <input type="datetime-local" class="form-control"
+                         id="portfolioduedate" name="accessdatetime">
+                        <small id="portfolioduedatecheck" style="color: red;"> date is required</small>
+                    </div>
                 </div><br/>
                 <div class="form-group row">
                     <label for="" class="col-sm-2 col-form-label">Client Name </label>

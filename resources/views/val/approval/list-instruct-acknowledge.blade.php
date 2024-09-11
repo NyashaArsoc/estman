@@ -38,7 +38,7 @@ $description = 'acknowledge instruction ...';
                                   @endphp
                                     <td>{{$count ++}}</td>
                                     <td>{{$abc->companyname ?? ''}} {{$abc->clientfullname ?? ''}}</td>
-                                    <td>{{$abc->contactname}} {{ now() }}</td>
+                                    <td>{{$abc->contactname}}</td>
                                     <td>{{$abc->propertytype}}</td>
                                     <td>{{$abc->streetaddress}}</td>
                                     <td> {!! $status !!} </td>
