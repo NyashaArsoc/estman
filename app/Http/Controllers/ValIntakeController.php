@@ -121,11 +121,15 @@ public function createportfolio(){
 }
 public function createnewportfolio(Request $request){
     try {  
-        DB::table('valinstrportfolio') ->insert(['datedue'=>$request
+        $invoicedatedue = Carbon::parse(now())->addMinutes(60);
+       $id = DB::table('valinstrportfolio') ->insertGetId(['datedue'=>$request
         ->portfolioduedate,'totalproperties'=>$request->totalnumberpropertyportfolio,'operatorid'
         =>session('alluser'), 'purpose'=>$request->valuationpurpose,'type'=>$request->valuationtype,
         'paymentterms'=>$request->valuationpaymentagreement,
         'clientcontactid'=>$request->clientcontactname,'clientid'=>$request->propertyclientname]);
+
+        DB::table('valinstrinvoicingportfolio') ->insert(['portfolioid'=>$id,'operatorid'=>
+        session('alluser'),'datedue'=>$invoicedatedue]);
        
         return  redirect()->route('valin.crtportfoli') 
             ->with('success', 'portfolio created');

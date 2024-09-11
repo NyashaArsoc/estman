@@ -32,9 +32,18 @@ $description = 'instructions for invoice...';
                                 @foreach($stage as $abc)
                                    <tr>
                                     @php
+                                    $id= Crypt::encrypt($abc->id);
+                                    $instr_id= Crypt::encrypt($abc->instructionid);
                                     $status = trim(now())>=trim($abc->datedue) ? 
                                     '<span class="badge badge-pill bg-danger">overdue</span>'
-                                    : '<span class="badge badge-pill bg-success">pending</span>';  
+                                    : '<span class="badge badge-pill bg-success">pending</span>'; 
+                                    $btnview =  trim(trim($abc->propertytype)=='portfolio') ?
+                                    '<a class="btn btn-info btn-sm " id=""
+                                     href="' . route('valapp.viewsinglinvoport',[$instr_id]) .'"
+                                     title="view"><i class="ti-eye mr-0-5"></i>view</a>' :
+                                   '<a class="btn btn-info btn-sm " id=""
+                                     href="' . route('valapp.viewsinglinvo',[$id,$instr_id]) . '"
+                                     title="view"><i class="ti-eye mr-0-5"></i>view</a>'
                                   @endphp
                                     <td>{{$count ++}}</td>
                                     <td>{{$abc->companyname ?? ''}} {{$abc->clientfullname ?? ''}}</td>
@@ -42,11 +51,7 @@ $description = 'instructions for invoice...';
                                     <td>{{$abc->propertytype}}</td>
                                     <td>{{$abc->streetaddress}}</td>
                                     <td> {!! $status !!} </td>
-                                    @php $id= Crypt::encrypt($abc->id);
-                                 $instr_id= Crypt::encrypt($abc->instructionid); @endphp
-                                 <td><a class="btn btn-info btn-sm " id=""
-                                     href="{{route('valapp.viewsinglinvo',[$id,$instr_id])}}"
-                                     title="view"><i class="ti-eye mr-0-5"></i>view</a>
+                                 <td>{!! $btnview !!}
                                  </td>
                                 </tr>
                                 @endforeach

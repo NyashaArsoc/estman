@@ -313,6 +313,7 @@ public function submitqualitycheck(Request $request,$id,$instr_id){
             $request->validate([
                 'reportdocument' => 'required',
             ]);
+            $instructiontype = DB::table('valinstructions') ->where('id', $instructionid)->select('*') ->first();
             $filename   = DB::table('valinstruploads')->where('instructionid',$instructionid)
             ->select('reportdoc')->first();
             if (!is_null($filename)) {
@@ -339,9 +340,12 @@ public function submitqualitycheck(Request $request,$id,$instr_id){
         DB::table('valinstrqualitycheck')->where('id', $qualityid)
         ->update(['completedby' => session('alluser'),'status' => 'C',
         'completedon' => now(),'comments'=>$request->commentshighlights]);
-       
-        DB::table('valinstrinvoicing') ->insert(['instructionid'=>$instructionid,'operatorid'=>
-        session('alluser'),'datedue'=>$invoicedatedue]);
+       /*-------------------check if portfolio dont put to invoice-------------------- */
+        if (trim($instructiontype->isportfolio)=='N') {
+            DB::table('valinstrinvoicing') ->insert(['instructionid'=>$instructionid,'operatorid'=>
+            session('alluser'),'datedue'=>$invoicedatedue]);
+        }
+    
         DB::table('valinstrfinalapproval') ->insert(['instructionid'=>$instructionid,'operatorid'=>
         session('alluser'),'datedue'=>$approvaldatedue,'isprint'=>$isprint]);
 
@@ -627,11 +631,48 @@ public function viewsingleinvoicing($id,$instrid){
         ->with('error', 'failed to load');
     }
 }
+public function viewsingleinvoicingportfolio($id){
+    try {
+        $portfolio = Crypt::decrypt($id);
+        try {
+            $arr['currency']   = DB::table('currency')
+            ->select('id','code')->get();
+            $arr['instr']   = DB::table('valinstrlistportfolio')->where('id',$portfolio)
+            ->select('*')->first();
+           return view('val.approval.view-single-invoicing-portfolio')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listinvoice')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('valapp.listinvoice')
+        ->with('error', 'failed to load');
+    }
+}
 public function submitinvoicing(Request $request,$id){
     try{
         $invoiceid = Crypt::decrypt($id);
         try{
         DB::table('valinstrinvoicing')->where('id', $invoiceid)
+        ->update(['completedby' => session('alluser'),'status' => 'C', 'completedon' 
+        => now(),'currencycode'=>$request->currencycode,'amountinvoiced'=>$request->invoicedamount]);
+
+        return redirect()->route('valapp.listinvoice')
+            ->with('success', 'instruction updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listinvoice')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+        return redirect()->route('valapp.listinvoice')
+        ->with('error', 'failed to load');
+    }
+}
+public function submitinvoicingportfolio(Request $request,$id){
+    try{
+        $portfolioid = Crypt::decrypt($id);
+        try{
+        DB::table('valinstrinvoicingportfolio')->where('portfolioid', $portfolioid)
         ->update(['completedby' => session('alluser'),'status' => 'C', 'completedon' 
         => now(),'currencycode'=>$request->currencycode,'amountinvoiced'=>$request->invoicedamount]);
 

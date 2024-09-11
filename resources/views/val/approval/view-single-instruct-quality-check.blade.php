@@ -187,7 +187,7 @@ $reportexc = ($upload !== null && !is_null($upload->reportexcel)) ? route('valap
                 id="commentshighlights" />
             </div>
             <label for="email" class="col-sm-2 text-uppercase">
-                <small>Print Report?</small></label>
+                <small>Print Report YES?</small></label>
             <div class="col-sm-4">
                 <label class="switchToggle">
                     <input type="checkbox" name="isprintreport"

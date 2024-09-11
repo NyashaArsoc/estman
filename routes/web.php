@@ -213,7 +213,9 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::any('/val/{id}/report/{instr_id}/print', 'submitprinting')->name('valapp.sbtprint');
     Route::get('/val/list/invoicing', 'listallinstructioninvoice')->name('valapp.listinvoice');
     Route::get('/val/{id}/view-single/{instr_id}/invoice', 'viewsingleinvoicing')->name('valapp.viewsinglinvo');
+    Route::get('/val-invoice/{id}/view-port', 'viewsingleinvoicingportfolio')->name('valapp.viewsinglinvoport');/*portfolio*/
     Route::any('/val/{id}/report/invoicing', 'submitinvoicing')->name('valapp.sbtinvoic');
+    Route::any('/val/{id}/portfolio/invoicing', 'submitinvoicingportfolio')->name('valapp.sbtinvoicport');
     Route::get('/val/list/dispatch', 'listallinstructiondispatch')->name('valapp.listdispatch');
     Route::get('/val/{id}/view-single/{instr_id}/dispatch', 'viewsingledispatch')->name('valapp.viewsingldisp');
     Route::any('/val/{id}/report/dispatch', 'submitdispatch')->name('valapp.sbtidisp');

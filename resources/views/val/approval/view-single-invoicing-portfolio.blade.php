@@ -1,16 +1,10 @@
 @php
-$title = 'Acknowledge Instruction';
-$description = 'below are instruction details .';
- $status = trim($instr->isportfolio)=='N' ? 
-'<span class="badge badge-pill bg-primary">normal instruction</span>'
-    : '<span class="badge badge-pill bg-info">portfolio instruction</span>';
-$accessdate = trim($instr->isportfolio)=='Y' ? now() : $purpose->datedueaccessdate;
-$id= Crypt::encrypt($acknow->id);
-$instr_id= Crypt::encrypt($instr->id);
-$to_id= Crypt::encrypt($acknow->allocatedto);
+$title = 'Invoicing Instruction';
+$description = 'instruction invoicing details .';
+$id= Crypt::encrypt($instr->id);
 @endphp
 @extends('layout.no-menu-layout')
-@section('title', 'Acknowledge')
+@section('title', 'Invoicing')
 @section('additional css')
 <link rel="stylesheet" type="text/css" href="{{ asset('css/select2/select2.min.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('css/select2-bootstrap-theme/select2-bootstrap.min.css') }}" />
@@ -21,13 +15,13 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
     <h4>{{ $title }}</h4>
     <ol class="breadcrumb no-bg mb-1">
         <li class="breadcrumb-item"><a href="{{ route('dash.val') }}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('valapp.listackn') }}">List</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('valapp.listinvoice') }}">List</a></li>
         <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
     <div class="box box-block bg-white">
         <h5>{{ $title }}</h5>
         <p class="font-90 text-muted mb-1">{{ $description }}</p>
-         {!! $status !!}<hr/>
+        <span class="badge badge-pill bg-info">portfolio instruction</span><hr/>
         <!-- Tabs Navigation -->
         <ul class="nav nav-tabs" id="clientTab" role="tablist">
             <li class="nav-item">
@@ -41,7 +35,7 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
             </li>
         </ul>
         <form class="form-material material-primary" id="defaultform" method="POST"
-                action="{{ route('valapp.declacknow',[$id,$instr_id]) }}">@csrf
+                action="{{ route('valapp.sbtinvoicport',$id) }}">@csrf
         <!-- Tabs Content -->
         <div class="tab-content" id="clientTabContent">
             <div class="tab-pane show active" id="instruction-info" role="tabpanel" aria-labelledby="instruction-info-tab">
@@ -49,19 +43,19 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
                     <tbody>
                         <tr>
                             <td><strong>Date Received:</strong></td>
-                            <td>{{ Carbon\Carbon::parse($purpose->datestamp)->format('F j, Y') ?? ''}} </td>
-                        </tr>
+                            <td>{{ Carbon\Carbon::parse($instr->datestamp)->format('F j, Y') ?? ''}} </td>
+                       </tr>
                         <tr>
                             <td><strong>Valuation Purpose:</strong></td>
-                            <td>{{$purpose->purpose ?? ''}} </td>
+                            <td>{{$instr->purpose ?? ''}} </td>
                         </tr>
                         <tr>
                             <td><strong>Valuation Type:</strong></td>
-                            <td>{{$purpose->type ?? ''}} </td>
+                            <td>{{$instr->type ?? ''}} </td>
                         </tr>
                         <tr>
-                            <td><strong>Access Date:</strong></td>
-                            <td>{{ Carbon\Carbon::parse($accessdate)->format('F j, Y H:m') ?? ''}} </td>
+                            <td><strong>Valuation Due Date:</strong></td>
+                            <td>{{$instr->datedue ?? ''}} </td>
                         </tr>
                     </tbody>
                 </table>
@@ -71,24 +65,23 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
                     <tbody>
                         <tr>
                             <td><strong>Name:</strong></td>
-                            <td>{{$client->companyname ?? ''}} {{$client->lastname ?? ''}}
-                                {{$client->firstname ?? ''}} </td>
+                            <td>{{$instr->companyname ?? ''}} {{$instr->fullname ?? ''}}</td>
                         </tr>
                         <tr>
                             <td><strong>Contact Person:</strong></td>
-                            <td>{{$client->contactfirstname ?? ''}} {{$client->contactlastname ?? ''}}</td>
+                            <td>{{$instr->contactperson ?? ''}}</td>
                         </tr>
                         <tr>
                             <td><strong>Cell:</strong></td>
-                            <td>{{$client->cell ?? ''}} </td>
+                            <td>{{$instr->cell ?? ''}} </td>
                         </tr>
                         <tr>
                             <td><strong>Email:</strong></td>
-                            <td>{{$client->email ?? ''}} </td>
+                            <td>{{$instr->contactemail ?? ''}}</td>
                         </tr>
                         <tr>
                             <td><strong>Contact Address:</strong></td>
-                            <td>{{$client->contactddress ?? ''}}</td>
+                            <td>{{$instr->contactddress ?? ''}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -97,45 +90,42 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
                 <table class="table table-bordered mt-3">
                     <tbody>
                         <tr>
-                            <td><strong>Property Type:</strong></td>
-                            <td>{{$properties->propertytype ?? ''}}  </td>
+                            <td><strong>Properties Expected:</strong></td>
+                            <td>{{$instr->totalproperties ?? ''}} </td>
                         </tr>
                         <tr>
-                            <td><strong>Province:</strong></td>
-                            <td>{{$properties->province ?? ''}} </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Town:</strong></td>
-                            <td>{{$properties->town ?? ''}} </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Surbub:</strong></td>
-                            <td>{{$properties->suburb ?? ''}} </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Street Address:</strong></td>
-                            <td>{{$properties->streetaddress ?? ''}}</td>
+                            <td><strong>Properties Captured:</strong></td>
+                            <td>{{$instr->propertiescaptured ?? ''}} </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div><br/>
         <div class="form-group row">
-            <label for="Email" class="col-sm-2 col-form-label">Reason for decline
+            <label for="" class="col-sm-2 form-control-label">Currency </label>
+                <div class="col-sm-4">
+                    <select class="js-example-basic-single w-100" name="currencycode" id="currencycode"/>
+                    <option value="">select currency</option>
+                    @foreach ($currency as $abc)
+                    <option value="{{ $abc->code }}">{{ $abc->code }}</option>
+                @endforeach
+                    </select>
+                    <small id="currencycodecheck" style="color: red;">required</small>
+                </div>
+            <label for="" class="col-sm-2 col-form-label">Invoiced Amount
             </label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" name="reasonsfordecline" 
-                id="reasonsfordecline" />
-                <small id="reasonscheck" style="color: red;"> reasons for rejection</small>
+                <input type="text" class="form-control" name="invoicedamount" 
+                id="marketvalue" />
+                <small id="marketvaluecheck" style="color: red;">required</small>
             </div>
         </div>
         <div class="form-group row">
-            <div class="offset-sm-2 col-sm-4">
-                <a class="btn btn-success btn-sm" href="{{route('valapp.accptacknow',
-                [$id,$instr_id,$to_id])}}" title="accept"><i class="ti-check mr-0-5"></i>accept</a>  
-                <button type="submit" class="btn btn-danger btn-sm" id="reject-instruction-ack" 
-                onclick = "rejectapproval(this); return false;"><i class="ti-close mr-0-5">
-                    </i>decline</button>
+            <div class="form-group row">
+                <div class="offset-sm-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary" id="btn-val-invoicing" >
+                        submit</button>
+                </div>
             </div>
         </div>
         </form>
@@ -144,7 +134,8 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
 <!-- Content End -->
 @endsection
 @section('additional js')
-<script src="{{ asset('js/validation/intake.js') }}"></script>
-<script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script> 
+<script src="{{ asset('js/validation/approval.js') }}"></script>
+<script src="{{ asset('css/select2/select2.min.js') }}"></script>
+<script src="{{ asset('js/select2.js') }}"></script>
     <!-- Additional JS End-->
 @endsection
