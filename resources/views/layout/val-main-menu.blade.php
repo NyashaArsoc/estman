@@ -114,7 +114,7 @@
                             <span class="s-text">Reports</span>
                         </a>
                         <ul>
-                            <li><a href="#">Landlord</a></li>
+                            <li><a href="#"></a></li>
                         </ul>
                     </li>
                     <li class="with-sub">
@@ -154,7 +154,10 @@
                         <span class="hamburger"></span>
                     </div>
                     <ul class="nav navbar-nav float-md-right">
-
+                        <li class="nav-item dropdown"><a class="nav-link" 
+                            data-toggle="dropdown" aria-expanded="false">
+                            {{ $user->firstname . ' ' . $user->lastname ?? ''}}														
+                        </a> </li>
                         <li class="nav-item dropdown hidden-sm-down">
                             <a href="#" data-toggle="dropdown" aria-expanded="false">
                                 <span class="avatar box-32">

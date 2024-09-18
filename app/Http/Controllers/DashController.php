@@ -40,6 +40,29 @@ public function maindashboard(){
        
 }
 public function valuationdashboard(){
-    return view('dash/val-dash');
+    $currentdate    = Carbon::now();
+    $previousdate   = $currentdate->subDays(10);
+    $arr['invoice']   = DB::table('valinstrinvoicing')->where('status','=' ,'P')->get()->count();
+    $arr['approve']   = DB::table('valinstrfinalapproval')->where('status','=' ,'P')->get()->count();
+    $arr['print']   = DB::table('valinstrprinting')->where('status','=' ,'P')->get()->count();
+    $arr['quality']   = DB::table('valinstrqualitycheck')->where('status','=' ,'P')->get()->count();
+    $arr['pending']   = DB::table('valinstructions')->where('status','=' ,'pending')->get()->count();
+    $arr['mail']        = DB::table('valinstrsendingreport')->where('status','=' ,'pending')->get()->count();
+    $arr['portfolio']   = DB::select('EXEC spValGetPortfolioCompilation');
+    $arr['instructions'] = DB::table('valinstrfinalapproval')
+    ->join('valinstructions', 'valinstrfinalapproval.instructionid', '=', 'valinstructions.id')
+    ->join('valclientproperty', 'valclientproperty.id', '=', 'valinstructions.propertyid')
+    ->where('valinstrfinalapproval.status', 'C')
+    ->where('valinstrfinalapproval.completedon', '>=', $previousdate)
+    ->select(
+        'valinstrfinalapproval.completedby',
+        'valinstrfinalapproval.completedon',
+        'valclientproperty.streetaddress'
+    )
+    ->orderBy('valinstrfinalapproval.id', 'desc')
+    ->take(10)
+    ->get();
+    //return $arr['instructions'] ;
+   return view('dash/val-dash')->with($arr);
 }
 }

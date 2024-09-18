@@ -334,8 +334,11 @@ public function submitqualitycheck(Request $request,$id,$instr_id){
 
         $newapprovaldatestamp = is_null($approvaldatestamp) ? now() : $approvaldatestamp->datedue;
         $newinvoicedatestamp  = is_null($invoicedatestamp) ? now() : $invoicedatestamp->datedue;
-        $approvaldatedue = Carbon::parse($newapprovaldatestamp)->addMinutes(60);
-        $invoicedatedue  = Carbon::parse($newinvoicedatestamp)->addMinutes(60);
+     
+        $newapprovalcurrentdatedue = $newapprovaldatestamp <= now() ? now() : $newapprovaldatestamp;
+        $approvaldatedue = Carbon::parse($newapprovalcurrentdatedue)->addMinutes(60);
+        $newinvoicedapprovalcurrentdatedue = $newinvoicedatestamp <= now() ? now() : $newinvoicedatestamp;
+        $invoicedatedue = Carbon::parse($newinvoicedapprovalcurrentdatedue)->addMinutes(60);
 
         DB::table('valinstrqualitycheck')->where('id', $qualityid)
         ->update(['completedby' => session('alluser'),'status' => 'C',
@@ -451,11 +454,17 @@ public function submitfinalapproval(Request $request,$id,$instr_id){
         $isprint     =     DB::table('valinstrfinalapproval')->where('id', $approvalid)
         ->select('*')->first();
         $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
-        $datedue = Carbon::parse($newdatestamp)->addMinutes(60);
+        $newdatestampdatedue = $newdatestamp <= now() ? now() : $newdatestamp;
+        $datedue = Carbon::parse($newdatestampdatedue)->addMinutes(60);
+
+
         if (trim($isprint->isprint)=='Y'){
             DB::table('valinstrprinting') ->insert(['instructionid'=>$instructionid,'operatorid'=>
             session('alluser'),'datedue'=>$datedue]);
         }
+        DB::table('valinstrsendingreport') ->insert(['instructionid'=>$instructionid,'operatorid'=>
+        session('alluser'),'datedue'=>$datedue]);
+
         DB::table('valinstrcompile')->where('id', $compileid->id)
         ->update(['marketvalue'=>$request->marketvalue,'grc'=>$request->grc,'forcedsale'=>
         $request->forcedsalestimate,'depreciation' =>$request->depreciationvalue,'rentalvalue'=>
@@ -467,6 +476,8 @@ public function submitfinalapproval(Request $request,$id,$instr_id){
         'completedon' => now()]);
         DB::table('valinstruploads')->where('instructionid',$instructionid)
         ->update(['reportdoc'=>$reportdocname]);
+        DB::table('valinstructions')->where('id',$instructionid)
+        ->update(['status'=>'C']);
 
         return redirect()->route('valapp.listallappro')
             ->with('success', 'instruction updated');
@@ -548,9 +559,9 @@ public function submitprinting(Request $request,$id,$instr_id){
         try{
         $datestamp =     DB::table('valinstrdispatch')
         ->where('status','=','P')->select('*')->orderBy('id', 'desc')->first();
-       
         $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
-        $datedue = Carbon::parse($newdatestamp)->addMinutes(60);
+        $newdatestampdatedue = $newdatestamp <= now() ? now() : $newdatestamp;
+        $datedue = Carbon::parse($newdatestampdatedue)->addMinutes(60);
         DB::table('valinstrprinting')->where('id', $printid)
         ->update(['completedby' => session('alluser'),'status' => 'C',
         'completedon' => now()]);
@@ -882,7 +893,9 @@ public function closeportfolio($id){
         ->with('error', 'some properties pending compilation');
             }
             DB::table('valinstrportfolioclosed')
-            ->Insert(['portfolioid'=>$portfolioid,'operatiorid'=>session('alluser')]);
+            ->Insert(['portfolioid'=>$portfolioid,'operatorid'=>session('alluser')]);
+            DB::table('valinstrportfolio')->where('id', $portfolioid)
+            ->update(['status' => 'C']);
             return redirect()->route('valapp.listportcomp')
             ->with('success','portfolio closed');
         } catch (\Throwable $th) {
@@ -894,4 +907,95 @@ public function closeportfolio($id){
         ->with('error', 'failed to load');
     }
 }
+/* -----------------------end compile portfolio */
+/*-----------------------------send soft copies---------------------*/
+public function listallinstructionsendingsoftcopy(){
+    try{
+        $arr['stage'] = DB::select('EXEC spValGetInstEmailNormal');
+    return view('val.approval.list-instruct-softcopy')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.val');
+    }
+}
+public function viewsinglesoftcopy($id,$instrid){
+    try {
+        $softid = Crypt::decrypt($id);
+        $instructionid = Crypt::decrypt($instrid);
+        try {
+            $arr['type']   = DB::table('clienttype')
+                ->select('id','description')->get();
+            $arr['instr']   = DB::table('valinstructions')->where('id',$instructionid)
+                ->select('*')->first();
+            $arr['prevstage']   = DB::table('valinstrcompile')->where('instructionid',$instructionid)
+                ->select('*')->orderBy('id', 'desc')->first();
+            $arr['currstage']   = DB::table('valinstrsendingreport')->where('id',$softid)
+                ->select('*')->first();
+            $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
+            ,[$arr['instr']->propertyid]))->first();
+            $arr['upload']   = DB::table('valinstruploads')->where('instructionid',$instructionid)
+            ->select('*')->first();
+        
+            $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
+                'N' => DB::table('valinstructions') ->where('id', $instructionid)
+                    ->select('*') ->first(),
+                default => DB::table('valinstrportfolio')
+                    ->where('id', $arr['instr']->portfolioid)
+                    ->select('*')->first(),
+            };
+            $arr['client'] = match (trim($arr['instr']->isportfolio)) {
+                'N' => DB::table('valclientcontactperson')->join('valclientdetail', 
+                'valclientcontactperson.clientid','=', 'valclientdetail.id')
+                ->where('valclientcontactperson.id', $arr['instr']->contactid)
+                    ->select('valclientdetail.companyname','valclientdetail.lastname',
+                    'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
+                    ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
+                    'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
+                default => DB::table('valclientcontactperson')->join('valclientdetail', 
+                'valclientcontactperson.clientid','=', 'valclientdetail.id')
+                ->where('valclientcontactperson.id', $arr['purpose']->clientcontactid)
+                    ->select('valclientdetail.companyname','valclientdetail.lastname',
+                    'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
+                    ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
+                    'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
+            };
+            return view('val.approval.view-single-soft-copy')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listallappro')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('valapp.listallappro')
+        ->with('error', 'failed to load');
+    }
+}
+public function submitsoftcopy($id){
+    try{
+        $softcopyid = Crypt::decrypt($id);
+        try{
+       
+        DB::table('valinstrsendingreport')->where('id', $softcopyid)
+        ->update(['completedby' => session('alluser'),'status' => 'C',
+        'completedon' => now()]);
+        return redirect()->route('valapp.listallsoft')
+            ->with('success', 'instruction updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('valapp.listallsoft')
+        ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+        return redirect()->route('valapp.listallsoft')
+        ->with('error', 'failed to load');
+    }
+}
+/*--------------------close send soft copy report------------------- */
+/*=======================review portfolio============================== */
+public function listallportfolioreview(){
+    try {
+        $arr['portfolio'] = DB::select('EXEC spValGetPortfolioReview');
+        return view('val.approval.list-instruct-review-port')->with($arr);
+    } catch (\Throwable $th) {
+        return redirect()->route('dash.val');
+    }
+}
+/*-------------------------end review portfolio---------------------------- */
 }
