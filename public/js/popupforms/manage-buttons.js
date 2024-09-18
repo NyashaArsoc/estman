@@ -104,3 +104,9 @@ function closeportfolio(that) {
         window.location = anchor.attr("href");
     }
 }
+function closeportfolioreview(that) {
+    var proceedto = confirm("all corrections completed on this report?")
+    if (proceedto) {
+        window.location = anchor.attr("href");
+    }
+}

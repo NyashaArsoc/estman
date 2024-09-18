@@ -40,7 +40,7 @@ $description = 'all portfolios pending review...';
                                     <td> {!! $status !!} </td>
                                     @php $id= Crypt::encrypt($abc->portfolioid);  @endphp
                                  <td><a class="btn btn-info btn-sm " id=""
-                                     href="{{route('valapp.viewsinglportfoli',$id)}}"
+                                     href="{{route('valapp.viewsinglportrevie',$id)}}"
                                      title="view"><i class="ti-eye mr-0-5"></i>view</a>
                                  </td>
                                 </tr>

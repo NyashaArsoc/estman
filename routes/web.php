@@ -227,6 +227,9 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/{id}/view-single/{instr_id}/softcopy', 'viewsinglesoftcopy')->name('valapp.viewsinglsofy');
     Route::any('/val/{id}/report/send/softcopy', 'submitsoftcopy')->name('valapp.sbtsoft');
     Route::get('/val/list/portfolio/review', 'listallportfolioreview')->name('valapp.listportreview');
+    Route::get('/val/portfolio/{id}/review', 'listallinstructionportfolioreview')->name('valapp.viewsinglportrevie');
+    Route::any('/val/portfolio/review', 'submitportfolioreviewedreports')->name('valapp.sbtreviewport');
+    Route::any('/val/portfolio/{id}/close', 'closeportfolioreview')->name('valapp.portclosereview');
     /*-----------download reports-------------------- */
     Route::any('/val-report/{instr_id}/download/doc', 'downloadreportword')->name('valapp.dwndoc');
     Route::any('/val-report/{instr_id}/excel/download', 'downloadreportexcel')->name('valapp.dwnexc');
