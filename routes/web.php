@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+/*
 Route::controller(LandlordController::class)->group(function () {
     Route::get('/create/landlord', 'createnew')->name('landlord.newlandlord');
     Route::post('/new/create/landlord', 'addnewlandlord')->name('landlord.addlandlord');
@@ -139,7 +139,7 @@ Route::controller(TransactionController::class)->group(function (){
     Route::get('/single-creditor/bal/{column}/{id}', 'getcreditorbal');
     Route::any('/creditor-payment', 'creditorpayment')->name('transact.paycreditor');
 });
-
+*/
 Route::controller(LoginAuthController::class)->group(function(){
     Route::get('/login', 'signin')->name('login.signin');
     Route::get('/', 'defaultport');
@@ -150,7 +150,7 @@ Route::controller(LoginAuthController::class)->group(function(){
     Route::post('/profile/edit', 'profilepassword')->name('login.editprofile');
 });
 Route::controller(DashController::class)->group(function(){
-    Route::get('/dashboard/property', 'propertyview')->name('dash.property');
+   // Route::get('/dashboard/property', 'propertyview')->name('dash.property');
     Route::get('/welcome', 'maindashboard')->name('dash.main');
     Route::get('/valuation/dashboard', 'valuationdashboard')->name('dash.val');
 });
