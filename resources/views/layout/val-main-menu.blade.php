@@ -66,7 +66,8 @@
                             @foreach ($valintake as $abc)
                             <li><a href="{{url (trim($abc->descriptionroute)) }}">
                                 {{$abc->eventdescription}}</a></li>
-                            @endforeach                        </ul>
+                            @endforeach
+                          </ul>
                     </li>
                     <li class="with-sub">
                         <a href="#" class="waves-effect  waves-light">

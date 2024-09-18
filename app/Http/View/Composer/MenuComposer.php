@@ -15,10 +15,10 @@ public function compose(View $view){
         $valmanage      =   'valmanage';
          /*------------------------valuation menu--------------------------- */
         
-        $arr['valintake']= DB::select ('EXEC spGetMenuList ?,?',array($user->roleid,$valintake));
-        $arr['valapprove']= DB::select ('EXEC spGetMenuList ?,?',array($user->roleid,$valapprove));
-        $arr['valdecline']= DB::select ('EXEC spGetMenuList ?,?',array($user->roleid,$valdecline));
-        $arr['valmanage']= DB::select ('EXEC spGetMenuList ?,?',array($user->roleid,$valmanage));
+        $arr['valintake']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$valintake]);
+        $arr['valapprove']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$valapprove]);
+        $arr['valdecline']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$valdecline]);
+        $arr['valmanage']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$valmanage]);
        
         $view->with($arr);
     } catch (\Throwable $th) {
