@@ -80,7 +80,7 @@ public function userlogin(Request $request){
         }
         } catch (\Throwable $th) {
             return  redirect()->route('login.signin') 
-                ->with('error', 'failed to load ');
+                ->with('error', 'failed to load '.$th);
         }
         
 }   
