@@ -49,6 +49,7 @@ public function valuationdashboard(){
     $arr['pending']   = DB::table('valinstructions')->where('status','=' ,'pending')->get()->count();
     $arr['mail']        = DB::table('valinstrsendingreport')->where('status','=' ,'pending')->get()->count();
     $arr['portfolio']   = DB::select('EXEC spValGetPortfolioCompilation');
+    $arr['portfolioreview']   = DB::select('EXEC spValGetPortfolioReview');
     $arr['instructions'] = DB::table('valinstrfinalapproval')
     ->join('valinstructions', 'valinstrfinalapproval.instructionid', '=', 'valinstructions.id')
     ->join('valclientproperty', 'valclientproperty.id', '=', 'valinstructions.propertyid')

@@ -24,7 +24,7 @@ $portfolioid= Crypt::encrypt($portfolio->id);
                 </div>
                 <form action="{{ route('valapp.sbtreviewport') }}" method="POST" id="defaultform">@csrf
                     <div>
-                        <button type="submit" class="btn btn-primary" id="btn-portfolio-compile">compile
+                        <button type="submit" class="btn btn-primary" id="btn-portfolio-compile">review
                             <span id="selected-items-info"></span>
                         </button>
                     </div>
