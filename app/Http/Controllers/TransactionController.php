@@ -232,8 +232,8 @@ public function processreceipt(Request $request){
         $productsubledger       =       $this->getproductsubledger($productcolumn,$request->PropertyAddressDesc,$request->ReceiptCurrency);
        /*check if the base currency is the one running 
                     use exchange rate as 1*/
-        if(trim($basecurrency)==trim($request->ReceiptCurrency)){ $exchangerate =1;}
-        else{ $exchangerate  =  $this->getexchangerate($request->ReceiptCurrency);   }
+        $exchangerate = trim($basecurrency)==trim($request->ReceiptCurrency) ? 1 :
+                    $this->getexchangerate($request->ReceiptCurrency) ;
 
         // Retrieve the payment amount
         $remainingamount = $request->ReceiptAmount;
