@@ -19,6 +19,61 @@ public function userlogin(Request $request){
           // get the login validation
         $login = collect(DB::select('EXEC  spPostUserLogin ?',
         [$request->username]))->first();
+        // get the base currency 
+        $basecurrency           =       $this->getbasecurrency();
+        $license                =       $this->getlicensecheck();
+        $attempts               =       DB::table('systlogins')->select('attempts')
+                ->where('username',$request->username)->latest('id')->first();
+        return match (true) {
+            $login->username == 'blocked' => redirect()->route('login.signin')
+                ->with('error', 'user blocked'),
+            $login->username == 'notactive' => redirect()->route('login.signin')
+                ->with('error', 'user not active'),
+            $login->username == 'notavailable' => redirect()->route('login.signin')
+                ->with('error', 'user disabled'),
+            $login->username == 'incorrect' => redirect()->route('login.signin')
+                ->with('error', 'incorrect username/password'),
+            $login->username == 'norole' => redirect()->route('login.signin')
+                ->with('error', 'no role assigned'),
+                // default when username is correct and all details are active
+            default => (function () use($login,$request,$basecurrency,$license,$attempts){
+                /*------------when username and password are correct------------------- */
+                if(Hash::check($request->password,$login->password)){
+                    //insert a successful login 
+                    DB::table('systlogins')->insert(['username'=>$request->username,
+                    'attempts'=>0,'isvalid'=>'Y']);
+                    //place a session
+                    $request->session()->put('alluser',$login->username);
+                    // check if basecurrency is set
+                    switch(true){
+                        case($basecurrency == 'failed'):
+                            $error = 'no base currency set';
+                            return $this->userforcelogout($error);
+                        default:
+                        /*------------check licence validity----------------------- */
+                        switch ($license){
+                            case 'failed':
+                                $error = 'invalid license key';
+                                return $this->userforcelogout($error);
+                            case 'notvalid':
+                                $error = 'license expired';
+                                return $this->userforcelogout($error);
+                            case 'valid':
+                                return  redirect()->route('dash.main');
+                            default:
+                                $error = 'invalid login';
+                                return $this->userforcelogout($error);
+                        }
+                    }
+                }else{/* passwords mismatch */
+                    DB::table('systlogins')->insert(['username'=>$request->username,
+                    'logoutdate'=>now(),'attempts'=>$attempts->attempts +=1,'isvalid'=>'N']); 
+                    return  redirect()->route('login.signin') 
+                    ->with('error', 'incorrect username/password');
+                }
+            })
+        };
+        /*
         if($login->username == 'blocked'){
             return  redirect()->route('login.signin') 
                 ->with('error', 'user blocked');
@@ -76,8 +131,8 @@ public function userlogin(Request $request){
                     'logoutdate'=>now(),'attempts'=>$attempts->attempts +=1,'isvalid'=>'N']);          
                 return  redirect()->route('login.signin') 
                 ->with('error', 'incorrect username/password');
-            }
-        }
+            } 
+        } */
         } catch (\Throwable $th) {
             return  redirect()->route('login.signin') 
                 ->with('error', 'failed to load ');
