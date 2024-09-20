@@ -50,8 +50,15 @@
                 <ul class="sidebar-menu">
                     <li class="menu-title">Main</li>
                     <li class="with-sub">
-                        <a href="{{route('dash.val')}}" class="waves-effect  waves-light">
+                        <a href="{{route('dash.main')}}" class="waves-effect  waves-light">
                             <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                            <span class="s-icon"><i class="ti-home"></i></span>
+                            <span class="s-text">Dashboard</span>
+                        </a>
+                    </li><li class="menu-title">Valuation</li>
+                    <li class="with-sub">
+                        <a href="{{route('dash.val')}}" class="waves-effect  waves-light">
+                            
                             <span class="s-icon"><i class="ti-anchor"></i></span>
                             <span class="s-text">Dashboard</span>
                         </a>

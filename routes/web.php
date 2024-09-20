@@ -150,7 +150,7 @@ Route::controller(LoginAuthController::class)->group(function(){
     Route::post('/profile/edit', 'profilepassword')->name('login.editprofile');
 });
 Route::controller(DashController::class)->group(function(){
-   // Route::get('/dashboard/property', 'propertyview')->name('dash.property');
+    Route::get('/dashboard/property', 'propertyview')->name('dash.property');
     Route::get('/welcome', 'maindashboard')->name('dash.main');
     Route::get('/valuation/dashboard', 'valuationdashboard')->name('dash.val');
 });
@@ -229,7 +229,7 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::get('/val/list/portfolio/review', 'listallportfolioreview')->name('valapp.listportreview');
     Route::get('/val/portfolio/{id}/review', 'listallinstructionportfolioreview')->name('valapp.viewsinglportrevie');
     Route::any('/val/portfolio/review', 'submitportfolioreviewedreports')->name('valapp.sbtreviewport');
-    Route::any('/val/portfolio/{id}/close', 'closeportfolioreview')->name('valapp.portclosereview');
+    Route::any('/val/portfolio/{id}/review', 'closeportfolioreview')->name('valapp.portclosereview');
     /*-----------download reports-------------------- */
     Route::any('/val-report/{instr_id}/download/doc', 'downloadreportword')->name('valapp.dwndoc');
     Route::any('/val-report/{instr_id}/excel/download', 'downloadreportexcel')->name('valapp.dwnexc');

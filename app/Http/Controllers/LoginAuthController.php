@@ -82,7 +82,8 @@ public function userlogin(Request $request){
 public function userlogout(){
     if(session()->has('alluser')){
         try {
-            $logouttime = date("Y-m-d H:i:s", strtotime('+2 hours', strtotime(now())));
+            $logouttime = date("Y-m-d H:i:s", strtotime('+2 hours',
+             strtotime(now())));
            $lastlogin = DB::table('systlogins')->where('username',session('alluser'))
             ->orderBy('id','desc')->first();
             DB::table('systlogins')->where('id',$lastlogin->id)
