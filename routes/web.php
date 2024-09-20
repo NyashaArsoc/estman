@@ -154,6 +154,7 @@ Route::controller(DashController::class)->group(function(){
     Route::get('/welcome', 'maindashboard')->name('dash.main');
     Route::get('/valuation/dashboard', 'valuationdashboard')->name('dash.val');
 });
+/*
 Route::controller(ReportController::class)->group(function(){
     Route::get('/report/landlord', 'viewlandlord')->name('report.viewland');
     Route::get('/report/property', 'viewproperty')->name('report.viewprop');
@@ -169,7 +170,7 @@ Route::controller(ReportController::class)->group(function(){
     Route::get('/report/lease/status', 'printleasestatus')->name('report.printleasestatus');
     Route::get('/report/lease/statament', 'viewleasestatement')->name('report.leastatement');
     Route::get('/print/lease/statement', 'printleasestatement')->name('report.printstatement');
-});
+}); */
 Route::controller(ValIntakeController::class)->group(function(){
     Route::get('/val/add/client', 'addclientdetails')->name('valin.addclient'); /*done*/
     Route::any('/val/add/new/client', 'addnewclientdetails')->name('valin.addnewclient');/*done*/
