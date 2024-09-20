@@ -71,73 +71,12 @@ public function userlogin(Request $request){
                     return  redirect()->route('login.signin') 
                     ->with('error', 'incorrect username/password');
                 }
-            })
-        };
-        /*
-        if($login->username == 'blocked'){
-            return  redirect()->route('login.signin') 
-                ->with('error', 'user blocked');
-        }else if($login->username == 'notactive'){
-            return  redirect()->route('login.signin') 
-                ->with('error', 'user not active');
-        }else if($login->username == 'notavailable'){
-            return  redirect()->route('login.signin') 
-                ->with('error', 'user disabled');
-        }else if($login->username == 'incorrect'){
-            return  redirect()->route('login.signin') 
-                ->with('error', 'incorrect username/password');
-        }else if($login->username == 'norole'){
-            return  redirect()->route('login.signin') 
-                ->with('error', 'no role assigned');
-        }else{ //when all credentials are correct
-            if(Hash::check($request->password,$login->password)){
-                DB::table('systlogins')->insert(['username'=>$request->username,
-                'attempts'=>0,'isvalid'=>'Y']); 
-                //put session on
-                $request->session()->put('alluser',$login->username);
-                //check if system date is set
-                $systemdate             =       $this->systemdate();
-                if($systemdate == 'failed'){
-                    $error = 'no system date set';
-                   return $this->userforcelogout($error);
-                }else{ 
-                    // check if base currency is set
-                    $basecurrency           =       $this->getbasecurrency();
-                    if($basecurrency =='failed'){
-                        $error = 'no base currency set';
-                       return $this->userforcelogout($error);
-                    }else{ 
-                        //check license
-                        $license    =   $this->getlicensecheck();
-                        switch ($license){
-                            case 'failed':
-                                $error = 'invalid license key';
-                                return $this->userforcelogout($error);
-                            case 'notvalid':
-                                $error = 'license expired';
-                                return $this->userforcelogout($error);
-                            case 'valid':
-                                return  redirect()->route('dash.val');
-                            default:
-                            $error = 'invalid login';
-                            return $this->userforcelogout($error);
-                        }
-                    }
-                }   
-            }else{//wrong pin
-                $attempts = DB::table('systlogins')->select('attempts')
-                ->where('username',$request->username)->latest('id')->first();
-                DB::table('systlogins')->insert(['username'=>$request->username,
-                    'logoutdate'=>now(),'attempts'=>$attempts->attempts +=1,'isvalid'=>'N']);          
-                return  redirect()->route('login.signin') 
-                ->with('error', 'incorrect username/password');
-            } 
-        } */
+            })()
+            };
         } catch (\Throwable $th) {
             return  redirect()->route('login.signin') 
                 ->with('error', 'failed to load ');
         }
-        
 }   
 
 public function userlogout(){
