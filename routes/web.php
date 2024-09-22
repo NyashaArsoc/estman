@@ -6,6 +6,7 @@ use App\Http\Controllers\LandlordController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\LoginAuthController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\PropManIntakeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TransactionController;
@@ -27,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 */
 /*
 Route::controller(LandlordController::class)->group(function () {
-    Route::get('/create/landlord', 'createnew')->name('landlord.newlandlord');
+    1.Route::get('/create/landlord', 'createnew')->name('landlord.newlandlord');
     Route::post('/new/create/landlord', 'addnewlandlord')->name('landlord.addlandlord');
     Route::get('/edit/landlord/{id}/view', 'vieweditlandlord')->name('landlord.editview');
     Route::get('/landlord-banking-details', 'addbanking')->name('landlord.addbanking');
@@ -241,4 +242,9 @@ Route::controller(ValDeclinedController::class)->group(function(){
     Route::get('/declined/val/{propid}/view-single/{instr_id}/acknowledgement', 'viewdeclinedsingleacknowledge')->name('valdec.viewsinglackn');
     Route::get('/val/list/quality-check/declined', 'listalldeclinedinstructionqualitycheck')->name('valdec.listquality');
     Route::get('/declined/val/{propid}/view-single/{instr_id}/quality', 'viewdeclinedsinglequalitycheck')->name('valdec.viewsinglqlty');
+});
+/*-------------------property management intake------------------------ */
+Route::middleware('loginauth')->controller(PropManIntakeController::class)->group(function(){
+    Route::get('/prop/add/landlord', 'addlandlorddetails')->name('propin.addlandlord');
+    Route::post('/prop/add/new/landlord', 'addnewlandlorddetails')->name('propin.addnewlandlord');
 });

@@ -94,7 +94,7 @@
                     <table class="table mb-md-0">
                         <thead>
                             <tr>
-                                <strong><td>No</td><td>Tenant</td><td>Description</td><td>Expire</td></strong>
+                                <td><b>No</b></td><td><b>Tenant</b></td><td><b>Description</b></td><td><b>Expire</b></td>
                             </tr>
                         </thead>
                         <tbody>@php $count=1;@endphp

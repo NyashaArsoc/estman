@@ -25,20 +25,20 @@ public function __construct(){
     /**
      * Show the form for creating a new resource.
      */
-    public function createnew()
-    {
-        $arr_owner['type']   = DB::table('clienttype')
-          ->select('id','description')->get();
-          $arr_owner['currency']   = DB::table('currency')
-          ->select('id','code')->get();
-        return view('landlord/add-landlord')
-        ->with($arr_owner);
-    }
+    // public function createnew()
+    // {
+    //     $arr_owner['type']   = DB::table('clienttype')
+    //       ->select('id','description')->get();
+    //       $arr_owner['currency']   = DB::table('currency')
+    //       ->select('id','code')->get();
+    //     return view('landlord/add-landlord')
+    //     ->with($arr_owner);
+    // }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function addnewlandlord(Request $request)
+  /*  public function addnewlandlord(Request $request)
     {
         $user = $this->userdetail();
         IF (!empty($request->AccountNumber)){ 
@@ -129,7 +129,7 @@ public function __construct(){
         }
        
     }
-
+*/
     /**
      * Show the form for editing the specified resource.
      */

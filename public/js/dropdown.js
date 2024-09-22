@@ -16,18 +16,15 @@ function CreationTypeOption(select){
    
     if(select.value == 1){ // individual 
      document.getElementById('IndividualGroup').style.display = "block";
-     document.getElementById('CorporateGroup').style.display = "none";
-     document.getElementById('CorporateGroupContact').style.display = "none";  
+     document.getElementById('CorporateGroup').style.display = "none"; 
     } 
      else if(select.value == ""){ // nothing/default 
       document.getElementById('IndividualGroup').style.display = "none";
       document.getElementById('CorporateGroup').style.display = "none";
-      document.getElementById('CorporateGroupContact').style.display = "none";
     }
     else{ // corporate 
     document.getElementById('IndividualGroup').style.display = "none";
      document.getElementById('CorporateGroup').style.display = "block";
-     document.getElementById('CorporateGroupContact').style.display = "block";
     }
  } 
 
