@@ -6,6 +6,8 @@ use App\Http\Controllers\LandlordController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\LoginAuthController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\PropManApprovalController;
+use App\Http\Controllers\PropManDeclineController;
 use App\Http\Controllers\PropManIntakeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TenantController;
@@ -28,19 +30,13 @@ use Illuminate\Support\Facades\Route;
 */
 /*
 Route::controller(LandlordController::class)->group(function () {
-    1.Route::get('/create/landlord', 'createnew')->name('landlord.newlandlord');
-    Route::post('/new/create/landlord', 'addnewlandlord')->name('landlord.addlandlord');
     Route::get('/edit/landlord/{id}/view', 'vieweditlandlord')->name('landlord.editview');
     Route::get('/landlord-banking-details', 'addbanking')->name('landlord.addbanking');
     Route::post('/create/landlord/bank', 'capturebankingdetails')->name('landlord.addbank');
-    Route::any('/landlord-approval', 'pendingapproval')->name('landlord.pending');
     Route::any('/landlord-rejected', 'rejected')->name('landlord.rejected');
     Route::any('/single-landlord/{id}', 'getlandlord')->name('landlord.getlandlord');
-    Route::any('/approve-landlord/{id}', 'approvelandlord')->name('landlord.approve');
     Route::any('/disable/{id}/landlord', 'disablelandlord')->name('landlord.disable');
     Route::any('/view-pending-landlord/{id}', 'viewpending')->name('landlord.viewpending');
-    Route::any('/reject-landlord/{id}', 'rejectlandlord')->name('landlord.reject');
-    Route::any('/edit-update-landlord/{id}', 'updatelandlord')->name('landlord.editupdate');
     Route::any('/delete-rejected-landlord/{id}', 'deleterejected')->name('landlord.deleterejected');
     Route::any('/landlord/{id}/view', 'viewindividual')->name('landlord.view');
     Route::get('/landlord/{id}/view-ledgers', 'viewledgers')->name('landlord.ledgers');
@@ -248,3 +244,17 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::get('/prop/add/landlord', 'addlandlorddetails')->name('propin.addlandlord');
     Route::post('/prop/add/new/landlord', 'addnewlandlorddetails')->name('propin.addnewlandlord');
 });
+/*-------------------end property management intake------------------------ */
+
+/*-------------------property management approval------------------------ */
+Route::middleware('loginauth')->controller(PropManApprovalController::class)->group(function(){
+    Route::get('/prop/list/landlord/approval', 'listlandlordapproval')->name('propapp.listland');
+   Route::get('/prop/view/{id}/landlord/approval', 'viewlandlordapproval')->name('propapp.viewland');
+   Route::get('/prop/{id}/landlord/approve', 'approvenewsinglelandlordapproval')->name('propapp.landapprove');
+});
+/*-------------------end property management approval------------------------ */
+/*-------------------property management declines------------------------ */
+Route::middleware('loginauth')->controller(PropManDeclineController::class)->group(function(){
+    Route::any('/prop/landlord/{id}/decline', 'declinenewlandlord')->name('propdec.landdec');
+   });
+/*-------------------end property management declines------------------------ */

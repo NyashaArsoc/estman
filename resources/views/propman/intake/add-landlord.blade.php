@@ -209,9 +209,11 @@ $description = 'add landlord to the system...'; @endphp
                     </table>
                 </div>
                 <div class="form-group row">
+                    @if (in_array(1,$arraycontrolids))
                     <div class="offset-sm-2 col-sm-10">
                         <button type="submit" class="btn btn-primary" id="btn-add-landlord" >submit</button>
                     </div>
+                    @endif
                 </div>
                 @include('layout.arlet')
             </form>

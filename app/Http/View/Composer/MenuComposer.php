@@ -15,6 +15,7 @@ public function compose(View $view){
         $valmanage          =   'valmanage';
         //property management
         $propmanintake      =   'propmanintake';
+        $propmanapprove      =   'propmanapprove';
          /*------------------------valuation menu--------------------------- */
         
         $arr['valintake']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$valintake]);
@@ -23,7 +24,7 @@ public function compose(View $view){
         $arr['valmanage']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$valmanage]);
         // property management  
         $arr['propmanintake']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$propmanintake]);
-       
+        $arr['propmanapprove']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$propmanapprove]);
         $view->with($arr);
     } catch (\Throwable $th) {
         $error = 'fail to load menu';

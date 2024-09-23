@@ -1,5 +1,5 @@
-function approvelandlord(that) {
-    var proceedto = confirm("proceed to approve this landlord?")
+function approveentry(that) {
+    var proceedto = confirm("proceed to approve this entry?")
     if (proceedto) {
         window.location = anchor.attr("href");
     }

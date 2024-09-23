@@ -22,118 +22,8 @@ public function __construct(){
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    // public function createnew()
-    // {
-    //     $arr_owner['type']   = DB::table('clienttype')
-    //       ->select('id','description')->get();
-    //       $arr_owner['currency']   = DB::table('currency')
-    //       ->select('id','code')->get();
-    //     return view('landlord/add-landlord')
-    //     ->with($arr_owner);
-    // }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-  /*  public function addnewlandlord(Request $request)
-    {
-        $user = $this->userdetail();
-        IF (!empty($request->AccountNumber)){ 
-            $AccountNumber         =      $request->AccountNumber;
-         }Else { $AccountNumber = [0]; }
-         IF (!empty($request->Currency)){ 
-          $Currency         =      $request->Currency;
-          }Else { $Currency = [0];}
-          IF (!empty($request->BankName)){ 
-            $BankName         =      $request->BankName;
-          }Else {
-            $BankName = [0];
-          }
-          IF (!empty($request->AccountName)){ 
-            $AccountName         =      $request->AccountName;
-          }Else {
-            $AccountName = [0];
-          }
-          IF (!empty($request->Branch)){ 
-            $Branch         =      $request->Branch;
-          }Else {
-            $Branch = [0];
-          }
-          $NumbersInArray         =       count($AccountName);
-        $a  = 0;
-
-        try{
-            if ($request->LandlordClientType    ==   1){//individual
-                $ExistLandlord = DB::table('landlord')
-                ->where('nationalID','=',$request->NationalID)->get();
-                if  ( $ExistLandlord->isEmpty() ) {
-                   $LandlordID = DB::table('landlord')
-                    ->insertGetId(
-                        ['nationalID'=>$request->NationalID,'clienttypeid'=>$request->LandlordClientType,
-                         'firstname'=>$request->FirstName,'cell'=>$request->Cell,
-                        'email'=>$request->Email,'tel'=>$request->Tel,'operatorid'=>$user->username,
-                        'lastname'=>$request->LastName, 'contactaddress'=>$request->ContactAddress]
-                    );
-                    while ($a   <   $NumbersInArray){
-                        DB::table('landlordbank')
-            ->Insert(['accountnumber'=>$AccountNumber[$a],'branch'=>$Branch[$a],
-            'bankname'=>$BankName[$a],'accountname'=>$AccountName[$a],
-                'currencycode'=>$Currency[$a],'landlordid'=>$LandlordID,'available'=>'Y']);
-                        $a++;
-                    }
-                    return  redirect()->route('landlord.newlandlord') 
-                    ->with('success', 'landlord added successfully');
-                }else{
-                    return  redirect()->route('landlord.newlandlord') 
-                    ->with('error', 'failed landlord already exists');
-                }     
-            }else{
-                $ExistLandlord = DB::table('landlord')
-                ->where('companynumber','=',$request->CompanyNumber)->get();
-                if ( $ExistLandlord->isEmpty() ) {
-                    $LandlordID = DB::table('landlord')
-                    ->insertGetId(
-                        ['companynumber'=>$request->CompanyNumber,'operatorid'=>$user->username,
-                        'clienttypeid'=>$request->LandlordClientType,
-                        'email'=>$request->Email,'tel'=>$request->Tel, 'cell'=>$request->Cell,
-                         'contactaddress'=>$request->ContactAddress,'bpnumber'=>$request->BPNumber,
-                        'vatnumber'=>$request->VATNumber,'companyname'=>$request->CompanyName]
-                    );
-                    DB::table('landlordcontact')
-                    ->updateOrInsert(
-                        ['email'=>$request->ContactEmail],
-                        ['cell'=>$request->ContactCell,'lastname'=>$request->ContactLastName,
-                        'firstname'=>$request->ContactFirstName,'landlordid'=>$LandlordID]
-                    );
-                    while ($a   <   $NumbersInArray){
-                        DB::table('landlordbank')
-                        ->Insert(['accountnumber'=>$AccountNumber[$a],'branch'=>$Branch[$a],
-                            'bankname'=>$BankName[$a],'accountname'=>$AccountName[$a],
-                            'currencycode'=>$Currency[$a],'landlordid'=>$LandlordID,'available'=>'Y']);
-                        $a++;
-                    }
-                    return  redirect()->route('landlord.newlandlord') 
-                    ->with('success', 'landlord added successfully');
-                }else{// exist landlord
-                    return  redirect()->route('landlord.newlandlord') 
-                    ->with('error', 'failed landlord already exists');
-                }
-               
-            }
-        }catch (QueryException $e){
-            return  redirect()->route('landlord.newlandlord') 
-            ->with('error', 'failed to add landlord');
-        }
-       
-    }
-*/
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function vieweditlandlord($id)
+   public function vieweditlandlord($id)
     {
         $landlordid = Crypt::decrypt($id);
         try {
@@ -160,13 +50,7 @@ public function __construct(){
        
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        return $id;
-    }
+
 
     public function  addbanking(){
         $arr_owner['type']   = DB::table('clienttype')
@@ -220,15 +104,7 @@ public function capturebankingdetails(Request $request){
     }
     
 }
-    public function  pendingapproval(){
-        $arr_owner['landlord']   = DB::table('alllandlord')
-        ->where('approval','=' ,'N')
-        ->select('fullname','id','companyname','nationalID','companynumber',
-        'cell','email','clienttypeid','description')
-        ->get();
-        return view('landlord/pending-approval')
-        ->with($arr_owner);
-    }
+
     public function  rejected(){
         $arr_owner['landlord']   = DB::table('alllandlord')
         ->where('approval','=' ,'R')
@@ -257,7 +133,7 @@ public function capturebankingdetails(Request $request){
          return view('landlord/get-single-landlord')
          ->with($arr_owner);
     }
-
+/*
     public function approvelandlord($id){
        
         try{
@@ -273,24 +149,8 @@ public function capturebankingdetails(Request $request){
             return  redirect()->route('landlord.pending') 
             ->with('error', 'failed to approve landlord');
         }
-    }
+    }*/
 
-    public function rejectlandlord($id, Request $request){
-       
-        try{
-            $landlordid = Crypt::decrypt($id);
-            $update = array('approval' => 'R' , 'available'=> 'N', 'reasons'=> $request->ReasonsForDecline);
-            DB::table('landlord')
-            ->where('id',$landlordid)
-            ->update($update);
-
-            return  redirect()->route('landlord.pending') 
-            ->with('success', 'landlord rejected');
-        } catch(QueryException $e){
-            return  redirect()->route('landlord.pending') 
-            ->with('error', 'failed to reject landlord');
-        }
-    }
     public function viewpending($id){
         $landlordid = Crypt::decrypt($id);
         try {
