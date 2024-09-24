@@ -1,6 +1,6 @@
 @php $title = 'Rejected Landlords'; 
       $description = 'landlords rejected...'; @endphp
-    @extends('layout.main-layout')
+    @extends('layout.propman-main-menu')
     @section('title', 'Landlord Rejected')
     @section('content')
         <!-- Content Start-->
@@ -22,33 +22,25 @@
                                     <th>Name</th>
                                     <th>Registration</th>
                                     <th>Cell</th>
+                                    <th>Email</th>
                                     <th>Reason</th>
                                     <th>Option</th>
                                 </tr>
                             </thead>
                             <tbody>@php $count=1;@endphp
-                                @foreach($landlord as $land)
+                                @foreach($landlord as $abc)
                             <tr>
-                                @php if ($land->clienttypeid == 1){
-                                    $owner   =  $land->fullname ;
-                                    $registration   =  $land->nationalID ;
-                                 }else{
-                                     $owner   =  $land->companyname ;
-                                     $registration   =  $land->companynumber ;
-                                 } @endphp
                                     <td>{{$count ++}}</td>
-                                    <td>{{ $land->description }}</td>
-                                    <td>{{ $owner}}</td>
-                                    <td>{{ $registration }}</td>
-                                    <td>{{ $land->cell }}</td>
-                                    <td>{{ $land->reasons }}</td>
-                                    <td>@php $id= Crypt::encrypt($land->id); @endphp
-                                     <a class="btn btn-secondary btn-sm view_landlord" id=""
-                                     href="{{route('landlord.editview', $id)}}"
-                                     title="view"><i class="ti-pencil mr-0-5"></i>edit</a>
-                                     <a onclick = "deletelandlord(this); return false;"
-                                     class="btn btn-danger btn-sm" href="{{route('landlord.deleterejected', $id)}}"
-                                     title="View Landlord"><i class="ti-close mr-0-5"></i>delete</a>
+                                    <td>{{ $abc->description }}</td>
+                                    <td>{{ $abc->fullname}}  {{ $abc->companyname}}</td>
+                                    <td>{{ $abc->companynumber }} {{ $abc->nationalID }}</td>
+                                    <td>{{ $abc->cell }}</td>
+                                    <td>{{ $abc->email }}</td>
+                                    <td>{{ $abc->reasons }}</td>
+                                    <td>@php $id= Crypt::encrypt($abc->id); @endphp
+                                        @if (in_array(2,$arraycontrolids))<a class="btn btn-secondary 
+                                    btn-sm view_landlord" id=""href="{{route('propdec.editviewland', $id)}}"
+                                     title="view"><i class="ti-pencil mr-0-5"></i>edit</a> @endif
                             </td>
                             </tr>
                             @endforeach
@@ -60,6 +52,7 @@
                                     <th>Name</th>
                                     <th>Registration</th>
                                     <th>Cell</th>
+                                    <th>Email</th>
                                     <th>Reason</th>
                                     <th>Option</th>
                                 </tr>

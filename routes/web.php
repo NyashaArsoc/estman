@@ -30,14 +30,14 @@ use Illuminate\Support\Facades\Route;
 */
 /*
 Route::controller(LandlordController::class)->group(function () {
-    Route::get('/edit/landlord/{id}/view', 'vieweditlandlord')->name('landlord.editview');
+   -- Route::get('/edit/landlord/{id}/view', 'vieweditlandlord')->name('landlord.editview');
     Route::get('/landlord-banking-details', 'addbanking')->name('landlord.addbanking');
     Route::post('/create/landlord/bank', 'capturebankingdetails')->name('landlord.addbank');
-    Route::any('/landlord-rejected', 'rejected')->name('landlord.rejected');
+   -- Route::any('/landlord-rejected', 'rejected')->name('landlord.rejected');
     Route::any('/single-landlord/{id}', 'getlandlord')->name('landlord.getlandlord');
     Route::any('/disable/{id}/landlord', 'disablelandlord')->name('landlord.disable');
     Route::any('/view-pending-landlord/{id}', 'viewpending')->name('landlord.viewpending');
-    Route::any('/delete-rejected-landlord/{id}', 'deleterejected')->name('landlord.deleterejected');
+    --Route::any('/delete-rejected-landlord/{id}', 'deleterejected')->name('landlord.deleterejected');
     Route::any('/landlord/{id}/view', 'viewindividual')->name('landlord.view');
     Route::get('/landlord/{id}/view-ledgers', 'viewledgers')->name('landlord.ledgers');
     Route::post('/landlord/{id}/sub-ledgers/{product}', 'createsubledgers')->name('landlord.createsub');
@@ -256,5 +256,8 @@ Route::middleware('loginauth')->controller(PropManApprovalController::class)->gr
 /*-------------------property management declines------------------------ */
 Route::middleware('loginauth')->controller(PropManDeclineController::class)->group(function(){
     Route::any('/prop/landlord/{id}/decline', 'declinenewlandlord')->name('propdec.landdec');
+    Route::get('/prop/list/landlord/declined', 'listdeclinelandlord')->name('propdec.listlanddec');
+    Route::get('/prop/view/landlord/{id}/edit', 'vieweditsinglelandlord')->name('propdec.editviewland');
+    Route::any('/prop/landlord/{id}/delete', 'deletesinglelandlord')->name('propdec.landdel');
    });
 /*-------------------end property management declines------------------------ */
