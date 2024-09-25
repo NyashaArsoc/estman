@@ -10,6 +10,7 @@ use App\Http\Controllers\PropManApprovalController;
 use App\Http\Controllers\PropManDeclineController;
 use App\Http\Controllers\PropManIntakeController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SetupIntakeController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ValApprovalController;
@@ -261,3 +262,8 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/landlord/{id}/delete', 'deletesinglelandlord')->name('propdec.landdel');
    });
 /*-------------------end property management declines------------------------ */
+/*-------------------setup intake------------------------ */
+Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(function(){
+     Route::get('/set-up/add/currency', 'listdeclinelandlord')->name('propdec.listlanddec');
+     });
+/*-------------------end setup intake------------------------ */
