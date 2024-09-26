@@ -28,4 +28,46 @@ class SetupIntakeController extends Controller
    }
  }
  /*---------------end creating new currency-----------------*/
+     /*---------------creating new client type-----------------*/
+public function addclienttype(){
+      return view('setup.intake.add-client-type');
+}
+public function addnewclienttype(Request $request){
+     try {
+        $textdescription = ucfirst($request->textdescription);
+        if(DB::table('setupclienttype')->select('id')->where('description',
+        $textdescription)->exists()){
+           return  redirect()->route('setin.addcltyp') 
+           ->with('error', 'record already exists');
+        }
+        DB::table('setupclienttype')->insert(['description'=>$textdescription]);
+        return  redirect()->route('setin.addcltyp') 
+        ->with('success', 'record added');
+     } catch (\Throwable $th) {
+        return  redirect()->route('setin.addcltyp') 
+        ->with('error', 'failed to load');
+     }
+}
+   /*---------------end creating new client type-----------------*/
+     /*---------------creating new client type-----------------*/
+public function addpropertytype(){
+      return view('setup.intake.add-property-type');
+}
+public function addnewpropertytype(Request $request){
+     try {
+        $textdescription = ucfirst($request->textdescription);
+        if(DB::table('setuppropertytype')->select('id')->where('description',
+        $textdescription)->exists()){
+           return  redirect()->route('setin.addpropty') 
+           ->with('error', 'record already exists');
+        }
+        DB::table('setuppropertytype')->insert(['description'=>$textdescription]);
+        return  redirect()->route('setin.addpropty') 
+        ->with('success', 'record added');
+     } catch (\Throwable $th) {
+        return  redirect()->route('setin.addpropty') 
+        ->with('error', 'failed to load');
+     }
+}
+   /*---------------end creating new client type-----------------*/
 }

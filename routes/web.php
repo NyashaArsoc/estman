@@ -268,6 +268,10 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
 Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(function(){
      Route::get('/set-up/add/currency', 'addcurrency')->name('setin.addcurr');
      Route::post('/set-up/add/new/currency', 'addnewcurrency')->name('setin.addnewcurr');
+     Route::get('/set-up/add/client-type', 'addclienttype')->name('setin.addcltyp');
+     Route::post('/set-up/add/new/client-type', 'addnewclienttype')->name('setin.addnewcltyp');
+     Route::get('/set-up/add/property-type', 'addpropertytype')->name('setin.addpropty');
+     Route::post('/set-up/add/new/property-type', 'addnewpropertytype')->name('setin.addnewpropty');
 });
 /*-------------------end setup intake------------------------ */
 /*-------------------setup manage------------------------ */

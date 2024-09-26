@@ -29,21 +29,51 @@ function validateCurrencyCode() {
             }
     }
 }
-
+//valid text description
+$("#textdescriptioncheck").hide();
+let textdescriptionError = true;
+$("#textdescription").keyup(function () {
+    validateTextDescription();
+});
+function validateTextDescription() {
+    let textValue = $("#textdescription").val();
+    if (textValue.length == "") {
+        $("#textdescriptioncheck").show();
+        textdescriptionError = false;
+        return false;
+    } else if (textValue.length < 2 ) {
+        $("#textdescriptioncheck").show();
+        $("#textdescriptioncheck").html("**invalid text");
+        textdescriptionError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#textdescriptioncheck").show();
+                $("#textdescriptioncheck").html("**follow the required format (Description)");
+                textdescriptionError = false;
+                return false;
+            }else{
+                textdescriptionError = true;
+                $("#textdescriptioncheck").hide();
+            }
+    }
+}
 /*--------------------starting buttons --------------------------*/
  //button currency code
  $("#btn-submit-currency").click(function () {
     validateCurrencyCode();
     try {
-        if (currencycodeError == true ){
-            //--------------valid input-----------
-            return true;
-        }else{
-             //-------------invalid input-----------
-             return false;
-        }
-    } catch (err) {
-        alert(err.message);
-        return false;
-    }
+        if (currencycodeError == true ){return true;
+        }else{ return false;}
+    } catch (err) { return false;}
+});
+ //button single text
+ $("#btn-submit-single-text").click(function () {
+    validateTextDescription();
+    try {
+        if (textdescriptionError == true ){return true;
+        }else{ return false; }
+    } catch (err) { return false;}
 });
