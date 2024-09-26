@@ -16,7 +16,7 @@ $description = 'add currency type to the system...'; @endphp
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
             <form class="form-material material-primary" id="defaultform" method="POST"
-                action="">@csrf
+                action="{{ route('setin.addnewcurr') }}">@csrf
 
                 <div class="form-group row">
                     <label for="currencycode" class="col-sm-2 form-control-label">Currency Code

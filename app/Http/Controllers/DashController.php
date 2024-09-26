@@ -8,10 +8,16 @@ use Illuminate\Support\Facades\DB;
 
 class DashController extends Controller
 {
-        public function __construct(){
-                $this->middleware(['loginauth']);
-            }
 public function propertyview(){
+    $basecurrency = $this->getbasecurrency();
+     // check if basecurrency is set
+     switch(true){
+        case($basecurrency == 'failed'):
+            $error = 'no base currency set';
+            return  redirect()->route('dash.main')
+            ->with('error', $error);
+        default:
+        /*------------check licence validity----------------------- */
     $systemdate     = $this->systemdate();
     $currentyear    = Carbon::now()->year;
     $jan            = Carbon::createFromDate($currentyear, 1, 1)->endOfMonth()->format('Y-m-d');
@@ -72,6 +78,7 @@ public function propertyview(){
     $arr['rentalbilled'] = [$billjan, $billfeb, $billmar,$billapr,$billmay,$billjun,$billjul,$billaug
                         ,$billsep,$billoct,$billnov,$billdec];
     return view('dash/property-view')->with($arr);
+        }
 }
 public function maindashboard(){
     try {

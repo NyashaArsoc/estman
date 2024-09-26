@@ -147,7 +147,7 @@ Route::controller(LoginAuthController::class)->group(function(){
     Route::get('/user/profile', 'profileview')->name('login.profile');
     Route::post('/profile/edit', 'profilepassword')->name('login.editprofile');
 });
-Route::controller(DashController::class)->group(function(){
+Route::middleware('loginauth')->controller(DashController::class)->group(function(){
     Route::get('/dashboard/property', 'propertyview')->name('dash.property');
     Route::get('/welcome', 'maindashboard')->name('dash.main');
     Route::get('/valuation/dashboard', 'valuationdashboard')->name('dash.val');
@@ -266,5 +266,6 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
 /*-------------------setup intake------------------------ */
 Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(function(){
      Route::get('/set-up/add/currency', 'addcurrency')->name('setin.addcurr');
+     Route::post('/set-up/add/new/currency', 'addnewcurrency')->name('setin.addnewcurr');
      });
 /*-------------------end setup intake------------------------ */

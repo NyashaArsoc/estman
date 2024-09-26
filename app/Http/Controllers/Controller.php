@@ -15,25 +15,75 @@ class Controller extends BaseController
     use AuthorizesRequests, ValidatesRequests;
 //current system date
     public function systemdate(){
-        // try {      
-        //     $sysdate   = DB::table('sysdates')
-        //     ->select('*')->latest('id')->first();
-        //     if(is_null($sysdate)){
-        //         return 'failed';
-        //     }else if(trim($sysdate->OpenClose)=='O'){
-        //         return $sysdate->systemdate;
-        //     }
-        //     else{
-        //         return 'failed';
-        //     }
-        // } catch (QueryException $th) {
-        //    return 'failed';
-        // }
-        return date_format(now(),"Y-m-d");
-       
-       
+    return date_format(now(),"Y-m-d");
     }
-// take the transaction id for all transactions
+public function userdetail(){
+        if(session()->has('alluser')){
+            try {
+               $user = DB::table('systusers')->select('*')
+               ->where('username',session('alluser'))
+                ->orderBy('id','desc')->first();
+                return $user;
+            } catch (\Throwable $th) {
+             return 'failed';
+            }
+        }
+}
+public function getlicensecheck(){
+    try {
+        $licensecheck = DB::table('systmetacheck')
+        ->select('*')->latest('id')->first();
+        if(is_null($licensecheck)){
+            return 'failed';
+        }else{
+            try {
+                $license = Crypt::decrypt($licensecheck->checktil);
+                $systemdate = $this->systemdate();
+                $firstcheck = \Carbon\Carbon::parse($systemdate);
+                $secondcheck = \Carbon\Carbon::parse($license);
+                if($secondcheck >$firstcheck ){ return 'valid';}else{return 'notvalid';}
+            } catch (DecryptException $th) {
+               return 'failed';
+            }
+        }
+    } catch (\Throwable $th) {
+        return 'failed';
+    }
+}
+public function userforcelogout($error){
+    if(session()->has('alluser')){
+        try {
+            $logouttime = date("Y-m-d H:i:s", strtotime('+2 hours', strtotime(now())));
+           $lastlogin = DB::table('systlogins')->where('username',session('alluser'))
+            ->orderBy('id','desc')->first();
+            DB::table('systlogins')->where('id',$lastlogin->id)
+           ->update(['logoutdate' => $logouttime]);
+            session()->pull('alluser');
+            return  redirect()->route('login.signin') 
+                ->with('error', $error);
+        } catch (\Throwable $th) {
+            session()->pull('alluser');
+            return  redirect()->route('login.signin') 
+                ->with('error', $error);
+        }
+    }
+}
+//find active base currency
+public function getbasecurrency(){
+    try {      
+        $basecurrency   = DB::table('setupcurrencybase')
+        ->select('*')->where('active','=','Y')
+        ->latest('id')->first();
+        if(is_null($basecurrency)){
+            return 'failed';
+        }else{
+            return $basecurrency->code;
+        }
+    } catch (QueryException $th) {
+       return 'failed';
+    }
+}
+/* take the transaction id for all transactions
     public function transationid(){
         try {
             $trxid = collect(DB::select('EXEC spTriggerGetTrxID'))->first();
@@ -126,21 +176,7 @@ public function getexchangerate($currencycode){
         return 'failed';
     }
 }
-//find active base currency
-public function getbasecurrency(){
-    try {      
-        $basecurrency   = DB::table('currencybase')
-        ->select('*')->where('active','=','Y')
-        ->latest('id')->first();
-        if(is_null($basecurrency)){
-            return 'failed';
-        }else{
-            return $basecurrency->code;
-        }
-    } catch (QueryException $th) {
-       return 'failed';
-    }
-}
+
 
 public function getgraceperiod($currencycode){
     try {
@@ -153,62 +189,14 @@ public function getgraceperiod($currencycode){
         return 'failed';
     }
 }
-public function getlicensecheck(){
-    try {
-        $licensecheck = DB::table('systmetacheck')
-        ->select('*')->latest('id')->first();
-        if(is_null($licensecheck)){
-            return 'failed';
-        }else{
-            try {
-                $license = Crypt::decrypt($licensecheck->checktil);
-                $systemdate = $this->systemdate();
-                $firstcheck = \Carbon\Carbon::parse($systemdate);
-                $secondcheck = \Carbon\Carbon::parse($license);
-                if($secondcheck >$firstcheck ){ return 'valid';}else{return 'notvalid';}
-            } catch (DecryptException $th) {
-               return 'failed';
-            }
-        }
-    } catch (\Throwable $th) {
-        return 'failed';
-    }
-}
-public function userforcelogout($error){
-    if(session()->has('alluser')){
-        try {
-            $logouttime = date("Y-m-d H:i:s", strtotime('+2 hours', strtotime(now())));
-           $lastlogin = DB::table('systlogins')->where('username',session('alluser'))
-            ->orderBy('id','desc')->first();
-            DB::table('systlogins')->where('id',$lastlogin->id)
-           ->update(['logoutdate' => $logouttime]);
-            session()->pull('alluser');
-            return  redirect()->route('login.signin') 
-                ->with('error', $error);
-        } catch (\Throwable $th) {
-            session()->pull('alluser');
-            return  redirect()->route('login.signin') 
-                ->with('error', $error);
-        }
-    }
-}
-public function userdetail(){
-    if(session()->has('alluser')){
-        try {
-           $user = DB::table('systusers')->select('*')
-           ->where('username',session('alluser'))
-            ->orderBy('id','desc')->first();
-            return $user;
-        } catch (\Throwable $th) {
-         return 'failed';
-        }
-    }
-}
+
+
+
 public function passwordvalidto(){
     // $this->ValidFrom      =       date("Y-m-d H:i:s");
      $timeoriginal  =       strtotime(now());
      $timeadd       =       $timeoriginal + ((3600*24)*30); //add seconds of one 30 days
     $validtil       =       date("Y-m-d H:i:s", $timeadd);
     return $validtil;
- }
+ } */
 }
