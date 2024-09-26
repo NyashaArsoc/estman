@@ -20,6 +20,7 @@ public function compose(View $view){
         $propmandecline      =   'propmandecline';
          /*------------------------set up menu--------------------------- */
          $setupintake      =   'setupintake';
+         $setupmanage      =   'setupmanage';
         
         $arr['valintake']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$valintake]);
         $arr['valapprove']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$valapprove]);
@@ -31,6 +32,7 @@ public function compose(View $view){
         $arr['propmandecline']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$propmandecline]);
         //setup menu
         $arr['setupintake']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$setupintake]);
+        $arr['setupmanage']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$setupmanage]);
         $view->with($arr);
     } catch (\Throwable $th) {
         $error = 'fail to load menu';

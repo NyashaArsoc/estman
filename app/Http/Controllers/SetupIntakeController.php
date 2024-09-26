@@ -14,12 +14,12 @@ class SetupIntakeController extends Controller
  public function addnewcurrency(Request $request){
    try {
       $currencycode = strtoupper($request->currencycode);
-      if(DB::table('setupcurrencybase')->select('id')->where('code',
+      if(DB::table('setupcurrency')->select('id')->where('code',
       $currencycode)->exists()){
          return  redirect()->route('setin.addcurr') 
          ->with('error', 'currency already exists');
       }
-      DB::table('setupcurrencybase')->insert(['code'=>$currencycode]);
+      DB::table('setupcurrency')->insert(['code'=>$currencycode]);
       return  redirect()->route('setin.addcurr') 
       ->with('success', 'record added');
    } catch (\Throwable $th) {

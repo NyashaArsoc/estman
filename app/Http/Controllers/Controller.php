@@ -83,6 +83,14 @@ public function getbasecurrency(){
        return 'failed';
     }
 }
+public function getcurrencycode(){
+    try {
+        $currency   = DB::table('setupcurrency')->select('id','code')->get();
+        return $currency;
+    } catch (\Throwable $th) {
+        return 'failed';
+    }
+}
 /* take the transaction id for all transactions
     public function transationid(){
         try {

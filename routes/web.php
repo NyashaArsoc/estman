@@ -11,6 +11,7 @@ use App\Http\Controllers\PropManDeclineController;
 use App\Http\Controllers\PropManIntakeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SetupIntakeController;
+use App\Http\Controllers\SetupManageController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ValApprovalController;
@@ -267,5 +268,11 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
 Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(function(){
      Route::get('/set-up/add/currency', 'addcurrency')->name('setin.addcurr');
      Route::post('/set-up/add/new/currency', 'addnewcurrency')->name('setin.addnewcurr');
-     });
+});
 /*-------------------end setup intake------------------------ */
+/*-------------------setup manage------------------------ */
+Route::middleware('loginauth')->controller(SetupManageController::class)->group(function(){
+    Route::get('/set-up/base/currency', 'setbasecurrency')->name('setman.addbasecurr');
+    Route::post('/set-up/set/base/currency', 'addnewbasecurrency')->name('setman.addbewcode');
+});
+/*-------------------end setup manage------------------------ */

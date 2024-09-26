@@ -103,7 +103,10 @@
                             <span class="s-text">Manage </span>
                         </a>
                         <ul>
-                            
+                            @foreach ($setupmanage as $abc)
+                            <li><a href="{{url (trim($abc->descriptionroute)) }}">
+                                {{$abc->eventdescription}}</a></li>
+                            @endforeach
                         </ul>
                     </li>
                     <li class="with-sub">

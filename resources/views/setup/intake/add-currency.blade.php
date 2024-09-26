@@ -42,6 +42,6 @@ $description = 'add currency type to the system...'; @endphp
 
 @endsection
 @section('additional js')
-<script src="{{ asset('js/validation/setup-intake.js') }}"></script>
+<script src="{{ asset('js/validation/intake-setup.js') }}"></script>
     <!-- Additional JS End-->
 @endsection
