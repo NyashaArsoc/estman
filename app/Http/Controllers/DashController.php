@@ -111,4 +111,7 @@ public function valuationdashboard(){
     //return $arr['instructions'] ;
    return view('dash/val-dash')->with($arr);
 }
+public function setupdashboard(){
+    return view('dash.setup-dash');
+}
 }

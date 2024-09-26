@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer(views:'*',callback:RolePermission::class);
-        View::composer(views:['layout.val-main-menu','layout.propman-main-menu'],callback:MenuComposer::class);
+        View::composer(views:['layout.val-main-menu','layout.propman-main-menu','layout.setup-main-menu'
+    ],callback:MenuComposer::class);
     }
 }

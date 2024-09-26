@@ -9,6 +9,7 @@ class MenuComposer extends Controller{
 public function compose(View $view){
     try {
         $user = $this->userdetail();
+         /*------------------------valuation menu--------------------------- */
         $valintake          =   'valintake';
         $valapprove         =   'valapprove';
         $valdecline         =   'valdecline';
@@ -17,7 +18,8 @@ public function compose(View $view){
         $propmanintake      =   'propmanintake';
         $propmanapprove      =   'propmanapprove';
         $propmandecline      =   'propmandecline';
-         /*------------------------valuation menu--------------------------- */
+         /*------------------------set up menu--------------------------- */
+         $setupintake      =   'setupintake';
         
         $arr['valintake']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$valintake]);
         $arr['valapprove']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$valapprove]);
@@ -27,6 +29,8 @@ public function compose(View $view){
         $arr['propmanintake']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$propmanintake]);
         $arr['propmanapprove']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$propmanapprove]);
         $arr['propmandecline']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$propmandecline]);
+        //setup menu
+        $arr['setupintake']= DB::select ('EXEC spGetMenuList ?,?',[$user->roleid,$setupintake]);
         $view->with($arr);
     } catch (\Throwable $th) {
         $error = 'fail to load menu';

@@ -151,6 +151,7 @@ Route::controller(DashController::class)->group(function(){
     Route::get('/dashboard/property', 'propertyview')->name('dash.property');
     Route::get('/welcome', 'maindashboard')->name('dash.main');
     Route::get('/valuation/dashboard', 'valuationdashboard')->name('dash.val');
+    Route::get('/set-up/dashboard', 'setupdashboard')->name('dash.setup');
 });
 /*
 Route::controller(ReportController::class)->group(function(){
@@ -264,6 +265,6 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
 /*-------------------end property management declines------------------------ */
 /*-------------------setup intake------------------------ */
 Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(function(){
-     Route::get('/set-up/add/currency', 'listdeclinelandlord')->name('propdec.listlanddec');
+     Route::get('/set-up/add/currency', 'addcurrency')->name('setin.addcurr');
      });
 /*-------------------end setup intake------------------------ */

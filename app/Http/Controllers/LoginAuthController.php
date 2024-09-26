@@ -19,8 +19,6 @@ public function userlogin(Request $request){
           // get the login validation
         $login = collect(DB::select('EXEC  spPostUserLogin ?',
         [$request->username]))->first();
-        // get the base currency 
-        $basecurrency           =       $this->getbasecurrency();
         $license                =       $this->getlicensecheck();
         $attempts               =       DB::table('systlogins')->select('attempts')
                 ->where('username',$request->username)->latest('id')->first();
@@ -36,7 +34,7 @@ public function userlogin(Request $request){
             $login->username == 'norole' => redirect()->route('login.signin')
                 ->with('error', 'no role assigned'),
                 // default when username is correct and all details are active
-            default => (function () use($login,$request,$basecurrency,$license,$attempts){
+            default => (function () use($login,$request,$license,$attempts){
                 /*------------when username and password are correct------------------- */
                 if(Hash::check($request->password,$login->password)){
                     //insert a successful login 
@@ -44,12 +42,6 @@ public function userlogin(Request $request){
                     'attempts'=>0,'isvalid'=>'Y']);
                     //place a session
                     $request->session()->put('alluser',$login->username);
-                    // check if basecurrency is set
-                    switch(true){
-                        case($basecurrency == 'failed'):
-                            $error = 'no base currency set';
-                            return $this->userforcelogout($error);
-                        default:
                         /*------------check licence validity----------------------- */
                         switch ($license){
                             case 'failed':
@@ -64,7 +56,6 @@ public function userlogin(Request $request){
                                 $error = 'invalid login';
                                 return $this->userforcelogout($error);
                         }
-                    }
                 }else{/* passwords mismatch */
                     DB::table('systlogins')->insert(['username'=>$request->username,
                     'logoutdate'=>now(),'attempts'=>$attempts->attempts +=1,'isvalid'=>'N']); 
