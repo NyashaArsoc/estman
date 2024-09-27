@@ -91,6 +91,14 @@ public function getcurrencycode(){
         return 'failed';
     }
 }
+public function getclienttype(){
+    try {
+        $description   = DB::table('setupclienttype')->select('id','description')->get();
+        return $description;
+    } catch (\Throwable $th) {
+        return 'failed';
+    }
+}
 /* take the transaction id for all transactions
     public function transationid(){
         try {

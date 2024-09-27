@@ -12,7 +12,7 @@ class PropManApprovalController extends Controller
     /*---------------approval new landlord-----------------*/
 public function listlandlordapproval(){
     try {
-        $arr['landlord']   = DB::table('alllandlord')
+        $arr['landlord']   = DB::table('propmanalllandlord')
         ->where('approval','=' ,'N')
         ->select('*')->get();
         return view('propman.approval.list-landlord-pending-approval')->with($arr);
@@ -24,12 +24,12 @@ public function viewlandlordapproval($id){
     try {
         $landlordid = Crypt::decrypt($id);
         try {
-            $arr['landlord']   = DB::table('alllandlord')
+            $arr['landlord']   = DB::table('propmanalllandlord')
             ->where('id', $landlordid)->select(columns: '*')->first();  
-            $arr['contact']   = DB::table('landlordcontact')
+            $arr['contact']   = DB::table('propmanlandlordcontact')
             ->where('landlordid', $landlordid)
             ->select('*')->latest('id')->first();
-            $arr['bank']   = DB::table('landlordbank')->where('landlordid', $landlordid)
+            $arr['bank']   = DB::table('propmanlandlordbank')->where('landlordid', $landlordid)
             ->select('*')->get();
             return view('propman.approval.view-single-landlord-approval')->with($arr);
         } catch (\Throwable $th) {

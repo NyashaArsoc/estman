@@ -493,7 +493,7 @@ function validateAccountName() {
         accountnameError = false;
         return false;
     } else {
-        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?~\/s\0-9]/;
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/;
             charscheck =  specialChars.test(textValue);
             if (charscheck == true){
                  $("#accountnamecheck").show();
@@ -524,7 +524,7 @@ function validateBankName() {
         banknameError = false;
         return false;
     } else {
-        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?~\/s\0-9]/;
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/;
             charscheck =  specialChars.test(textValue);
             if (charscheck == true){
                  $("#banknamecheck").show();
@@ -545,11 +545,7 @@ $("#notrequiredgeneraltextcaps").keyup(function () {
 });
 function validateNotRequiredGeneralTextCaps() {
     let textValue = $("#notrequiredgeneraltextcaps").val();
-    if (textValue.length == "") {
-        $("#notrequiredgeneraltextcapscheck").show();
-        notrequiredgeneraltextcapsError = false;
-        return false;
-    } else if (textValue.length < 2) {
+         if (textValue.length < 2) {
         $("#notrequiredgeneraltextcapscheck").show();
         $("#notrequiredgeneraltextcapscheck").html("**invalid text");
         notrequiredgeneraltextcapsError = false;
@@ -601,13 +597,13 @@ $('#add-banking-item').on('click', function() {
         if(accountnameError==true && banknameError==true && notrequiredgeneraltextcapsError==true &&
             numericrequiredError==true && currencycodeError==true){
                 if(branch ==''){ branch = 'n/a'; }
-        $('#landlordbanking tbody').append('<tr class="child"><td>'+count+'</td><td><input name="currencycode[]" class="form-control" value='+currencycode+' readonly/></td><td><input name="accountname[]" class="form-control" value='+accountname+' readonly /></td><td><input name="bankname[]" class="form-control" value='+bankname+' readonly /></td><td> <input name="branch[]" class="form-control " value='+branch+' readonly/></td><td><input name="accountnumber[]" class="form-control " value='+accountnumber+' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="delete" onclick="deleteRow(this)">delete</button></td></tr>');
+        $('#landlordbanking tbody').append('<tr class="child"><td>'+count+'</td><td><input name="currencycode[]" class="form-control" value='+currencycode+' readonly/></td><td><input name="accountname[]" class="form-control" value='+accountname+' readonly /></td><td><input name="bankname[]" class="form-control" value='+bankname+' readonly /></td><td> <input name="branch[]" class="form-control " value='+branch+' readonly/></td><td><input name="accountnumber[]" class="form-control " value='+accountnumber+' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="delete" onclick="deletelandlordbankrow(this)">delete</button></td></tr>');
 		$('#accountname').val('');  $('#bankname').val('');   $('#notrequiredgeneraltextcaps').val(''); $('#numericrequired').val('');      
             }
     }catch(err){  alert(err.message); }
 });
-function deletenewpropertyrow(t) {
-    var a = $("#tblnewpropertydetails > tbody > tr").length;
+function deletelandlordbankrow(t) {
+    var a = $("#landlordbanking > tbody > tr").length;
     if (1 == a) alert("There only one row you can't delete.");
     else {
         var e = t.parentNode.parentNode;

@@ -43,37 +43,8 @@ class InvoiceController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(invoice $invoice)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(invoice $invoice)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, invoice $invoice)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(invoice $invoice)
-    {
-        //
-    }
+ 
 
     public function compilepreinvoice(){
         try {

@@ -10,8 +10,16 @@ class PropManIntakeController extends Controller
     /*---------------creating new landlord-----------------*/
 public function addlandlorddetails(){
     try {
-        $arr['type']   = DB::table('clienttype')->select('id','description')->get();
-        $arr['currency']   = DB::table('currency')->select('id','code')->get();
+        $currencycode = $this->getcurrencycode();
+        $clienttype = $this->getclienttype();
+        switch ($currencycode){
+         case 'failed':
+             return  redirect()->route('setin.property')->with('error', 'failed to load');
+           default: $arr['currency'] = $currencycode; }
+
+         switch ($clienttype){case 'failed':
+                return  redirect()->route('setin.property')->with('error', 'failed to load');
+              default: $arr['type'] = $clienttype; }
         return view('propman.intake.add-landlord')->with($arr);
     } catch (\Throwable $th) {
         return  redirect()->route('dash.property');
@@ -27,30 +35,31 @@ public function addnewlandlorddetails(Request $request){
         $arraytotal         =       count($accountnumber);
         $a  = 0;
         if(!is_null($request->nationalid)){
-            if (DB::table('landlord')->select('id')->where('nationalID', $request->nationalid)->exists()) {
+            if (DB::table('propmanlandlord')->select('id')->where('nationalid', $request->nationalid)->exists()) {
                 return  redirect()->route('propin.addlandlord')
                 ->with('error', 'client exists');
             }
         }elseif (!is_null($request->companynumber)){
-            if (DB::table('landlord')->select('id')->where('companynumber', $request->companynumber)->exists()) {
+            if (DB::table('propmanlandlord')->select('id')->where('companynumber', $request->companynumber)->exists()) {
                 return  redirect()->route('propin.addlandlord')
                     ->with('error', 'client exists');
             }
         }
-        $landlordid = DB::table('landlord')->insertGetId( ['nationalID'=>$request->nationalid,
+        $landlordid = DB::table('propmanlandlord')->insertGetId( ['nationalid'=>$request->nationalid,
         'clienttypeid'=>$request->clienttype,'firstname'=>$request->firstname,'cell'=>$request->cell,
                         'email'=>$request->email,'tel'=>$request->tel,'operatorid'=>session('alluser'),
                         'lastname'=>$request->lastname, 'contactaddress'=>$request->billingaddress,
-    'companynumber'=>$request->companynumber,'bpnumber'=>$request->tinumber,
+    'companynumber'=>$request->companynumber,'tinnumber'=>$request->tinumber,
                         'vatnumber'=>$request->vatnumber,'companyname'=>$request->companyname]
         );
-        DB::table('landlordcontact')->insert( ['email'=>$request->contactemail,'cell'=>$request->contactcell,
-            'lastname'=>$request->contactlastname,'firstname'=>$request->contactfirstname,'landlordid'=>$landlordid]);
+        DB::table('propmanlandlordcontact')->insert( ['email'=>$request->contactemail,'cell'=>$request->contactcell,
+            'lastname'=>$request->contactlastname,'firstname'=>$request->contactfirstname,'operatorid'=>session('alluser'),
+            'landlordid'=>$landlordid]);
         while ($a   <   $arraytotal){
-                DB::table('landlordbank')
+                DB::table('propmanlandlordbank')
                 ->Insert(['accountnumber'=>$accountnumber[$a],'branch'=>$branch[$a],
                     'bankname'=>$bankname[$a],'accountname'=>$accountname[$a],'operatorid'=>session('alluser'),
-                    'currencycode'=>$currencycode[$a],'landlordid'=>$landlordid,'available'=>'Y']);
+                    'currencycode'=>$currencycode[$a],'landlordid'=>$landlordid]);
                 $a++;
             }
     return  redirect()->route('propin.addlandlord') 

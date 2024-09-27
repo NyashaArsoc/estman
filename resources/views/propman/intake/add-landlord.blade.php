@@ -127,7 +127,7 @@ $description = 'add landlord to the system...'; @endphp
                         <label for="FirstName" class="col-sm-2 form-control-label">First Name</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="contactfirstname" 
-                            name="contactfirstName"  placeholder="First Name" autocomplete="off">
+                            name="contactfirstname"  placeholder="First Name" autocomplete="off">
                             <small id="contactfirstnamecheck" style="color: red;">required</small>
                         </div>
 

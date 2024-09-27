@@ -36,7 +36,7 @@
                                     <td>{{$count ++}}</td>
                                     <td>{{ $abc->description }}</td>
                                     <td>{{ $abc->fullname}}  {{ $abc->companyname}}</td>
-                                    <td>{{ $abc->companynumber }} {{ $abc->nationalID }}</td>
+                                    <td>{{ $abc->companynumber }} {{ $abc->nationalid }}</td>
                                     <td>{{ $abc->cell }}</td>
                                     <td>{{ $abc->email }}</td>
                                     <td>@php $id= Crypt::encrypt($abc->id); @endphp

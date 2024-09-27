@@ -200,14 +200,7 @@ function validateLeaseItemAdminPaid(){
 
 	
 
-function deleteRow(t) {
-    var a = $("#landlordbanking > tbody > tr").length;
-    if (1 == a) alert("There only one row you can't delete.");
-    else {
-        var e = t.parentNode.parentNode;
-        e.parentNode.removeChild(e);
-    }
-}
+
 $('#add-lease-item').on('click', function() {
 	var CurrencyID				=	$('#LeaseItemCurrencyID').val();
 	var BalanceBD				=	$('#LeaseItemBDamount').val();

@@ -47,11 +47,11 @@ $id= Crypt::encrypt($landlord->id);
                         </tr>
                         <tr>
                             <td><strong>Registration:</strong></td>
-                            <td>{{ $landlord->companynumber ?? '' }}  {{ $landlord->nationalID ?? ''}}</td>
+                            <td>{{ $landlord->companynumber ?? '' }}  {{ $landlord->nationalid ?? ''}}</td>
                         </tr>
                         <tr>
                             <td><strong>Tin Number:</strong></td>
-                            <td>{{ $landlord->bpnumber ?? ''}}</td>
+                            <td>{{ $landlord->tinnumber ?? ''}}</td>
                         </tr>
                         <tr>
                             <td><strong>Vat Number:</strong></td>
