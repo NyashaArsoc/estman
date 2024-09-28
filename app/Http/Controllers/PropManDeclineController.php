@@ -14,11 +14,11 @@ public function declinenewlandlord($id,Request $request){
     try{
     $landlordid = Crypt::decrypt($id);
         try {
-            DB::table('landlord')
+            DB::table('propmanlandlord')
             ->where('id',$landlordid)
             ->update(['approval' => 'R' , 'available'=> 'N', 'reasons'=> $request->reasons_comments]);
             return  redirect()->route('propapp.listland') 
-            ->with('success', 'declines');
+            ->with('success', 'record declined');
         } catch (\Throwable $th) {
             return redirect()->route('propapp.viewland',$id)
             ->with('error', 'failed to load');
@@ -30,7 +30,7 @@ public function declinenewlandlord($id,Request $request){
 }
 public function listdeclinelandlord(){
     try {
-        $arr['landlord']   = DB::table('alllandlord')
+        $arr['landlord']   = DB::table('propmanalllandlord')
         ->where('approval','=' ,'R')
         ->select('*')->get();
         return view('propman.declined.list-landlord-declined-approval')->with($arr);
@@ -42,12 +42,13 @@ public function vieweditsinglelandlord($id){
     try{
         $landlordid = Crypt::decrypt($id);
             try {
-                $arr['landlord']   = DB::table('alllandlord')
+                $clienttype = $this->getclienttype();
+                $arr['type'] = $clienttype;
+                $arr['landlord']   = DB::table('propmanalllandlord')
             ->where('id', $landlordid)->select(columns: '*')->first();  
-            $arr['contact']   = DB::table('landlordcontact')
+            $arr['contact']   = DB::table('propmanlandlordcontact')
             ->where('landlordid', $landlordid)
             ->select('*')->latest('id')->first();
-            $arr['type']   = DB::table('clienttype')->select('id','description')->get();
                 return view('propman.declined.view-single-landlord-edit')->with($arr);
             } catch (\Throwable $th) {
                 return redirect()->route('propdec.listlanddec')
@@ -62,22 +63,50 @@ public function deletesinglelandlord($id){
     try{
         $landlordid = Crypt::decrypt($id);
             try {
-                if (DB::table('property')->select('id')->where('landlordid',
+                if (DB::table('propmanproperty')->select('id')->where('landlordid',
                  $landlordid)->where('available','=','Y')->exists()) {
                     return  redirect()->route('propdec.listlanddec')
                     ->with('error', 'active properties still attached');
                 }
-                DB::table('landlord')
+                DB::table('propmanlandlord')
                 ->where('id',$landlordid)
-                ->update(['approval' => 'D' , 'available'=> 'N']);
-                return  redirect()->route('propapp.listland') 
-                ->with('success', 'declines');
+                ->update(['approval' => 'D' , 'available'=> 'N','approvedby'=>session('alluser'),
+            'approvedon'=>now()]);
+                return  redirect()->route('propdec.listlanddec') 
+                ->with('success', 'record removed');
             } catch (\Throwable $th) {
-                return redirect()->route('propapp.viewland',$id)
+                return redirect()->route('propdec.listlanddec')
                 ->with('error', 'failed to load');
             }
         }catch (DecryptException $th) {
-            return redirect()->route('propapp.viewland',$id)
+            return redirect()->route('propdec.listlanddec')
+            ->with('error', 'failed to load');
+        }
+}
+public function updatesinglelandlord($id, Request $request,$contactid){
+    try{
+        $landlordid = Crypt::decrypt($id);
+        $contactpersonid = Crypt::decrypt($contactid);
+            try {
+                DB::table('propmanlandlord')
+                ->where('id',$landlordid)
+                ->update(['nationalid'=>$request->nationalid,
+        'clienttypeid'=>$request->clienttype,'firstname'=>$request->firstname,'cell'=>$request->cell,
+                        'email'=>$request->email,'tel'=>$request->tel,'approval'=>'N',
+                        'lastname'=>$request->lastname, 'contactaddress'=>$request->billingaddress,
+        'companynumber'=>$request->companynumber,'tinnumber'=>$request->tinumber,
+                        'vatnumber'=>$request->vatnumber,'companyname'=>$request->companyname]);
+            DB::table('propmanlandlordcontact')->where('id',$contactpersonid)
+            ->update( ['email'=>$request->contactemail,'cell'=>$request->contactcell,
+            'lastname'=>$request->contactlastname,'firstname'=>$request->contactfirstname]);
+                return  redirect()->route('propdec.listlanddec') 
+                ->with('success', 'record removed');
+            } catch (\Throwable $th) {
+                return redirect()->route('propdec.editviewland',$id)
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propdec.editviewland',$id)
             ->with('error', 'failed to load');
         }
 }

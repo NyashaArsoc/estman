@@ -33,7 +33,7 @@
                                     <td>{{$count ++}}</td>
                                     <td>{{ $abc->description }}</td>
                                     <td>{{ $abc->fullname}}  {{ $abc->companyname}}</td>
-                                    <td>{{ $abc->companynumber }} {{ $abc->nationalID }}</td>
+                                    <td>{{ $abc->companynumber }} {{ $abc->nationalid }}</td>
                                     <td>{{ $abc->cell }}</td>
                                     <td>{{ $abc->email }}</td>
                                     <td>{{ $abc->reasons }}</td>
@@ -41,6 +41,10 @@
                                         @if (in_array(2,$arraycontrolids))<a class="btn btn-secondary 
                                     btn-sm view_landlord" id=""href="{{route('propdec.editviewland', $id)}}"
                                      title="view"><i class="ti-pencil mr-0-5"></i>edit</a> @endif
+                                     @if (in_array(4,$arraycontrolids))<a class="btn btn-danger btn-sm"
+                                      onclick = "rejectapproval(this); return false;"
+                                     id=""href="{{route('propdec.landdel', $id)}}"
+                                     title="view"><i class="ti-close mr-0-5"></i>remove</a> @endif
                             </td>
                             </tr>
                             @endforeach

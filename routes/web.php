@@ -262,6 +262,8 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::get('/prop/list/landlord/declined', 'listdeclinelandlord')->name('propdec.listlanddec');
     Route::get('/prop/view/landlord/{id}/edit', 'vieweditsinglelandlord')->name('propdec.editviewland');
     Route::any('/prop/landlord/{id}/delete', 'deletesinglelandlord')->name('propdec.landdel');
+    Route::any('/prop/{id}/landlord/{contactid}/update', 'updatesinglelandlord')->name('propdec.landupd');
+  
    });
 /*-------------------end property management declines------------------------ */
 /*-------------------setup intake------------------------ */

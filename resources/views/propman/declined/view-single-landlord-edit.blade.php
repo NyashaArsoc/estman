@@ -1,18 +1,18 @@
 @php 
-$title = 'Add Landlord';
-$description = 'add landlord to the system...';
+$title = 'Edit Landlord';
+$description = 'update landlord details...';
 $id= Crypt::encrypt($landlord->id);
+$contactid= Crypt::encrypt($contact->id);
 $divindividualclass = $landlord->clienttypeid == 1 ? 'hide': 'dropdwn';
-$divcompanyclass = $landlord->clienttypeid != 1 ? 'dropdwn': 'hide';
+$divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
  @endphp
 @extends('layout.no-menu-layout')
-@section('title', 'Add Landlord')
+@section('title', 'Edit Landlord')
 @section('additional css')
     <!-- Additional css Start-->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/select2-bootstrap-theme/select2-bootstrap.min.css') }}">
     <!-- Additional css End-->
-  
 @endsection
 @section('content')
     <!-- Content Start-->
@@ -27,7 +27,7 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'dropdwn': 'hide';
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
             <form class="form-material material-primary" id="" method="POST" id="defaultform"
-                action="{{ route('propin.addnewlandlord') }}">@csrf
+                action="{{ route('propdec.landupd', [$id,$contactid]) }}">@csrf
                 <div class="form-group row">
                     <label for="ClientType" class="col-sm-2 form-control-label">Type<i class="text-danger">*</i></label>
                     <div class="col-sm-4">
@@ -63,7 +63,7 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'dropdwn': 'hide';
                         </label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="nationalid" name="nationalid"
-                            value="{{ $landlord->nationalID ?? '' }}" autocomplete="off">
+                            value="{{ $landlord->nationalid ?? '' }}" autocomplete="off">
                                 <small id="nationalidcheck" style="color: red;">required</small>
                         </div>
                     </div>
@@ -133,7 +133,7 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'dropdwn': 'hide';
                         <label for="FirstName" class="col-sm-2 form-control-label">First Name</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="contactfirstname" 
-                            name="contactfirstName"  value="{{ $contact->firstname ?? ''}}" autocomplete="off">
+                            name="contactfirstname"  value="{{ $contact->firstname ?? ''}}" autocomplete="off">
                             <small id="contactfirstnamecheck" style="color: red;">required</small>
                         </div>
 

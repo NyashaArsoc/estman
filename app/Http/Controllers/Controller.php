@@ -86,17 +86,23 @@ public function getbasecurrency(){
 public function getcurrencycode(){
     try {
         $currency   = DB::table('setupcurrency')->select('id','code')->get();
+        if(is_null($currency)){
+            return  redirect()->route('dash.main')->with('error', 'no currency set');
+        }
         return $currency;
     } catch (\Throwable $th) {
-        return 'failed';
+        return  redirect()->route('dash.main')->with('error', 'no currency set');
     }
 }
 public function getclienttype(){
     try {
         $description   = DB::table('setupclienttype')->select('id','description')->get();
+        if(is_null($description)){
+            return  redirect()->route('dash.main')->with('error', 'no client type');
+        }
         return $description;
     } catch (\Throwable $th) {
-        return 'failed';
+        return  redirect()->route('dash.main')->with('error', 'no client type');
     }
 }
 /* take the transaction id for all transactions

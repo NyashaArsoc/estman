@@ -96,7 +96,10 @@
                             <span class="s-text">Declined</span>
                         </a>
                         <ul>
-                           
+                            @foreach ($propmandecline as $abc)
+                            <li><a href="{{url (trim($abc->descriptionroute)) }}">
+                                {{$abc->eventdescription}}</a></li>
+                            @endforeach
                         </ul>
                     </li>
                     <li class="with-sub">
