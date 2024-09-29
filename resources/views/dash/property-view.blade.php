@@ -26,10 +26,18 @@
                     </div>
                 </div>
             </div> 
-           
         </div>
-        
-
+        <div class="row"> 
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <div class="box box-block tile tile-2 bg-info mb-2">
+                    <div class="t-icon right"><i class="ti-user"></i></div>
+                    <div class="t-content">
+                        <h2 class="mb-1">{{$activelandlord}}</h2>
+                        <h6 class="text-uppercase">Active Landlords</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- Content End-->
 @endsection

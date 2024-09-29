@@ -17,10 +17,10 @@ public function propertyview(){
             return  redirect()->route('dash.main')
             ->with('error', $error);
         default:
-        $systemdate     = $this->systemdate();
         $arr['sysdates'] = $this->systemdate();
         $arr['base']   = DB::table('setupcurrencybase')->where('active','=','Y')
         ->select('code')->latest('id')->first();
+        $arr['activelandlord']   = DB::table('propmanlandlord')->where('available','=' ,'Y')->get()->count();
     return view('dash/property-view')->with($arr);
         }
 }

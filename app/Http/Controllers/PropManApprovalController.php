@@ -45,11 +45,16 @@ public function approvenewsinglelandlordapproval($id){
     try{
         $landlordid = Crypt::decrypt($id);
         try {
-            DB::table('landlord')
+            DB::table('propmanlandlord')
             ->where('id',$landlordid)
-            ->update(['approval' => 'Y' , 'available'=> 'Y']);
+            ->update(['approval' => 'Y' , 'available'=> 'Y','approvedby'=>session('alluser'),
+            'approvedon'=>now()]);
+            DB::table('propmanlandlordcontact')
+            ->where('landlordid',$landlordid)
+            ->update(['approval' => 'Y' , 'available'=> 'Y','approvedby'=>session('alluser'),
+            'approvedon'=>now()]);
             return  redirect()->route('propapp.listland') 
-            ->with('success', 'approved');
+            ->with('success', 'record approved');
         } catch (\Throwable $th) {
             return redirect()->route('propapp.viewland',$id)
             ->with('error', 'failed to load');

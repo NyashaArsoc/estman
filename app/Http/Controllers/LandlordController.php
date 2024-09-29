@@ -22,36 +22,6 @@ public function __construct(){
         //
     }
 
-
-   public function vieweditlandlord($id)
-    {
-        $landlordid = Crypt::decrypt($id);
-        try {
-            $arr_owner['landlord']   = DB::table('alllandlord')
-            ->where('id', $landlordid)
-            ->select('firstname','lastname','id','companyname','nationalID','companynumber',
-            'cell','email','clienttypeid','description','vatnumber','bpnumber',
-            'contactaddress','tel','fullname')
-            ->first();
-            $arr_owner['contact']   = DB::table('landlordcontact')
-            ->where('landlordid', $landlordid)
-            ->where('available', '=','Y')
-            ->select('email','cell','lastname','firstname')
-            ->first();
-            $arr_owner['type']   = DB::table('clienttype')
-            ->select('id','description')->get();
-            return view('landlord.edit-landlord')
-        ->with($arr_owner);
-
-        } catch (QueryException $e) {
-            return  redirect()->route('landlord.rejected') 
-            ->with('error', 'failed to load');
-        }
-       
-    }
-
-
-
     public function  addbanking(){
         $arr_owner['type']   = DB::table('clienttype')
         ->select('id','description')->get();
@@ -105,16 +75,6 @@ public function capturebankingdetails(Request $request){
     
 }
 
-    public function  rejected(){
-        $arr_owner['landlord']   = DB::table('alllandlord')
-        ->where('approval','=' ,'R')
-        ->where('available','=' ,'N')
-        ->select('fullname','id','companyname','nationalID','companynumber',
-        'cell','email','clienttypeid','description','reasons')
-        ->get();
-        return view('landlord/rejected')
-        ->with($arr_owner);
-    }
     public function  listlandlords(){
         $arr_owner['landlord']   = DB::table('alllandlord')
         ->select('fullname','id','companyname','nationalID','companynumber',
@@ -150,72 +110,6 @@ public function capturebankingdetails(Request $request){
             ->with('error', 'failed to approve landlord');
         }
     }*/
-
-    public function viewpending($id){
-        $landlordid = Crypt::decrypt($id);
-        try {
-            $arr_owner['landlord']   = DB::table('alllandlord')
-            ->where('id', $landlordid)
-            ->select('fullname','id','companyname','nationalID','companynumber',
-            'cell','email','clienttypeid','description','vatnumber','bpnumber',
-            'contactaddress','tel')
-            ->first();
-            $arr_owner['contact']   = DB::table('landlordcontact')
-            ->where('landlordid', $landlordid)
-            ->where('available', '=','Y')
-            ->select('email','cell','lastname','firstname')
-            ->first();
-
-            return view('landlord/view-pending')
-           ->with($arr_owner);
-        } catch (QueryException $e) {
-            return  redirect()->route('landlord.pending') 
-            ->with('error', 'failed to load');
-        }
-        
-    }
-
-    public function updatelandlord($id, Request $request){
-
-        try {
-            $landlordid = Crypt::decrypt($id);
-            DB::table('landlord')
-            ->updateOrInsert(['id'=>$landlordid],
-            ['companynumber'=>$request->CompanyNumber,'clienttypeid'=>$request->LandlordClientType,
-            'email'=>$request->Email,'tel'=>$request->Tel, 'cell'=>$request->Cell,
-             'contactaddress'=>$request->ContactAddress,'bpnumber'=>$request->BPNumber,
-            'vatnumber'=>$request->VATNumber,'companyname'=>$request->CompanyName,
-            'nationalID'=>$request->NationalID,'firstname'=>$request->FirstName,
-            'lastname'=>$request->LastName,'approval' => 'N']  );
-            DB::table('landlordcontact')
-                    ->updateOrInsert(
-                        ['email'=>$request->ContactEmail,'landlordid'=>$landlordid],
-                        ['cell'=>$request->ContactCell,'lastname'=>$request->ContactLastName,
-                        'firstname'=>$request->ContactFirstName]
-                    );
-            return  redirect()->route('landlord.rejected') 
-            ->with('success', 'submitted for approval');
-        } catch (QueryException $e) {
-            return  redirect()->route('landlord.rejected') 
-            ->with('error', 'failed to update');
-        }
-    }
-
-    public function deleterejected($id){
-        try{
-            $landlordid = Crypt::decrypt($id);
-            $update = array('available'=> 'D');
-            DB::table('landlord')
-            ->where('id',$landlordid)
-            ->update($update);
-
-            return  redirect()->route('landlord.rejected') 
-            ->with('success', 'landlord deleted');
-        } catch(QueryException $e){
-            return  redirect()->route('landlord.rejected') 
-            ->with('error', 'failed to deleted landlord');
-        }
-    }
 
     public function viewindividual($id){
         $landlordid = Crypt::decrypt($id);

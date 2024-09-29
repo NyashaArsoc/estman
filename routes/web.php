@@ -32,14 +32,10 @@ use Illuminate\Support\Facades\Route;
 */
 /*
 Route::controller(LandlordController::class)->group(function () {
-   -- Route::get('/edit/landlord/{id}/view', 'vieweditlandlord')->name('landlord.editview');
     Route::get('/landlord-banking-details', 'addbanking')->name('landlord.addbanking');
     Route::post('/create/landlord/bank', 'capturebankingdetails')->name('landlord.addbank');
-   -- Route::any('/landlord-rejected', 'rejected')->name('landlord.rejected');
     Route::any('/single-landlord/{id}', 'getlandlord')->name('landlord.getlandlord');
     Route::any('/disable/{id}/landlord', 'disablelandlord')->name('landlord.disable');
-    Route::any('/view-pending-landlord/{id}', 'viewpending')->name('landlord.viewpending');
-    --Route::any('/delete-rejected-landlord/{id}', 'deleterejected')->name('landlord.deleterejected');
     Route::any('/landlord/{id}/view', 'viewindividual')->name('landlord.view');
     Route::get('/landlord/{id}/view-ledgers', 'viewledgers')->name('landlord.ledgers');
     Route::post('/landlord/{id}/sub-ledgers/{product}', 'createsubledgers')->name('landlord.createsub');
