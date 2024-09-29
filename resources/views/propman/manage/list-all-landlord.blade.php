@@ -1,6 +1,6 @@
 @php $title = 'Manage Landlords'; 
       $description = 'list of all landlords...'; @endphp
-    @extends('layout.main-layout')
+    @extends('layout.propman-main-menu')
     @section('title', 'Manage Landlords')
     @section('content')
         <!-- Content Start-->
@@ -28,31 +28,25 @@
                                 </tr>
                             </thead>
                             <tbody>@php $count=1;@endphp
-                                @foreach($landlord as $land)
+                                @foreach($landlord as $abc)
                             <tr>
                                 @php
-                                $id= Crypt::encrypt($land->id); 
-                                 if ($land->clienttypeid == 1){
-                                    $owner   =  $land->fullname ;
-                                    $registration   =  $land->nationalID ;
-                                 }else{
-                                     $owner   =  $land->companyname ;
-                                     $registration   =  $land->companynumber ;
-                                 } if (trim($land->available) == 'Y'){
+                                $id= Crypt::encrypt($abc->id); 
+                                if (trim($abc->available) == 'Y'){
                                         $status = 'available';
                                         $badge = "badge badge-pill bg-success badge-secondary";
                                         $buttondeactivate = '<a onclick = "deactivatelandlord(this); 
-                                        return false;" class="btn btn-warning btn-sm" href="' . route('landlord.disable',$id) . '"
+                                        return false;" class="btn btn-warning btn-sm" href="' . route('propapp.viewland',$id) . '"
                                      title="disable"><i class="ti-close mr-0-5"></i>deactivate</a>';
-                                     $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('landlord.view',$id) . '"
+                                     $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('propapp.viewland',$id) . '"
                                      title="view"><i class="ti-eye mr-0-5"></i>view</a>';
-                                    }else if (trim($land->available) == 'D'){//include the deleted status
+                                    }else if (trim($abc->available) == 'D'){//include the deleted status
                                         $status = 'deleted';
                                         $badge = 'badge badge-pill bg-danger badge-secondary';
                                         $buttondeactivate = '';
                                         $buttonview = '';
                                     }else{
-                                    if (trim($land->approval) == 'R'){ 
+                                    if (trim($abc->approval) == 'R'){ 
                                         $status = 'rejected';
                                         $badge = 'badge badge-pill bg-danger badge-secondary';
                                         $buttondeactivate = '';
@@ -66,11 +60,11 @@
                                  }
                                  @endphp
                                     <td>{{$count ++}}</td>
-                                    <td>{{ $land->description }}</td>
-                                    <td>{{ $owner}}</td>
-                                    <td>{{ $registration }}</td>
-                                    <td>{{ $land->cell }}</td>
-                                    <td>{{ $land->email }}</td>
+                                    <td>{{ $abc->description }}</td>
+                                    <td>{{  $abc->companyname  }} {{  $abc->fullname  }}</td>
+                                    <td>{{  $abc->nationalid  }} {{  $abc->companynumber  }}</td>
+                                    <td>{{ $abc->cell }}</td>
+                                    <td>{{ $abc->email }}</td>
                                     <td><span class="{{ $badge }}">{{$status}}</span></td>
                                     <td>
                                      {!! $buttonview !!}

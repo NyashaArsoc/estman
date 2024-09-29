@@ -75,14 +75,6 @@ public function capturebankingdetails(Request $request){
     
 }
 
-    public function  listlandlords(){
-        $arr_owner['landlord']   = DB::table('alllandlord')
-        ->select('fullname','id','companyname','nationalID','companynumber',
-        'cell','email','clienttypeid','description','reasons','available','approval')
-        ->get();
-        return view('landlord/list')
-        ->with($arr_owner);
-    }
     public function getlandlord($id){
         $arr_owner['landlord']   = DB::table('alllandlord')
         ->where([['clienttypeid', $id],

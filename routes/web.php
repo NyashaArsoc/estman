@@ -9,6 +9,7 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropManApprovalController;
 use App\Http\Controllers\PropManDeclineController;
 use App\Http\Controllers\PropManIntakeController;
+use App\Http\Controllers\PropManManageController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SetupIntakeController;
 use App\Http\Controllers\SetupManageController;
@@ -39,7 +40,6 @@ Route::controller(LandlordController::class)->group(function () {
     Route::any('/landlord/{id}/view', 'viewindividual')->name('landlord.view');
     Route::get('/landlord/{id}/view-ledgers', 'viewledgers')->name('landlord.ledgers');
     Route::post('/landlord/{id}/sub-ledgers/{product}', 'createsubledgers')->name('landlord.createsub');
-    Route::any('/manage-landlord', 'listlandlords')->name('landlord.list');
 });
 //Route::resource('tenant', TenantController::class);
 Route::controller(TenantController::class)->group(function () {
@@ -260,6 +260,11 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/landlord/{id}/delete', 'deletesinglelandlord')->name('propdec.landdel');
     Route::any('/prop/{id}/landlord/{contactid}/update', 'updatesinglelandlord')->name('propdec.landupd');
   
+   });
+/*-------------------end property management declines------------------------ */
+/*-------------------property management declines------------------------ */
+Route::middleware('loginauth')->controller(PropManManageController::class)->group(function(){
+    Route::get('/prop/list/landlord', 'listalllandlords')->name('propma.landlist');
    });
 /*-------------------end property management declines------------------------ */
 /*-------------------setup intake------------------------ */
