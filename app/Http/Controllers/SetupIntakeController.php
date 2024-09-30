@@ -70,4 +70,25 @@ public function addnewpropertytype(Request $request){
      }
 }
    /*---------------end creating new client type-----------------*/
+     /*---------------creating new province-----------------*/
+public function addprovince(){
+      return view('setup.intake.add-province');
+}
+public function addnewprovince(Request $request){
+     try {
+        $textdescription = ucfirst($request->textdescription);
+        if(DB::table('setupprovince')->select('id')->where('description',
+        $textdescription)->exists()){
+           return  redirect()->route('setin.addprov') 
+           ->with('error', 'record already exists');
+        }
+        DB::table('setupprovince')->insert(['description'=>$textdescription]);
+        return  redirect()->route('setin.addprov') 
+        ->with('success', 'record added');
+     } catch (\Throwable $th) {
+        return  redirect()->route('setin.addprov') 
+        ->with('error', 'failed to load');
+     }
+}
+   /*---------------end creating new province-----------------*/
 }

@@ -10,18 +10,6 @@ function getLandlord() {
         	}
 	});
 }
-// get landlord on add property
-function getLandlordonProperty() {
-    var textValue = $("#PropertyLandlordClientType").val();
-        
-	$.ajax({          
-        	type: "GET",
-        	url: "/single-landlord"+'/'+textValue,
-        	success: function(data){
-        		$("#PropertyLandlordName").html(data);
-        	}
-	});
-}
 // get tenant on add lease
 function getTenantonLease() {
     var textValue = $("#LeaseTenantClientType").val();
@@ -126,6 +114,17 @@ function getvalclientcontact() {
         	url: "/val/"+textValue+"/client/contact", 
         	success: function(data){
         		$("#clientcontactname").html(data);
+        	}
+	});
+}
+// get landlord on add property
+function getpropmanlandlordlist() {
+    var textValue = $("#clienttype").val();
+	$.ajax({          
+        	type: "GET",
+        	url: "/prop/landlord/single/type"+'/'+textValue,
+        	success: function(data){
+        		$("#landlordlist").html(data);
         	}
 	});
 }

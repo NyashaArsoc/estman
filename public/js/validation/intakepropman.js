@@ -171,7 +171,7 @@ function validateCompanyNumber() {
             }
     }
 }
-//valid numeric value not required
+//valid numeric value not required eg VAT or property stories
 $("#numericnotrequiredcheck").hide();
 let numericnotrequiredError = true;
 $("#numericnotrequired").keyup(function () {
@@ -444,7 +444,7 @@ function validateContactEmail() {
         });
     }
 }
-// required general text with Caps
+// required general text with Caps ****removed caps**** eg bank branch
 $("#requiredgeneraltextcapscheck").hide();
 let requiredgeneraltextcapsError = true;
 $("#requiredgeneraltextcaps").keyup(function () {
@@ -568,9 +568,9 @@ function validateNotRequiredGeneralTextCaps() {
 $("#currencycodecheck").hide();
 let currencycodeError = true;
 $("#currencycode").keyup(function () {
-    validateCurrency();
+    validateCurrencyCode();
 });
-function validateCurrency() {
+function validateCurrencyCode() {
     let textValue = $("#currencycode").val();
     if (textValue.length == "") {
         $("#currencycodecheck").show();
@@ -591,7 +591,7 @@ $('#add-banking-item').on('click', function() {
 	var count = $('#landlordbanking tr').length - 1;
 
     validateAccountName();validateBankName();validateNotRequiredGeneralTextCaps();
-    validateNumericValueRequired(); validateCurrency();
+    validateNumericValueRequired(); validateCurrencyCode();
 
     try{
         if(accountnameError==true && banknameError==true && notrequiredgeneraltextcapsError==true &&
@@ -613,6 +613,448 @@ function deletelandlordbankrow(t) {
 var count = 2,
 limits = 3;
 /*-----------------------------end add banking details table ----------------------- */
+  //landlord name
+  $("#landlordlistcheck").hide();
+  let landlordnameError = true;
+  $("#landlordlist").keyup(function () {
+      validateLandlordName();
+  });
+  function validateLandlordName() {
+      let textValue = $("#landlordlist").val();
+      if (textValue.length == "") {
+          $("#landlordlistcheck").show();
+          landlordnameError = false;
+          return false;
+      } else {
+        landlordnameError = true;
+          $("#landlordlistcheck").hide();
+      }
+  }
+    //Province check
+$("#provincecheck").hide();
+let provinceError = true;
+$("#province").keyup(function () {
+    validateProvince();
+});
+function validateProvince() {
+    let textValue = $("#province").val();
+    if (textValue.length == "") {
+        $("#provincecheck").show();
+        provinceError = false;
+        return false;
+    } else {
+        provinceError = true;
+        $("#provincecheck").hide();
+    }
+} 
+//valid city
+$("#citycheck").hide();
+let cityError = true;
+$("#city").keyup(function () {
+    validateCity();
+});
+function validateCity() {
+    let textValue = $("#city").val();
+    if (textValue.length == "") {
+        $("#citycheck").show();
+        cityError = false;
+        return false;
+    } else if (textValue.length < 3) {
+        $("#citycheck").show();
+        $("#citycheck").html("**invalid");
+        cityError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#citycheck").show();
+                $("#citycheck").html("**follow the required format");
+                cityError = false;
+                return false;
+            }else{
+                cityError = true;
+                $("#citycheck").hide();
+            }
+    }
+}
+    //PropType check
+$("#propertytypecheck").hide();
+let propertytypeError = true;
+$("#propertytype").keyup(function () {
+        validatePropertyType();
+});
+function validatePropertyType() {
+        let textValue = $("#propertytype").val();
+        if (textValue.length == "") {
+            $("#propertytypecheck").show();
+            propertytypeError = false;
+            return false;
+        } else {
+            propertytypeError = true;
+            $("#propertytypecheck").hide();
+        }
+}
+ // stand number
+ $("#standnumbercheck").hide();
+ let standnumberError = true;
+ $("#standnumber").keyup(function () {
+     validateStandNumber();
+ }); 
+ function validateStandNumber() {
+     let textValue = $("#standnumber").val();
+         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|<>\/?~]/;
+         charscheck =  specialChars.test(textValue);
+         if (charscheck == true){
+              $("#standnumbercheck").show();
+             $("#standnumbercheck").html("**remove characters");
+             standnumberError = false;
+             return false;
+         }else{
+            standnumberError = true;
+             $("#standnumbercheck").hide();
+         }
+}
+ // comment highlights not required text
+ $("#commentshighlightscheck").hide();
+ let commentshighlightsError = true;
+ $("#commentshighlights").keyup(function () {
+     validateCommentsHighlights();
+ }); 
+ function validateCommentsHighlights() {
+     let textValue = $("#commentshighlights").val();
+         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|<>\/?~]/;
+         charscheck =  specialChars.test(textValue);
+         if (charscheck == true){
+              $("#commentshighlightscheck").show();
+             $("#commentshighlightscheck").html("**remove characters");
+             commentshighlightsError = false;
+             return false;
+         }else{
+            commentshighlightsError = true;
+             $("#commentshighlightscheck").hide();
+         }
+}
+//valid add rooms
+$("#roomscheck").hide();
+let roomsError = true;
+$("#rooms").keyup(function () {
+    validateAddRooms();
+});
+function validateAddRooms() {
+    let textValue = $("#rooms").val();
+    if (textValue.length == "") {
+        $("#roomscheck").show();
+        roomsError = false;
+        return false;
+    } else if (textValue.length > 2) {
+        $("#roomscheck").show();
+        $("#roomscheck").html("**two digits allowed");
+        roomsError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~a-z/\s/A-Z]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#roomscheck").show();
+                $("#roomscheck").html("**digits only");
+                roomsError = false;
+                return false;
+            }else{
+                roomsError = true;
+                $("#roomscheck").hide();
+            }
+    }
+}
+//valid add bedrooms
+$("#bedroomscheck").hide();
+let bedroomsError = true;
+$("#bedrooms").keyup(function () {
+    validateAddBedRooms();
+});
+function validateAddBedRooms() {
+    let textValue = $("#bedrooms").val();
+    if (textValue.length == "") {
+        $("#bedroomscheck").show();
+        bedroomsError = false;
+        return false;
+    } else if (textValue.length > 2) {
+        $("#bedroomscheck").show();
+        $("#bedroomscheck").html("**two digits allowed");
+        bedroomsError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~a-z/\s/A-Z]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#bedroomscheck").show();
+                $("#bedroomscheck").html("**digits only");
+                bedroomsError = false;
+                return false;
+            }else{
+                bedroomsError = true;
+                $("#bedroomscheck").hide();
+            }
+    }
+}
+//valid total area 
+$("#totalareacheck").hide();
+let totalareaError = true;
+$("#totalarea").keyup(function () {
+    validateAddTotalArea();
+});
+function validateAddTotalArea() {
+    let textValue = $("#totalarea").val();
+    if (textValue.length == "") {
+        $("#totalareacheck").show();
+        totalareaError = false;
+        return false;
+    } else if (textValue.length < 2) {
+        $("#totalareacheck").show();
+        $("#totalareacheck").html("**at least two digits allowed");
+        totalareaError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#totalareacheck").show();
+                $("#totalareacheck").html("**digits only or (3.5)");
+                totalareaError = false;
+                return false;
+            }else{
+                totalareaError = true;
+                $("#totalareacheck").hide();
+            }
+    }
+}
+//valid lettable area 
+$("#lettableareacheck").hide();
+let lettableareaError = true;
+$("#lettablearea").keyup(function () {
+    validateAddLettableArea();
+});
+function validateAddLettableArea() {
+    let textValue = $("#lettablearea").val();
+    if (textValue.length == "") {
+        $("#lettableareacheck").show();
+        lettableareaError = false;
+        return false;
+    } else if (textValue.length < 2) {
+        $("#lettableareacheck").show();
+        $("#lettableareacheck").html("**atleast two digits allowed");
+        lettableareaError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#lettableareacheck").show();
+                $("#lettableareacheck").html("**digits only or (3.5)");
+                lettableareaError = false;
+                return false;
+            }else{
+                lettableareaError = true;
+                    $("#lettableareacheck").hide();
+                
+            }
+    }
+}
+//valid rate/sqm
+$("#expectedratecheck").hide();
+let expectedrateError = true;
+$("#expectedrate").keyup(function () {
+    validateAddExpectedRate();
+});
+function validateAddExpectedRate() {
+    let textValue = $("#expectedrate").val();
+    if (textValue.length == "") {
+        $("#expectedratecheck").show();
+        expectedrateError = false;
+        return false;
+    } else if (textValue.length > 4) {
+        $("#expectedratecheck").show();
+        $("#expectedratecheck").html("**four digits allowed");
+        expectedrateError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#expectedratecheck").show();
+                $("#expectedratecheck").html("**digits only or (3.5)");
+                expectedrateError = false;
+                return false;
+            }else{
+                expectedrateError = true;
+                $("#expectedratecheck").hide();
+            }
+    }
+}
+//valid rental
+$("#expectedrentalcheck").hide();
+let expectedrentalError = true;
+$("#expectedrental").keyup(function () {
+    validateAddExpectedRental();
+});
+function validateAddExpectedRental() {
+    let textValue = $("#expectedrental").val();
+    if (textValue.length == "") {
+        $("#expectedrentalcheck").show();
+        expectedrentalError = false;
+        return false;
+    } else if (textValue.length < 2) {
+        $("#expectedrentalcheck").show();
+        $("#expectedrentalcheck").html("**atleast two digits allowed");
+        expectedrentalError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#expectedrentalcheck").show();
+                $("#expectedrentalcheck").html("**digits only or (3.5)");
+                expectedrentalError = false;
+                return false;
+            }else{
+                expectedrentalError = true;
+                $("#expectedrentalcheck").hide();
+            }
+    }
+}
+//commission type
+$("#commissiontypecheck").hide();
+let commissiontypeError = true;
+$("#commissiontype").keyup(function () {
+    validateCommissionType();
+});
+function validateCommissionType() {
+    let textValue = $("#commissiontype").val();
+    if (textValue.length == "") {
+        $("#commissiontypecheck").show();
+        commissiontypeError = false;
+        return false;
+    } else {
+       commissiontypeError = true;
+        $("#commissiontypecheck").hide();
+    }
+} 
+//valid CommissionPercentage
+$("#commissionpercentcheck").hide();
+let commissionpercentError = true;
+$("#commissionpercentage").keyup(function () {
+    validateCommissionPercent();
+});
+function validateCommissionPercent() {
+    let textValue = $("#commissionpercentage").val();
+    if (textValue.length == "") {
+        $("#commissionpercentcheck").show();
+        commissionpercentError = false;
+        return false;
+    } else if (textValue.length > 5) {
+        $("#commissionpercentcheck").show();
+        $("#commissionpercentcheck").html("**three digits allowed");
+        commissionpercentError = false;
+        return false;
+    } else {
+        const specialChars = /^\d+(\.\d+)?$/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                commissionpercentError = true;
+                $("#commissionpercentcheck").hide();
+            }else{
+                $("#commissionpercentcheck").show();
+                $("#commissionpercentcheck").html("**digits only or (3.5)");
+                commissionpercentError = false;
+                return false;
+            }
+    }
+}
+  // signed pdf document eg mandate/lease agreement
+$("#requiredsignedpdfcheck").hide();
+  let requiredsignedpdfdocumentError = true;
+$("#requiredsignedpdf").keyup(function () {
+      validateRequiredSignedPDFDocument();
+}); 
+function validateRequiredSignedPDFDocument() {
+      let textValue = $("#requiredsignedpdf")[0];
+      if (textValue.files.length === 0) {
+          $("#requiredsignedpdfcheck").show();
+          requiredsignedpdfdocumentError = false;
+          return false;
+      }else {
+          var uploadedfile = textValue.files[0];
+          // Check the file extension
+          var uploadedExtension = uploadedfile.name.split('.').pop().toLowerCase();
+          if (uploadedExtension !== 'pdf') {
+              $("#requiredsignedpdfcheck").show();
+              $("#requiredsignedpdfcheck").html("**file must be pdf ");
+              requiredsignedpdfdocumentError = false;
+              return false;
+            }else{
+              
+              if (uploadedfile.size > 2000*1024){ // file must be less than 2Mb
+                   $("#requiredsignedpdfcheck").show();
+                  $("#requiredsignedpdfcheck").html("**file must be less that 2MB");
+                  requiredsignedpdfdocumentError = false;
+                  return false;
+              }else{
+                requiredsignedpdfdocumentError = true;
+                  $("#requiredsignedpdfcheck").hide();
+              }
+            } 
+      }
+}
+  // not required pdf document
+  $("#notrequiredpdfcheck").hide();
+  let notrequiredpdfdocumentError = true;
+$("#notrequiredpdf").keyup(function () {
+      validateNotRequiredPDFDocument();
+}); 
+function validateNotRequiredPDFDocument() {
+      let textValue = $("#notrequiredpdf")[0];
+      if (textValue.files.length !== 0) {
+          var uploadedfile = textValue.files[0];
+          // Check the file extension
+          var uploadedExtension = uploadedfile.name.split('.').pop().toLowerCase();
+          if (uploadedExtension !== 'pdf') {
+              $("#notrequiredpdfcheck").show();
+              $("#notrequiredpdfcheck").html("**file must be pdf ");
+              notrequiredpdfdocumentError = false;
+              return false;
+            }else{
+              
+              if (uploadedfile.size > 2000*1024){ // file must be less than 2Mb
+                   $("#notrequiredpdfcheck").show();
+                  $("#notrequiredpdfcheck").html("**file must be less that 2MB");
+                  notrequiredpdfdocumentError = false;
+                  return false;
+              }else{
+                notrequiredpdfdocumentError = true;
+                  $("#notrequiredpdfcheck").hide();
+              }
+            }
+        } 
+}
+//function to check if lettable < total area
+let lettabletotalareaError = true;
+function validateLettable_TotalArea(){
+    var lettable = parseFloat($("#lettablearea").val());
+    var totalarea = parseFloat($("#totalarea").val());
+     //check if all are numbers
+     if (isNaN(lettable) || isNaN(totalarea) ) {
+        alert("Please enter valid number.");
+        lettabletotalareaError = false;
+        return false;
+      }
+      if (lettable >= totalarea) {
+        alert("lettable must be less.");
+        lettabletotalareaError = false;
+        return false;
+      }
+      lettabletotalareaError = true;
+      return true;
+}
 /*-----------------------------butn submit ----------------------- */
 $("#btn-add-landlord").click(function () {
     validateBillingAddress();validateCell();validateContactCell();validateContactEmail();
@@ -634,4 +1076,36 @@ $("#btn-add-landlord").click(function () {
                 return true;}else{ return false;}
         }
     }catch(err){return false;}
+});
+//button submit new property 
+$("#btn-add-property").click(function () {
+    try {
+        validateLandlordName(); validateProvince();validateCity();validatePropertyType();
+        validateRequiredGeneralTextCaps();validateBillingAddress();validateStandNumber();
+        validateCommentsHighlights();validateCurrencyCode();validateCommissionType();
+        validateCommissionPercent();validateRequiredSignedPDFDocument();validateNotRequiredPDFDocument();
+        
+        if(landlordnameError==true && provinceError==true && cityError==true && propertytypeError==true
+            && requiredgeneraltextcapsError==true && billingaddressError==true && standnumberError==true
+            && commentshighlightsError==true && currencycodeError==true && commissiontypeError==true &&
+            commissionpercentError==true && requiredsignedpdfdocumentError==true && notrequiredpdfdocumentError==true){
+                var propertytypevalue =  $("#propertytype").val();
+                if(propertytypevalue==1){//residential property 
+                validateAddRooms();validateAddBedRooms();validateNumericValueRequired();
+                validateNumericValueNotRequired();
+                if(roomsError==true && bedroomsError==true && numericrequiredError==true && 
+                    numericnotrequiredError==true){return true;}else{return false;}
+                }else{// not residential ie commercial
+                    validateAddTotalArea();validateAddLettableArea();validateAddExpectedRate();
+                    validateLettable_TotalArea();
+                    if(totalareaError==true && lettableareaError==true && expectedrateError==true &&
+                        lettabletotalareaError==true){
+                        return true;}else{return false;}
+                }
+        }else{return false;}
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+   
 });

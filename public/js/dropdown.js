@@ -49,19 +49,19 @@ function CreationTypeOption(select){
  }
 
 
-function AddPropertyType(select){
+function optionpropertytype(select){
    if(select.value==1){// residential
-    document.getElementById('Residential').style.display = "block";
-    document.getElementById('Commercial').style.display = "none";
+    document.getElementById('residential').style.display = "block";
+    document.getElementById('commercial').style.display = "none";
     document.getElementById('CommercialBottom').style.display = "none";
-    document.getElementById('ResidentialBottom').style.display = "block";
+    document.getElementById('residentialbottom').style.display = "block";
      
    } 
    else{
-    document.getElementById('Commercial').style.display = "block";
-    document.getElementById('Residential').style.display = "none";
+    document.getElementById('commercial').style.display = "block";
+    document.getElementById('residential').style.display = "none";
     document.getElementById('CommercialBottom').style.display = "block";
-    document.getElementById('ResidentialBottom').style.display = "none"; 
+    document.getElementById('residentialbottom').style.display = "none"; 
     
    }
 } 

@@ -16,4 +16,14 @@ public function listalllandlords(){
         return  redirect()->route('dash.property');
     }
 }
+public function getlandlordbytype($id){
+    try {
+        $arr['landlord']   = DB::table('propmanalllandlord') ->where([['clienttypeid', $id],
+        ['available','=' ,'Y']])
+        ->select('*')->get();
+      return view('propman.manage.get-single-landlord-type')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    } 
+}
 }

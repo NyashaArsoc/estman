@@ -21,53 +21,11 @@ public function __construct(){
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function createnew()
-    {
-        $arr['type']   = DB::table('clienttype')
-        ->select('id','description')->get();
-        $arr['currency']   = DB::table('currency')
-        ->select('id','code')->get();
-        $arr['province']   = DB::table('province')
-        ->select('id','description')->get();
-        $arr['propertytype']   = DB::table('propertytype')
-        ->select('id','description')->get();
-        $arr['commission']   = DB::table('interestoptions')
-        ->select('id','description')->get();
-      return view('property/add-property')
-      ->with($arr);
-
-    }
-
+  
     /**
      * Store a newly created resource in storage.
      */
-    public function addnewproperty(Request $request)
-    {
-        $user = $this->userdetail();
-       try {
-        $PropertyID = DB::table('property')
-        ->insertGetId([
-            'currencyid'=> $request->Currency, 'landlordid'=> $request->LandlordName, 'propertytypeid'=> $request->PropertyType,
-            'provinceid'=> $request->Province, 'city'=> $request->City, 'location' => $request->LocationSurburb,
-            'streetaddress' => $request->PropertyAddress, 'standnumber'=> $request->StandNumber,
-            'comments'=> $request->Highlights, 'rooms'=> $request->Rooms, 'bedrooms'=> $request->Bedrooms,
-            'bathrooms'=> $request->Bathrooms, 'stories'=> $request->Stories, 'totalarea'=> $request->TotalArea,
-            'lettablearea'=> $request->LettableArea,'ratesqm'=> $request->ExpectedRate,
-            'operatorid'=>$user->username,'expectedrental'=> $request->ExpectedRental
-        ]);
-            DB::table('commissionpercent')
-            ->updateOrInsert(['propertyid'=>$PropertyID],['interestoptionid'=>$request->CommissionType, 
-                'percentage'=>$request->CommissionPercentage]);
-                return  redirect()->route('property.newproperty') 
-                ->with('success', 'property added successful');
-       } catch (\Throwable $e) {
-        return  redirect()->route('property.newproperty') 
-        ->with('error', 'failed to add property');
-       }
-    }
+
 
     /**
      * Display the specified resource.

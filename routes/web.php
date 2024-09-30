@@ -35,7 +35,6 @@ use Illuminate\Support\Facades\Route;
 Route::controller(LandlordController::class)->group(function () {
     Route::get('/landlord-banking-details', 'addbanking')->name('landlord.addbanking');
     Route::post('/create/landlord/bank', 'capturebankingdetails')->name('landlord.addbank');
-    Route::any('/single-landlord/{id}', 'getlandlord')->name('landlord.getlandlord');
     Route::any('/disable/{id}/landlord', 'disablelandlord')->name('landlord.disable');
     Route::any('/landlord/{id}/view', 'viewindividual')->name('landlord.view');
     Route::get('/landlord/{id}/view-ledgers', 'viewledgers')->name('landlord.ledgers');
@@ -61,8 +60,6 @@ Route::controller(TenantController::class)->group(function () {
 });
 //Route::resource('property', PropertyController::class);
 Route::controller(PropertyController::class)->group(function () {
-    Route::get('/new/property', 'createnew')->name('property.newproperty');
-    Route::post('/new/property/create', 'addnewproperty')->name('property.addproperty');
     Route::get('/edit/{id}/property', 'vieweditproperty')->name('property.editview');
     Route::any('/property-approval', 'pendingapproval')->name('property.pending');
     Route::any('/view-pending-property/{id}', 'viewpending')->name('property.viewpending');
@@ -242,6 +239,8 @@ Route::controller(ValDeclinedController::class)->group(function(){
 Route::middleware('loginauth')->controller(PropManIntakeController::class)->group(function(){
     Route::get('/prop/add/landlord', 'addlandlorddetails')->name('propin.addlandlord');
     Route::post('/prop/add/new/landlord', 'addnewlandlorddetails')->name('propin.addnewlandlord');
+    Route::get('/prop/add/property', 'addpropertydetails')->name('propin.addproperty');
+    Route::post('/prop/add/new/property', 'addnewpropertydetails')->name('propin.addnewproperty');
 });
 /*-------------------end property management intake------------------------ */
 
@@ -258,13 +257,13 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::get('/prop/list/landlord/declined', 'listdeclinelandlord')->name('propdec.listlanddec');
     Route::get('/prop/view/landlord/{id}/edit', 'vieweditsinglelandlord')->name('propdec.editviewland');
     Route::any('/prop/landlord/{id}/delete', 'deletesinglelandlord')->name('propdec.landdel');
-    Route::any('/prop/{id}/landlord/{contactid}/update', 'updatesinglelandlord')->name('propdec.landupd');
-  
+    Route::any('/prop/{id}/landlord/{contactid}/update', 'updatesinglelandlord')->name('propdec.landupd');  
    });
 /*-------------------end property management declines------------------------ */
 /*-------------------property management declines------------------------ */
 Route::middleware('loginauth')->controller(PropManManageController::class)->group(function(){
     Route::get('/prop/list/landlord', 'listalllandlords')->name('propma.landlist');
+    Route::get('/prop/landlord/single/type/{id}', 'getlandlordbytype');
    });
 /*-------------------end property management declines------------------------ */
 /*-------------------setup intake------------------------ */
@@ -275,6 +274,8 @@ Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(
      Route::post('/set-up/add/new/client-type', 'addnewclienttype')->name('setin.addnewcltyp');
      Route::get('/set-up/add/property-type', 'addpropertytype')->name('setin.addpropty');
      Route::post('/set-up/add/new/property-type', 'addnewpropertytype')->name('setin.addnewpropty');
+     Route::get('/set-up/add/province', 'addprovince')->name('setin.addprov');
+     Route::post('/set-up/add/new/province', 'addnewprovince')->name('setin.addnewprov');
 });
 /*-------------------end setup intake------------------------ */
 /*-------------------setup manage------------------------ */
