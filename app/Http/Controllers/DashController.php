@@ -21,6 +21,8 @@ public function propertyview(){
         $arr['base']   = DB::table('setupcurrencybase')->where('active','=','Y')
         ->select('code')->latest('id')->first();
         $arr['activelandlord']   = DB::table('propmanlandlord')->where('available','=' ,'Y')->get()->count();
+        $arr['activeproperty']   = DB::table('propmanallproperty')->where('available','=' ,'Y')->get()->count();
+        $arr['activetenant']   = DB::table('propmanalltenant')->where('available','=' ,'Y')->get()->count();
     return view('dash/property-view')->with($arr);
         }
 }

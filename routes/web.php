@@ -42,8 +42,6 @@ Route::controller(LandlordController::class)->group(function () {
 });
 //Route::resource('tenant', TenantController::class);
 Route::controller(TenantController::class)->group(function () {
-    Route::get('/create/tenant', 'createnew')->name('tenant.newtenant');
-    Route::post('/new/create/tenant', 'addnewtenant')->name('tenant.addtenant');
     Route::get('/edit/tenant/{id}/view', 'viewedittenant')->name('tenant.editview');
     Route::any('/tenant-approval', 'pendingapproval')->name('tenant.pending');
     Route::any('/view-pending-tenant/{id}', 'viewpending')->name('tenant.viewpending');
@@ -238,6 +236,8 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::post('/prop/add/new/landlord', 'addnewlandlorddetails')->name('propin.addnewlandlord');
     Route::get('/prop/add/property', 'addpropertydetails')->name('propin.addproperty');
     Route::post('/prop/add/new/property', 'addnewpropertydetails')->name('propin.addnewproperty');
+    Route::get('/prop/add/tenant', 'addtenantdetails')->name('propin.addtenant');
+    Route::post('/prop/add/new/tenant', 'addnewtenantdetails')->name('propin.addnewtenant');
 });
 /*-------------------end property management intake------------------------ */
 

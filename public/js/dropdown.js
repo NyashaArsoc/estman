@@ -12,39 +12,39 @@ function CreationTypeOption(select){
     }
  } 
 
- function LandlordCreationType(select){
+ function optionlandlordtype(select){
    
     if(select.value == 1){ // individual 
-     document.getElementById('IndividualGroup').style.display = "block";
-     document.getElementById('CorporateGroup').style.display = "none"; 
+     document.getElementById('individualgroup').style.display = "block";
+     document.getElementById('corporategroup').style.display = "none"; 
     } 
      else if(select.value == ""){ // nothing/default 
-      document.getElementById('IndividualGroup').style.display = "none";
-      document.getElementById('CorporateGroup').style.display = "none";
+      document.getElementById('individualgroup').style.display = "none";
+      document.getElementById('corporategroup').style.display = "none";
     }
     else{ // corporate 
-    document.getElementById('IndividualGroup').style.display = "none";
-     document.getElementById('CorporateGroup').style.display = "block";
+    document.getElementById('individualgroup').style.display = "none";
+     document.getElementById('corporategroup').style.display = "block";
     }
  } 
 
- function TenantCreationType(select){
+ function optiontenanttype(select){
    if(select.value == 1){ // individual 
-      document.getElementById('IndividualGroup').style.display = "block";
-      document.getElementById('KeenGroup').style.display = "block";
-      document.getElementById('CorporateGroup').style.display = "none";
-      document.getElementById('CompanyContactGroup').style.display = "none";
+      document.getElementById('individualgroup').style.display = "block";
+      document.getElementById('keengroup').style.display = "block";
+      document.getElementById('corporategroup').style.display = "none";
+      document.getElementById('companycontactgroup').style.display = "none";
    }else if (select.value == ""){ // empty clienttype
-      document.getElementById('IndividualGroup').style.display = "none";
-      document.getElementById('KeenGroup').style.display = "none";
-      document.getElementById('CorporateGroup').style.display = "none";
-      document.getElementById('CompanyContactGroup').style.display = "none";
+      document.getElementById('individualgroup').style.display = "none";
+      document.getElementById('keengroup').style.display = "none";
+      document.getElementById('corporategroup').style.display = "none";
+      document.getElementById('companycontactgroup').style.display = "none";
    }else{
     
-      document.getElementById('CorporateGroup').style.display = "block";
-      document.getElementById('KeenGroup').style.display = "none";
-      document.getElementById('IndividualGroup').style.display = "none";
-      document.getElementById('CompanyContactGroup').style.display = "block";
+      document.getElementById('corporategroup').style.display = "block";
+      document.getElementById('keengroup').style.display = "none";
+      document.getElementById('individualgroup').style.display = "none";
+      document.getElementById('companycontactgroup').style.display = "block";
    }
  }
 

@@ -1055,6 +1055,124 @@ function validateLettable_TotalArea(){
       lettabletotalareaError = true;
       return true;
 }
+//valid keen person firstname
+$("#keenfirstnamecheck").hide();
+let keenfirstnameError = true;
+$("#keenfirstname").keyup(function () {
+    validateKeenFirstName();
+});
+function validateKeenFirstName() {
+   let textValue = $("#keenfirstname").val();
+   if (textValue.length == "") {
+       $("#keenfirstnamecheck").show();
+       keenfirstnameError = false;
+       return false;
+   } else if (textValue.length < 3) {
+       $("#keenfirstnamecheck").show();
+       $("#keenfirstnamecheck").html("**invalid");
+       keenfirstnameError = false;
+       return false;
+   } else {
+       const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/]/;
+           charscheck =  specialChars.test(textValue);
+           if (charscheck == true){
+                $("#keenfirstnamecheck").show();
+               $("#keenfirstnamecheck").html("**follow the required format");
+               keenfirstnameError = false;
+               return false;
+           }else{
+            keenfirstnameError = true;
+               $("#keenfirstnamecheck").hide();
+           }
+   }
+}
+//valid keen person lastname
+$("#keenlastnamecheck").hide();
+let keenlastnameError = true;
+$("#keenlastname").keyup(function () {
+    validateKeenLastName();
+});
+function validateKeenLastName() {
+    let textValue = $("#keenlastname").val();
+    if (textValue.length == "") {
+        $("#keenlastnamecheck").show();
+        keenlastnameError = false;
+        return false;
+    } else if (textValue.length < 3) {
+        $("#keenlastnamecheck").show();
+        $("#keenlastnamecheck").html("**invalid");
+        keenlastnameError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/]/;
+        charscheck =  specialChars.test(textValue);
+        if (charscheck == true){
+             $("#keenlastnamecheck").show();
+            $("#keenlastnamecheck").html("**follow the required format");
+            keenlastnameError = false;
+            return false;
+        }else{
+            keenlastnameError = true;
+            $("#keenlastnamecheck").hide();
+        }
+    }
+}
+//valid keen person cell
+$("#keencellcheck").hide();
+let keencellError = true;
+$("#keencell").keyup(function () {
+    validateKeenCell();
+});
+function validateKeenCell() {
+    let textValue = $("#keencell").val();
+    if (textValue.length == "") {
+        $("#keencellcheck").show();
+        keencellError = false;
+        return false;
+    } else if (textValue.length < 10) {
+        $("#keencellcheck").show();
+        $("#keencellcheck").html("**invalid cell");
+        keencellError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_\-=\[\]{};':"\\|,.<>\/?~a-z/\s/A-Z]/;
+        charscheck         =  specialChars.test(textValue);
+        if (charscheck == true){
+             $("#keencellcheck").show();
+            $("#keencellcheck").html("**follow the required format 0701000123 or +263701000123");
+            keencellError = false;
+            return false;
+        }else{
+            keencellError = true;
+            $("#keencellcheck").hide();
+        }
+    }
+}
+//valid keen email not required
+$("#keenemailcheck").hide();
+let keenemailError = true;
+$("#keenemail").keyup(function () {
+    validateKeenEmail();
+});
+function validateKeenEmail() {
+    let textValue = $("#keenemail").val();
+        const emailvalid = document.getElementById("keenemail");
+        emailvalid.addEventListener("blur", () => {
+            let regex =
+            /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
+            let textValue = emailvalid.value;
+            if (regex.test(textValue)) {
+                $("#keenemailcheck").hide();
+                keenemailError = true;
+            } else {
+                $("#keenemailcheck").show();
+                $("#keenemailcheck").html("**follow the required format example@example.com");
+                keenemailError = false;
+                return false;
+            }
+        });
+}
+
 /*-----------------------------butn submit ----------------------- */
 $("#btn-add-landlord").click(function () {
     validateBillingAddress();validateCell();validateContactCell();validateContactEmail();
@@ -1106,6 +1224,32 @@ $("#btn-add-property").click(function () {
     } catch (err) {
         alert(err.message);
         return false;
+    }  
+});
+//button submit new tenant
+$("#btn-add-tenant").click(function () {
+    validateClientType();validateBillingAddress();validateCell();validateEmail();
+    var clienttypevalue = $("#clienttype").val();
+    try {
+        if(clienttypevalue == 1){
+            validateFirstName();validateLastName(); validateNationalID();validateKeenEmail();
+            validateKeenLastName();validateKeenFirstName();validateKeenCell();
+            if(billingaddressError==true && cellError==true && emailError==true &&
+                clienttypeError==true && firstnameError==true && keencellError==true && keenemailError==true
+               && lastnameError==true && nationalidError==true && keenfirstnameError==true &&
+            keenlastnameError==true){return true}else{return false}
+        }else{
+            validateCompanyName();validateCompanyNumber();validateNumericValueNotRequired();
+            validateContactCell();validateContactEmail();validateContactLastName();
+             validateContactFirstName();
+            if(billingaddressError==true && cellError==true && emailError==true &&
+                contactcellError==true && contactfirstnameError==true && contactlastnameError==true &&
+                contactemailError==true && clienttypeError==true && companynameError==true && 
+                companynumberError && numericnotrequiredError==true){
+                return true;}else{ return false;}
+        }
+    } catch (err) {
+        alert(err.message);
+        return false;
     }
-   
 });

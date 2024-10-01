@@ -37,6 +37,24 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <div class="box box-block tile tile-2 bg-primary mb-2">
+                    <div class="t-icon right"><i class="ti-home"></i></div>
+                    <div class="t-content">
+                        <h2 class="mb-1">{{$activeproperty}}</h2>
+                        <h6 class="text-uppercase">Active Properties</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <div class="box box-block tile tile-2 bg-info mb-2">
+                    <div class="t-icon right"><i class="ti-user"></i></div>
+                    <div class="t-content">
+                        <h2 class="mb-1">{{$activetenant}}</h2>
+                        <h6 class="text-uppercase">Active Tenants</h6>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- Content End-->

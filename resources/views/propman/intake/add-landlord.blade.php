@@ -27,8 +27,8 @@ $description = 'add landlord to the system...'; @endphp
                     <label for="ClientType" class="col-sm-2 form-control-label">Type<i class="text-danger">*</i></label>
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="clienttype" id="clienttype"
-                            onchange="LandlordCreationType(this)" />
-                        <option value="">Select Client Type</option>
+                            onchange="optionlandlordtype(this)" />
+                        <option value="">select client type</option>
                         @foreach($type as $abc)
                         <option value="{{ $abc->id }}">  {{ $abc->description }}
                         </option>
@@ -37,7 +37,7 @@ $description = 'add landlord to the system...'; @endphp
                         <small id="clienttypecheck" style="color: red;">required</small>
                     </div>
                 </div>
-                <div id="IndividualGroup" class="dropdwn">
+                <div id="individualgroup" class="dropdwn">
                     <div class="form-group row">
                         <label for="FirstName" class="col-sm-2 form-control-label">First Name</label>
                         <div class="col-sm-4">
@@ -45,8 +45,7 @@ $description = 'add landlord to the system...'; @endphp
                                 placeholder="First Name" autocomplete="off">
                         <small id="firstnamecheck" style="color: red;">required</small>
                         </div>
-                        <label for="LastName" class="col-sm-2 form-control-label">Last Name
-                        </label>
+                        <label for="LastName" class="col-sm-2 form-control-label">Last Name</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="lastname" name="lastname"
                                 placeholder="Last Name" autocomplete="off">
@@ -54,8 +53,7 @@ $description = 'add landlord to the system...'; @endphp
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="NationalIDNumber" class="col-sm-2 col-form-label">National ID
-                        </label>
+                        <label for="NationalIDNumber" class="col-sm-2 col-form-label">National ID </label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="nationalid" name="nationalid"
                                 placeholder="33708965K67" autocomplete="off">
@@ -63,7 +61,7 @@ $description = 'add landlord to the system...'; @endphp
                         </div>
                     </div>
                 </div>
-                <div id="CorporateGroup" class="dropdwn">
+                <div id="corporategroup" class="dropdwn">
                     <div class="form-group row">
                         <label for="CompanyName" class="col-sm-2 form-control-label">Company Name</label>
                         <div class="col-sm-4">
@@ -71,8 +69,7 @@ $description = 'add landlord to the system...'; @endphp
                                 placeholder="Company Name" autocomplete="off">
                                 <small id="companynamecheck" style="color: red;">required</small>
                         </div>
-                        <label for="ClientType" class="col-sm-2 form-control-label">Company Number
-                        </label>
+                        <label for="" class="col-sm-2 form-control-label">Company Number</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="companynumber" name="companynumber"
                                 placeholder="Company Number" autocomplete="off">
@@ -95,8 +92,7 @@ $description = 'add landlord to the system...'; @endphp
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="Cell" class="col-sm-2 col-form-label">Cell
-                    </label>
+                    <label for="Cell" class="col-sm-2 col-form-label">Cell </label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="cell" name="cell" placeholder="Cell"
                             autocomplete="off">

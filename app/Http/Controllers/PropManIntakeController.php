@@ -124,4 +124,55 @@ public function addnewlandlorddetails(Request $request){
     }
  }
  /*---------------end creating new property-----------------*/
+  /*---------------creating new tenant-----------------*/
+public function addtenantdetails(){
+    try {
+        $clienttype = $this->getclienttype();
+        $arr['type'] = $clienttype; 
+        return view('propman.intake.add-tenant')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    } 
+ }
+ public function addnewtenantdetails(Request $request){
+    try {
+        if(!is_null($request->nationalid)){
+            if (DB::table('propmantenant')->select('id')->where('nationalid', $request->nationalid)->exists()) {
+                return  redirect()->route('propin.addtenant')
+                ->with('error', 'record exists');
+            }
+            /*----------values to insert in table keen ---------*/
+            $tablearray = ['email'=>$request->keenemail,'lastname'=>$request->keenlastname,
+            'firstname'=>$request->keenfirstname,'operatorid'=>session('alluser'),
+            'cell'=>$request->keencell];
+            $tablename = 'propmantenantkeen';
+        }elseif (!is_null($request->companynumber)){
+            if (DB::table('propmantenant')->select('id')->where('companynumber', $request->companynumber)->exists()) {
+                return  redirect()->route('propin.addtenant')
+                    ->with('error', 'record exists');
+            }
+            $tablearray = ['email'=>$request->contactemail,'lastname'=>$request->contactlastname,
+            'firstname'=>$request->contactfirstname,'operatorid'=>session('alluser'),'cell'
+            =>$request->contactcell];
+            $tablename = 'propmantenantcontact';
+        }
+        //-------------------table insert tenant----------------
+        $tenantid = DB::table('propmantenant')->insertGetId( ['nationalid'=>
+        $request->nationalid,'clienttypeid'=>$request->clienttype,'firstname'=>$request->firstname,
+        'cell'=>$request->cell,'email'=>$request->email,'tel'=>$request->tel,'operatorid'
+        =>session('alluser'),'lastname'=>$request->lastname, 'contactaddress'=>$request->billingaddress,
+        'companynumber'=>$request->companynumber,'tinnumber'=>$request->tinumber,'vatnumber'=>
+        $request->vatnumber,'companyname'=>$request->companyname] );
+        $idarray  = ['tenantid'=>$tenantid]; //define the tenantId
+        $combinedarray = array_merge($idarray, $tablearray);
+        DB::table($tablename)->insert($combinedarray);
+
+    return  redirect()->route('propin.addtenant') 
+            ->with('success', 'record added');
+    } catch (\Throwable $th) {
+        return  redirect()->route('propin.addtenant')
+        ->with('error', 'failed to load');
+    }
+ }  
+   /*---------------end creating new tenant-----------------*/
 }
