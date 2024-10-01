@@ -43,9 +43,6 @@ Route::controller(LandlordController::class)->group(function () {
 //Route::resource('tenant', TenantController::class);
 Route::controller(TenantController::class)->group(function () {
     Route::get('/edit/tenant/{id}/view', 'viewedittenant')->name('tenant.editview');
-    Route::any('/tenant-approval', 'pendingapproval')->name('tenant.pending');
-    Route::any('/view-pending-tenant/{id}', 'viewpending')->name('tenant.viewpending');
-    Route::any('/approve-tenant/{id}', 'approvetenant')->name('tenant.approve');
     Route::any('/reject-tenant/{id}', 'rejecttenant')->name('tenant.reject');
     Route::any('/tenant-rejected', 'rejected')->name('tenant.rejected');
     Route::any('/single-tenant/{id}', 'gettenant')->name('tenant.gettenant');
@@ -249,6 +246,10 @@ Route::middleware('loginauth')->controller(PropManApprovalController::class)->gr
    Route::get('/prop/list/property/approval', 'listpropertyapproval')->name('propapp.listprop');
    Route::get('/prop/view/{id}/property/approval', 'viewpropertyapproval')->name('propapp.viewprop');
    Route::any('/prop/property/{id}/approve', 'approvenewproperty')->name('propapp.propapp');
+   Route::get('/prop/list/tenant/approval', 'listtenantapproval')->name('propapp.listten');
+   Route::get('/prop/view/{id}/tenant/approval', 'viewtenantapproval')->name('propapp.viewten');
+   Route::any('/prop/tenant/{id}/approve', 'approvenewtenant')->name('propapp.tenappv');
+
    /*-----------download property documents-------------------- */
    Route::any('/prop-pdf/{path}/download/mandate', 'downloadmandatepdf')->name('propapp.dwnmandpdf');
    Route::any('/prop-pdf/{path}/other/download', 'downloadotherpdf')->name('propapp.dwnothrpdf');

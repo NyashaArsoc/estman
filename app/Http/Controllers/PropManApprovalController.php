@@ -26,7 +26,7 @@ public function viewlandlordapproval($id){
         $landlordid = Crypt::decrypt($id);
         try {
             $arr['landlord']   = DB::table('propmanalllandlord')
-            ->where('id', $landlordid)->select(columns: '*')->first();  
+            ->where('id', $landlordid)->select('*')->first();  
             $arr['contact']   = DB::table('propmanlandlordcontact')
             ->where('landlordid', $landlordid)
             ->select('*')->latest('id')->first();
@@ -139,4 +139,57 @@ public function approvenewproperty($id){
         }
 }
 /*---------------end approval new property-----------------*/
+/*---------------approval new tenant-----------------*/
+public function listtenantapproval(){
+    try {
+        $arr['tenant']   = DB::table('propmanalltenant')
+        ->where('approval','=' ,'N')
+        ->select('*')->get();
+        return view('propman.approval.list-tenent-pending-approval')->with($arr);
+    } catch (\Throwable $th) {
+      return  redirect()->route('dash.property');
+    }
+}
+public function viewtenantapproval($id){
+    try {
+        $tenantid = Crypt::decrypt($id);
+        try {
+            $arr['tenant']   = DB::table('propmanalltenant')
+            ->where('id', $tenantid)->select('*')->first();  
+            $arr['contact']   = DB::table('propmantenantcontact')
+            ->where('tenantid', $tenantid)
+            ->select('*')->latest('id')->first();
+            $arr['keen']   = DB::table('propmantenantkeen')
+            ->where('tenantid', $tenantid)
+            ->select('*')->latest('id')->first();
+            return view('propman.approval.view-single-tenant-approval')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propapp.listland')
+                ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('propapp.listland')
+        ->with('error', 'failed to load');
+    }
+}
+public function approvenewtenant($id){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        try {
+            DB::table('propmantenant')
+            ->where('id',$tenantid)
+            ->update(['approval' => 'Y' , 'available'=> 'Y','approvedby'=>session('alluser'),
+            'dateapproved'=>now()]);
+            return  redirect()->route('propapp.listten') 
+            ->with('success', 'record approved');
+        } catch (\Throwable $th) {
+            return redirect()->route('propapp.viewten',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propapp.viewten',$id)
+        ->with('error', 'failed to load');
+    }
+}
+/*---------------end approval new tenant-----------------*/
 }

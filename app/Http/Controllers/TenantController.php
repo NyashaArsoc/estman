@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tenant;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -13,23 +12,7 @@ class TenantController extends BaseController
 public function __construct(){
         $this->middleware(['loginauth']);
 }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-
-    public function show(Tenant $tenant)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+ 
     public function viewedittenant($id)
     {
         $tenantid = Crypt::decrypt($id);
@@ -59,70 +42,7 @@ public function __construct(){
         }
     
     }
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Tenant $tenant)
-    {
-        //
-    }
-    public function  pendingapproval(){
-        try {
-            $arr_owner['tenant']   = DB::table('alltenant')
-        ->where('approval','=' ,'N')
-        ->select('fullname','id','companyname','nationalid','companynumber',
-        'cell','email','clienttypeid','typedescription')
-        ->get();
-        return view('tenant/pending-approval')
-        ->with($arr_owner);
-        } catch (\Throwable $th) {
-            return  redirect()->route('dash.property') 
-            ->with('error', 'failed to load');
-        } 
-    }
-    public function viewpending($id){
-        $tenantid = Crypt::decrypt($id);
-        try {
-          
-            $arr_owner['tenant']   = DB::table('alltenant')
-            ->where('id', $tenantid)
-            ->select('fullname','id','companyname','nationalid','companynumber',
-            'cell','email','clienttypeid','typedescription','vatnumber','bpnumber',
-            'contactaddress','tel')
-            ->first();
-            $arr_owner['contact']   = DB::table('tenantcontact')
-            ->where('tenantid', $tenantid)
-            ->select('email','cell','lastname','firstname')->latest('id')
-            ->first();
-            $arr_owner['keen']   = DB::table('tenantkeen')
-            ->where('tenantid', $tenantid)
-            ->select('email','cell','lastname','firstname')->latest('id')
-            ->first();
-            return view('tenant/view-pending')
-            ->with($arr_owner);
-        } catch (QueryException $e) {
-            return  redirect()->route('tenant.pending') 
-            ->with('error', 'failed to load'.$e);
-        }
-        
-    }
-    
-    public function approvetenant($id){
-        try{
-            $tenantid = Crypt::decrypt($id);
-            $updatetenant = array('approval' => 'Y' , 'available'=> 'Y');
 
-            DB::table('tenant')
-            ->where('id',$tenantid)
-            ->update($updatetenant);
-
-            return  redirect()->route('tenant.pending') 
-            ->with('success', 'tenant activated');
-        } catch(QueryException $e){
-            return  redirect()->route('tenant.pending') 
-            ->with('error', 'failed to activate tenant');
-        }
-    }
     public function rejecttenant($id, Request $request){
        
         try{
