@@ -85,23 +85,6 @@ public function __construct(){
         //
     }
 
-  
-    public function approveproperty($id){
-       
-        try{
-            $propertyid = Crypt::decrypt($id);
-            $update = array('approval' => 'Y' , 'available'=> 'Y');
-            DB::table('property')
-            ->where('id',$propertyid)
-            ->update($update);
-
-            return  redirect()->route('property.pending') 
-            ->with('success', 'property activated');
-        } catch(QueryException $e){
-            return  redirect()->route('property.pending') 
-            ->with('error', 'failed to activate property');
-        }
-    }
     
     public function rejectproperty($id, Request $request){
        

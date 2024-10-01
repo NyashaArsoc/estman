@@ -93,31 +93,50 @@ public function viewpropertyapproval($id){
         ->with('error', 'failed to load');
     }
 }
-public function downloadmandatepdf($address) {
+public function downloadmandatepdf($path) {
     try {
-        $streetaddress = Crypt::decrypt($address);
+        $filename = Crypt::decrypt($path);
             //check the existance of receipt first
-            if (!Storage::disk('public')->exists("public/documents/prop/mandate/{$streetaddress}")) {
+            if (!Storage::disk('public')->exists("documents/prop/mandate/{$filename}")) {
                 return abort(404);
             }
-            return response()->download(storage_path("app/public/documents/prop/mandate/{$streetaddress}"));
+            return response()->download(storage_path("app/public/documents/prop/mandate/{$filename}"));
 
     } catch (DecryptException $th) {
         return redirect()->route('dash.property');
     }
 }
-public function downloadotherpdf($address) {
+public function downloadotherpdf($path) {
     try {
-        $streetaddress = Crypt::decrypt($address);
+        $filename = Crypt::decrypt($path);
             //check the existance of receipt first
-            if (!Storage::disk('public')->exists("public/documents/prop/other/{$streetaddress}")) {
+            if (!Storage::disk('public')->exists("documents/prop/other/{$filename}")) {
                 return abort(404);
             }
-            return response()->download(storage_path("public/documents/prop/other/{$streetaddress}"));
+            return response()->download(storage_path("public/documents/prop/other/{$filename}"));
 
     } catch (DecryptException $th) {
         return redirect()->route('dash.property');
     }
+}
+public function approvenewproperty($id){
+    try{
+        $propertyid = Crypt::decrypt($id);
+            try {
+                DB::table('propmanproperty')
+                ->where('id',$propertyid)
+                ->update(['approval' => 'Y' , 'available'=> 'Y','approvedby'=>session('alluser'),
+            'dateapproved'=>now()]);
+                return  redirect()->route('propapp.listprop') 
+                ->with('success', 'record approved');
+            } catch (\Throwable $th) {
+                return redirect()->route('propapp.viewprop',$id)
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propapp.viewprop',$id)
+            ->with('error', 'failed to load');
+        }
 }
 /*---------------end approval new property-----------------*/
 }

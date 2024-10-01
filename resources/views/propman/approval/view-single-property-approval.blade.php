@@ -2,7 +2,8 @@
 $title = 'Approve Property';
 $description = 'below are property details .';
 $id= Crypt::encrypt($property->id);
-$address= Crypt::encrypt($property->streetaddress);
+$mandate= Crypt::encrypt($property->mandate);
+$otherattachement= Crypt::encrypt($property->otherattachement);
 if ($property->propertytypeid == 1){
     $divclasscompany      =   'dropdwn';
     $divclassindividual   =   'show';
@@ -12,8 +13,8 @@ if ($property->propertytypeid == 1){
  }
  $attachementrequiredpdf = (!is_null($property->mandate)) ? 'download file' : '';
 $attachementnotrequired = (!is_null($property->otherattachement)) ? 'download file' : '';
-$requiredpdf    = (!is_null($property->mandate)) ? route('propapp.dwnmandpdf',[$address]) : '';
-$notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnothrpdf',[$address]) : '';
+$requiredpdf    = (!is_null($property->mandate)) ? route('propapp.dwnmandpdf',[$mandate]) : '';
+$notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnothrpdf',[$otherattachement]) : '';
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'Approval')
@@ -42,7 +43,7 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
             </li>
         </ul>
         <form class="form-material material-primary" id="defaultform" method="POST"
-                action="{{ route('propdec.landdec', $id)}}">@csrf
+                action="{{ route('propapp.propapp', $id)}}">@csrf
         <!-- Tabs Content -->
         <div class="tab-content" id="clientTabContent">
             <div class="tab-pane show active" id="property-detail" role="tabpanel" aria-labelledby="property-detail-tab">
@@ -150,13 +151,14 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
         <div class="form-group row">
             <div class="offset-sm-2 col-sm-4">@if (in_array(5,$arraycontrolids))
                 <a onclick = "approveentry(this); return false;" class="btn btn-success btn-sm" 
-                href="{{route('propapp.landapprove', $id)}}"title="approve">
+                href="{{route('propapp.propapp', $id)}}"title="approve">
                 <i class="ti-check mr-0-5"></i>approve</a> @endif
                 @if (in_array(6,$arraycontrolids)) <button type="submit" class="btn btn-danger btn-sm" 
                 id="btn-reject-entry" onclick = "rejectapproval(this); return false;">
                 <i class="ti-close mr-0-5"> </i>decline</button> @endif
             </div>
         </div>
+        @include('layout.arlet')
         </form>
     </div>
 </div>

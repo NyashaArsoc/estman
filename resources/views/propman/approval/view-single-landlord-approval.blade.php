@@ -136,6 +136,7 @@ $id= Crypt::encrypt($landlord->id);
                 <i class="ti-close mr-0-5"> </i>decline</button> @endif
             </div>
         </div>
+        @include('layout.arlet')
         </form>
     </div>
 </div>

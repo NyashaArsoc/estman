@@ -8,7 +8,7 @@
                     <div class="box b-a-0">
                         <div class="p-2 text-xs-center">
                             <h3>BAD REQUEST</h3> 
-                            <a class="btn btn-warning btn-sm "  href="{{route('dash.val')}}"
+                            <a class="btn btn-warning btn-sm "  href="{{route('dash.main')}}"
                                 title="back"><i class="ti-back-left mr-0-5"></i>back</a>
                         </div>
                         

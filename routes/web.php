@@ -61,7 +61,6 @@ Route::controller(TenantController::class)->group(function () {
 //Route::resource('property', PropertyController::class);
 Route::controller(PropertyController::class)->group(function () {
     Route::get('/edit/{id}/property', 'vieweditproperty')->name('property.editview');
-    Route::any('/approve-property/{id}', 'approveproperty')->name('property.approve');
     Route::any('/reject-property/{id}', 'rejectproperty')->name('property.reject');
     Route::any('/property-rejected', 'rejected')->name('property.rejected');
     Route::any('/delete-rejected-property/{id}', 'deleterejected')->name('property.deleterejected');
@@ -249,9 +248,10 @@ Route::middleware('loginauth')->controller(PropManApprovalController::class)->gr
    Route::get('/prop/{id}/landlord/approve', 'approvenewsinglelandlordapproval')->name('propapp.landapprove');
    Route::get('/prop/list/property/approval', 'listpropertyapproval')->name('propapp.listprop');
    Route::get('/prop/view/{id}/property/approval', 'viewpropertyapproval')->name('propapp.viewprop');
+   Route::any('/prop/property/{id}/approve', 'approvenewproperty')->name('propapp.propapp');
    /*-----------download property documents-------------------- */
-   Route::any('/prop-pdf/{address}/download/mandate', 'downloadmandatepdf')->name('propapp.dwnmandpdf');
-   Route::any('/prop-pdf/{address}/other/download', 'downloadotherpdf')->name('propapp.dwnothrpdf');
+   Route::any('/prop-pdf/{path}/download/mandate', 'downloadmandatepdf')->name('propapp.dwnmandpdf');
+   Route::any('/prop-pdf/{path}/other/download', 'downloadotherpdf')->name('propapp.dwnothrpdf');
    /*-----------end download property documents-------------------- */
 });
 /*-------------------end property management approval------------------------ */
