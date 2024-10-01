@@ -161,7 +161,7 @@ $description = 'add property to the system...';
                         <select class="js-example-basic-single w-100" name="currencycode" id="currencycode" />
                         <option value="">select currency </option>
                         @foreach ($currency as $abc)
-                            <option value="{{ $abc->id }}"> {{ $abc->code }}
+                            <option value="{{ $abc->code }}"> {{ $abc->code }}
                             </option>
                         @endforeach
                         </select>

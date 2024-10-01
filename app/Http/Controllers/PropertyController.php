@@ -84,39 +84,8 @@ public function __construct(){
     {
         //
     }
-    public function  pendingapproval(){
-        try {
-            $arr['property']   = DB::table('allproperty')
-        ->where('approval','=' ,'N')
-        ->select('fullname','id','companyname','code','landlordclienttype',
-        'location','propertytype','streetaddress')
-        ->get();
-        return view('property/pending-approval')
-        ->with($arr);
-        } catch (\Throwable $th) {
-            return  redirect()->route('dash.property') 
-            ->with('error', 'failed to load');
-        }
-        
-    }
-    public function viewpending($id){
-        $propertyid = Crypt::decrypt($id);
-        try {
-            $arr['property']   = DB::table('allproperty')
-            ->where('id', $propertyid)
-            ->select('fullname','id','companyname','code','location','province',
-            'propertytype','streetaddress','city','standnumber','comments','rooms',
-            'bedrooms','bathrooms','stories','totalarea','lettablearea','ratesqm',
-            'expectedrental','propertytypeid','commissionpercentage','commissionon','landlordclienttype')
-            ->first();
-            return view('property/view-pending')
-           ->with($arr);
-        } catch (QueryException $e) {
-            return  redirect()->route('property.pending') 
-            ->with('error', 'failed to load');
-        }
-        
-    }
+
+  
     public function approveproperty($id){
        
         try{

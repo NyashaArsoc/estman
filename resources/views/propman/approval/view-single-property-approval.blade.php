@@ -1,0 +1,170 @@
+@php
+$title = 'Approve Property';
+$description = 'below are property details .';
+$id= Crypt::encrypt($property->id);
+$address= Crypt::encrypt($property->streetaddress);
+if ($property->propertytypeid == 1){
+    $divclasscompany      =   'dropdwn';
+    $divclassindividual   =   'show';
+ }else{
+    $divclasscompany   =   'show';
+    $divclassindividual   =   'dropdwn';
+ }
+ $attachementrequiredpdf = (!is_null($property->mandate)) ? 'download file' : '';
+$attachementnotrequired = (!is_null($property->otherattachement)) ? 'download file' : '';
+$requiredpdf    = (!is_null($property->mandate)) ? route('propapp.dwnmandpdf',[$address]) : '';
+$notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnothrpdf',[$address]) : '';
+@endphp
+@extends('layout.no-menu-layout')
+@section('title', 'Approval')
+@section('additional css')
+@endsection
+@section('content')
+<!-- Content Start-->
+<div class="container-fluid">
+    <h4>{{ $title }}</h4>
+    <ol class="breadcrumb no-bg mb-1">
+        <li class="breadcrumb-item"><a href="{{ route('dash.property') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('propapp.listland') }}">List</a></li>
+        <li class="breadcrumb-item active">{{ $title }}</li>
+    </ol>
+    <div class="box box-block bg-white">
+        <h5>{{ $title }}</h5>
+        <p class="font-90 text-muted mb-1">{{ $description }}</p>
+        <span class="badge badge-pill bg-info">{{$property->propertytype ?? '' }}</span><hr/>
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs" id="clientTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="property-detail-tab" data-toggle="tab" href="#property-detail" role="tab" aria-controls="property-detail" aria-selected="true">Property Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="additional-info-tab" data-toggle="tab" href="#additional-info" role="tab" aria-controls="additional-info" aria-selected="true">Additional Information</a>
+            </li>
+        </ul>
+        <form class="form-material material-primary" id="defaultform" method="POST"
+                action="{{ route('propdec.landdec', $id)}}">@csrf
+        <!-- Tabs Content -->
+        <div class="tab-content" id="clientTabContent">
+            <div class="tab-pane show active" id="property-detail" role="tabpanel" aria-labelledby="property-detail-tab">
+                <table class="table table-bordered mt-3">
+                    <tbody>
+                        <tr>
+                            <td><strong>Name:</strong></td>
+                            <td>{{ $property->fullname ?? ''}}  {{ $property->companyname ?? ''}} </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Province:</strong></td>
+                            <td>{{ $property->province ?? ''}}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>City/Town:</strong></td>
+                            <td> {{ $property->city ?? ''}} </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Location/Surburb:</strong></td>
+                            <td> {{ $property->location ?? ''}}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Street Address:</strong></td>
+                            <td>{{ $property->streetaddress ?? ''}}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Stand Number:</strong></td>
+                            <td>{{ $property->standnumber ?? ''}}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Highlights:</strong></td>
+                            <td>{{ $property->comments ?? ''}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane show" id="additional-info" role="tabpanel" aria-labelledby="additional-info-tab">
+                <table class="table table-bordered mt-3">
+                    <tbody>
+                    <div id="residential" class="{{$divclassindividual}}">
+                        <tr>
+                            <td><strong>Rooms:</strong></td>
+                            <td>{{ $property->rooms ?? ''}} </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bedrooms:</strong></td>
+                            <td>{{ $property->bedrooms ?? ''}} </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bathrooms:</strong></td>
+                            <td>{{ $property->bathrooms ?? ''}} </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Stories:</strong></td>
+                            <td>{{ $property->stories ?? ''}} </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Expected Rental:</strong></td>
+                            <td>{{ $property->currencycode ?? ''}} {{ $property->expectedrental ?? ''}} </td>
+                        </tr>
+                    </div>
+                        <div id="commercial" class="{{$divclasscompany}}">
+                        <tr>
+                            <td><strong>Total Area (Sqm):</strong></td>
+                            <td>{{ $property->totalarea ?? ''}} </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lettable Area (Sqm):</strong></td>
+                            <td>{{ $property->lettablearea ?? ''}} </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Expected Rate:</strong></td>
+                            <td>{{ $property->currencycode ?? ''}} {{ $property->ratesqm ?? ''}} </td>
+                        </tr>
+                        </div>
+                        <tr>
+                            <td><strong>Commission Type:</strong></td>
+                            <td>{{ $property->commissiontype ?? ''}} </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Commission %:</strong></td>
+                            <td>{{ $property->commission ?? ''}} </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mandate document:</strong></td>
+                            <td><a href="{{ $requiredpdf }}">{{ $attachementrequiredpdf}}</a> </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Other Attachments:</strong></td>
+                            <td><a href="{{ $notrequiredpdf }}">{{ $attachementnotrequired}}</a> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div><br/>
+        <div class="form-group row">
+            <label for="Email" class="col-sm-2 col-form-label">Reason for decline
+            </label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="reasons_comments" 
+                id="rejectreason" />
+                <small id="rejectreasoncheck" style="color: red;"> reasons for rejection</small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-sm-2 col-sm-4">@if (in_array(5,$arraycontrolids))
+                <a onclick = "approveentry(this); return false;" class="btn btn-success btn-sm" 
+                href="{{route('propapp.landapprove', $id)}}"title="approve">
+                <i class="ti-check mr-0-5"></i>approve</a> @endif
+                @if (in_array(6,$arraycontrolids)) <button type="submit" class="btn btn-danger btn-sm" 
+                id="btn-reject-entry" onclick = "rejectapproval(this); return false;">
+                <i class="ti-close mr-0-5"> </i>decline</button> @endif
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+<!-- Content End -->
+@endsection
+@section('additional js')
+<script src="{{ asset('js/validation/approvalpropman.js') }}"></script>
+<script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script> 
+<script src="{{ asset('js/dropdown.js') }}"></script>
+    <!-- Additional JS End-->
+@endsection

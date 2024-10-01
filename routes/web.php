@@ -61,8 +61,6 @@ Route::controller(TenantController::class)->group(function () {
 //Route::resource('property', PropertyController::class);
 Route::controller(PropertyController::class)->group(function () {
     Route::get('/edit/{id}/property', 'vieweditproperty')->name('property.editview');
-    Route::any('/property-approval', 'pendingapproval')->name('property.pending');
-    Route::any('/view-pending-property/{id}', 'viewpending')->name('property.viewpending');
     Route::any('/approve-property/{id}', 'approveproperty')->name('property.approve');
     Route::any('/reject-property/{id}', 'rejectproperty')->name('property.reject');
     Route::any('/property-rejected', 'rejected')->name('property.rejected');
@@ -246,9 +244,15 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
 
 /*-------------------property management approval------------------------ */
 Route::middleware('loginauth')->controller(PropManApprovalController::class)->group(function(){
-    Route::get('/prop/list/landlord/approval', 'listlandlordapproval')->name('propapp.listland');
+   Route::get('/prop/list/landlord/approval', 'listlandlordapproval')->name('propapp.listland');
    Route::get('/prop/view/{id}/landlord/approval', 'viewlandlordapproval')->name('propapp.viewland');
    Route::get('/prop/{id}/landlord/approve', 'approvenewsinglelandlordapproval')->name('propapp.landapprove');
+   Route::get('/prop/list/property/approval', 'listpropertyapproval')->name('propapp.listprop');
+   Route::get('/prop/view/{id}/property/approval', 'viewpropertyapproval')->name('propapp.viewprop');
+   /*-----------download property documents-------------------- */
+   Route::any('/prop-pdf/{address}/download/mandate', 'downloadmandatepdf')->name('propapp.dwnmandpdf');
+   Route::any('/prop-pdf/{address}/other/download', 'downloadotherpdf')->name('propapp.dwnothrpdf');
+   /*-----------end download property documents-------------------- */
 });
 /*-------------------end property management approval------------------------ */
 /*-------------------property management declines------------------------ */

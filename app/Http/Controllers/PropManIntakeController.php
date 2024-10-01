@@ -95,13 +95,13 @@ public function addnewlandlorddetails(Request $request){
             $reportdoc = $request->file('mandate');
             $reportdocname = $request->billingaddress . '.' . $reportdoc->getClientOriginalExtension();
             $reportdoc->storeAs('public/documents/prop/mandate', $reportdocname);
-        }else{$reportdocname = '';}
+        }
         //checking if the attachment is there 
         if ($request->hasFile('otherattachment')) {
             $otherattachment = $request->file('otherattachment');
             $otherattachmentname = $request->billingaddress. '.' . $otherattachment->getClientOriginalExtension();
             $otherattachment->storeAs('public/documents/prop/other', $otherattachmentname);
-        }else{$otherattachmentname = '';}
+        }
         
         $propertyid = DB::table('propmanproperty')
         ->insertGetId([

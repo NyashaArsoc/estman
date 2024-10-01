@@ -6,6 +6,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PropManApprovalController extends Controller
 {
@@ -65,4 +66,58 @@ public function approvenewsinglelandlordapproval($id){
     }
 }
 /*---------------end approval new landlord-----------------*/
+/*---------------approval new property-----------------*/
+public function listpropertyapproval(){
+    try {
+        $arr['property']   = DB::table('propmanallproperty')
+        ->where('approval','=' ,'N')
+        ->select('*')->get();
+        return view('propman.approval.list-property-pending-approval')->with($arr);
+    } catch (\Throwable $th) {
+      return  redirect()->route('dash.property');
+    }
+}
+public function viewpropertyapproval($id){
+    try {
+        $propertyid = Crypt::decrypt($id);
+        try {
+            $arr['property']   = DB::table('propmanallproperty')
+            ->where('id', $propertyid)->select('*')->first();  
+            return view('propman.approval.view-single-property-approval')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propapp.listprop')
+                ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('propapp.listprop')
+        ->with('error', 'failed to load');
+    }
+}
+public function downloadmandatepdf($address) {
+    try {
+        $streetaddress = Crypt::decrypt($address);
+            //check the existance of receipt first
+            if (!Storage::disk('public')->exists("public/documents/prop/mandate/{$streetaddress}")) {
+                return abort(404);
+            }
+            return response()->download(storage_path("app/public/documents/prop/mandate/{$streetaddress}"));
+
+    } catch (DecryptException $th) {
+        return redirect()->route('dash.property');
+    }
+}
+public function downloadotherpdf($address) {
+    try {
+        $streetaddress = Crypt::decrypt($address);
+            //check the existance of receipt first
+            if (!Storage::disk('public')->exists("public/documents/prop/other/{$streetaddress}")) {
+                return abort(404);
+            }
+            return response()->download(storage_path("public/documents/prop/other/{$streetaddress}"));
+
+    } catch (DecryptException $th) {
+        return redirect()->route('dash.property');
+    }
+}
+/*---------------end approval new property-----------------*/
 }

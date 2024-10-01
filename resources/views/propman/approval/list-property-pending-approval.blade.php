@@ -1,11 +1,9 @@
 @php $title = 'Pending Approval'; 
       $description = 'properties pending approval...'; @endphp
-    @extends('layout.main-layout')
+    @extends('layout.propman-main-menu')
     @section('title', 'Property Approval')
     @section('additional css')
     <!-- Additional css Start-->
-    <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/select2-bootstrap-theme/select2-bootstrap.min.css') }}">
     <!-- Additional css End-->
     @endsection
     @section('content')
@@ -13,7 +11,7 @@
         <div class="container-fluid">
             <h4>{{$title}}</h4>
             <ol class="breadcrumb no-bg mb-1">
-                <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{route('dash.property')}}">Dashboard</a></li>
                 <li class="breadcrumb-item active">{{$title}}</li>
             </ol>
             <div class="box box-block bg-white">
@@ -34,24 +32,17 @@
                             </thead>
                             <tbody>@php $count=1;@endphp
                                 @foreach($property as $abc)
-                            <tr>@php if ($abc->landlordclienttype == 1){//individual
-                                $owner   =  $abc->fullname ;
-                             }else{
-                                 $owner   =  $abc->companyname ;
-                             } @endphp
+                            <tr>
                                     <td>{{$count ++}}</td>
-                                    <td>{{ $owner}}</td>
+                                    <td>{{ $abc->fullname}}  {{ $abc->companyname}}</td>
                                     <td>{{ $abc->propertytype }}</td>
-                                    <td>{{ $abc->code }}</td>
+                                    <td>{{ $abc->currencycode }}</td>
                                     <td>{{ $abc->location }}</td>
                                     <td>{{ $abc->streetaddress }}</td>
                                     <td>@php $id= Crypt::encrypt($abc->id); @endphp
-                                        <a class="btn btn-info btn-sm " id=""
-                                        href="{{route('property.viewpending', $id)}}"
-                                        title="view"><i class="ti-eye mr-0-5"></i>view</a>
-                                        <a onclick = "approveproperty(this); return false;"
-                                        class="btn btn-success btn-sm" href="{{route('property.approve', $id)}}"
-                                        title="activate"><i class="ti-check mr-0-5"></i>activate</a>
+                                     @if (in_array(3,$arraycontrolids))<a class="btn btn-info btn-sm" id=""
+                                     href="{{route('propapp.viewprop',$id)}}"
+                                     title="view"><i class="ti-eye mr-0-5"></i>view</a>  @endif
                             </td>
                             </tr>
                             @endforeach
@@ -76,9 +67,6 @@
     @endsection
     @section('additional js')
     <!-- Additional JS Start-->
-    <script src="{{ asset('css/select2/select2.min.js') }}"></script>
-        <script src="{{ asset('js/select2.js') }}"></script>
-		<script src="{{ asset('js/dropdown.js') }}"></script>
-		<script src="{{ asset('js/add-banking-details.js') }}"></script> 
+        <script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script> 
     <!-- Additional JS End-->
     @endsection
