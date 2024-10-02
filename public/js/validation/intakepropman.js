@@ -581,38 +581,7 @@ function validateCurrencyCode() {
         $("#currencycodecheck").hide();
     }
 }
-/*-----------------------------add banking details table ----------------------- */
-$('#add-banking-item').on('click', function() {
-	var currencycode		=	$('#currencycode').val();
-	var accountname		=	$('#accountname').val();
-	var bankname		=	$('#bankname').val();
-	var branch			=	$('#notrequiredgeneraltextcaps').val();
-	var accountnumber	=	$('#numericrequired').val();
-	var count = $('#landlordbanking tr').length - 1;
 
-    validateAccountName();validateBankName();validateNotRequiredGeneralTextCaps();
-    validateNumericValueRequired(); validateCurrencyCode();
-
-    try{
-        if(accountnameError==true && banknameError==true && notrequiredgeneraltextcapsError==true &&
-            numericrequiredError==true && currencycodeError==true){
-                if(branch ==''){ branch = 'n/a'; }
-        $('#landlordbanking tbody').append('<tr class="child"><td>'+count+'</td><td><input name="currencycode[]" class="form-control" value='+currencycode+' readonly/></td><td><input name="accountname[]" class="form-control" value='+accountname+' readonly /></td><td><input name="bankname[]" class="form-control" value='+bankname+' readonly /></td><td> <input name="branch[]" class="form-control " value='+branch+' readonly/></td><td><input name="accountnumber[]" class="form-control " value='+accountnumber+' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="delete" onclick="deletelandlordbankrow(this)">delete</button></td></tr>');
-		$('#accountname').val('');  $('#bankname').val('');   $('#notrequiredgeneraltextcaps').val(''); $('#numericrequired').val('');      
-            }
-    }catch(err){  alert(err.message); }
-});
-function deletelandlordbankrow(t) {
-    var a = $("#landlordbanking > tbody > tr").length;
-    if (1 == a) alert("There only one row you can't delete.");
-    else {
-        var e = t.parentNode.parentNode;
-        e.parentNode.removeChild(e);
-    }
-}
-var count = 2,
-limits = 3;
-/*-----------------------------end add banking details table ----------------------- */
   //landlord name
   $("#landlordlistcheck").hide();
   let landlordnameError = true;
@@ -1172,8 +1141,311 @@ function validateKeenEmail() {
             }
         });
 }
+// tenant list by client type
+$("#tenantlistcheck").hide();
+  let tenantnameError = true;
+  $("#tenantlist").keyup(function () {
+      validateTenantName();
+  });
+  function validateTenantName() {
+      let textValue = $("#tenantlist").val();
+      if (textValue.length == "") {
+          $("#tenantlistcheck").show();
+          tenantnameError = false;
+          return false;
+      } else {
+        tenantnameError = true;
+          $("#tenantlistcheck").hide();
+      }
+  } 
+ //date valid from
+ $("#datefromcheck").hide();
+ let datefromError = true;
+ $("#datefrom").keyup(function () {
+     validateDateFrom();
+ });
+ function validateDateFrom() {
+     let textValue = $("#datefrom").val();
+     if (textValue.length == "") {
+         $("#datefromcheck").show();
+         datefromError = false;
+         return false;
+     } else {
+        datefromError = true;
+         $("#datefromcheck").hide();
+     }
+ }
+ //valid to
+ $("#datetocheck").hide();
+ let datetoError = true;
+ $("#dateto").keyup(function () {
+     validateDateTo();
+ });
+ function validateDateTo() {
+     let textValue = $("#dateto").val();
+     if (textValue.length == "") {
+         $("#datetocheck").show();
+         datetoError = false;
+         return false;
+     } else {
+        datetoError = true;
+         $("#datetocheck").hide();
+     }
+ }
+  //inspection period
+  $("#periodlistcheck").hide();
+  let periodlistError = true;
+  $("#periodlist").keyup(function () {
+      validatePeriodList();
+  });
+  function validatePeriodList() {
+      let textValue = $("#periodlist").val();
+      if (textValue.length == "") {
+          $("#periodlistcheck").show();
+          periodlistError = false;
+          return false;
+      } else {
+        periodlistError = true;
+          $("#periodlistcheck").hide();
+      }
+  }
+//rent review period
+$("#rentreviewcheck").hide();
+let rentreviewError = true;
+$("#rentreviewperiod").keyup(function () {
+    validateRentReview();
+});
+function validateRentReview() {
+    let textValue = $("#rentreviewperiod").val();
+    if (textValue.length == "") {
+        $("#rentreviewcheck").show();
+        rentreviewError = false;
+        return false;
+    } else {
+       rentreviewError = true;
+        $("#rentreviewcheck").hide();
+    }
+}
+//valid balance bd input eg lease bd on new lease
+$("#balancebdinputcheck").hide();
+let leasebalancebdinputError = true;
+$("#balancebdinput").keyup(function() {
+   validateLeaseBalanceBDInput();
+});
 
-/*-----------------------------butn submit ----------------------- */
+function validateLeaseBalanceBDInput(){
+    let textValue         = $("#balancebdinput").val();
+    if(textValue!=''){
+        const specialChars = /[`!@#$%^&*()_+\=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck =  specialChars.test(textValue);
+        if (charscheck == true){
+            $("#balancebdinputcheck").show();
+           $("#balancebdinputcheck").html("**digits only or (13.5)");
+           leasebalancebdinputError = false;
+           return false;
+       }else{
+        leasebalancebdinputError = true;
+           $("#balancebdinputcheck").hide();
+       }
+    }else {
+        leasebalancebdinputError = true;
+       $("#balancebdinputcheck").hide();
+   }
+}
+//valid lease item rate cost
+$("#leaseratescostcheck").hide();
+let leaseratecostError = true;
+$("#leaseratescost").keyup(function() {
+   validateLeaseRatesCost();
+});
+
+function validateLeaseRatesCost(){
+    let textValue         = $("#leaseratescost").val();
+    if(textValue!=''){
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck =  specialChars.test(textValue);
+        if (charscheck == true){
+            $("#leaseratescostcheck").show();
+           $("#leaseratescostcheck").html("**digits only or (13.5)");
+           leaseratecostError = false;
+           return false;
+       }else{
+        leaseratecostError = true;
+           $("#leaseratescostcheck").hide();
+       }
+    }
+}
+//valid lease item operation cost
+$("#leaseoperationcostcheck").hide();
+let leaseoperationcostError = true;
+$("#leaseoperationalcost").keyup(function() {
+    validateLeaseOperationalCost();
+});
+
+function validateLeaseOperationalCost(){
+    let textValue         = $("#leaseoperationalcost").val();
+    if(textValue!=''){
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck =  specialChars.test(textValue);
+        if (charscheck == true){
+            $("#leaseoperationcostcheck").show();
+           $("#leaseoperationcostcheck").html("**digits only or (13.5)");
+           leaseoperationcostError = false;
+           return false;
+       }else{
+        leaseoperationcostError = true;
+           $("#leaseoperationcostcheck").hide();
+       }
+    }
+}
+//valid lease item deposit
+$("#leasedepositpaidcheck").hide();
+let leasedepositcheckError = true;
+$("#leasedepositpaid").keyup(function() {
+   validateLeaseDepositPaid();
+});
+
+function validateLeaseDepositPaid(){
+    let textValue         = $("#leasedepositpaid").val();
+    if(textValue!=''){
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck =  specialChars.test(textValue);
+        if (charscheck == true){
+            $("#leasedepositpaidcheck").show();
+           $("#leasedepositpaidcheck").html("**digits only or (13.5)");
+           leasedepositcheckError = false;
+           return false;
+       }else{
+        leasedepositcheckError = true;
+           $("#leasedepositpaidcheck").hide();
+       }
+    }
+}
+//valid lease item admin
+$("#leaseadminpaidcheck").hide();
+let leaseadmincheckError = true;
+$("#leaseadminpaid").keyup(function() {
+   validateLeaseAdminPaid();
+});
+function validateLeaseAdminPaid(){
+    let textValue         = $("#leaseadminpaid").val();
+    if(textValue!=''){
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck =  specialChars.test(textValue);
+        if (charscheck == true){
+            $("#leaseadminpaidcheck").show();
+           $("#leaseadminpaidcheck").html("**digits only or (13.5)");
+           leaseadmincheckError = false;
+           return false;
+       }else{
+        leaseadmincheckError = true;
+           $("#leaseadminpaidcheck").hide();
+       }
+    }
+}
+//valid currency
+$("#leaseitemcurrencycodecheck").hide();
+let leaseitemcurrencycodeError = true;
+$("#leaseitemcurrencycode").keyup(function () {
+    validateLeaseItemCurrencyCode();
+});
+function validateLeaseItemCurrencyCode() {
+    let textValue = $("#leaseitemcurrencycode").val();
+    if (textValue.length == "") {
+        $("#leaseitemcurrencycodecheck").show();
+        leaseitemcurrencycodeError = false;
+        return false;
+    } else {
+        leaseitemcurrencycodeError = true;
+        $("#leaseitemcurrencycodecheck").hide();
+    }
+}
+//validate date bigger than
+let daterangeError = true;
+function validateDateRange() {
+    var date_from          = new Date($ ('#datefrom').val());
+    var date_to            = new Date($ ('#dateto').val());
+    if (date_from >= date_to){
+        $("#datetocheck").show();
+        $("#datetocheck").html("invalid date range");
+        daterangeError = false;
+        return false;
+    }else{
+        $("#datetocheck").hide();
+        daterangeError = true;
+        return true;
+    } 
+}
+/*-----------------------------buttons submit ----------------------- */
+/*-----------------------------add banking details table ----------------------- */
+$('#add-banking-item').on('click', function() {
+	var currencycode		=	$('#currencycode').val();
+	var accountname		=	$('#accountname').val();
+	var bankname		=	$('#bankname').val();
+	var branch			=	$('#notrequiredgeneraltextcaps').val();
+	var accountnumber	=	$('#numericrequired').val();
+	var count = $('#landlordbanking tr').length - 1;
+
+    validateAccountName();validateBankName();validateNotRequiredGeneralTextCaps();
+    validateNumericValueRequired(); validateCurrencyCode();
+
+    try{
+        if(accountnameError==true && banknameError==true && notrequiredgeneraltextcapsError==true &&
+            numericrequiredError==true && currencycodeError==true){
+                if(branch ==''){ branch = 'n/a'; }
+        $('#landlordbanking tbody').append('<tr class="child"><td>'+count+'</td><td><input name="currencycode[]" class="form-control" value='+currencycode+' readonly/></td><td><input name="accountname[]" class="form-control" value='+accountname+' readonly /></td><td><input name="bankname[]" class="form-control" value='+bankname+' readonly /></td><td> <input name="branch[]" class="form-control " value='+branch+' readonly/></td><td><input name="accountnumber[]" class="form-control " value='+accountnumber+' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="delete" onclick="deletelandlordbankrow(this)">delete</button></td></tr>');
+		$('#accountname').val('');  $('#bankname').val('');   $('#notrequiredgeneraltextcaps').val(''); $('#numericrequired').val('');      
+            }
+    }catch(err){  alert(err.message); }
+});
+function deletelandlordbankrow(t) {
+    var a = $("#landlordbanking > tbody > tr").length;
+    if (1 == a) alert("There only one row you can't delete.");
+    else {
+        var e = t.parentNode.parentNode;
+        e.parentNode.removeChild(e);
+    }
+}
+var count = 2,
+limits = 3;
+/*-----------------------------end add banking details table ----------------------- */
+/*-----------------------------add lease addtional information details table ----------------------- */
+$('#add-lease-item').on('click', function() {
+	var currencycode		=	$('#leaseitemcurrencycode').val();
+	var balancebd		    =	$('#balancebdinput').val();
+	var rateutilities		=	$('#leaseratescost').val();
+	var operationalcost		=	$('#leaseoperationalcost').val();
+	var depositpaid	        =	$('#leasedepositpaid').val();
+    var adminpaid	        =	$('#leaseadminpaid').val();
+	var count = $('#leaseitems tr').length - 1;
+
+    validateLeaseItemCurrencyCode();validateLeaseRatesCost();validateLeaseBalanceBDInput();
+    validateLeaseOperationalCost();validateLeaseDepositPaid();validateLeaseAdminPaid();
+
+    try{
+        if(leaseitemcurrencycodeError==true && leasebalancebdinputError==true && leaseratecostError==true 
+        && leaseoperationcostError==true && leasedepositcheckError==true && leaseadmincheckError==true){
+            if(balancebd ==''){balancebd = 0;}
+            if(rateutilities ==''){rateutilities = 0;}
+            if(operationalcost ==''){operationalcost = 0;}
+            if(depositpaid ==''){depositpaid = 0;}
+            if(adminpaid ==''){adminpaid = 0;}
+        $('#leaseitems tbody').append('<tr class="child"><td>'+count+'</td><td><input name="currencycode[]" class="form-control" value='+currencycode+' readonly/></td><td><input name="leasebalancebd[]" class="form-control" value='+balancebd+' readonly /></td><td><input name="leaseratescost[]" class="form-control" value='+rateutilities+' readonly /></td><td> <input name="leaseoperationalcost[]" class="form-control " value='+operationalcost+' readonly/></td><td><input name="leasedepositpaid[]" class="form-control " value='+depositpaid+' readonly /></td><td><input name="leaseadminpaid[]" class="form-control " value='+adminpaid+' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="delete" onclick="deleteleaseitemrow(this)">delete</button></td></tr>');
+		$('#balancebdinput').val('');  $('#leaseratescost').val('');   $('#leaseoperationalcost').val(''); $('#leasedepositpaid').val(''); $('#leaseadminpaid').val('');      
+            }
+    }catch(err){  alert(err.message); }
+});
+function deleteleaseitemrow(t) {
+    var a = $("#leaseitems > tbody > tr").length;
+    if (1 == a) alert("There only one row you can't delete.");
+    else {
+        var e = t.parentNode.parentNode;
+        e.parentNode.removeChild(e);
+    }
+}
+var count = 2,
+limits = 3;
+/*-----------------------------end add addtional information details  table ----------------------- */
 $("#btn-add-landlord").click(function () {
     validateBillingAddress();validateCell();validateContactCell();validateContactEmail();
     validateContactLastName(); validateContactFirstName();validateEmail();validateClientType();
@@ -1248,6 +1520,30 @@ $("#btn-add-tenant").click(function () {
                 companynumberError && numericnotrequiredError==true){
                 return true;}else{ return false;}
         }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+// --------------btn add new lease
+$("#btn-add-lease").click(function () {
+    try {
+        validateTenantName();validateLandlordName();validateBillingAddress();validateDateFrom();
+        validateDateTo();validateRentReview();validatePeriodList();validateCurrencyCode();validateDateRange();
+        var propertytype    =  $("#propertytype").val();
+        if(tenantnameError==true && landlordnameError==true && billingaddressError==true && 
+            datefromError==true && datetoError==true && rentreviewError==true && periodlistError==true &&
+            currencycodeError==true && daterangeError==true){
+            if(propertytype == 1) {//residential 
+                validateAddExpectedRental();
+                if(expectedrateError == true && expectedrentalError==true){
+                    return true;}else{return false;}
+            }else{ validateAddLettableArea(); validateAddExpectedRate();
+                if(lettableareaError==true && expectedrateError==true){return true;}else{return false;}
+             }
+        }else{return false;}
+            
+            
     } catch (err) {
         alert(err.message);
         return false;

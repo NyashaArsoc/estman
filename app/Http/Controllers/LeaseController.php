@@ -389,28 +389,6 @@ class LeaseController extends BaseController
             ->with('error', 'failed to update');
         }
     }
-
-    public function addcreate()
-    {
-        try {
-            $arr['type']   = DB::table('clienttype')
-            ->select('id','description')->get();
-            $arr['currency']   = DB::table('currency')
-            ->select('id','code')->get();
-            $arr['province']   = DB::table('province')
-            ->select('id','description')->get();
-            $arr['propertytype']   = DB::table('propertytype')
-            ->select('id','description')->get();
-            $arr['period']   = DB::table('periodviews')
-            ->select('id','description')->get();
-          return view('lease/add-lease')
-          ->with($arr);
-            
-        } catch (QueryException $e) {
-            return  redirect()->route('tenant.addcreate') 
-            ->with('error', 'failed to load lease');
-        }
-    }
     public function addstore(Request $request)
     {
         $user = $this->userdetail();

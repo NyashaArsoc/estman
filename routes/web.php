@@ -45,7 +45,6 @@ Route::controller(TenantController::class)->group(function () {
     Route::get('/edit/tenant/{id}/view', 'viewedittenant')->name('tenant.editview');
     Route::any('/reject-tenant/{id}', 'rejecttenant')->name('tenant.reject');
     Route::any('/tenant-rejected', 'rejected')->name('tenant.rejected');
-    Route::any('/single-tenant/{id}', 'gettenant')->name('tenant.gettenant');
     Route::any('/manage-tenant', 'listtenants')->name('tenant.list');
     Route::get('/single-tenant/details/{id}', 'gettenantdetails')->name('tenant.tenantdetails');
     Route::get('/update/{id}/edit-tenant', 'updatetenant')->name('tenant.updating');
@@ -60,8 +59,6 @@ Route::controller(PropertyController::class)->group(function () {
     Route::any('/property-rejected', 'rejected')->name('property.rejected');
     Route::any('/delete-rejected-property/{id}', 'deleterejected')->name('property.deleterejected');
     Route::any('/edit-update-tenant/{id}', 'updateproperty')->name('property.editupdate');
-    Route::any('/single-property/{id}', 'getpropertyaddress')->name('property.getproperty');
-    Route::any('/property-areataken/{id}', 'getpropertyareataken')->name('property.areataken');
     Route::any('/property-areaavailable/{id}', 'getpropertyareaavailable')->name('property.areaavailable');
     Route::any('/property/{id}/view', 'viewindividual')->name('property.view');
     Route::get('/property/{id}/view-ledgers', 'viewledgers')->name('property.ledgers');
@@ -73,7 +70,6 @@ Route::controller(PropertyController::class)->group(function () {
     Route::any('/remit/{id}/property/{currency}', 'addpreremit')->name('property.preremit');
     Route::any('/property/{id}/disable', 'disableproperty')->name('property.disable');
 });
-//Route::resource('lease', LeaseController::class);
 Route::controller(LeaseController::class)->group(function () {
     Route::any('/lease-approval', 'pendingapproval')->name('lease.pending');
     Route::any('/view-pending-lease/{id}', 'viewpending')->name('lease.viewpending');
@@ -82,7 +78,6 @@ Route::controller(LeaseController::class)->group(function () {
     Route::any('/edit-update-lease/{id}', 'updatelease')->name('lease.editupdate');
     Route::get('/lease/{id}/edit', 'vieweditlease')->name('lease.editview');
     Route::any('/lease-rejected', 'rejected')->name('lease.rejected');
-    Route::any('/lease-create', 'addcreate')->name('lease.addcreate');
     Route::any('/lease-create-store', 'addstore')->name('lease.addstore');
     Route::any('/lease/{id}/view', 'viewindividual')->name('lease.view');
     Route::get('/lease/{id}/view-ledgers', 'viewledgers')->name('lease.ledgers');
@@ -235,6 +230,9 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::post('/prop/add/new/property', 'addnewpropertydetails')->name('propin.addnewproperty');
     Route::get('/prop/add/tenant', 'addtenantdetails')->name('propin.addtenant');
     Route::post('/prop/add/new/tenant', 'addnewtenantdetails')->name('propin.addnewtenant');
+    Route::get('/prop/add/lease', 'addleasedetails')->name('propin.addlease');
+    Route::post('/prop/add/new/lease', 'addnewleasedetails')->name('propin.addnewlease');
+
 });
 /*-------------------end property management intake------------------------ */
 
@@ -269,6 +267,9 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
 Route::middleware('loginauth')->controller(PropManManageController::class)->group(function(){
     Route::get('/prop/list/landlord', 'listalllandlords')->name('propma.landlist');
     Route::get('/prop/landlord/single/type/{id}', 'getlandlordbytype');
+    Route::get('/prop/tenant/single/type/{id}', 'gettenantbytype');
+    Route::get('/prop/property/single/type/{id}', 'getpropertybytype');
+    Route::get('/prop/landlord/contact/propertyaddress/{id}', 'getlandlordbyproperty');
    });
 /*-------------------end property management declines------------------------ */
 /*-------------------setup intake------------------------ */

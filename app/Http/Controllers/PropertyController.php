@@ -156,26 +156,6 @@ public function __construct(){
             ->with('error', 'failed to update');
         }
     }
-
-    public function getpropertyaddress(Request $request, $id){
-
-        $arr['property']   = DB::table('allproperty')
-        ->where([['propertytypeid', $id],
-        ['available','=' ,'Y']])
-        ->orwhere([['occupation','=', 'E'],['occupation','=','P']])
-        ->select('id','streetaddress','propertytypeid')
-        ->get();
-         return view('property/get-single-property')
-         ->with($arr);
-    }
-    public function getpropertyareataken($id){
-        $arr['prop'] = DB::table('propertyspacetaken')
-        ->where('propertyid', $id)
-        ->select('propertyid','totalareataken','roomstaken')
-        ->first();
-        return view('property/get-area-taken')
-        ->with($arr);
-    }
     public function getpropertyareaavailable($id){
         $arr['prop'] = DB::table('allproperty')
         ->where('id', $id)

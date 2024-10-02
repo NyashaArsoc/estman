@@ -36,7 +36,7 @@ $description = 'add property to the system...';
                         @endforeach
                         </select>
                     </div>
-                    <label for="City" class="col-sm-2 col-form-label">Landlord Name </label>
+                    <label for="" class="col-sm-2 col-form-label">Landlord Name </label>
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="landlordname" id="landlordlist" />
                         <option value="">select landlord</option>
@@ -71,8 +71,7 @@ $description = 'add property to the system...';
                             onchange="optionpropertytype(this)" />
                         <option value="">select property type </option>
                         @foreach ($proptype as $abc)
-                            <option value="{{ $abc->id }}"> {{ $abc->description }}
-                            </option>
+                            <option value="{{ $abc->id }}"> {{ $abc->description }}</option>
                         @endforeach
                         </select>
                         <small id="propertytypecheck" style="color: red;">required</small>

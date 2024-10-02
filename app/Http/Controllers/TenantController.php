@@ -117,16 +117,7 @@ public function __construct(){
         }
         
     }
-    public function gettenant(Request $request, $id){
 
-        $arr['tenant']   = DB::table('alltenant')
-        ->where([['clienttypeid', $id],
-        ['available','=' ,'Y']])
-        ->select('id','companyname','clienttypeid','fullname')
-        ->get();
-         return view('tenant/get-single-tenant')
-         ->with($arr);
-    }
 public function gettenantdetails($id){
     try { 
         $arr['tenant']    = collect(DB::select ('EXEC spGetSingleTenantByLeaseID ?',

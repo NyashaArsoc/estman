@@ -175,4 +175,28 @@ public function addtenantdetails(){
     }
  }  
    /*---------------end creating new tenant-----------------*/
+ /*---------------creating new lease-----------------*/
+public function addleasedetails(){
+    try {
+        $currencycode = $this->getcurrencycode();
+        $clienttype = $this->getclienttype();
+        $arr['province']   = DB::table('setupprovince')->select('*')->get();
+        $arr['proptype']   = DB::table('setuppropertytype')->select('*')->get();
+        $arr['commtype']   = DB::table('setupcommissionoptions')->select('*')->get();
+        $arr['currency'] = $currencycode; 
+        $arr['type'] = $clienttype; 
+        return view('propman.intake.add-lease')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+}
+public function addnewleasedetails(Request $request){
+    try {
+        //code...
+    } catch (\Throwable $th) {
+        return  redirect()->route('propin.addlease')
+        ->with('error', 'failed to load');
+    }
+}
+  /*---------------end creating new lease-----------------*/
 }

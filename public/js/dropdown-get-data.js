@@ -10,57 +10,6 @@ function getLandlord() {
         	}
 	});
 }
-// get tenant on add lease
-function getTenantonLease() {
-    var textValue = $("#LeaseTenantClientType").val();
-	$.ajax({          
-        	type: "GET",
-        	url: "/single-tenant"+'/'+textValue,
-        	success: function(data){
-        		$("#LeaseTenantName").html(data);
-        	}
-	});
-}
-// get property on add lease
-function getPropertyonLease() {
-    var textValue = $("#LeasePropertyType").val();
-	$.ajax({          
-        	type: "GET",
-        	url: "/single-property"+'/'+textValue,
-        	success: function(data){
-        		$("#LeasePropertyAddress").html(data);
-        	}
-	});
-	if(textValue==1){// residential
-		document.getElementById('Residential').style.display = "block";
-		document.getElementById('Commercial').style.display = "none";   
-		document.getElementById('CommercialBottom').style.display = "none";   
-	   } 
-	   else{
-		document.getElementById('Commercial').style.display = "block";
-		document.getElementById('CommercialBottom').style.display = "block";
-		document.getElementById('Residential').style.display = "none";   
-	   }	
-}
-// get property balances
-function getPropertyBalances() {
-    var textValue = $("#LeasePropertyAddress").val();
-	$.ajax({          
-        	type: "GET",
-        	url: "/property-areataken"+'/'+textValue,
-        	success: function(data){
-        		$("#OccupiedArea").val(data);
-        	}
-	});
-	$.ajax({          
-		type: "GET",
-		url: "/property-areaavailable"+'/'+textValue,
-		success: function(data){
-			$("#AvailableLettableArea").val(data);
-		}
-});
-
-}
 // get tenant details on recepting
 function getTenantDetails() {
     var textValue = $("#PropertyAddressDesc").val();
@@ -117,12 +66,55 @@ function getvalclientcontact() {
         	}
 	});
 }
-// get landlord on add property
+// get landlord on add property by client type
 function getpropmanlandlordlist() {
     var textValue = $("#clienttype").val();
 	$.ajax({          
         	type: "GET",
         	url: "/prop/landlord/single/type"+'/'+textValue,
+        	success: function(data){
+        		$("#landlordlist").html(data);
+        	}
+	});
+}
+// get tenant on add lease by client type
+function getpropmantenantlist() {
+    var textValue = $("#clienttype").val();
+	$.ajax({          
+        	type: "GET",
+        	url: "/prop/tenant/single/type/"+textValue,
+        	success: function(data){
+        		$("#tenantlist").html(data);
+        	}
+	});
+}
+// get property list on add lease by propertytype
+function getoptionpropmanpropertylist() {
+    var textValue = $("#propertytype").val();
+	$.ajax({          
+        	type: "GET",
+        	url: "/prop/property/single/type/"+textValue,
+        	success: function(data){
+        		$("#propertyaddress").html(data);
+        	}
+	});
+	if(textValue==1){// residential
+		document.getElementById('residential').style.display = "block";
+		document.getElementById('commercial').style.display = "none";   
+		document.getElementById('commercialbottom').style.display = "none";   
+	   } 
+	   else{
+		document.getElementById('commercial').style.display = "block";
+		document.getElementById('commercialbottom').style.display = "block";
+		document.getElementById('residential').style.display = "none";   
+	   }	
+}
+// get landlord on add lease by property address
+function getpropmanlandlordlistbyproperty() {
+    var textValue = $("#propertyaddress").val();
+	$.ajax({          
+        	type: "GET",
+        	url: "/prop/landlord/contact/propertyaddress/"+textValue,
         	success: function(data){
         		$("#landlordlist").html(data);
         	}
