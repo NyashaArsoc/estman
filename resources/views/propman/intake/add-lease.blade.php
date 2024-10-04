@@ -23,7 +23,7 @@
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
             <form class="form-material material-primary" action="{{ route('propin.addnewlease') }}"
-            method="POST"> @csrf
+            method="POST" enctype="multipart/form-data"> @csrf
                 <div class="form-group row">
                     <label for="" class="col-sm-2 form-control-label">Client Type</label>
                     <div class="col-sm-4">
@@ -167,7 +167,16 @@
                     name="AvailableLettableArea" readonly hidden>
                 </div>
             </div>
-        </div> <br />
+        </div>
+        <h5>attachments </h5>
+        <div class="form-group row">
+            <label for="pdf" class="col-sm-2 col-form-label">Signed Lease</label>
+            <div class="col-sm-4">
+                <input type="file" class="form-control" id="requiredsignedpdf" name="leaseagreement"
+                accept=".pdf">
+                <small id="requiredsignedpdfcheck" style="color: red;">required</small>
+            </div>
+        </div>  <br />
         <h5>Additional Details  </h5>
         <div class="table-responsive" style="margin-top: 15px;">
             <table class="table table-bordered table-hover" id="leaseitems">
@@ -227,9 +236,6 @@
                         </td>
                     </tr>
                 </tbody>
-                <tfoot>
-
-                </tfoot>
             </table>
         </div>
         <div class="form-group row">

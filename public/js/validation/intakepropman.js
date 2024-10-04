@@ -1430,7 +1430,7 @@ $('#add-lease-item').on('click', function() {
             if(operationalcost ==''){operationalcost = 0;}
             if(depositpaid ==''){depositpaid = 0;}
             if(adminpaid ==''){adminpaid = 0;}
-        $('#leaseitems tbody').append('<tr class="child"><td>'+count+'</td><td><input name="currencycode[]" class="form-control" value='+currencycode+' readonly/></td><td><input name="leasebalancebd[]" class="form-control" value='+balancebd+' readonly /></td><td><input name="leaseratescost[]" class="form-control" value='+rateutilities+' readonly /></td><td> <input name="leaseoperationalcost[]" class="form-control " value='+operationalcost+' readonly/></td><td><input name="leasedepositpaid[]" class="form-control " value='+depositpaid+' readonly /></td><td><input name="leaseadminpaid[]" class="form-control " value='+adminpaid+' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="delete" onclick="deleteleaseitemrow(this)">delete</button></td></tr>');
+        $('#leaseitems tbody').append('<tr class="child"><td>'+count+'</td><td><input name="leaseitemcurrencycode[]" class="form-control" value='+currencycode+' readonly/></td><td><input name="leasebalancebd[]" class="form-control" value='+balancebd+' readonly /></td><td><input name="leaseratescost[]" class="form-control" value='+rateutilities+' readonly /></td><td> <input name="leaseoperationalcost[]" class="form-control " value='+operationalcost+' readonly/></td><td><input name="leasedepositpaid[]" class="form-control " value='+depositpaid+' readonly /></td><td><input name="leaseadminpaid[]" class="form-control " value='+adminpaid+' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="delete" onclick="deleteleaseitemrow(this)">delete</button></td></tr>');
 		$('#balancebdinput').val('');  $('#leaseratescost').val('');   $('#leaseoperationalcost').val(''); $('#leasedepositpaid').val(''); $('#leaseadminpaid').val('');      
             }
     }catch(err){  alert(err.message); }
@@ -1530,10 +1530,11 @@ $("#btn-add-lease").click(function () {
     try {
         validateTenantName();validateLandlordName();validateBillingAddress();validateDateFrom();
         validateDateTo();validateRentReview();validatePeriodList();validateCurrencyCode();validateDateRange();
+        validateRequiredSignedPDFDocument();
         var propertytype    =  $("#propertytype").val();
         if(tenantnameError==true && landlordnameError==true && billingaddressError==true && 
             datefromError==true && datetoError==true && rentreviewError==true && periodlistError==true &&
-            currencycodeError==true && daterangeError==true){
+            currencycodeError==true && daterangeError==true && requiredsignedpdfdocumentError==true){
             if(propertytype == 1) {//residential 
                 validateAddExpectedRental();
                 if(expectedrateError == true && expectedrentalError==true){

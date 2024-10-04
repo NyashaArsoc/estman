@@ -7,6 +7,20 @@ use Illuminate\Support\Facades\DB;
 
 class PropManIntakeController extends Controller
 {
+    private $monthlyvalue;   private $quarterlyvalue; 
+    private $halfyearlyvalue; private $yearlyvalue; 
+public function __construct(){
+    $todayvalue = date("Y-m-d H:i:s");
+    $timeinseconds = strtotime($todayvalue);
+    $addmonthlyvalue  = $timeinseconds + (3600*24)*30;
+    $addquarterlyvalue = $timeinseconds + (3600*24)*90;
+    $addhalfyearlyvalue = $timeinseconds + (3600*24)*180;
+    $addyearlyvalue = $timeinseconds + (3600*24)*360;
+    $this->monthlyvalue  = date("Y-m-d", $addmonthlyvalue);
+    $this->quarterlyvalue  = date("Y-m-d", $addquarterlyvalue);
+    $this->halfyearlyvalue  = date("Y-m-d", $addhalfyearlyvalue);
+    $this->yearlyvalue  = date("Y-m-d", $addyearlyvalue);
+}
     /*---------------creating new landlord-----------------*/
 public function addlandlorddetails(){
     try {
@@ -192,10 +206,76 @@ public function addleasedetails(){
 }
 public function addnewleasedetails(Request $request){
     try {
-        //code...
+        $request->validate([
+            'mandate' => 'leaseagreement',
+        ]);
+         //checking if the attachment is there 
+         if ($request->hasFile('leaseagreement')) {
+            $reportdoc = $request->file('leaseagreement');
+            $reportdocname = $request->propertydescription . '.' . $reportdoc->getClientOriginalExtension();
+            $reportdoc->storeAs('public/documents/prop/lease', $reportdocname);
+        }
+        switch($request->rentreviewperiod){
+            case 'monthly': $nextrentreview = $this->monthlyvalue;
+            case 'quarterly': $nextrentreview = $this->quarterlyvalue;
+            case 'halfyearly': $nextrentreview = $this->halfyearlyvalue;
+            case 'yearly': $nextrentreview = $this->yearlyvalue;}
+
+        switch($request->inspectionperiod){
+            case 'monthly': $nextinspection = $this->monthlyvalue;
+            case 'quarterly': $nextinspection = $this->quarterlyvalue;
+            case 'halfyearly': $nextinspection = $this->halfyearlyvalue;
+            case 'yearly': $nextinspection = $this->yearlyvalue; }
+        
+        $currencycode = (!empty($request->leaseitemcurrencycode)) ? $request->leaseitemcurrencycode : [0];
+        $leasebalancebd = (!empty($request->leasebalancebd)) ? $request->leasebalancebd : [0];
+        $leaseratescost = (!empty($request->leaseratescost)) ? $request->leaseratescost :[0];
+        $leaseoperationalcost = (!empty($request->leaseoperationalcost)) ? $request->leaseoperationalcost : [0];
+        $leasedepositpaid = (!empty($request->leasedepositpaid)) ? $request->leasedepositpaid : [0];
+        $leaseadminpaid = (!empty($request->leaseadminpaid)) ? $request->leaseadminpaid : [0];
+        $arraytotal         =       count($currencycode);
+        $a  = 0;
+        $rental = ($request->propertytype ==1) ? $request->expectedrental
+         : $request->expectedrate * $request->areataken;
+
+         $leaseid    = DB::table('propmanlease')->insertGetId(['tenantid'=>$request->tenantname,
+         'propertyid'=>$request->propertyaddress,'operatorid'=>session('alluser'), 
+         'validfrom'=>$request->leasevalidfrom,'validto'=>$request->leasevalidto,'areataken'=>
+         $request->areataken,'rental'=>$rental,'currencycode'=>$request->currencycode,'ratesqm'=>
+         $request->expectedrate,'propertydescription'=>$request->propertydescription,'landlordcontactid'
+         =>$request->landlordname,'rentreview'=>$request->rentreviewperiod,'inspectionreview'=>
+         $request->inspectionperiod,'agreement'=> $reportdocname]);
+         
+         DB::table('propmanleaseschedules')->insert(['leaseid'=>$leaseid,
+         'nextinspection'=>$nextinspection,'nextrentreview'=>$nextrentreview]);
+         while ($a   <   $arraytotal){
+            if($leasebalancebd[$a] > 0){
+                $tablearray = ['leaseid'=>$leaseid,'currencycode'=>$currencycode[$a],
+            'leasebalancebd'=>$leasebalancebd[$a],'operatorid'=>session('alluser'),'baldays'=>10];
+            $tablename = 'propmanleasearrearsdetails';
+            }else{
+            $tablearray = ['leaseid'=>$leaseid,'currencycode'=>$currencycode[$a],
+            'balance'=>$leasebalancebd[$a] * -1];
+            $tablename = 'propmanleaseprepayments';
+            }
+            DB::table($tablename)->insert($tablearray);
+            
+            DB::table('propmanleasecurrentbillrates')
+            ->Insert(['deposit'=>$leasedepositpaid[$a],'ratescosts'=>$leaseratescost[$a],
+                'operationalcosts'=>$leaseoperationalcost[$a],'adminstrationfee'=>$leaseadminpaid[$a],
+                'currencycode'=>$currencycode[$a],'leaseid'=>$leaseid]);
+            $a++;
+        }
+        if($request->propertytype ==1){
+            DB::table('propmanproperty')
+            ->where('id',$request->propertyaddress)
+            ->update(['occupation' => 'F']);
+        }
+        return  redirect()->route('propin.addlease') 
+        ->with('success', 'record added');
     } catch (\Throwable $th) {
         return  redirect()->route('propin.addlease')
-        ->with('error', 'failed to load');
+        ->with('error', 'failed to load'.$th);
     }
 }
   /*---------------end creating new lease-----------------*/
