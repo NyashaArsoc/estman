@@ -119,6 +119,19 @@ public function downloadotherpdf($path) {
         return redirect()->route('dash.property');
     }
 }
+public function downloadleaseagreementpdf($path) {
+    try {
+        $filename = Crypt::decrypt($path);
+            //check the existance of receipt first
+            if (!Storage::disk('public')->exists("documents/prop/lease/{$filename}")) {
+                return abort(404);
+            }
+            return response()->download(storage_path("app/public/documents/prop/lease/{$filename}"));
+
+    } catch (DecryptException $th) {
+        return redirect()->route('dash.property');
+    }
+}
 public function approvenewproperty($id){
     try{
         $propertyid = Crypt::decrypt($id);
@@ -192,4 +205,58 @@ public function approvenewtenant($id){
     }
 }
 /*---------------end approval new tenant-----------------*/
+/*---------------approval new lease-----------------*/
+public function listleaseapproval(){
+    try {
+        $arr['lease']   = DB::table('propmanalllease')
+        ->where('approval','=' ,'N')
+        ->select('*')->get();
+        return view('propman.approval.list-lease-pending-approval')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+}
+public function viewleaseapproval($id){
+    try {
+        $leaseid = Crypt::decrypt($id);
+        try {
+            $arr['lease']   = DB::table('propmanalllease')
+            ->where('id', $leaseid)->select('*')->first();  
+            $arr['prepay']   = DB::table('propmanleaseprepayments')->where('id', $leaseid)
+            ->select('*')->first();
+            $arr['balance']   = DB::table('propmanleasearrearsdetails')->where('id', $leaseid)
+            ->select('*')->first();
+            $arr['rates']   = DB::table('propmanleasecurrentbillrates')->where('id', $leaseid)
+            ->select('*')->get();
+
+            return view('propman.approval.view-single-lease-approval')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propapp.listland')
+                ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('propapp.listland')
+        ->with('error', 'failed to load');
+    }
+}
+public function approvenewlease($id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            DB::table('propmanlease')
+            ->where('id',$leaseid)
+            ->update(['approval' => 'Y' , 'available'=> 'Y','approvedby'=>session('alluser'),
+            'dateapproved'=>now()]);
+            return  redirect()->route('propapp.listlea') 
+            ->with('success', 'record approved');
+        } catch (\Throwable $th) {
+            return redirect()->route('propapp.viewlease',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propapp.viewlease',$id)
+        ->with('error', 'failed to load');
+    }
+}
+/*---------------end approval new lease-----------------*/
 }

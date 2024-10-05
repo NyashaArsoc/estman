@@ -71,9 +71,6 @@ Route::controller(PropertyController::class)->group(function () {
     Route::any('/property/{id}/disable', 'disableproperty')->name('property.disable');
 });
 Route::controller(LeaseController::class)->group(function () {
-    Route::any('/lease-approval', 'pendingapproval')->name('lease.pending');
-    Route::any('/view-pending-lease/{id}', 'viewpending')->name('lease.viewpending');
-    Route::any('/approve-lease/{id}/{pid}/{product}', 'approvelease')->name('lease.approve');
     Route::any('/reject-lease/{id}', 'rejectlease')->name('lease.reject');
     Route::any('/edit-update-lease/{id}', 'updatelease')->name('lease.editupdate');
     Route::get('/lease/{id}/edit', 'vieweditlease')->name('lease.editview');
@@ -246,10 +243,14 @@ Route::middleware('loginauth')->controller(PropManApprovalController::class)->gr
    Route::get('/prop/list/tenant/approval', 'listtenantapproval')->name('propapp.listten');
    Route::get('/prop/view/{id}/tenant/approval', 'viewtenantapproval')->name('propapp.viewten');
    Route::any('/prop/tenant/{id}/approve', 'approvenewtenant')->name('propapp.tenappv');
+   Route::get('/prop/list/lease/approval', 'listleaseapproval')->name('propapp.listlea');
+   Route::get('/prop/view/{id}/lease/approval', 'viewleaseapproval')->name('propapp.viewlease');
+   Route::any('/prop/lease/{id}/approve', 'approvenewlease')->name('propapp.leaappv');
 
    /*-----------download property documents-------------------- */
    Route::any('/prop-pdf/{path}/download/mandate', 'downloadmandatepdf')->name('propapp.dwnmandpdf');
    Route::any('/prop-pdf/{path}/other/download', 'downloadotherpdf')->name('propapp.dwnothrpdf');
+   Route::any('/prop-pdf/{path}/lease-download/agreement', 'downloadleaseagreementpdf')->name('propapp.dwnagrepdf');
    /*-----------end download property documents-------------------- */
 });
 /*-------------------end property management approval------------------------ */

@@ -1,11 +1,9 @@
 @php $title = 'Pending Approval'; 
       $description = 'leases pending approval...'; @endphp
-    @extends('layout.main-layout')
+    @extends('layout.propman-main-menu')
     @section('title', 'Lease Approval')
     @section('additional css')
     <!-- Additional css Start-->
-    <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/select2-bootstrap-theme/select2-bootstrap.min.css') }}">
     <!-- Additional css End-->
     @endsection
     @section('content')
@@ -25,6 +23,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
+                                    <th>Address</th>
                                     <th>Description</th>
                                     <th>Valid From</th>
                                     <th>Valid To</th>
@@ -35,26 +34,18 @@
                             <tbody>
                                 @php $count=1;@endphp
                                 @foreach($lease as $abc)
-                                <tr>@php if ($abc->clienttypeid == 1){//individual
-                                    $lname   =  $abc->fullname ;
-                                 }else{
-                                     $lname   =  $abc->companyname ;
-                                 } @endphp
-                    
+                                <tr>
                                     <td>{{$count ++}}</td>
-                                    <td>{{ $lname}}</td>
+                                    <td>{{ $abc->tenantcompanyname}} {{ $abc->tenantfullname}}</td>
+                                    <td>{{ $abc->propertydescription }}</td>
                                     <td>{{ $abc->propertydescription }}</td>
                                     <td>{{ $abc->validfrom}}</td>
                                     <td>{{ $abc->validto }}</td>
-                                    <td>{{ $abc->rentalcurrency.' '.number_format($abc->rental, 2) }}</td>
-                                    <td>@php $id= Crypt::encrypt($abc->id);$pid =Crypt::encrypt($abc->propertyid);
-                                     $product= Crypt::encrypt('debtors'); @endphp
-                                        <a class="btn btn-info btn-sm " id=""
-                                        href="{{route('lease.viewpending', $id)}}"
-                                        title="view"><i class="ti-eye mr-0-5"></i>view</a>
-                                        <a onclick = "approvelease(this); return false;"
-                                        class="btn btn-success btn-sm" href="{{route('lease.approve',['id'=>$id,'pid'=>$pid,'product'=>$product])}}"
-                                        title="activate"><i class="ti-check mr-0-5"></i>activate</a>
+                                    <td>{{ $abc->currencycode.' '.number_format($abc->rental, 2) }}</td>
+                                    <td>@php $id= Crypt::encrypt($abc->id)@endphp   
+                                        @if (in_array(3,$arraycontrolids))<a class="btn btn-info btn-sm" id=""
+                                        href="{{route('propapp.viewlease',$id)}}"
+                                        title="view"><i class="ti-eye mr-0-5"></i>view</a>  @endif   
                             </td> 
                             </tr>
                             @endforeach
@@ -63,6 +54,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
+                                    <th>Address</th>
                                     <th>Description</th>
                                     <th>Valid From</th>
                                     <th>Valid To</th>
