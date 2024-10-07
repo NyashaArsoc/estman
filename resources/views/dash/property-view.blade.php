@@ -55,6 +55,47 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <div class="box box-block tile tile-2 bg-primary mb-2">
+                    <div class="t-icon right"><i class="ti-file"></i></div>
+                    <div class="t-content">
+                        <h2 class="mb-1">{{$activelease}}</h2>
+                        <h6 class="text-uppercase">Active Leases</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row row-md mb-2">
+            <div class="col-md-7">
+                <div class="box bg-white">
+                    <div class="box-block clearfix">
+                        <h5 class="float-xs-left">Top 5 Upcoming Lease Renewal</h5>
+                        <div class="float-xs-right">
+                            <button class="btn btn-link btn-sm text-muted" type="button">
+                                <i class="ti-angle-down"></i></button>
+                            </div>
+                            <table class="table mb-md-0">
+                                <thead>
+                                    <tr>
+                                        <td><b>No</b></td><td><b>Tenant</b></td>
+                                        <td><b>Description</b></td><td><b>Expire</b></td>
+                                    </tr>
+                                </thead>
+                                <tbody>@php $count=1;@endphp
+                                    @foreach($lease as $abc)
+                                    <tr>
+                                        <td>{{$count ++}}</td>
+                                        <td>{{$abc->tenantfullname }} {{$abc->tenantcompanyname }}</td>
+                                        <td>{{$abc->propertydescription}}</td>
+                                        <td>{{$abc->validto}}</td>
+                                    </tr>
+                                </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- Content End-->

@@ -462,7 +462,7 @@ function validateRequiredGeneralTextCaps() {
         requiredgeneraltextcapsError = false;
         return false;
     } else {
-        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?~\/s\0-9]/;
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?~0-9]/;
             charscheck =  specialChars.test(textValue);
             if (charscheck == true){
                  $("#requiredgeneraltextcapscheck").show();

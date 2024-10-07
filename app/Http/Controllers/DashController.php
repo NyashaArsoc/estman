@@ -23,6 +23,11 @@ public function propertyview(){
         $arr['activelandlord']   = DB::table('propmanlandlord')->where('available','=' ,'Y')->get()->count();
         $arr['activeproperty']   = DB::table('propmanallproperty')->where('available','=' ,'Y')->get()->count();
         $arr['activetenant']   = DB::table('propmanalltenant')->where('available','=' ,'Y')->get()->count();
+        $arr['activelease']   = DB::table('propmanalllease')->where('available','=' ,'Y')->get()->count();
+        $leasedue = Carbon::parse($arr['sysdates'])->addDays(35);
+        $arr['lease']   = DB::table('propmanalllease')->where('available','=' ,'Y')
+        ->where('validto','>',$arr['sysdates'])->where('validto',
+        '<',$leasedue) ->select('*')->take(5)->get();
     return view('dash/property-view')->with($arr);
         }
 }

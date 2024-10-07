@@ -115,7 +115,7 @@ public function addnewlandlorddetails(Request $request){
             $otherattachment = $request->file('otherattachment');
             $otherattachmentname = $request->billingaddress. '.' . $otherattachment->getClientOriginalExtension();
             $otherattachment->storeAs('public/documents/prop/other', $otherattachmentname);
-        }
+        }$otherattachmentname = null;
         
         $propertyid = DB::table('propmanproperty')
         ->insertGetId([

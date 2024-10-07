@@ -19,6 +19,7 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
 @extends('layout.no-menu-layout')
 @section('title', 'Approval')
 @section('additional css')
+<link rel="stylesheet" href="{{ asset('css/popupforms/msg.css') }}">
 @endsection
 @section('content')
 <!-- Content Start-->
@@ -26,7 +27,7 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
     <h4>{{ $title }}</h4>
     <ol class="breadcrumb no-bg mb-1">
         <li class="breadcrumb-item"><a href="{{ route('dash.property') }}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('propapp.listland') }}">List</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('propapp.listten') }}">List</a></li>
         <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
     <div class="box box-block bg-white">
@@ -54,7 +55,7 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
                             <td>{{ $property->fullname ?? ''}}  {{ $property->companyname ?? ''}} </td>
                         </tr>
                         <tr>
-                            <td><strong>Province:</strong></td>
+                            <td><strong>Province {{$property->propertytypeid}}:</strong></td>
                             <td>{{ $property->province ?? ''}}</td>
                         </tr>
                         <tr>
@@ -86,7 +87,7 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
                     <div id="residential" class="{{$divclassindividual}}">
                         <tr>
                             <td><strong>Rooms:</strong></td>
-                            <td>{{ $property->rooms ?? ''}} </td>
+                            <td>{{ $property->rooms ?? ''}} {{$divclassindividual}}</td>
                         </tr>
                         <tr>
                             <td><strong>Bedrooms:</strong></td>
@@ -108,7 +109,7 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
                         <div id="commercial" class="{{$divclasscompany}}">
                         <tr>
                             <td><strong>Total Area (Sqm):</strong></td>
-                            <td>{{ $property->totalarea ?? ''}} </td>
+                            <td>{{ $property->totalarea ?? ''}} {{$divclasscompany}}</td>
                         </tr>
                         <tr>
                             <td><strong>Lettable Area (Sqm):</strong></td>
