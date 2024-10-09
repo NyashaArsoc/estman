@@ -38,7 +38,7 @@
                                         $buttondeactivate = '<a onclick = "deactivatelandlord(this); 
                                         return false;" class="btn btn-warning btn-sm" href="' . route('propapp.viewland',$id) . '"
                                      title="disable"><i class="ti-close mr-0-5"></i>deactivate</a>';
-                                     $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('propapp.viewland',$id) . '"
+                                     $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('propma.viewland',$id) . '"
                                      title="view"><i class="ti-eye mr-0-5"></i>view</a>';
                                     }else if (trim($abc->available) == 'D'){//include the deleted status
                                         $status = 'deleted';

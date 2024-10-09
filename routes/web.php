@@ -234,7 +234,7 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
 
 /*-------------------property management approval------------------------ */
 Route::middleware('loginauth')->controller(PropManApprovalController::class)->group(function(){
-   Route::get('/prop/list/landlord/approval', 'listlandlordapproval')->name('propapp.listland');
+   Route::get('/prop/list/approval/landlord', 'listlandlordapproval')->name('propapp.listland');
    Route::get('/prop/view/{id}/landlord/approval', 'viewlandlordapproval')->name('propapp.viewland');
    Route::get('/prop/{id}/landlord/approve', 'approvenewsinglelandlordapproval')->name('propapp.landapprove');
    Route::get('/prop/list/property/approval', 'listpropertyapproval')->name('propapp.listprop');
@@ -260,7 +260,8 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::get('/prop/list/landlord/declined', 'listdeclinelandlord')->name('propdec.listlanddec');
     Route::get('/prop/view/landlord/{id}/edit', 'vieweditsinglelandlord')->name('propdec.editviewland');
     Route::any('/prop/landlord/{id}/delete', 'deletesinglelandlord')->name('propdec.landdel');
-    Route::any('/prop/{id}/landlord/{contactid}/update', 'updatesinglelandlord')->name('propdec.landupd');  
+    Route::any('/prop/{id}/landlord/{contactid}/update', 'updatesinglelandlord')->name('propdec.landupd'); 
+    Route::any('/prop/lease/{id}/decline', 'declinenewlease')->name('propdec.leadec'); 
    });
 /*-------------------end property management declines------------------------ */
 /*-------------------property management declines------------------------ */
@@ -270,6 +271,8 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::get('/prop/tenant/single/type/{id}', 'gettenantbytype');
     Route::get('/prop/property/single/type/{id}', 'getpropertybytype');
     Route::get('/prop/landlord/contact/propertyaddress/{id}', 'getlandlordbyproperty');
+    Route::get('/prop/lanlord/{id}/view', 'viewlandlorddetails')->name('propma.viewland');
+
    });
 /*-------------------end property management declines------------------------ */
 /*-------------------setup intake------------------------ */

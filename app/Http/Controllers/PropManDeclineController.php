@@ -111,4 +111,24 @@ public function updatesinglelandlord($id, Request $request,$contactid){
         }
 }
 /*---------------end approval new landlord-----------------*/
+/*---------------decline new lease-----------------*/
+public function declinenewlease($id,Request $request){
+    try{
+        $leaseid = Crypt::decrypt($id);
+            try {
+                DB::table('propmanlease')
+                ->where('id',$leaseid)
+                ->update(['approval' => 'R' , 'available'=> 'N', 'reasons'=> $request->reasons_comments]);
+                return  redirect()->route('propapp.listlea') 
+                ->with('success', 'record declined');
+            } catch (\Throwable $th) {
+                return redirect()->route('propapp.viewlease',$id)
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propapp.viewlease',$id)
+            ->with('error', 'failed to load');
+        }
+}
+/*---------------end decline new lease-----------------*/
 }

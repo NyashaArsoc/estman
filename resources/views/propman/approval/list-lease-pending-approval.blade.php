@@ -37,7 +37,7 @@
                                 <tr>
                                     <td>{{$count ++}}</td>
                                     <td>{{ $abc->tenantcompanyname}} {{ $abc->tenantfullname}}</td>
-                                    <td>{{ $abc->propertydescription }}</td>
+                                    <td>{{ $abc->streetaddress }}</td>
                                     <td>{{ $abc->propertydescription }}</td>
                                     <td>{{ $abc->validfrom}}</td>
                                     <td>{{ $abc->validto }}</td>

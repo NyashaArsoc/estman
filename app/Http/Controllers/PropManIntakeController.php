@@ -234,6 +234,7 @@ public function addnewleasedetails(Request $request){
         $leasedepositpaid = (!empty($request->leasedepositpaid)) ? $request->leasedepositpaid : [0];
         $leaseadminpaid = (!empty($request->leaseadminpaid)) ? $request->leaseadminpaid : [0];
         $arraytotal         =       count($currencycode);
+        //check on the availability of array first 
         $a  = 0;
         $rental = ($request->propertytype ==1) ? $request->expectedrental
          : $request->expectedrate * $request->areataken;
@@ -258,12 +259,13 @@ public function addnewleasedetails(Request $request){
             'balance'=>$leasebalancebd[$a] * -1];
             $tablename = 'propmanleaseprepayments';
             }
-            DB::table($tablename)->insert($tablearray);
-            
-            DB::table('propmanleasecurrentbillrates')
-            ->Insert(['deposit'=>$leasedepositpaid[$a],'ratescosts'=>$leaseratescost[$a],
-                'operationalcosts'=>$leaseoperationalcost[$a],'adminstrationfee'=>$leaseadminpaid[$a],
-                'currencycode'=>$currencycode[$a],'leaseid'=>$leaseid]);
+            if($currencycode[$a]<>0){
+                DB::table($tablename)->insert($tablearray);
+                DB::table('propmanleasecurrentbillrates')
+                ->Insert(['deposit'=>$leasedepositpaid[$a],'ratescosts'=>$leaseratescost[$a],
+                    'operationalcosts'=>$leaseoperationalcost[$a],'adminstrationfee'=>$leaseadminpaid[$a],
+                    'currencycode'=>$currencycode[$a],'leaseid'=>$leaseid]);
+            }
             $a++;
         }
         if($request->propertytype ==1){

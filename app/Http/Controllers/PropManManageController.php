@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\DB;
 
 class PropManManageController extends Controller
@@ -60,4 +61,28 @@ public function getlandlordbyproperty ($id){
     } 
 }
 /*------------end get by client type */
+/*-----------------view landlord------ */
+public function viewlandlorddetails($id){
+    try{
+        $landlordid = Crypt::decrypt($id);
+        try {
+            $arr['landlord']   = DB::table('propmanalllandlord')
+            ->where('id', $landlordid)->select('*')->first();  
+            $arr['contact']   = DB::table('propmanlandlordcontact')
+            ->where('landlordid', $landlordid)
+            ->select('*')->get();
+            $arr['bank']   = DB::table('propmanlandlordbank')->where('landlordid', $landlordid)
+            ->select('*')->get();
+            $arr['property']   = DB::table('propmanallproperty')->where('landlordid', $landlordid)
+            ->select('*')->get();
+            return view('propman.manage.view-single-landlord-detail')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propapp.viewlease',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propapp.viewlease',$id)
+        ->with('error', 'failed to load');
+    }
+}
 }

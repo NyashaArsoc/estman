@@ -797,14 +797,28 @@ function validateAddTotalArea() {
             }
     }
 }
+//validate rental from lease rate*area taken
+function validateLeaseRentalSqm(){
+    let rateValue = $("#expectedrate").val();
+    let areaValue = $("#lettablearea").val();
+    if (areaValue.length != "" && rateValue.length != "") {
+        $rentalexp = rateValue * areaValue;
+        $("#rentalcalculatedcheck").show();
+        $("#rentalcalculatedcheck").html($rentalexp);
+        return true;
+    }
+    $("#rentalcalculatedcheck").hide();
+}
 //valid lettable area 
 $("#lettableareacheck").hide();
 let lettableareaError = true;
 $("#lettablearea").keyup(function () {
     validateAddLettableArea();
+    validateLeaseRentalSqm();
 });
 function validateAddLettableArea() {
     let textValue = $("#lettablearea").val();
+
     if (textValue.length == "") {
         $("#lettableareacheck").show();
         lettableareaError = false;
@@ -834,6 +848,7 @@ $("#expectedratecheck").hide();
 let expectedrateError = true;
 $("#expectedrate").keyup(function () {
     validateAddExpectedRate();
+    validateLeaseRentalSqm()
 });
 function validateAddExpectedRate() {
     let textValue = $("#expectedrate").val();

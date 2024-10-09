@@ -4,7 +4,7 @@
  if ($lease->propertytypeid == 1){
     $divclasscompany      =   'dropdwn';
  }else{
-    $divclasscompany   =   'show';
+    $divclasscompany   =   'dropdwn';
  }
  $id= Crypt::encrypt($lease->id);
  $agreement= Crypt::encrypt($lease->agreement);
@@ -28,7 +28,7 @@
         <div class="box box-block bg-white">
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
-            <form class="form-material material-primary" action="{{ route('propapp.leaappv',$id) }}"
+            <form class="form-material material-primary" action="{{ route('propdec.leadec',$id) }}"
             method="PUT"> @csrf
                 <div class="form-group row">
                     <label for="" class="col-sm-2 form-control-label">Operator</label>
@@ -145,9 +145,9 @@
             <label for="Email" class="col-sm-2 col-form-label">Reason for decline
             </label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" name="ReasonsForDecline" 
-                id="ReasonsForDecline" />
-                <small id="reasonscheck" style="color: red;"> reasons for rejection</small>
+                <input type="text" class="form-control" name="reasons_comments" 
+                id="rejectreason" />
+                <small id="rejectreasoncheck" style="color: red;"> reasons for rejection</small>
             </div>
         </div>
         <div class="form-group row">
@@ -155,8 +155,8 @@
                 <a onclick = "approveentry(this); return false;"
                 class="btn btn-success btn-sm" href="{{route('propapp.leaappv', $id)}}"
                 title="approve"><i class="ti-check mr-0-5"></i>approve</a>  @endif
-            <button type="submit" class="btn btn-danger btn-sm" id="reject-lease" 
-                    onclick = "rejectlease(this); return false;"><i class="ti-close mr-0-5">
+            <button type="submit" class="btn btn-danger btn-sm" id="btn-reject-entry" 
+                    onclick = "rejectapproval(this); return false;"><i class="ti-close mr-0-5">
                         </i>reject</button>
             </div>
         </div>

@@ -160,8 +160,9 @@
                                 placeholder="380" autocomplete="off">
                     <small id="lettableareacheck" style="color: red;">required</small>
                 </div>
-                {{-- <label for="Stories" class="col-sm-2 col-form-label">Occupied Area (Sqm)</label> --}}
+                <label for="" class="col-sm-2 col-form-label">Calulated Rental</label>
                 <div class="col-sm-4">
+                    <strong id="rentalcalculatedcheck" style="color: rgb(37, 27, 182);"></strong>
                     <input type="text" class="form-control" id="OccupiedArea" name="OccupiedArea" readonly hidden/>
                     <input type="text" class="form-control" id="AvailableLettableArea" 
                     name="AvailableLettableArea" readonly hidden>
