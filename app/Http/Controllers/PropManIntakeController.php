@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 class PropManIntakeController extends Controller
 {
     private $monthlyvalue;   private $quarterlyvalue; 
@@ -83,7 +84,42 @@ public function addnewlandlorddetails(Request $request){
         ->with('error', 'failed to load');
     }
 }
- /*---------------creating new landlord-----------------*/
+public function addlandlordcontact($id){
+    try{
+        $landlordid = Crypt::decrypt($id);
+        try {
+            $arr['landlord']   = DB::table('propmanalllandlord')
+            ->where('id', $landlordid)->select('*')->first();  
+            return view('propman.intake.add-single-landlord-contact')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.editland',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.editland',$id)
+        ->with('error', 'failed to load');
+    }
+}
+public function addlandlordnewcontact(Request $request, $id){
+    try{
+        $landlordid = Crypt::decrypt($id);
+        try {
+            DB::table('propmanlandlordcontact')->insert( ['email'=>$request->contactemail,
+            'cell'=>$request->contactcell, 'lastname'=>$request->contactlastname,
+            'firstname'=>$request->contactfirstname,'operatorid'=>session('alluser'),
+            'landlordid'=>$landlordid]);
+            return  redirect()->route('propma.editland',$id) 
+            ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.editland',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.editland',$id)
+        ->with('error', 'failed to load');
+    }
+}
+ /*---------------end creating new landlord-----------------*/
  /*---------------creating new property-----------------*/
  public function addpropertydetails(){
     try {

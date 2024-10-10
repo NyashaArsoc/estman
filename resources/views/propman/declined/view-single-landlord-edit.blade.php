@@ -32,7 +32,7 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
                     <label for="ClientType" class="col-sm-2 form-control-label">Type<i class="text-danger">*</i></label>
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="clienttype" id="clienttype"
-                            onchange="LandlordCreationType(this)" />
+                            onchange="optionlandlordtype(this)" />
                             <option value="{{ $landlord->clienttypeid }}">{{ $landlord->description }}</option>
                         @foreach($type as $abc)
                         <option value="{{ $abc->id }}">  {{ $abc->description }}
@@ -42,7 +42,7 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
                         <small id="clienttypecheck" style="color: red;">required</small>
                     </div>
                 </div>
-                <div id="IndividualGroup"  class="{{$divindividualclass}}">
+                <div id="individualgroup"  class="{{$divindividualclass}}">
                     <div class="form-group row">
                         <label for="FirstName" class="col-sm-2 form-control-label">First Name</label>
                         <div class="col-sm-4">
@@ -68,7 +68,7 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
                         </div>
                     </div>
                 </div>
-                <div id="CorporateGroup"  class="{{$divcompanyclass}}">
+                <div id="corporategroup"  class="{{$divcompanyclass}}">
                     <div class="form-group row">
                         <label for="CompanyName" class="col-sm-2 form-control-label">Company Name</label>
                         <div class="col-sm-4">
@@ -159,7 +159,7 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
                         </div>
                     </div>
                 <div class="form-group row">
-                    @if (in_array(1,$arraycontrolids))
+                    @if (in_array(2,$arraycontrolids))
                     <div class="offset-sm-2 col-sm-10">
                         <button type="submit" class="btn btn-primary" id="btn-add-landlord" >submit</button>
                     </div>

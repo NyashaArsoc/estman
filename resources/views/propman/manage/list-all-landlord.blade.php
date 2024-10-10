@@ -40,22 +40,27 @@
                                      title="disable"><i class="ti-close mr-0-5"></i>deactivate</a>';
                                      $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('propma.viewland',$id) . '"
                                      title="view"><i class="ti-eye mr-0-5"></i>view</a>';
+                                     $buttonedit = '<a class="btn btn-secondary btn-sm"  href="' . route('propma.editland',$id) . '"
+                                     title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>';
                                     }else if (trim($abc->available) == 'D'){//include the deleted status
                                         $status = 'deleted';
                                         $badge = 'badge badge-pill bg-danger badge-secondary';
                                         $buttondeactivate = '';
                                         $buttonview = '';
+                                        $buttonedit = '';
                                     }else{
                                     if (trim($abc->approval) == 'R'){ 
                                         $status = 'rejected';
                                         $badge = 'badge badge-pill bg-danger badge-secondary';
                                         $buttondeactivate = '';
                                         $buttonview = '';
+                                        $buttonedit = '';
                                     }else{
                                         $status = 'inactive';
                                         $badge = 'badge badge-pill bg-danger badge-secondary';
                                         $buttondeactivate ='';
                                         $buttonview = '';
+                                        $buttonedit = '';
                                     }
                                  }
                                  @endphp
@@ -67,8 +72,9 @@
                                     <td>{{ $abc->email }}</td>
                                     <td><span class="{{ $badge }}">{{$status}}</span></td>
                                     <td>
-                                     {!! $buttonview !!}
-                                     {!! $buttondeactivate !!}
+                                        @if (in_array(3,$arraycontrolids)){!! $buttonview !!} @endif
+                                        @if (in_array(2,$arraycontrolids)){!! $buttonedit !!} @endif
+                                        @if (in_array(7,$arraycontrolids)){!! $buttondeactivate !!} @endif
                             </td>
                             </tr>
                             @endforeach

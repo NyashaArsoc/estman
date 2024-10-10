@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PropManManageController extends Controller
@@ -77,12 +78,97 @@ public function viewlandlorddetails($id){
             ->select('*')->get();
             return view('propman.manage.view-single-landlord-detail')->with($arr);
         } catch (\Throwable $th) {
-            return redirect()->route('propapp.viewlease',$id)
+            return redirect()->route('propma.landlist')
             ->with('error', 'failed to load');
         }
     }catch (DecryptException $th) {
-    return redirect()->route('propapp.viewlease',$id)
+    return redirect()->route('propma.landlist')
         ->with('error', 'failed to load');
     }
 }
+public function vieweditlandlorddetails($id){
+    try{
+        $landlordid = Crypt::decrypt($id);
+        try {
+            $arr['landlord']   = DB::table('propmanalllandlord')
+            ->where('id', $landlordid)->select('*')->first();  
+            $arr['contact']   = DB::table('propmanlandlordcontact')
+            ->where('landlordid', $landlordid)
+            ->select('*')->get();
+            $arr['bank']   = DB::table('propmanlandlordbank')->where('landlordid', $landlordid)
+            ->select('*')->get();
+            $arr['property']   = DB::table('propmanallproperty')->where('landlordid', $landlordid)
+            ->select('*')->get();
+            $clienttype = $this->getclienttype();
+            $arr['type'] = $clienttype;
+            return view('propman.manage.edit-single-landlord-detail')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.landlist')
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.landlist')
+        ->with('error', 'failed to load');
+    }
+}
+public function updatelandlorddetails($id, Request $request){
+    try{
+        $landlordid = Crypt::decrypt($id);
+        try {
+            DB::table('propmanlandlord')->where('id',$landlordid)
+            ->update(['nationalid'=>$request->nationalid,'firstname'=>$request->firstname,'cell'=>$request->cell,
+            'email'=>$request->email,'tel'=>$request->tel,'lastname'=>$request->lastname, 'contactaddress'=>
+            $request->billingaddress,'companynumber'=>$request->companynumber,'tinnumber'=>$request->tinnumber,
+            'vatnumber'=>$request->vatnumber,'companyname'=>$request->companyname]);
+            return  redirect()->route('propma.landlist') 
+                ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.editland',$id)
+            ->with('error', 'failed to load'.$th);
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.editland',$id)
+        ->with('error', 'failed to load');
+    }
+}
+public function vieweditlandlordcontact($id,$cid){
+    try{
+        $landlordid = Crypt::decrypt($id);
+        $contactid = Crypt::decrypt($cid);
+        try {
+            $arr['landlord']   = DB::table('propmanalllandlord')
+            ->where('id', $landlordid)->select('*')->first();  
+            $arr['contact']   = DB::table('propmanlandlordcontact')
+            ->where('id', $contactid)
+            ->select('*')->first();
+            return view('propman.manage.edit-single-landlord-contact')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.editland',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.editland',$id)
+        ->with('error', 'failed to load');
+    }
+}
+public function updatelandlordcontact($id,$cid,Request $request){
+    try{
+        $landlordid = Crypt::decrypt($id);
+        $contactid = Crypt::decrypt($cid);
+        try {
+            DB::table('propmanlandlordcontact')->where('id',$contactid)
+            ->update( ['email'=>$request->contactemail,'cell'=>$request->contactcell,
+            'lastname'=>$request->contactlastname,'firstname'=>$request->contactfirstname]);
+            return  redirect()->route('propma.editland',$id) 
+            ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.editlandcon',[$id,$cid])
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.editlandcon',[$id,$cid])
+        ->with('error', 'failed to load');
+    }
+}
+/*-----------------landlord------ */
 }

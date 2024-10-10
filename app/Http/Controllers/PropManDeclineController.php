@@ -87,6 +87,25 @@ public function updatesinglelandlord($id, Request $request,$contactid){
     try{
         $landlordid = Crypt::decrypt($id);
         $contactpersonid = Crypt::decrypt($contactid);
+        // $existingclienttype = DB::table('propmanalllandlord')->where('id',$landlordid)
+        // ->select('clienttypeid')->first();
+        // if($existingclienttype->clienttypeid <> $request->clienttype){
+        //     switch($request->clienttype){
+        //         case 1: 
+        //             $companyname = null;        $tinnumber = null;
+        //             $companynumber = null;      $vatnumber = null;
+        //             $firstname = $request->firstname; $lastname = $request->lastname;
+        //             $nationalid = $request->nationalid;
+        //         default:
+        //         $firstname = null;          $lastname = null;
+        //         $nationalid = null;
+        //         $companyname = $request->companyname; $tinnumber = $request->tinnumber;
+        //         $companynumber = $request->companynumber; $vatnumber = $request->vatnumber; }
+        // }
+        // $companyname = $request->companyname; $tinnumber = $request->tinnumber;
+        // $companynumber = $request->companynumber; $vatnumber = $request->vatnumber;
+        // $firstname = $request->firstname; $lastname = $request->lastname;
+        // $nationalid = $request->nationalid;
             try {
                 DB::table('propmanlandlord')
                 ->where('id',$landlordid)

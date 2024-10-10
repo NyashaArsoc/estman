@@ -304,7 +304,7 @@ function validateEmail() {
           emailError = false;
           return false;
       } else {
-          const emailvalid = document.getElementById("Email");
+          const emailvalid = document.getElementById("email");
           emailvalid.addEventListener("blur", () => {
               let regex =
               /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
@@ -1564,4 +1564,32 @@ $("#btn-add-lease").click(function () {
         alert(err.message);
         return false;
     }
+});
+// -----------btn edit landlord 
+$("#btn-edit-landlord").click(function () {
+    validateBillingAddress();validateCell();validateClientType();validateEmail();
+    var clienttypevalue = $("#clienttype").val();
+    try{
+        if(clienttypevalue == 1){
+            validateFirstName();validateLastName(); validateNationalID();
+            if(billingaddressError==true && cellError==true && emailError==true 
+                 && clienttypeError==true && firstnameError==true && 
+                lastnameError==true && nationalidError==true){return true}else{return false}
+        }else{
+            validateCompanyName();validateCompanyNumber();validateNumericValueNotRequired();
+            if(billingaddressError==true && cellError==true && emailError==true
+                 && clienttypeError==true && companynameError==true && 
+                companynumberError && numericnotrequiredError==true){
+                return true;}else{ return false;}
+        }
+    }catch(err){return false;}
+});
+//--------- btn add landlord new contact 
+$("#btn-add-landlord-contact").click(function () {
+    validateContactCell();validateContactEmail();
+    validateContactLastName(); validateContactFirstName();
+    try{
+            if(contactcellError==true && contactfirstnameError==true && contactlastnameError==true &&
+                contactemailError==true ){return true}else{return false}
+    }catch(err){return false;}
 });
