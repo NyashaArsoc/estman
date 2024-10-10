@@ -33,10 +33,7 @@ use Illuminate\Support\Facades\Route;
 */
 /*
 Route::controller(LandlordController::class)->group(function () {
-    Route::get('/landlord-banking-details', 'addbanking')->name('landlord.addbanking');
-    Route::post('/create/landlord/bank', 'capturebankingdetails')->name('landlord.addbank');
-    Route::any('/disable/{id}/landlord', 'disablelandlord')->name('landlord.disable');
-    --Route::any('/landlord/{id}/view', 'viewindividual')->name('landlord.view');
+   -- Route::any('/disable/{id}/landlord', 'disablelandlord')->name('landlord.disable');
     Route::get('/landlord/{id}/view-ledgers', 'viewledgers')->name('landlord.ledgers');
     Route::post('/landlord/{id}/sub-ledgers/{product}', 'createsubledgers')->name('landlord.createsub');
 });
@@ -230,6 +227,8 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::post('/prop/add/new/lease', 'addnewleasedetails')->name('propin.addnewlease');
     Route::get('/prop/add/{id}/landlord/contact', 'addlandlordcontact')->name('propin.addlandcont');
     Route::post('/prop/add/{id}/landlord/new/contact', 'addlandlordnewcontact')->name('propin.addlandnewcont');
+    Route::get('/prop/add/{id}/landlord/bank', 'addlandlordbank')->name('propin.addlandbank');
+    Route::post('/prop/add/{id}/landlord/new/bank', 'addlandlordnewbank')->name('propin.addlandnewbank');
 
 });
 /*-------------------end property management intake------------------------ */
@@ -264,7 +263,10 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/landlord/{id}/delete', 'deletesinglelandlord')->name('propdec.landdel');
     Route::any('/prop/{id}/landlord/{contactid}/update', 'updatesinglelandlord')->name('propdec.landupd'); 
     Route::any('/prop/lease/{id}/decline', 'declinenewlease')->name('propdec.leadec'); 
-   });
+    Route::any('/prop/disable/{id}/landlord/contact/{cid}', 'disablelandlordcontact')->name('propdec.dislancon');
+    Route::any('/prop/disable/{id}/landlord', 'disablelandlord')->name('propdec.disland');
+
+});
 /*-------------------end property management declines------------------------ */
 /*-------------------property management declines------------------------ */
 Route::middleware('loginauth')->controller(PropManManageController::class)->group(function(){
@@ -278,6 +280,8 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::any('/prop/update/{id}/landlord', 'updatelandlorddetails')->name('propma.updtland');
     Route::get('/prop/edit/{id}/landlord/contact/{cid}', 'vieweditlandlordcontact')->name('propma.editlandcon');
     Route::any('/prop/update/{id}/landlord/contact/{cid}', 'updatelandlordcontact')->name('propma.updatlandcon');
+    Route::get('/prop/edit/{id}/landlord/bank/{bid}', 'vieweditlandlordbank')->name('propma.editlandban');
+    Route::any('/prop/update/{id}/landlord/bank/{bid}', 'updatelandlordbank')->name('propma.updatlandbank');
 
    });
 /*-------------------end property management declines------------------------ */

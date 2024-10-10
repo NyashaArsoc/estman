@@ -129,6 +129,50 @@ public function updatesinglelandlord($id, Request $request,$contactid){
             ->with('error', 'failed to load');
         }
 }
+public function disablelandlordcontact($id,$cid){
+    try{
+        $contactid = Crypt::decrypt($cid);
+        try {
+            if (DB::table('propmanlease')->select('id')->where('landlordcontactid',
+             $contactid)->where('available','=','Y')->exists()) {
+                return  redirect()->route('propma.editland',$id)
+                    ->with('error', 'active property');
+            }
+            DB::table('propmanlandlordcontact')
+                ->where('id',$contactid)->update(['available'=>'N']);
+                return  redirect()->route('propma.editland',$id) 
+                ->with('success', 'record removed');
+            } catch (\Throwable $th) {
+                return redirect()->route('propma.editland',$id)
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propma.editland',$id)
+            ->with('error', 'failed to load');
+        }
+}
+public function disablelandlord($id){
+    try{
+        $landlordid = Crypt::decrypt($id);
+        try {
+            if (DB::table(table: 'propmanlandlordcontact')->select('id')->where('landlordid',
+             $landlordid)->where('available','=','Y')->exists()) {
+                return  redirect()->route('propma.landlist')
+                    ->with('error', 'active contact persons');
+            }
+            DB::table('propmanlandlord')
+                ->where('id',$landlordid)->update(['available'=>'N']);
+                return  redirect()->route('propma.landlist') 
+                ->with('success', 'record removed');
+            } catch (\Throwable $th) {
+                return redirect()->route('propma.landlist')
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propma.landlist')
+            ->with('error', 'failed to load');
+        }    
+}
 /*---------------end approval new landlord-----------------*/
 /*---------------decline new lease-----------------*/
 public function declinenewlease($id,Request $request){

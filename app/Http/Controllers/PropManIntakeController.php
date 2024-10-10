@@ -119,6 +119,43 @@ public function addlandlordnewcontact(Request $request, $id){
         ->with('error', 'failed to load');
     }
 }
+public function addlandlordbank($id){
+    try{
+        $landlordid = Crypt::decrypt($id);
+        try {
+            $arr['landlord']   = DB::table('propmanalllandlord')
+            ->where('id', $landlordid)->select('*')->first();
+            $currencycode = $this->getcurrencycode();
+            $arr['currency'] = $currencycode;  
+            return view('propman.intake.add-single-landlord-bank')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.editland',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.editland',$id)
+        ->with('error', 'failed to load');
+    }
+}
+public function addlandlordnewbank($id, Request $request){
+    try{
+        $landlordid = Crypt::decrypt($id);
+        try {
+            DB::table('propmanlandlordbank')->insert( ['operatorid'=>session('alluser'),
+            'landlordid'=>$landlordid,'currencycode'=>$request->currencycode,'accountname'=>$request->accountname,
+            'accountnumber'=>$request->accountnumber,'branch'=>$request->branch,
+        'bankname'=>$request->bankname]);
+            return  redirect()->route('propma.editland',$id) 
+            ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.editland',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.editland',$id)
+        ->with('error', 'failed to load');
+    } 
+}
  /*---------------end creating new landlord-----------------*/
  /*---------------creating new property-----------------*/
  public function addpropertydetails(){

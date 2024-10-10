@@ -153,7 +153,6 @@ public function vieweditlandlordcontact($id,$cid){
 }
 public function updatelandlordcontact($id,$cid,Request $request){
     try{
-        $landlordid = Crypt::decrypt($id);
         $contactid = Crypt::decrypt($cid);
         try {
             DB::table('propmanlandlordcontact')->where('id',$contactid)
@@ -167,6 +166,47 @@ public function updatelandlordcontact($id,$cid,Request $request){
         }
     }catch (DecryptException $th) {
     return redirect()->route('propma.editlandcon',[$id,$cid])
+        ->with('error', 'failed to load');
+    }
+}
+public function vieweditlandlordbank($id,$bid){
+    try{
+        $landlordid = Crypt::decrypt($id);
+        $bankid = Crypt::decrypt($bid);
+        try {
+            $arr['landlord']   = DB::table('propmanalllandlord')
+            ->where('id', $landlordid)->select('*')->first();  
+            $arr['bank']   = DB::table('propmanlandlordbank')
+            ->where('id', $bankid)
+            ->select('*')->first();
+            $currencycode = $this->getcurrencycode();
+            $arr['currency'] = $currencycode; 
+            return view('propman.manage.edit-single-landlord-bank')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.editland',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.editland',$id)
+        ->with('error', 'failed to load');
+    }  
+}
+public function updatelandlordbank($id,$bid,Request $request){
+    try{
+        $bankid = Crypt::decrypt($bid);
+        try {
+            DB::table('propmanlandlordbank')->where('id',$bankid)
+            ->update( ['currencycode'=>$request->currencycode,'accountname'=>$request->accountname,
+            'accountnumber'=>$request->accountnumber,'branch'=>$request->branch,
+        'bankname'=>$request->bankname]);
+            return  redirect()->route('propma.editland',$id) 
+            ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.editlandban',[$id,$bid])
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.editlandban',[$id,$bid])
         ->with('error', 'failed to load');
     }
 }

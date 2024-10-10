@@ -1593,3 +1593,13 @@ $("#btn-add-landlord-contact").click(function () {
                 contactemailError==true ){return true}else{return false}
     }catch(err){return false;}
 });
+//--------- btn edit landlord bank
+$("#btn-edit-landlord-bank").click(function () {
+    validateAccountName();validateBankName();validateNotRequiredGeneralTextCaps();
+    validateNumericValueRequired(); validateCurrencyCode();
+    try{
+        if(accountnameError==true && banknameError==true && notrequiredgeneraltextcapsError==true &&
+            numericrequiredError==true && currencycodeError==true){
+                return true;}else{ return false;}
+    }catch(err){ return false;}
+});

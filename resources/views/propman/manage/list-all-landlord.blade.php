@@ -35,9 +35,9 @@
                                 if (trim($abc->available) == 'Y'){
                                         $status = 'available';
                                         $badge = "badge badge-pill bg-success badge-secondary";
-                                        $buttondeactivate = '<a onclick = "deactivatelandlord(this); 
-                                        return false;" class="btn btn-warning btn-sm" href="' . route('propapp.viewland',$id) . '"
-                                     title="disable"><i class="ti-close mr-0-5"></i>deactivate</a>';
+                                        $buttondeactivate = '<a onclick = "deactivaterecord(this); 
+                                        return false;" class="btn btn-warning btn-sm" href="' . route('propdec.disland',$id) . '"
+                                     title="disable"><i class="ti-close mr-0-5"></i>disable</a>';
                                      $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('propma.viewland',$id) . '"
                                      title="view"><i class="ti-eye mr-0-5"></i>view</a>';
                                      $buttonedit = '<a class="btn btn-secondary btn-sm"  href="' . route('propma.editland',$id) . '"

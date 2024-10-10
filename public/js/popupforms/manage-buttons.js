@@ -86,8 +86,8 @@ function deactivateproperty(that) {
         window.location = anchor.attr("href");
     }
 }
-function deactivatelease(that) {
-    var proceedto = confirm("proceed to disable this lease?")
+function deactivaterecord(that) {
+    var proceedto = confirm("proceed to disable this entry?")
     if (proceedto) {
         window.location = anchor.attr("href");
     }

@@ -6,7 +6,7 @@ $divindividualclass = $landlord->clienttypeid == 1 ? 'hide': 'dropdwn';
 $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
 @endphp
 @extends('layout.no-menu-layout')
-@section('title', 'Approval')
+@section('title', 'Edit Landlord')
 @section('additional css')
  <!-- Additional css Start-->
  <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
@@ -147,7 +147,7 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
                 <table  class="datatable table table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>No </th> <th>Name</th> <th>Cell</th><th>Email</th><th>Status </th><th>Option </th>
+                            <th>No </th> <th>Name</th> <th>Cell</th><th>Email</th><th>Status</th><th>Option </th>
                         </tr>
                     </thead>
                     <tbody>@php $count=1;@endphp
@@ -160,10 +160,15 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
                                     $badge = "badge badge-pill bg-success badge-secondary";
                                     $buttonedit = '<a class="btn btn-secondary btn-sm"  href="' . route('propma.editlandcon',[$id,$contactid]) . '"
                                      title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>';
+                                     $buttondisable = '<a class="btn btn-danger btn-sm" 
+                                      href="' . route('propdec.dislancon',[$id,$contactid]) . '"title="disable" 
+                                      onclick = "deactivaterecord(this); return false;"><i class="ti-close 
+                                      mr-0-5"></i>disable</a>';
                                 }else if (trim($abc->available) == 'D'){//include the deleted status
                                     $status = 'deleted';
                                     $badge = 'badge badge-pill bg-danger badge-secondary';
                                     $buttonedit = '';
+                                    $buttondisable = '';
                                 }else{
                                 if (trim($abc->approval) == 'R'){ 
                                     $status = 'rejected';
@@ -173,33 +178,41 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
                                     $badge = 'badge badge-pill bg-danger badge-secondary';
                                 }
                                 $buttonedit = '';
+                                $buttondisable = '';
                              }
                            @endphp
                             <td>{{$count ++}}</td><td>{{ $abc->lastname }} {{ $abc->firstname ?? ''}}</td>
                             <td>{{ $abc->cell }}</td><td>{{ $abc->email }}</td>
                             <td><span class="{{ $badge }}">{{$status}}</span></td> 
-                            <td>@if (in_array(2,$arraycontrolids)){!! $buttonedit !!} @endif</td>
+                            <td>@if (in_array(2,$arraycontrolids)){!! $buttonedit !!} @endif
+                                @if (in_array(7,$arraycontrolids)){!! $buttondisable !!} @endif
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
             <div class="tab-pane fade" id="banking-info" role="tabpanel" aria-labelledby="banking-info-tab">
-                <h5 class="mt-2">Banking</h5><hr/>
+                <h5 class="mt-2">Banking</h5>
+                @if (in_array(1,$arraycontrolids))
+                    <a  class="btn btn-primary btn-sm" href="{{route('propin.addlandbank', $id)}}
+                    " title="add">create new</a>
+                    @endif<hr/>
                 <div class="table-responsive">
                     <table  class="datatable table table-hover table-bordered">
                         <thead>
                             <tr>
                                 <th>No </th> <th>Account Name</th> <th>Bank Name</th><th>Branch </th>
-                                <th>Account Number </th><th>Currency </th>
+                                <th>Account Number </th><th>Currency </th><th>Option </th>
                             </tr>
                         </thead>
                         <tbody>@php $count=1;@endphp
                             @foreach($bank as $abc)
-                            <tr>
-                               
+                            <tr>@php $bankid= Crypt::encrypt($abc->id);@endphp
                                 <td>{{$count ++}}</td><td>{{ $abc->accountname }}</td><td>{{ $abc->bankname }}</td>
                                 <td>{{ $abc->branch }}</td> <td>{{ $abc->accountnumber }}</td><td>{{ $abc->currencycode }}</td>
+                                <td><a class="btn btn-secondary btn-sm"  href="{{route('propma.editlandban',[$id,$bankid])}}"
+                                    title="edit"><i class="ti-pencil mr-0-5"></i>edit</a></td>
                             </tr>
                             @endforeach
                         </tbody>

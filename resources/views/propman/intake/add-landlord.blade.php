@@ -154,7 +154,7 @@ $description = 'add landlord to the system...'; @endphp
                         <thead>
                             <tr>
                                 <th class="text-center">No</th>
-                                <th class="text-center">Curreny<i class="text-danger">*</i></th>
+                                <th class="text-center">Currency<i class="text-danger">*</i></th>
                                 <th class="text-center">Account Name<i class="text-danger">*</i></th>
                                 <th class="text-center">Bank Name<i class="text-danger">*</i></th>
                                 <th class="text-center">Branch</th>
