@@ -1603,3 +1603,34 @@ $("#btn-edit-landlord-bank").click(function () {
                 return true;}else{ return false;}
     }catch(err){ return false;}
 });
+//button submit new property 
+$("#btn-edit-property").click(function () {
+    try {
+         validateProvince();validateCity();validatePropertyType();
+        validateRequiredGeneralTextCaps();validateBillingAddress();validateStandNumber();
+        validateCommentsHighlights();validateCurrencyCode();
+        validateCommissionPercent();
+        
+        if(provinceError==true && cityError==true && propertytypeError==true
+            && requiredgeneraltextcapsError==true && billingaddressError==true && standnumberError==true
+            && commentshighlightsError==true && currencycodeError==true && 
+            commissionpercentError==true ){
+                var propertytypevalue =  $("#propertytype").val();
+                if(propertytypevalue=='Residential Building'){//residential property 
+                validateAddRooms();validateAddBedRooms();validateNumericValueRequired();
+                validateNumericValueNotRequired();
+                if(roomsError==true && bedroomsError==true && numericrequiredError==true && 
+                    numericnotrequiredError==true){return true;}else{return false;}
+                }else{// not residential ie commercial
+                    validateAddTotalArea();validateAddLettableArea();validateAddExpectedRate();
+                    validateLettable_TotalArea();
+                    if(totalareaError==true && lettableareaError==true && expectedrateError==true &&
+                        lettabletotalareaError==true){
+                        return true;}else{return false;}
+                }
+        }else{return false;}
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }  
+});

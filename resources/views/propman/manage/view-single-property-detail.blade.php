@@ -5,11 +5,17 @@ $id= Crypt::encrypt($property->id);
 $mandate= Crypt::encrypt($property->mandate);
 $otherattachement= Crypt::encrypt($property->otherattachement);
 if ($property->propertytypeid == 1){
-    $divclasscompany      =   'dropdwn';
-    $divclassindividual   =   'show';
+  $div =  ' <tr> <td><strong>Rooms:</strong></td>
+         <td>'.$property->rooms .'</td> </tr><tr> <td><strong>Bedrooms:</strong></td>
+         <td>'.$property->bedrooms .'</td> </tr><tr><td><strong>Bathrooms:</strong></td>
+        <td>'.$property->bathrooms .'</td></tr><tr>  <td><strong>Stories:</strong></td>
+        <td>'. $property->stories .'</td> </tr><tr> <td><strong>Expected Rental:</strong></td>
+         <td>'. $property->currencycode .' '. number_format($property->expectedrental,2) .'</td> </tr>';
  }else{
-    $divclasscompany   =   'show';
-    $divclassindividual   =   'dropdwn';
+$div =  '<tr>   <td><strong>Total Area (Sqm):</strong></td><td>'.$property->totalarea .'</td></tr>
+        <tr> <td><strong>Lettable Area (Sqm):</strong></td><td>'. $property->lettablearea .'</td> </tr>
+        <tr><td><strong>Expected Rate:</strong></td>
+        <td>'. $property->currencycode .' '. number_format($property->ratesqm,2) .' </td> </tr>';
  }
  $attachementrequiredpdf = (!is_null($property->mandate)) ? 'download file' : '';
 $attachementnotrequired = (!is_null($property->otherattachement)) ? 'download file' : '';
@@ -26,7 +32,7 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
     <h4>{{ $title }}</h4>
     <ol class="breadcrumb no-bg mb-1">
         <li class="breadcrumb-item"><a href="{{ route('dash.property') }}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('propapp.listten') }}">List</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('propma.landproplist') }}">List</a></li>
         <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
     <div class="box box-block bg-white">
@@ -53,7 +59,7 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
                 <table class="table table-bordered mt-3">
                     <tbody>
                         <tr>
-                            <td><strong>Name:</strong></td>
+                            <td><strong>Landlord:</strong></td>
                             <td>{{ $property->fullname ?? ''}}  {{ $property->companyname ?? ''}} </td>
                         </tr>
                         <tr>
@@ -86,42 +92,7 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
             <div class="tab-pane show" id="additional-info" role="tabpanel" aria-labelledby="additional-info-tab">
                 <table class="table table-bordered mt-3">
                     <tbody>
-                    <div id="residential" class="{{$divclassindividual}}">
-                        <tr>
-                            <td><strong>Rooms:</strong></td>
-                            <td>{{ $property->rooms ?? ''}}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Bedrooms:</strong></td>
-                            <td>{{ $property->bedrooms ?? ''}} </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Bathrooms:</strong></td>
-                            <td>{{ $property->bathrooms ?? ''}} </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Stories:</strong></td>
-                            <td>{{ $property->stories ?? ''}} </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Expected Rental:</strong></td>
-                            <td>{{ $property->currencycode ?? ''}} {{ number_format($property->expectedrental,2) ?? ''}} </td>
-                        </tr>
-                    </div>
-                        <div id="commercial" class="{{$divclasscompany}}">
-                        <tr>
-                            <td><strong>Total Area (Sqm):</strong></td>
-                            <td>{{ $property->totalarea ?? ''}}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Lettable Area (Sqm):</strong></td>
-                            <td>{{ $property->lettablearea ?? ''}} </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Expected Rate:</strong></td>
-                            <td>{{ $property->currencycode ?? ''}} {{ $property->ratesqm ?? ''}} </td>
-                        </tr>
-                        </div>
+                    {!! $div !!} 
                         <tr>
                             <td><strong>Commission Type:</strong></td>
                             <td>{{ $property->commissiontype ?? ''}} </td>

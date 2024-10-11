@@ -62,7 +62,7 @@ Route::controller(PropertyController::class)->group(function () {
     Route::any('/genarate-preremit', 'compilepreremitlist');
     Route::get('/property/{id}/remit/{currency}/{period}', 'prepareremittance')->name('property.remitprepare');
     Route::any('/remit/{id}/property/{currency}', 'addpreremit')->name('property.preremit');
-    Route::any('/property/{id}/disable', 'disableproperty')->name('property.disable');
+    --Route::any('/property/{id}/disable', 'disableproperty')->name('property.disable');
 });
 Route::controller(LeaseController::class)->group(function () {
     Route::any('/reject-lease/{id}', 'rejectlease')->name('lease.reject');
@@ -264,6 +264,7 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/lease/{id}/decline', 'declinenewlease')->name('propdec.leadec'); 
     Route::any('/prop/disable/{id}/landlord/contact/{cid}', 'disablelandlordcontact')->name('propdec.dislancon');
     Route::any('/prop/disable/{id}/landlord', 'disablelandlord')->name('propdec.disland');
+    Route::any('/prop/disable/{id}/property', 'disableproperty')->name('propdec.disprop');
 
 });
 /*-------------------end property management declines------------------------ */
@@ -283,6 +284,8 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::any('/prop/update/{id}/landlord/bank/{bid}', 'updatelandlordbank')->name('propma.updatlandbank');
     Route::get('/prop/list/property', 'listallproperty')->name('propma.landproplist');
     Route::get('/prop/property/{id}/view', 'viewpropertydetails')->name('propma.viewprop');
+    Route::get('/prop/edit/{id}/property', 'vieweditpropertydetails')->name('propma.editprop');
+    Route::any('/prop/update/{id}/property', 'updatepropertydetails')->name('propma.updatprop');
 
    });
 /*-------------------end property management declines------------------------ */

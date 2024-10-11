@@ -37,11 +37,11 @@ $description = 'list of all properties...';
                                         $status = 'available';
                                         $badge = "badge badge-pill bg-success badge-secondary";
                                         $buttondeactivate = '<a onclick = "deactivaterecord(this); 
-                                        return false;" class="btn btn-warning btn-sm" href="' . route('propdec.disland',$id) . '"
+                                        return false;" class="btn btn-warning btn-sm" href="' . route('propdec.disprop',$id) . '"
                                      title="disable"><i class="ti-close mr-0-5"></i>disable</a>';
                                      $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('propma.viewprop',$id) . '"
                                      title="view"><i class="ti-eye mr-0-5"></i>view</a>';
-                                     $buttonedit = '<a class="btn btn-secondary btn-sm"  href="' . route('propma.editland',$id) . '"
+                                     $buttonedit = '<a class="btn btn-secondary btn-sm"  href="' . route('propma.editprop',$id) . '"
                                      title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>';
                                     }else if (trim($abc->available) == 'D'){//include the deleted status
                                         $status = 'deleted';
@@ -73,8 +73,9 @@ $description = 'list of all properties...';
                                 <td>{{ $abc->streetaddress }}</td>
                                 <td><span class="{{ $badge }}">{{ $status }}</span></td>
                                 <td>
-                                    {!! $buttonview !!}
+                                    {!! $buttonview !!} {!! $buttonedit !!}
                                     {!! $buttondeactivate !!}
+                                    
                                 </td>
                             </tr>
                         @endforeach

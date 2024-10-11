@@ -194,4 +194,28 @@ public function declinenewlease($id,Request $request){
         }
 }
 /*---------------end decline new lease-----------------*/
+/*------------property----------------------------*/
+public function disableproperty($id){
+    try{
+        $propertyid = Crypt::decrypt($id);
+        try {
+            if (DB::table('propmanlease')->select('id')->where('propertyid',
+             $propertyid)->where('available','=','Y')->exists()) {
+                return  redirect()->route('propma.landproplist')
+                    ->with('error', 'active lease');
+            }
+            DB::table('propmanproperty')
+                ->where('id',$propertyid)->update(['available'=>'N']);
+                return  redirect()->route('propma.landproplist') 
+                ->with('success', 'record removed');
+            } catch (\Throwable $th) {
+                return redirect()->route('propma.landproplist')
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propma.landproplist')
+            ->with('error', 'failed to load');
+        }
+}
+/*------------end property------------------------*/
 }

@@ -238,5 +238,52 @@ public function viewpropertydetails($id){
         ->with('error', 'failed to load');
     }
 }
+public function vieweditpropertydetails($id){
+    try{
+        $propertyid = Crypt::decrypt($id);
+        try {
+            $arr['property']   = DB::table('propmanallproperty')
+            ->where('id', $propertyid)->select('*')->first(); 
+            $arr['province']   = DB::table('setupprovince')->select('*')->get();
+            $arr['proptype']   = DB::table('setuppropertytype')->select('*')->get();
+            $currencycode = $this->getcurrencycode();
+            $arr['commtype']   = DB::table('setupcommissionoptions')->select('*')->get();
+            $arr['currency'] = $currencycode; 
+            return view('propman.manage.edit-single-property')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.landproplist')
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.landproplist')
+        ->with('error', 'failed to load');
+    }
+}
+public function updatepropertydetails($id, Request $request){
+    try{
+        $propertyid = Crypt::decrypt($id);
+        try {
+            DB::table('propmanproperty')->where('id',$propertyid)
+            ->update( ['currencycode'=> $request->currencycode,'city' 
+            =>ucfirst($request->city),'location' => ucfirst($request->locationsurburb),
+             'streetaddress'=> $request->billingaddress,'standnumber'=> $request->standnumber, 
+             'comments'=> $request->commentshighlights, 'rooms'=>  $request->rooms,'bedrooms'=> 
+             $request->bedrooms, 'bathrooms'=> $request->bathrooms,'stories'=> $request->stories,
+                'totalarea'=> $request->totalarea,'lettablearea'=> $request->lettablearea,'ratesqm'=>
+                $request->expectedrate,'expectedrental'=> $request->expectedrental,'provinceid'=> 
+                $request->province ]);
+            DB::table('propmancommissionpercent')->where('propertyid',$propertyid)
+                ->update(['percentage'=>$request->commissionpercentage]);
+            return  redirect()->route('propma.landproplist') 
+            ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.landproplist')
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.landproplist')
+        ->with('error', 'failed to load');
+    } 
+}
 /*----------------------end property--------------------*/
 }
