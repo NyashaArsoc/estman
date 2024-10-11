@@ -33,7 +33,6 @@ use Illuminate\Support\Facades\Route;
 */
 /*
 Route::controller(LandlordController::class)->group(function () {
-   -- Route::any('/disable/{id}/landlord', 'disablelandlord')->name('landlord.disable');
     Route::get('/landlord/{id}/view-ledgers', 'viewledgers')->name('landlord.ledgers');
     Route::post('/landlord/{id}/sub-ledgers/{product}', 'createsubledgers')->name('landlord.createsub');
 });
@@ -57,11 +56,9 @@ Route::controller(PropertyController::class)->group(function () {
     Route::any('/delete-rejected-property/{id}', 'deleterejected')->name('property.deleterejected');
     Route::any('/edit-update-tenant/{id}', 'updateproperty')->name('property.editupdate');
     Route::any('/property-areaavailable/{id}', 'getpropertyareaavailable')->name('property.areaavailable');
-    Route::any('/property/{id}/view', 'viewindividual')->name('property.view');
     Route::get('/property/{id}/view-ledgers', 'viewledgers')->name('property.ledgers');
     Route::post('/property/{id}/sub-ledgers/{product}', 'createsubledgers')->name('property.createsub');
     Route::get('/property-remittance', 'remitlist')->name('property.remit');
-    Route::any('/property-list', 'listproperties')->name('property.list');
     Route::any('/genarate-preremit', 'compilepreremitlist');
     Route::get('/property/{id}/remit/{currency}/{period}', 'prepareremittance')->name('property.remitprepare');
     Route::any('/remit/{id}/property/{currency}', 'addpreremit')->name('property.preremit');
@@ -247,6 +244,8 @@ Route::middleware('loginauth')->controller(PropManApprovalController::class)->gr
    Route::get('/prop/list/lease/approval', 'listleaseapproval')->name('propapp.listlea');
    Route::get('/prop/view/{id}/lease/approval', 'viewleaseapproval')->name('propapp.viewlease');
    Route::any('/prop/lease/{id}/approve', 'approvenewlease')->name('propapp.leaappv');
+   Route::get('/prop/list/approval/landlord-contact', 'listlandlordcontactapproval')->name('propapp.listlandcont');
+   Route::any('/prop/landlord-contact/{id}/approve', 'approvenewlandlordcontact')->name('propapp.landcont');
 
    /*-----------download property documents-------------------- */
    Route::any('/prop-pdf/{path}/download/mandate', 'downloadmandatepdf')->name('propapp.dwnmandpdf');
@@ -275,13 +274,15 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::get('/prop/tenant/single/type/{id}', 'gettenantbytype');
     Route::get('/prop/property/single/type/{id}', 'getpropertybytype');
     Route::get('/prop/landlord/contact/propertyaddress/{id}', 'getlandlordbyproperty');
-    Route::get('/prop/lanlord/{id}/view', 'viewlandlorddetails')->name('propma.viewland');
+    Route::get('/prop/landlord/{id}/view', 'viewlandlorddetails')->name('propma.viewland');
     Route::get('/prop/edit/{id}/landlord', 'vieweditlandlorddetails')->name('propma.editland');
     Route::any('/prop/update/{id}/landlord', 'updatelandlorddetails')->name('propma.updtland');
     Route::get('/prop/edit/{id}/landlord/contact/{cid}', 'vieweditlandlordcontact')->name('propma.editlandcon');
     Route::any('/prop/update/{id}/landlord/contact/{cid}', 'updatelandlordcontact')->name('propma.updatlandcon');
     Route::get('/prop/edit/{id}/landlord/bank/{bid}', 'vieweditlandlordbank')->name('propma.editlandban');
     Route::any('/prop/update/{id}/landlord/bank/{bid}', 'updatelandlordbank')->name('propma.updatlandbank');
+    Route::get('/prop/list/property', 'listallproperty')->name('propma.landproplist');
+    Route::get('/prop/property/{id}/view', 'viewpropertydetails')->name('propma.viewprop');
 
    });
 /*-------------------end property management declines------------------------ */

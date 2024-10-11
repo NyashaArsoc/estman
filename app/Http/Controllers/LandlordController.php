@@ -76,27 +76,5 @@ class LandlordController  extends BaseController
                     ->with('error', 'failed to load');
         }
     }
-public function disablelandlord($id){
-    try{
-        $landlordid = Crypt::decrypt($id);
-        $update = array('approval' => 'N' , 'available'=> 'N');
-        $property = DB::table('property')->where('landlordid',$landlordid)
-        ->where('available', '=','Y')->select('id')->first();
-        if(is_null($property)){
-            DB::table('landlord')
-            ->where('id',$landlordid)
-            ->update($update);
-            return  redirect()->route('landlord.list') 
-            ->with('success', 'landlord disabled');
-        }else{
-            return  redirect()->route('landlord.list') 
-            ->with('error', 'landlord attached to active properties');
-        }
-        
-    } catch(QueryException $e){
-        return  redirect()->route('landlord.list') 
-        ->with('error', 'failed to disable landlord');
-    }
-}
 }
 

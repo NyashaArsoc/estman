@@ -13,31 +13,7 @@ class PropertyController extends BaseController
 public function __construct(){
         $this->middleware(['loginauth']);
 }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-  
-    /**
-     * Store a newly created resource in storage.
-     */
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Property $property)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+   
     public function vieweditproperty($id)
     {
         $propertyid = Crypt::decrypt($id);
@@ -70,20 +46,9 @@ public function __construct(){
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Property $property)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Property $property)
-    {
-        //
-    }
+  
 
     
     public function rejectproperty($id, Request $request){
@@ -164,39 +129,8 @@ public function __construct(){
         return view('property/get-area-available')
              ->with($arr);
     }
-    public function  listproperties(){
-        try {
-            $arr['property']   = DB::table('allproperty')
-            ->select('fullname','id','companyname','code','landlordclienttype',
-            'location','propertytype','streetaddress','available','approval')
-            ->get();
-            return view('property/list')
-            ->with($arr);
-        } catch (QueryException $e) {
-            return  redirect()->route('property.rejected') 
-            ->with('error', 'failed to load property list');
-        }
-    }
 
-public function viewindividual($id){
-    $propertyid = Crypt::decrypt($id);    
-        try {
-                BaseController::sharepropertyid($id);
-                $arr['property']   = DB::table('allproperty')
-                ->where('id', $propertyid)
-                ->select('fullname','id','companyname','code','location','province',
-                'propertytype','streetaddress','city','standnumber','comments','rooms',
-                'bedrooms','bathrooms','stories','totalarea','lettablearea','ratesqm',
-                'expectedrental','propertytypeid','commissionpercentage','commissionon','landlordclienttype')
-                ->first();
-            return view('property.view-single-property')
-        ->with($arr);
 
-        } catch (QueryException $e) {
-            return  redirect()->route('property.list') 
-            ->with('error', 'failed to load'.$e);
-        }
-    }
 public function viewledgers($id){
         $propertyid = Crypt::decrypt($id);
               

@@ -64,6 +64,35 @@ public function approvenewsinglelandlordapproval($id){
         ->with('error', 'failed to load');
     }
 }
+public function listlandlordcontactapproval(){
+    try {
+        $arr['contact']   = DB::table('propmanlandlordcontact')
+        ->select('propmanalllandlord.fullname','propmanalllandlord.companyname','propmanlandlordcontact.*')
+        ->join('propmanalllandlord', 'propmanlandlordcontact.landlordid','=','propmanalllandlord.id')
+        ->where('propmanlandlordcontact.approval','=' ,'N')->get();
+        return view('propman.approval.list-landlord-contact-pending-approval')->with($arr);
+    } catch (\Throwable $th) {
+      return  redirect()->route('dash.property');
+    } 
+}
+public function approvenewlandlordcontact($id){
+    try{
+        $contactid = Crypt::decrypt($id);
+        try {
+            DB::table('propmanlandlordcontact')->where('id',$contactid)
+            ->update(['approval' => 'Y' , 'available'=> 'Y','approvedby'=>session('alluser'),
+            'approvedon'=>now()]);
+            return  redirect()->route('propapp.listlandcont') 
+            ->with('success', 'record approved');
+        } catch (\Throwable $th) {
+            return redirect()->route('propapp.landcont',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propapp.landcont',$id)
+        ->with('error', 'failed to load');
+    }
+}
 /*---------------end approval new landlord-----------------*/
 /*---------------approval new property-----------------*/
 public function listpropertyapproval(){

@@ -1,5 +1,5 @@
 @php
-$title = 'Approve Property';
+$title = 'View Property';
 $description = 'below are property details .';
 $id= Crypt::encrypt($property->id);
 $mandate= Crypt::encrypt($property->mandate);
@@ -17,9 +17,8 @@ $requiredpdf    = (!is_null($property->mandate)) ? route('propapp.dwnmandpdf',[$
 $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnothrpdf',[$otherattachement]) : '';
 @endphp
 @extends('layout.no-menu-layout')
-@section('title', 'Approval')
+@section('title', 'View')
 @section('additional css')
-<link rel="stylesheet" href="{{ asset('css/popupforms/msg.css') }}">
 @endsection
 @section('content')
 <!-- Content Start-->
@@ -41,6 +40,9 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="additional-info-tab" data-toggle="tab" href="#additional-info" role="tab" aria-controls="additional-info" aria-selected="true">Additional Information</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="lease-info-tab" data-toggle="tab" href="#lease-info" role="tab" aria-controls="lease-info" aria-selected="true">Lease Information</a>
             </li>
         </ul>
         <form class="form-material material-primary" id="defaultform" method="POST"
@@ -103,7 +105,7 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
                         </tr>
                         <tr>
                             <td><strong>Expected Rental:</strong></td>
-                            <td>{{ $property->currencycode ?? ''}} {{ $property->expectedrental ?? ''}} </td>
+                            <td>{{ $property->currencycode ?? ''}} {{ number_format($property->expectedrental,2) ?? ''}} </td>
                         </tr>
                     </div>
                         <div id="commercial" class="{{$divclasscompany}}">
@@ -139,26 +141,43 @@ $notrequiredpdf = (!is_null($property->otherattachement)) ? route('propapp.dwnot
                     </tbody>
                 </table>
             </div>
+            <div class="tab-pane show" id="lease-info" role="tabpanel" aria-labelledby="lease-info-tab">
+                <h5 class="mt-2">Lease</h5><hr/>
+                <table  class="datatable table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No </th> <th>Name</th> <th>From</th><th>To</th><th>Rental</th><th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>@php $count=1;@endphp
+                        @foreach($lease as $abc)
+                        <tr>
+                           @php
+                               if (trim($abc->available) == 'Y'){
+                                    $status = 'available';
+                                    $badge = "badge badge-pill bg-success badge-secondary";
+                                }else if (trim($abc->available) == 'D'){//include the deleted status
+                                    $status = 'deleted';
+                                    $badge = 'badge badge-pill bg-danger badge-secondary';
+                                }else{
+                                if (trim($abc->approval) == 'R'){ 
+                                    $status = 'rejected';
+                                    $badge = 'badge badge-pill bg-danger badge-secondary';
+                                }else{
+                                    $status = 'inactive';
+                                    $badge = 'badge badge-pill bg-danger badge-secondary';
+                                }
+                             }
+                           @endphp
+                            <td>{{$count ++}}</td><td>{{ $abc->tenantfullname }} {{ $abc->tenantcompanyname ?? ''}}</td>
+                            <td>{{ $abc->validfrom }}</td><td>{{ $abc->validto }}</td><td>{{ $abc->currencycode }}{{ number_format($abc->rental,2) }}</td>
+                            <td><span class="{{ $badge }}">{{$status}}</span></td> 
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div><br/>
-        <div class="form-group row">
-            <label for="Email" class="col-sm-2 col-form-label">Reason for decline
-            </label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" name="reasons_comments" 
-                id="rejectreason" />
-                <small id="rejectreasoncheck" style="color: red;"> reasons for rejection</small>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="offset-sm-2 col-sm-4">@if (in_array(5,$arraycontrolids))
-                <a onclick = "approveentry(this); return false;" class="btn btn-success btn-sm" 
-                href="{{route('propapp.propapp', $id)}}"title="approve">
-                <i class="ti-check mr-0-5"></i>approve</a> @endif
-                @if (in_array(6,$arraycontrolids)) <button type="submit" class="btn btn-danger btn-sm" 
-                id="btn-reject-entry" onclick = "rejectapproval(this); return false;">
-                <i class="ti-close mr-0-5"> </i>decline</button> @endif
-            </div>
-        </div>
         @include('layout.arlet')
         </form>
     </div>

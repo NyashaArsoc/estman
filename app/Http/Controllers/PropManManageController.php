@@ -211,4 +211,32 @@ public function updatelandlordbank($id,$bid,Request $request){
     }
 }
 /*-----------------landlord------ */
+/*----------------- property -----------------*/
+public function listallproperty(){
+    try {
+        $arr['property']   = DB::table('propmanallproperty')->select('*')->get();
+        return view('propman.manage.list-all-property')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+}
+public function viewpropertydetails($id){
+    try{
+        $propertyid = Crypt::decrypt($id);
+        try {
+            $arr['property']   = DB::table('propmanallproperty')
+            ->where('id', $propertyid)->select('*')->first(); 
+            $arr['lease']   = DB::table('propmanalllease')
+            ->where('id', $propertyid)->select('*')->get();  
+            return view('propman.manage.view-single-property-detail')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.landlist')
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.landlist')
+        ->with('error', 'failed to load');
+    }
+}
+/*----------------------end property--------------------*/
 }
