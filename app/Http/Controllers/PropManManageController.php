@@ -286,4 +286,36 @@ public function updatepropertydetails($id, Request $request){
     } 
 }
 /*----------------------end property--------------------*/
+/*-----------------------tenant--------------------------*/
+public function listalltenants(){
+    try {
+        $arr['tenant']   = DB::table('propmanalltenant')->select('*')->get();
+        return view('propman.manage.list-all-tenant')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+}
+public function viewtenantdetails($id){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        try {
+            $arr['tenant']   = DB::table('propmanalltenant')
+            ->where('id', $tenantid)->select('*')->first();  
+            $arr['contact']   = DB::table('propmantenantcontact')
+            ->where('tenantid', $tenantid)->select('*')->get();
+            $arr['keen']   = DB::table('propmantenantkeen')->where('tenantid', $tenantid)
+            ->select('*')->get();
+            $arr['lease']   = DB::table('propmanalllease')->where('tenantid', $tenantid)
+            ->select('*')->get();
+            return view('propman.manage.view-single-tenant-detail')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.tenalist')
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.tenalist')
+        ->with('error', 'failed to load');
+    }
+}
+/*-----------------------end tenant----------------------*/
 }

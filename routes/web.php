@@ -41,20 +41,20 @@ Route::controller(TenantController::class)->group(function () {
     Route::get('/edit/tenant/{id}/view', 'viewedittenant')->name('tenant.editview');
     Route::any('/reject-tenant/{id}', 'rejecttenant')->name('tenant.reject');
     Route::any('/tenant-rejected', 'rejected')->name('tenant.rejected');
-    Route::any('/manage-tenant', 'listtenants')->name('tenant.list');
+    --Route::any('/manage-tenant', 'listtenants')->name('tenant.list');
     Route::get('/single-tenant/details/{id}', 'gettenantdetails')->name('tenant.tenantdetails');
     Route::get('/update/{id}/edit-tenant', 'updatetenant')->name('tenant.updating');
-    Route::get('/tenant/{id}/view', 'viewindividual')->name('tenant.view');
-    Route::get('/tenant/{id}/view-leases', 'viewtenantlease')->name('tenant.viewlease');
+    --Route::get('/tenant/{id}/view', 'viewindividual')->name('tenant.view');
+    --Route::get('/tenant/{id}/view-leases', 'viewtenantlease')->name('tenant.viewlease');
     Route::any('/disable/{id}/tenant', 'disabletenant')->name('tenant.disable');
 });
 //Route::resource('property', PropertyController::class);
 Route::controller(PropertyController::class)->group(function () {
-    Route::get('/edit/{id}/property', 'vieweditproperty')->name('property.editview');
+    -Route::get('/edit/{id}/property', 'vieweditproperty')->name('property.editview');
     Route::any('/reject-property/{id}', 'rejectproperty')->name('property.reject');
     Route::any('/property-rejected', 'rejected')->name('property.rejected');
     Route::any('/delete-rejected-property/{id}', 'deleterejected')->name('property.deleterejected');
-    Route::any('/edit-update-tenant/{id}', 'updateproperty')->name('property.editupdate');
+    -Route::any('/edit-update-tenant/{id}', 'updateproperty')->name('property.editupdate');
     Route::any('/property-areaavailable/{id}', 'getpropertyareaavailable')->name('property.areaavailable');
     Route::get('/property/{id}/view-ledgers', 'viewledgers')->name('property.ledgers');
     Route::post('/property/{id}/sub-ledgers/{product}', 'createsubledgers')->name('property.createsub');
@@ -265,6 +265,7 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/disable/{id}/landlord/contact/{cid}', 'disablelandlordcontact')->name('propdec.dislancon');
     Route::any('/prop/disable/{id}/landlord', 'disablelandlord')->name('propdec.disland');
     Route::any('/prop/disable/{id}/property', 'disableproperty')->name('propdec.disprop');
+    Route::any('/prop/disable/{id}/tenant', 'disabletenant')->name('propdec.disten');
 
 });
 /*-------------------end property management declines------------------------ */
@@ -286,6 +287,8 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::get('/prop/property/{id}/view', 'viewpropertydetails')->name('propma.viewprop');
     Route::get('/prop/edit/{id}/property', 'vieweditpropertydetails')->name('propma.editprop');
     Route::any('/prop/update/{id}/property', 'updatepropertydetails')->name('propma.updatprop');
+    Route::get('/prop/list/alltenant', 'listalltenants')->name('propma.tenalist');
+    Route::get('/prop/tenant/{id}/view', 'viewtenantdetails')->name('propma.viewtena');
 
    });
 /*-------------------end property management declines------------------------ */

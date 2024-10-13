@@ -218,4 +218,28 @@ public function disableproperty($id){
         }
 }
 /*------------end property------------------------*/
+/*------------tenant------------------------*/
+public function disabletenant($id){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        try {
+            if (DB::table('propmanlease')->select('id')->where('tenantid',
+             $tenantid)->where('available','=','Y')->exists()) {
+                return  redirect()->route('propma.tenalist')
+                    ->with('error', 'active lease');
+            }
+            DB::table('propmantenant')
+                ->where('id',$tenantid)->update(['available'=>'N']);
+                return  redirect()->route('propma.tenalist') 
+                ->with('success', 'record removed');
+            } catch (\Throwable $th) {
+                return redirect()->route('propma.tenalist')
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propma.tenalist')
+            ->with('error', 'failed to load');
+        }
+}
+/*------------end tenant------------------------*/
 }
