@@ -226,6 +226,8 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::post('/prop/add/{id}/landlord/new/contact', 'addlandlordnewcontact')->name('propin.addlandnewcont');
     Route::get('/prop/add/{id}/landlord/bank', 'addlandlordbank')->name('propin.addlandbank');
     Route::post('/prop/add/{id}/landlord/new/bank', 'addlandlordnewbank')->name('propin.addlandnewbank');
+    Route::get('/prop/add/{id}/tenant/keen', 'addtenantkeen')->name('propin.addtenkeen');
+    Route::post('/prop/add/{id}/tenant/new/keen', 'addtenantnewkeen')->name('propin.addnewtenkeen');
 
 });
 /*-------------------end property management intake------------------------ */
@@ -289,6 +291,9 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::any('/prop/update/{id}/property', 'updatepropertydetails')->name('propma.updatprop');
     Route::get('/prop/list/alltenant', 'listalltenants')->name('propma.tenalist');
     Route::get('/prop/tenant/{id}/view', 'viewtenantdetails')->name('propma.viewtena');
+    Route::get('/prop/edit/{id}/tenant', 'viewedittenantdetails')->name('propma.edittena');
+    Route::get('/prop/edit/{id}/tenant/keen/{cid}', 'viewedittenantkeen')->name('propma.edittenkeen');
+    Route::any('/prop/update/{id}/tenant/keen/{cid}', 'updatetenantkeen')->name('propma.updatenakeen');
 
    });
 /*-------------------end property management declines------------------------ */

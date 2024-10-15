@@ -317,5 +317,64 @@ public function viewtenantdetails($id){
         ->with('error', 'failed to load');
     }
 }
+public function viewedittenantdetails($id){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        try {
+            $arr['tenant']   = DB::table('propmanalltenant')
+            ->where('id', $tenantid)->select('*')->first();  
+            $arr['contact']   = DB::table('propmantenantcontact')
+            ->where('tenantid', $tenantid)
+            ->select('*')->get();
+            $arr['keen']   = DB::table('propmantenantkeen')->where('tenantid', $tenantid)
+            ->select('*')->get();
+            return view('propman.manage.edit-single-tenant-detail')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.tenalist')
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.tenalist')
+        ->with('error', 'failed to load');
+    } 
+}
+public function viewedittenantkeen($id,$cid){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        $keenid = Crypt::decrypt($cid);
+        try {
+            $arr['tenant']   = DB::table('propmanalltenant')
+            ->where('id', $tenantid)->select('*')->first();  
+            $arr['contact']   = DB::table('propmantenantkeen')
+            ->where('id', $keenid)
+            ->select('*')->first();
+            return view('propman.manage.edit-single-tenant-keen')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.edittena',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.edittena',$id)
+        ->with('error', 'failed to load');
+    }  
+}
+public function updatetenantkeen($id,$cid,Request $request){
+    try{
+        $contactid = Crypt::decrypt($cid);
+        try {
+            DB::table('propmantenantkeen')->where('id',$contactid)
+            ->update( ['email'=>$request->contactemail,'cell'=>$request->contactcell,
+            'lastname'=>$request->contactlastname,'firstname'=>$request->contactfirstname]);
+            return  redirect()->route('propma.edittena',$id) 
+            ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.edittenkeen',[$id,$cid])
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.edittenkeen',[$id,$cid])
+        ->with('error', 'failed to load');
+    }
+}
 /*-----------------------end tenant----------------------*/
 }

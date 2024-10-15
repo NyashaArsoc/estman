@@ -1,17 +1,15 @@
 @php 
-$title = 'Edit Landlord Contact';
-$description = 'update landlord details...';
-$id= Crypt::encrypt($landlord->id);
+$title = 'Edit Tenant Keen';
+$description = 'update next of keen details...';
+$id= Crypt::encrypt($tenant->id);
 $contactid= Crypt::encrypt($contact->id);
-$divindividualclass = $landlord->clienttypeid == 1 ? 'hide': 'dropdwn';
-$divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
+$divindividualclass = $tenant->clienttypeid == 1 ? 'hide': 'dropdwn';
+$divcompanyclass = $tenant->clienttypeid != 1 ? 'hide': 'dropdwn';
  @endphp
 @extends('layout.no-menu-layout')
-@section('title', 'Edit Landlord')
+@section('title', 'Edit Tenant')
 @section('additional css')
     <!-- Additional css Start-->
-    <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/select2-bootstrap-theme/select2-bootstrap.min.css') }}">
     <!-- Additional css End-->
 @endsection
 @section('content')
@@ -20,23 +18,23 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
         <h4>{{ $title }}</h4>
         <ol class="breadcrumb no-bg mb-1">
             <li class="breadcrumb-item"><a href="{{route('dash.property')}}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('propma.landlist') }}">List</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('propma.editland',$id) }}">View/Edit</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('propma.tenalist') }}">List</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('propma.edittena',$id) }}">View/Edit</a></li>
             <li class="breadcrumb-item active">{{ $title }}</li>
         </ol>
         <div class="box box-block bg-white">
             <h5>{{ $title }}</h5>
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
-            <span class="badge badge-pill bg-info">{{$landlord->description ?? '' }}</span><hr/>
+            <span class="badge badge-pill bg-info">{{$tenant->description ?? '' }}</span><hr/>
             <form class="form-material material-primary" id="" method="POST" id="defaultform"
-                action="{{ route('propma.updatlandcon', [$id,$contactid]) }}">@csrf
+                action="{{ route('propma.updatenakeen', [$id,$contactid]) }}">@csrf
                
                 <div id="corporategroup">
                     <div class="form-group row">
-                        <label for="CompanyName" class="col-sm-2 form-control-label">Landlord Name</label>
+                        <label for="CompanyName" class="col-sm-2 form-control-label">Tenant Name</label>
                         <div class="col-sm-4">
-                            {{ $landlord->lastname ?? ''}} {{ $landlord->firstname ?? ''}}
-                             {{ $landlord->companyname ?? ''}}
+                            {{ $tenant->lastname ?? ''}} {{ $tenant->firstname ?? ''}}
+                             {{ $tenant->companyname ?? ''}}
                         </div>
                     </div>
                 </div>
@@ -87,8 +85,5 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
 @endsection
 @section('additional js')
 <script src="{{ asset('js/validation/intakepropman.js') }}"></script>
-    <script src="{{ asset('css/select2/select2.min.js') }}"></script>
-    <script src="{{ asset('js/select2.js') }}"></script>
-    <script src="{{ asset('js/dropdown.js') }}"></script>
     <!-- Additional JS End-->
 @endsection

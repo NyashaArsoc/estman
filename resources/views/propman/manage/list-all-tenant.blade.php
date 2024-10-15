@@ -40,7 +40,7 @@
                                      title="disable"><i class="ti-close mr-0-5"></i>disable</a>';
                                      $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('propma.viewtena',$id) . '"
                                      title="view"><i class="ti-eye mr-0-5"></i>view</a>';
-                                     $buttonedit = '<a class="btn btn-secondary btn-sm"  href="' . route('propma.editland',$id) . '"
+                                     $buttonedit = '<a class="btn btn-secondary btn-sm"  href="' . route('propma.edittena',$id) . '"
                                      title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>';
                                     }else if (trim($abc->available) == 'D'){//include the deleted status
                                         $status = 'deleted';

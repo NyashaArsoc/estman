@@ -260,7 +260,42 @@ public function addtenantdetails(){
         return  redirect()->route('propin.addtenant')
         ->with('error', 'failed to load');
     }
- }  
+ }
+public function addtenantkeen($id){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        try {
+            $arr['tenant']   = DB::table('propmanalltenant')
+            ->where('id', $tenantid)->select('*')->first();  
+            return view('propman.intake.add-single-tenant-keen')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.edittena',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.edittena',$id)
+        ->with('error', 'failed to load');
+    }
+}
+public function addtenantnewkeen(Request $request, $id){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        try {
+            DB::table('propmantenantkeen')->insert( ['email'=>$request->contactemail,
+            'cell'=>$request->contactcell, 'lastname'=>$request->contactlastname,
+            'firstname'=>$request->contactfirstname,'operatorid'=>session('alluser'),
+            'tenantid'=>$tenantid]);
+            return  redirect()->route('propma.edittena',$id) 
+            ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.edittena',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.edittena',$id)
+        ->with('error', 'failed to load');
+    }
+}  
    /*---------------end creating new tenant-----------------*/
  /*---------------creating new lease-----------------*/
 public function addleasedetails(){
