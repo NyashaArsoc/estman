@@ -228,6 +228,8 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::post('/prop/add/{id}/landlord/new/bank', 'addlandlordnewbank')->name('propin.addlandnewbank');
     Route::get('/prop/add/{id}/tenant/keen', 'addtenantkeen')->name('propin.addtenkeen');
     Route::post('/prop/add/{id}/tenant/new/keen', 'addtenantnewkeen')->name('propin.addnewtenkeen');
+    Route::get('/prop/add/{id}/tenant/contact', 'addtenantcontact')->name('propin.addtencon');
+    Route::post('/prop/add/{id}/tenant/new/contact', 'addtenantnewcontact')->name('propin.addnewtencon');
 
 });
 /*-------------------end property management intake------------------------ */
@@ -268,6 +270,7 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/disable/{id}/landlord', 'disablelandlord')->name('propdec.disland');
     Route::any('/prop/disable/{id}/property', 'disableproperty')->name('propdec.disprop');
     Route::any('/prop/disable/{id}/tenant', 'disabletenant')->name('propdec.disten');
+    Route::any('/prop/disable/{id}/tenant/contact/{cid}', 'disabletenantcontact')->name('propdec.distencon');
 
 });
 /*-------------------end property management declines------------------------ */
@@ -294,6 +297,9 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::get('/prop/edit/{id}/tenant', 'viewedittenantdetails')->name('propma.edittena');
     Route::get('/prop/edit/{id}/tenant/keen/{cid}', 'viewedittenantkeen')->name('propma.edittenkeen');
     Route::any('/prop/update/{id}/tenant/keen/{cid}', 'updatetenantkeen')->name('propma.updatenakeen');
+    Route::any('/prop/update/{id}/tenant', 'updatetenantdetails')->name('propma.updttena');
+    Route::get('/prop/edit/{id}/tenant/contact/{cid}', 'viewedittenantcontact')->name('propma.edittencon');
+    Route::any('/prop/update/{id}/tenant/contact/{cid}', 'updatetenantcontact')->name('propma.updatenacon');
 
    });
 /*-------------------end property management declines------------------------ */

@@ -248,7 +248,7 @@ public function addtenantdetails(){
         $request->nationalid,'clienttypeid'=>$request->clienttype,'firstname'=>$request->firstname,
         'cell'=>$request->cell,'email'=>$request->email,'tel'=>$request->tel,'operatorid'
         =>session('alluser'),'lastname'=>$request->lastname, 'contactaddress'=>$request->billingaddress,
-        'companynumber'=>$request->companynumber,'tinnumber'=>$request->tinumber,'vatnumber'=>
+        'companynumber'=>$request->companynumber,'tinnumber'=>$request->tinnumber,'vatnumber'=>
         $request->vatnumber,'companyname'=>$request->companyname] );
         $idarray  = ['tenantid'=>$tenantid]; //define the tenantId
         $combinedarray = array_merge($idarray, $tablearray);
@@ -386,6 +386,41 @@ public function addnewleasedetails(Request $request){
     } catch (\Throwable $th) {
         return  redirect()->route('propin.addlease')
         ->with('error', 'failed to load'.$th);
+    }
+}
+public function addtenantcontact($id){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        try {
+            $arr['tenant']   = DB::table('propmanalltenant')
+            ->where('id', $tenantid)->select('*')->first();  
+            return view('propman.intake.add-single-tenant-contact')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.edittena',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.edittena',$id)
+        ->with('error', 'failed to load');
+    }
+}
+public function addtenantnewcontact(Request $request, $id){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        try {
+            DB::table('propmantenantcontact')->insert( ['email'=>$request->contactemail,
+            'cell'=>$request->contactcell, 'lastname'=>$request->contactlastname,
+            'firstname'=>$request->contactfirstname,'operatorid'=>session('alluser'),
+            'tenantid'=>$tenantid]);
+            return  redirect()->route('propma.edittena',$id) 
+            ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.edittena',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.edittena',$id)
+        ->with('error', 'failed to load');
     }
 }
   /*---------------end creating new lease-----------------*/

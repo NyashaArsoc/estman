@@ -241,5 +241,22 @@ public function disabletenant($id){
             ->with('error', 'failed to load');
         }
 }
+public function disabletenantcontact($id){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        try {
+            DB::table('propmantenantcontact')
+                ->where('tenantid',$tenantid)->update(['available'=>'N']);
+                return  redirect()->route('propma.viewtena',$id) 
+                ->with('success', 'record removed');
+            } catch (\Throwable $th) {
+                return redirect()->route('propma.viewtena',$id)
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propma.viewtena',$id)
+            ->with('error', 'failed to load');
+        }
+}
 /*------------end tenant------------------------*/
 }

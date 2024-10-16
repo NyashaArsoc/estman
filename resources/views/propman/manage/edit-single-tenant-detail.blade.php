@@ -1,5 +1,5 @@
 @php
-$title = 'View Tenant';
+$title = 'Edit Tenant';
 $description = 'below are tenant details .';
 $id= Crypt::encrypt($tenant->id);
 if ($tenant->clienttypeid == 1){
@@ -14,7 +14,7 @@ $divindividualclass = $tenant->clienttypeid == 1 ? 'hide': 'dropdwn';
 $divcompanyclass = $tenant->clienttypeid != 1 ? 'hide': 'dropdwn';
 @endphp
 @extends('layout.no-menu-layout')
-@section('title', 'Approval')
+@section('title', 'Edit Tenant')
 @section('additional css')
 @endsection
 @section('content')
@@ -37,15 +37,15 @@ $divcompanyclass = $tenant->clienttypeid != 1 ? 'hide': 'dropdwn';
             </li>
             {!! $tenanttab !!}
         </ul>
-        <form class="form-material material-primary" id="defaultform" method="POST"
-                action="{{ route('propdec.landdec', $id)}}">@csrf
         <!-- Tabs Content -->
         <div class="tab-content" id="clientTabContent">
             <div class="tab-pane show active" id="tenant-detail" role="tabpanel" aria-labelledby="tenant-detail-tab">
                 <br/><form class="form-material material-primary" id="" method="POST" id="defaultform"
-                action="{{ route('propma.updtland', $id) }}">@csrf
+                action="{{ route('propma.updttena', $id) }}">@csrf
                 <br/>
                 <div id="individualgroup"  class="{{$divindividualclass}}">
+                    <input type="text" class="form-control" id="clienttype" hidden
+                            value="{{ $tenant->clienttypeid ?? ''}}" readonly>
                     <div class="form-group row">
                         <label for="FirstName" class="col-sm-2 form-control-label">First Name</label>
                         <div class="col-sm-4">
@@ -79,7 +79,7 @@ $divcompanyclass = $tenant->clienttypeid != 1 ? 'hide': 'dropdwn';
                             value="{{ $tenant->companyname ?? ''}}" autocomplete="off">
                                 <small id="companynamecheck" style="color: red;">required</small>
                         </div>
-                        <label for="ClientType" class="col-sm-2 form-control-label">Company Number
+                        <label for="" class="col-sm-2 form-control-label">Company Number
                         </label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="companynumber" name="companynumber"
@@ -140,36 +140,49 @@ $divcompanyclass = $tenant->clienttypeid != 1 ? 'hide': 'dropdwn';
             </form>
             </div>
             <div class="tab-pane show" id="tenant-contact" role="tabpanel" aria-labelledby="tenant-contact-tab">
-                <h5 class="mt-2">Contact</h5><hr/>
+                <h5 class="mt-2">Contact</h5>
+                @if (in_array(1,$arraycontrolids))
+                <a  class="btn btn-primary btn-sm" href="{{route('propin.addtencon', $id)}}
+                " title="add">create new</a>
+                @endif<hr/>
                 <table  class="datatable table table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>No </th> <th>Name</th> <th>Cell</th><th>Email</th><th>Status </th>
+                            <th>No </th> <th>Name</th> <th>Cell</th><th>Email</th><th>Status </th><th>Option </th>
                         </tr>
                     </thead>
                     <tbody>@php $count=1;@endphp
                         @foreach($contact as $abc)
                         <tr>
                            @php
+                           $contactid= Crypt::encrypt($abc->id);
                                if (trim($abc->available) == 'Y'){
                                     $status = 'available';
                                     $badge = "badge badge-pill bg-success badge-secondary";
+                                    $buttonedit = '<a class="btn btn-secondary btn-sm"  href="' . route('propma.edittencon',[$id,$contactid]) . '"
+                                     title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>';
+                                     $buttondisable = '<a class="btn btn-danger btn-sm" 
+                                      href="' . route('propdec.distencon',[$id,$contactid]) . '"title="disable" 
+                                      onclick = "deactivaterecord(this); return false;"><i class="ti-close 
+                                      mr-0-5"></i>disable</a>';
                                 }else if (trim($abc->available) == 'D'){//include the deleted status
                                     $status = 'deleted';
                                     $badge = 'badge badge-pill bg-danger badge-secondary';
-                                }else{
-                                if (trim($abc->approval) == 'R'){ 
-                                    $status = 'rejected';
-                                    $badge = 'badge badge-pill bg-danger badge-secondary';
+                                    $buttonedit = '';
+                                    $buttondisable = '';
                                 }else{
                                     $status = 'inactive';
                                     $badge = 'badge badge-pill bg-danger badge-secondary';
-                                }
+                                    $buttonedit = '';
+                                    $buttondisable = '';
                              }
                            @endphp
                             <td>{{$count ++}}</td><td>{{ $abc->lastname }} {{ $abc->firstname ?? ''}}</td>
                             <td>{{ $abc->cell }}</td><td>{{ $abc->email }}</td>
                             <td><span class="{{ $badge }}">{{$status}}</span></td> 
+                            <td>@if (in_array(2,$arraycontrolids)){!! $buttonedit !!} @endif
+                                @if (in_array(7,$arraycontrolids)){!! $buttondisable !!} @endif
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -208,7 +221,6 @@ $divcompanyclass = $tenant->clienttypeid != 1 ? 'hide': 'dropdwn';
             </div>
         </div><br/>
         @include('layout.arlet')
-        </form>
     </div>
 </div>
 <!-- Content End -->

@@ -124,7 +124,7 @@ public function updatelandlorddetails($id, Request $request){
                 ->with('success', 'record updated');
         } catch (\Throwable $th) {
             return redirect()->route('propma.editland',$id)
-            ->with('error', 'failed to load'.$th);
+            ->with('error', 'failed to load');
         }
     }catch (DecryptException $th) {
     return redirect()->route('propma.editland',$id)
@@ -373,6 +373,64 @@ public function updatetenantkeen($id,$cid,Request $request){
         }
     }catch (DecryptException $th) {
     return redirect()->route('propma.edittenkeen',[$id,$cid])
+        ->with('error', 'failed to load');
+    }
+}
+public function updatetenantdetails($id, Request $request){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        try {
+            DB::table('propmantenant')->where('id',$tenantid)
+            ->update(['nationalid'=>$request->nationalid,'firstname'=>$request->firstname,'cell'=>$request->cell,
+            'email'=>$request->email,'tel'=>$request->tel,'lastname'=>$request->lastname, 'contactaddress'=>
+            $request->billingaddress,'companynumber'=>$request->companynumber,'tinnumber'=>$request->tinnumber,
+            'vatnumber'=>$request->vatnumber,'companyname'=>$request->companyname]);
+            return  redirect()->route('propma.tenalist') 
+                ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.edittena',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.edittena',$id)
+        ->with('error', 'failed to load');
+    }
+}
+public function viewedittenantcontact($id,$cid){
+    try{
+        $tenantid = Crypt::decrypt($id);
+        $contactid = Crypt::decrypt($cid);
+        try {
+            $arr['tenant']   = DB::table('propmanalltenant')
+            ->where('id', $tenantid)->select('*')->first();  
+            $arr['contact']   = DB::table('propmantenantcontact')
+            ->where('id', $contactid)
+            ->select('*')->first();
+            return view('propman.manage.edit-single-tenant-contact')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.edittena',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.edittena',$id)
+        ->with('error', 'failed to load');
+    }  
+}
+public function updatetenantcontact($id,$cid,Request $request){
+    try{
+        $contactid = Crypt::decrypt($cid);
+        try {
+            DB::table('propmantenantcontact')->where('id',$contactid)
+            ->update( ['email'=>$request->contactemail,'cell'=>$request->contactcell,
+            'lastname'=>$request->contactlastname,'firstname'=>$request->contactfirstname]);
+            return  redirect()->route('propma.edittena',$id) 
+            ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.edittencon',[$id,$cid])
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.edittencon',[$id,$cid])
         ->with('error', 'failed to load');
     }
 }

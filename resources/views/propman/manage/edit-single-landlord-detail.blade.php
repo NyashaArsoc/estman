@@ -45,6 +45,8 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
                 action="{{ route('propma.updtland', $id) }}">@csrf
                 <br/>
                 <div id="individualgroup"  class="{{$divindividualclass}}">
+                    <input type="text" class="form-control" id="clienttype" hidden
+                            value="{{ $landlord->clienttypeid ?? ''}}" readonly>
                     <div class="form-group row">
                         <label for="FirstName" class="col-sm-2 form-control-label">First Name</label>
                         <div class="col-sm-4">
@@ -78,7 +80,7 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
                             value="{{ $landlord->companyname ?? ''}}" autocomplete="off">
                                 <small id="companynamecheck" style="color: red;">required</small>
                         </div>
-                        <label for="ClientType" class="col-sm-2 form-control-label">Company Number
+                        <label for="" class="col-sm-2 form-control-label">Company Number
                         </label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="companynumber" name="companynumber"

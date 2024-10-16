@@ -12,7 +12,7 @@ if ($tenant->clienttypeid == 1){
  }
 @endphp
 @extends('layout.no-menu-layout')
-@section('title', 'Approval')
+@section('title', 'View Tenant')
 @section('additional css')
 @endsection
 @section('content')
@@ -99,13 +99,8 @@ if ($tenant->clienttypeid == 1){
                                     $status = 'deleted';
                                     $badge = 'badge badge-pill bg-danger badge-secondary';
                                 }else{
-                                if (trim($abc->approval) == 'R'){ 
-                                    $status = 'rejected';
-                                    $badge = 'badge badge-pill bg-danger badge-secondary';
-                                }else{
                                     $status = 'inactive';
                                     $badge = 'badge badge-pill bg-danger badge-secondary';
-                                }
                              }
                            @endphp
                             <td>{{$count ++}}</td><td>{{ $abc->lastname }} {{ $abc->firstname ?? ''}}</td>

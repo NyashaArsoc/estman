@@ -1,5 +1,5 @@
 @php 
-$title = 'Add Tenant Keen';
+$title = 'Add Tenant Contact';
 $description = 'update tenant details...';
 $id= Crypt::encrypt($tenant->id);
 $divindividualclass = $tenant->clienttypeid == 1 ? 'hide': 'dropdwn';
@@ -26,7 +26,7 @@ $divcompanyclass = $tenant->clienttypeid != 1 ? 'hide': 'dropdwn';
             <p class="font-90 text-muted mb-1"> {{ $description }}</p>
             <span class="badge badge-pill bg-info">{{$tenant->description ?? '' }}</span><hr/>
             <form class="form-material material-primary" id="" method="POST" id="defaultform"
-                action="{{ route('propin.addnewtenkeen', $id) }}">@csrf
+                action="{{ route('propin.addnewtencon', $id) }}">@csrf
                
                 <div id="corporategroup">
                     <div class="form-group row">
