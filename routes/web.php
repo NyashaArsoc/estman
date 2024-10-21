@@ -69,10 +69,10 @@ Route::controller(LeaseController::class)->group(function () {
     Route::any('/edit-update-lease/{id}', 'updatelease')->name('lease.editupdate');
     Route::get('/lease/{id}/edit', 'vieweditlease')->name('lease.editview');
     Route::any('/lease-rejected', 'rejected')->name('lease.rejected');
-    Route::any('/lease/{id}/view', 'viewindividual')->name('lease.view');
+    -Route::any('/lease/{id}/view', 'viewindividual')->name('lease.view');
     Route::get('/lease/{id}/view-ledgers', 'viewledgers')->name('lease.ledgers');
     Route::post('/lease/{id}/sub-ledgers/{product}', 'createsubledgers')->name('lease.createsub');
-    Route::get('/lease-list', 'listleases')->name('lease.list');
+    --Route::get('/lease-list', 'listleases')->name('lease.list');
     Route::any('/lease/{id}/disable', 'disablelease')->name('lease.disable');
     Route::get('/lease/{id}/view/renew', 'viewrenewal')->name('lease.viewrenew');
     Route::post('/renew/lease/{id}', 'singlerenewal')->name('lease.singlerenew');
@@ -230,6 +230,8 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::post('/prop/add/{id}/tenant/new/keen', 'addtenantnewkeen')->name('propin.addnewtenkeen');
     Route::get('/prop/add/{id}/tenant/contact', 'addtenantcontact')->name('propin.addtencon');
     Route::post('/prop/add/{id}/tenant/new/contact', 'addtenantnewcontact')->name('propin.addnewtencon');
+    Route::get('/prop/add/{id}/lease/rates', 'addleaserate')->name('propin.addlearate');
+    Route::post('/prop/add/new/lease/rates/{id}', 'addnewleaserate')->name('propin.addnewlearate');
 
 });
 /*-------------------end property management intake------------------------ */
@@ -300,6 +302,12 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::any('/prop/update/{id}/tenant', 'updatetenantdetails')->name('propma.updttena');
     Route::get('/prop/edit/{id}/tenant/contact/{cid}', 'viewedittenantcontact')->name('propma.edittencon');
     Route::any('/prop/update/{id}/tenant/contact/{cid}', 'updatetenantcontact')->name('propma.updatenacon');
+    Route::get('/prop/list/alllease', 'listallleases')->name('propma.lealist');
+    Route::get('/prop/lease/{id}/view', 'viewleasedetails')->name('propma.viewlea');
+    Route::get('/prop/edit/{id}/lease', 'vieweditleasedetails')->name('propma.editlea');
+    Route::get('/prop/{rid}/edit/{id}/rate/lease', 'vieweditleaserate')->name('propma.editlearat');
+    Route::any('/prop/update/{id}/lease', 'updateleasedetails')->name('propma.updtlea');
+    Route::any('/prop//{rid}/update/{id}/lease/rates', 'updateleaserate')->name('propma.updtlearate');
 
    });
 /*-------------------end property management declines------------------------ */

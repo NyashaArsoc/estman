@@ -213,8 +213,9 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
                             <tr>@php $bankid= Crypt::encrypt($abc->id);@endphp
                                 <td>{{$count ++}}</td><td>{{ $abc->accountname }}</td><td>{{ $abc->bankname }}</td>
                                 <td>{{ $abc->branch }}</td> <td>{{ $abc->accountnumber }}</td><td>{{ $abc->currencycode }}</td>
-                                <td><a class="btn btn-secondary btn-sm"  href="{{route('propma.editlandban',[$id,$bankid])}}"
-                                    title="edit"><i class="ti-pencil mr-0-5"></i>edit</a></td>
+                                <td>@if (in_array(2,$arraycontrolids))<a class="btn btn-secondary btn-sm"  
+                                    href="{{route('propma.editlandban',[$id,$bankid])}}"
+                                    title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>@endif</td>
                             </tr>
                             @endforeach
                         </tbody>

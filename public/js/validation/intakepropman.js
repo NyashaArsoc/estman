@@ -1634,3 +1634,38 @@ $("#btn-edit-property").click(function () {
         return false;
     }  
 });
+//btn add lease rates 
+$("#btn-add-lease-rate").click(function () {
+    validateCurrencyCode();validateLeaseOperationalCost();
+    validateLeaseRatesCost();
+    try{
+            if(currencycodeError==true && leaseoperationcostError==true && leaseratecostError==true  )
+                {return true}else{return false}
+    }catch(err){return false;}
+});
+// --------------btn edit lease
+$("#btn-edit-lease").click(function () {
+    try {
+        validateBillingAddress();validateDateFrom();
+        validateDateTo();validateRentReview();validatePeriodList();
+        validateCurrencyCode();validateDateRange();
+       
+        var propertytype    =  $("#propertytype").val();
+        if(billingaddressError==true && 
+            datefromError==true && datetoError==true && rentreviewError==true && periodlistError==true &&
+            currencycodeError==true && daterangeError==true){
+            if(propertytype == 1) {//residential 
+                validateAddExpectedRental();
+                if(expectedrateError == true && expectedrentalError==true){
+                    return true;}else{return false;}
+            }else{ validateAddLettableArea(); validateAddExpectedRate();
+                if(lettableareaError==true && expectedrateError==true){return true;}else{return false;}
+             }
+        }else{return false;}
+            
+            
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});

@@ -435,4 +435,114 @@ public function updatetenantcontact($id,$cid,Request $request){
     }
 }
 /*-----------------------end tenant----------------------*/
+/*-----------------------lease----------------------*/
+public function listallleases(){
+    try {
+        $arr['lease']   = DB::table('propmanalllease')->select('*')->get();
+        return view('propman.manage.list-all-lease')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+}
+public function viewleasedetails($id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            $arr['lease']   = DB::table('propmanalllease')->where('id', $leaseid)
+            ->select('*')->first();
+            $arr['rates']   = DB::table('propmanleasecurrentbillrates')->where('leaseid',
+             $leaseid)->select('*')->get();
+            return view('propman.manage.view-single-lease-detail')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.lealist')
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.lealist')
+        ->with('error', 'failed to load');
+    }
+}
+public function vieweditleasedetails($id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            $arr['lease']   = DB::table('propmanalllease')->where('id', $leaseid)
+            ->select('*')->first();
+            $currencycode = $this->getcurrencycode();
+            $arr['rates']   = DB::table('propmanleasecurrentbillrates')->where('leaseid',
+             $leaseid)->select('*')->get();
+             $arr['currency'] = $currencycode; 
+            return view('propman.manage.edit-single-lease-detail')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.lealist')
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.lealist')
+        ->with('error', 'failed to load');
+    }
+}
+public function vieweditleaserate($rid,$id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            $arr['lease']   = DB::table('propmanalllease')->where('id', $leaseid)
+            ->select('*')->first();
+            $arr['rates']   = DB::table('propmanleasecurrentbillrates')->where('leaseid',
+             $leaseid)->select('*')->first();
+             $currencycode = $this->getcurrencycode();
+             $arr['currency'] = $currencycode;
+            return view('propman.manage.edit-single-lease-rate')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.lealist')
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.lealist')
+        ->with('error', 'failed to load');
+    }
+}
+public function updateleasedetails($id,Request $request){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            $rental = ($request->propertytype ==1) ? $request->expectedrental
+                        : $request->expectedrate * $request->areataken;
+
+            DB::table('propmanlease')->where('id',$leaseid)
+            ->update(['validfrom'=>$request->leasevalidfrom,'validto'=>$request->leasevalidto,
+            'areataken'=>$request->areataken,'rental'=>$rental,'currencycode'=>$request->currencycode,
+            'ratesqm'=>$request->expectedrate,'propertydescription'=>$request->propertydescription,
+            'rentreview'=>$request->rentreviewperiod,'inspectionreview'=>$request->inspectionperiod]);
+            return  redirect()->route('propma.lealist') 
+                ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.editlea',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.editlea',$id)
+        ->with('error', 'failed to load');
+    }
+}
+public function updateleaserate($id,$rid,Request $request){
+    try{
+        $rateid = Crypt::decrypt($rid);
+        try {
+            DB::table('propmanleasecurrentbillrates')->where('id',$rateid)
+            ->update( [
+                'currencycode'=>$request->currencycode,
+            'operationalcosts'=>$request->leaseoperationalcost, 'ratescosts'=>$request->leaseratescost]);
+            return  redirect()->route('propma.editlea',$id) 
+            ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.editlearat',[$rid,$id])
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.editlearat',[$rid,$id])
+        ->with('error', 'failed to load');
+    }
+}
+/*-----------------------end lease----------------------*/
 }
