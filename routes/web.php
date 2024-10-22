@@ -32,10 +32,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 /*
-Route::controller(LandlordController::class)->group(function () {
-    Route::get('/landlord/{id}/view-ledgers', 'viewledgers')->name('landlord.ledgers');
-    Route::post('/landlord/{id}/sub-ledgers/{product}', 'createsubledgers')->name('landlord.createsub');
-});
 //Route::resource('tenant', TenantController::class);
 Route::controller(TenantController::class)->group(function () {
     Route::get('/edit/tenant/{id}/view', 'viewedittenant')->name('tenant.editview');
@@ -263,7 +259,7 @@ Route::middleware('loginauth')->controller(PropManApprovalController::class)->gr
 /*-------------------property management declines------------------------ */
 Route::middleware('loginauth')->controller(PropManDeclineController::class)->group(function(){
     Route::any('/prop/landlord/{id}/decline', 'declinenewlandlord')->name('propdec.landdec');
-    Route::get('/prop/list/landlord/declined', 'listdeclinelandlord')->name('propdec.listlanddec');
+    Route::get('/prop/landlord/list/declined', 'listdeclinelandlord')->name('propdec.listlanddec');
     Route::get('/prop/view/landlord/{id}/edit', 'vieweditsinglelandlord')->name('propdec.editviewland');
     Route::any('/prop/landlord/{id}/delete', 'deletesinglelandlord')->name('propdec.landdel');
     Route::any('/prop/{id}/landlord/{contactid}/update', 'updatesinglelandlord')->name('propdec.landupd'); 

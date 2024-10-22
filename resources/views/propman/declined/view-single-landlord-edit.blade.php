@@ -29,14 +29,13 @@ $divcompanyclass = $landlord->clienttypeid != 1 ? 'hide': 'dropdwn';
             <form class="form-material material-primary" id="" method="POST" id="defaultform"
                 action="{{ route('propdec.landupd', [$id,$contactid]) }}">@csrf
                 <div class="form-group row">
-                    <label for="ClientType" class="col-sm-2 form-control-label">Type<i class="text-danger">*</i></label>
+                    <label for="ClientType" class="col-sm-2 form-control-label">Type</label>
                     <div class="col-sm-4">
                         <select class="js-example-basic-single w-100" name="clienttype" id="clienttype"
                             onchange="optionlandlordtype(this)" />
                             <option value="{{ $landlord->clienttypeid }}">{{ $landlord->description }}</option>
                         @foreach($type as $abc)
-                        <option value="{{ $abc->id }}">  {{ $abc->description }}
-                        </option>
+                        <option value="{{ $abc->id }}">  {{ $abc->description }}</option>
                         @endforeach
                         </select>
                         <small id="clienttypecheck" style="color: red;">required</small>

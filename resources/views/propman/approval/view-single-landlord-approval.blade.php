@@ -2,6 +2,12 @@
 $title = 'Approve Landlord';
 $description = 'below are landlord details .';
 $id= Crypt::encrypt($landlord->id);
+if ($landlord->clienttypeid != 1){
+  $div =  ' <tr><td><strong>Tin Number:</strong></td>
+            <td>'.$landlord->tinnumber.'</td></tr>
+             <tr><td><strong>Vat Number:</strong></td>
+             <td>'.$landlord->vatnumber .'</td>';
+ }else{ $div =  ''; }
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'Approval')
@@ -49,14 +55,7 @@ $id= Crypt::encrypt($landlord->id);
                             <td><strong>Registration:</strong></td>
                             <td>{{ $landlord->companynumber ?? '' }}  {{ $landlord->nationalid ?? ''}}</td>
                         </tr>
-                        <tr>
-                            <td><strong>Tin Number:</strong></td>
-                            <td>{{ $landlord->tinnumber ?? ''}}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Vat Number:</strong></td>
-                            <td> {{ $landlord->vatnumber ?? ''}} </td>
-                        </tr>
+                        {!! $div !!}
                         <tr>
                             <td><strong>Cell:</strong></td>
                             <td> {{ $landlord->cell ?? ''}}</td>
