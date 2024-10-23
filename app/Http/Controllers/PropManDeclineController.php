@@ -258,5 +258,94 @@ public function disabletenantcontact($id){
             ->with('error', 'failed to load');
         }
 }
+public function declinenewtenant($id,Request $request){
+    try{
+        $tenantid = Crypt::decrypt($id);
+            try {
+                DB::table('propmantenant')
+                ->where('id',$tenantid)
+                ->update(['approval' => 'R' , 'available'=> 'N', 'reasons'=> $request->reasons_comments]);
+                return  redirect()->route('propapp.listten') 
+                ->with('success', 'record declined');
+            } catch (\Throwable $th) {
+                return redirect()->route('propapp.viewten',$id)
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propapp.viewten',$id)
+            ->with('error', 'failed to load');
+        } 
+}
+public function listdeclinetenant(){
+    try {
+        $arr['tenant']   = DB::table('propmanalltenant')
+        ->where('approval','=' ,'R')
+        ->select('*')->get();
+        return view('propman.declined.list-tenant-declined-approval')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+}
+public function vieweditsingletenant($id){
+    try{
+        $tenantid = Crypt::decrypt($id);
+            try {
+                $clienttype = $this->getclienttype();
+                $arr['type'] = $clienttype;
+                $arr['tenant']   = DB::table('propmanalltenant')
+            ->where('id', $tenantid)->select(columns: '*')->first();  
+            $arr['contact']   = DB::table('propmantenantcontact')
+            ->where('tenantid', $tenantid)
+            ->select('*')->latest('id')->first();
+            $arr['keen']   = DB::table('propmantenantkeen')
+            ->where('tenantid', $tenantid)
+            ->select('*')->latest('id')->first();
+                return view('propman.declined.view-single-tenant-edit')->with($arr);
+            } catch (\Throwable $th) {
+                return redirect()->route('propdec.listlanddec')
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propdec.listlanddec')
+            ->with('error', 'failed to load');
+        }
+}
+public function updatesingletenant($id, Request $request){
+    try{
+        $tenantid = Crypt::decrypt($id);
+            try {
+                if(!is_null($request->nationalid)){
+                    /*----------values to update in table keen ---------*/
+                    $tablearray = ['email'=>$request->keenemail,'lastname'=>$request->keenlastname,
+                    'firstname'=>$request->keenfirstname,'operatorid'=>session('alluser'),
+                    'cell'=>$request->keencell];
+                    $tablename = 'propmantenantkeen';
+                }elseif (!is_null($request->companynumber)){
+                    $tablearray = ['email'=>$request->contactemail,'lastname'=>$request->contactlastname,
+                    'firstname'=>$request->contactfirstname,'operatorid'=>session('alluser'),'cell'
+                    =>$request->contactcell];
+                    $tablename = 'propmantenantcontact';
+                }
+           DB::table('propmantenant')->where('id',$tenantid)->
+           update( ['nationalid'=>$request->nationalid,'clienttypeid'=>$request->clienttype,
+           'firstname'=>$request->firstname,'cell'=>$request->cell,'email'=>$request->email,'approval'
+           =>'N','tel'=>$request->tel,'operatorid'=>session('alluser'),'lastname'=>$request->lastname, 
+           'contactaddress'=>$request->billingaddress,'companynumber'=>$request->companynumber,
+           'tinnumber'=>$request->tinnumber,'vatnumber'=> $request->vatnumber,'companyname'=>
+           $request->companyname]);
+                //updating values
+           DB::table($tablename)->where('tenantid',$tenantid)
+           ->update($tablearray);
+                return  redirect()->route('propdec.listtendec') 
+                ->with('success', 'record updated');
+            } catch (\Throwable $th) {
+                return redirect()->route('propdec.editviewten',$id)
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propdec.editviewten',$id)
+            ->with('error', 'failed to load');
+        }
+}
 /*------------end tenant------------------------*/
 }

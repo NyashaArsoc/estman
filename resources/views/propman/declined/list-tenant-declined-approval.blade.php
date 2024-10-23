@@ -1,13 +1,7 @@
 @php $title = 'Rejected Tenants'; 
       $description = 'tenants rejected...'; @endphp
-    @extends('layout.main-layout')
+    @extends('layout.propman-main-menu')
     @section('title', 'Tenants Rejected')
-    @section('additional css')
-    <!-- Additional css Start-->
-    <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/select2-bootstrap-theme/select2-bootstrap.min.css') }}">
-    <!-- Additional css End-->
-    @endsection
     @section('content')
         <!-- Content Start-->
         <div class="container-fluid">
@@ -28,33 +22,29 @@
                                     <th>Name</th>
                                     <th>Registration</th>
                                     <th>Cell</th>
+                                    <th>Email</th>
                                     <th>Reason</th>
                                     <th>Option</th>
                                 </tr>
                             </thead>
                             <tbody>@php $count=1;@endphp
-                                @foreach($tenant as $ten)
-                            <tr> @php if ($ten->clienttypeid == 1){
-                                $owner   =  $ten->fullname ;
-                                $registration   =  $ten->nationalID ;
-                             }else{
-                                 $owner   =  $ten->companyname ;
-                                 $registration   =  $ten->companynumber ;
-                             } @endphp
-                           
+                                @foreach($tenant as $abc)
+                            <tr>
                                     <td>{{$count ++}}</td>
-                                    <td>{{ $ten->typedescription }}</td>
-                                    <td>{{ $owner}}</td>
-                                    <td>{{ $registration }}</td>
-                                    <td>{{ $ten->cell }}</td>
-                                    <td>{{ $ten->reasons }}</td>
-                                    <td>@php $id= Crypt::encrypt($ten->id); @endphp
-                                        <a class="btn btn-secondary btn-sm view" id=""
-                                        href="{{route('tenant.editview', $id)}}"
-                                        title="view"><i class="ti-pencil mr-0-5"></i>edit</a>
-                                        <a onclick = "deletelandlord(this); return false;"
-                                        class="btn btn-danger btn-sm" href="{{route('landlord.deleterejected', $id)}}"
-                                        title="View Landlord"><i class="ti-close mr-0-5"></i>delete</a>
+                                    <td>{{ $abc->clienttype }}</td>
+                                    <td>{{ $abc->fullname}}  {{ $abc->companyname}}</td>
+                                    <td>{{ $abc->companynumber }} {{ $abc->nationalid }}</td>
+                                    <td>{{ $abc->cell }}</td>
+                                    <td>{{ $abc->email }}</td>
+                                    <td>{{ $abc->reasons }}</td>
+                                    <td>@php $id= Crypt::encrypt($abc->id); @endphp
+                                        @if (in_array(2,$arraycontrolids))<a class="btn btn-secondary 
+                                    btn-sm" id=""href="{{route('propdec.editviewten', $id)}}"
+                                     title="view"><i class="ti-pencil mr-0-5"></i>edit</a> @endif
+                                     @if (in_array(4,$arraycontrolids))<a class="btn btn-danger btn-sm"
+                                      onclick = "rejectapproval(this); return false;"
+                                     id=""href="{{route('propdec.landdel', $id)}}"
+                                     title="view"><i class="ti-close mr-0-5"></i>remove</a> @endif
                             </td>
                             </tr>
                             @endforeach
@@ -66,6 +56,7 @@
                                     <th>Name</th>
                                     <th>Registration</th>
                                     <th>Cell</th>
+                                    <th>Email</th>
                                     <th>Reason</th>
                                     <th>Option</th>
                                 </tr>
@@ -79,9 +70,6 @@
     @endsection
     @section('additional js')
     <!-- Additional JS Start-->
-    <script src="{{ asset('css/select2/select2.min.js') }}"></script>
-        <script src="{{ asset('js/select2.js') }}"></script>
-		<script src="{{ asset('js/dropdown.js') }}"></script>
-		<script src="{{ asset('js/add-banking-details.js') }}"></script> 
+    <script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script> 
     <!-- Additional JS End-->
     @endsection

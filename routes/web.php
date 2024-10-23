@@ -34,15 +34,7 @@ use Illuminate\Support\Facades\Route;
 /*
 //Route::resource('tenant', TenantController::class);
 Route::controller(TenantController::class)->group(function () {
-    Route::get('/edit/tenant/{id}/view', 'viewedittenant')->name('tenant.editview');
-    Route::any('/reject-tenant/{id}', 'rejecttenant')->name('tenant.reject');
-    Route::any('/tenant-rejected', 'rejected')->name('tenant.rejected');
-    --Route::any('/manage-tenant', 'listtenants')->name('tenant.list');
     Route::get('/single-tenant/details/{id}', 'gettenantdetails')->name('tenant.tenantdetails');
-    Route::get('/update/{id}/edit-tenant', 'updatetenant')->name('tenant.updating');
-    --Route::get('/tenant/{id}/view', 'viewindividual')->name('tenant.view');
-    --Route::get('/tenant/{id}/view-leases', 'viewtenantlease')->name('tenant.viewlease');
-    Route::any('/disable/{id}/tenant', 'disabletenant')->name('tenant.disable');
 });
 //Route::resource('property', PropertyController::class);
 Route::controller(PropertyController::class)->group(function () {
@@ -269,6 +261,10 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/disable/{id}/property', 'disableproperty')->name('propdec.disprop');
     Route::any('/prop/disable/{id}/tenant', 'disabletenant')->name('propdec.disten');
     Route::any('/prop/disable/{id}/tenant/contact/{cid}', 'disabletenantcontact')->name('propdec.distencon');
+    Route::any('/prop/tenant/{id}/decline', 'declinenewtenant')->name('propdec.tendec');
+    Route::get('/prop/tenant/list/declined', 'listdeclinetenant')->name('propdec.listtendec');
+    Route::get('/prop/view/tenant/{id}/edit/dec', 'vieweditsingletenant')->name('propdec.editviewten');
+    Route::any('/prop/{id}/tenant/update/details', 'updatesingletenant')->name('propdec.tenupd'); 
 
 });
 /*-------------------end property management declines------------------------ */

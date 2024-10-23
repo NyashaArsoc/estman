@@ -30,7 +30,7 @@ $id= Crypt::encrypt($tenant->id);
             </li>
         </ul>
         <form class="form-material material-primary" id="defaultform" method="POST"
-                action="{{ route('propdec.landdec', $id)}}">@csrf
+                action="{{ route('propdec.tendec', $id)}}">@csrf
         <!-- Tabs Content -->
         <div class="tab-content" id="clientTabContent">
             <div class="tab-pane show active" id="tenant-detail" role="tabpanel" aria-labelledby="tenant-detail-tab">
