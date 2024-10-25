@@ -1,40 +1,5 @@
 $(document).ready(function () { 
 
-   
- 
-
-
-
-$("#reasonscheck").hide();
-let reasonsError = true;
-$("#ReasonsForDecline").keyup(function () {
-    validateReasons();
-});
-function validateReasons() {
-    let textValue = $("#ReasonsForDecline").val();
-    if (textValue.length == "") {
-        $("#reasonscheck").show();
-        reasonsError = false;
-        return false;
-    } else if (textValue.length < 3) {
-        $("#reasonscheck").show();
-        $("#reasonscheck").html("**write a proper reason");
-        reasonsError = false;
-        return false;
-    } else {
-        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#reasonscheck").show();
-                $("#reasonscheck").html("**follow the required format");
-                reasonsError = false;
-                return false;
-            }else{
-              reasonsError = true;
-                $("#reasonscheck").hide();
-            }
-    }
-}
 //valid security charges
 $("#remitcalcdeductionscheck").hide();
 $("#securitychargecheck").hide();
@@ -169,60 +134,6 @@ function validateOtherExpensesCharge() {
         return false;
     }
 }
-
- // button reject 
- $("#reject-property").click(function () {
-    validateReasons();
-
-    if(reasonsError == true ){
-        //valid
-        return true;
-    }else{
-        //failed
-        return false;
-    }
-
-});
-//button edit
-$("#btn-submit-edit").click(function () {
-    try {
-        validateLandlordType();validateLandlordName();validateProvince();
-        validateCity();validatePropertyType();validateLocation();
-        validateAddress();validateCurrency();validateCommissionType();
-        validateCommissionPercent();
-        if(landlordtypeError == true && landlordnameError== true && provinceError == true
-            && cityError == true && propertytypeError == true && locationError == true &&
-            propertyaddressError == true && rentalcurrencyError == true && 
-            commissiontypeError == true && commissionpercentError == true){
-            //valid for above check the property type
-            var PropertyTypeVal = $("#PropertyType").val();
-            if (PropertyTypeVal == 1){ //residential
-                validateAddRooms(); validateAddBathRooms(); validateAddBedRooms();
-                validateAddExpectedRental();
-                if (addroomsError == true && addbedroomsError == true && 
-                    addbathroomsError == true && addexpectedrentalError == true){
-                    return true;
-                    }else{
-                        return false;
-                    }
-            }else{ // commercial or any other
-                validateAddTotalArea(); validateAddExpectedRate(); validateAddLettableArea();
-                if (addtotalareaError == true && addexpectedrateError == true &&
-                    addlettableareaError == true){
-                        return true;
-                    }else{
-                        return false;
-                    }
-            }
-            }else{
-                return false;
-            }
-    } catch (err) {
-        alert(err.message);
-        return false;
-    }
-   
-});
 
 // button reject 
 $("#btn-pre-remit").click(function () {

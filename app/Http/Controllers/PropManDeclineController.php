@@ -119,7 +119,7 @@ public function updatesinglelandlord($id, Request $request,$contactid){
             ->update( ['email'=>$request->contactemail,'cell'=>$request->contactcell,
             'lastname'=>$request->contactlastname,'firstname'=>$request->contactfirstname]);
                 return  redirect()->route('propdec.listlanddec') 
-                ->with('success', 'record removed');
+                ->with('success', 'record updated');
             } catch (\Throwable $th) {
                 return redirect()->route('propdec.editviewland',$id)
                 ->with('error', 'failed to load');
@@ -214,6 +214,126 @@ public function disableproperty($id){
             }
         }catch (DecryptException $th) {
             return redirect()->route('propma.landproplist')
+            ->with('error', 'failed to load');
+        }
+}
+public function declinenewproperty($id,Request $request){
+    try{
+        $propertyid = Crypt::decrypt($id);
+            try {
+                DB::table('propmanproperty')
+                ->where('id',$propertyid)
+                ->update(['approval' => 'R' , 'available'=> 'N', 'reasons'=> $request->reasons_comments]);
+                return  redirect()->route('propapp.listprop') 
+                ->with('success', 'record declined');
+            } catch (\Throwable $th) {
+                return redirect()->route('propapp.viewprop',$id)
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propapp.viewprop',$id)
+            ->with('error', 'failed to load');
+        } 
+}
+public function listdeclinedproperty(){
+    try {
+        $arr['property']   = DB::table('propmanallproperty')
+        ->where('approval','=' ,'R')
+        ->select('*')->get();
+        return view('propman.declined.list-property-declined-approval')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+}
+public function vieweditsingleproperty($id){
+    try{
+        $propertyid = Crypt::decrypt($id);
+            try {
+                $clienttype = $this->getclienttype();
+                $currencycode = $this->getcurrencycode();
+                $arr['property']   = DB::table('propmanallproperty')
+            ->where('id', $propertyid)->select('*')->first();  
+            $arr['province']   = DB::table('setupprovince')->select('*')->get();
+            $arr['proptype']   = DB::table('setuppropertytype')->select('*')->get();
+            $arr['commtype']   = DB::table('setupcommissionoptions')->select('*')->get();
+            $arr['currency'] = $currencycode; 
+            $arr['type'] = $clienttype; 
+                return view('propman.declined.view-single-property-edit')->with($arr);
+            } catch (\Throwable $th) {
+                return redirect()->route('propdec.listlanddec')
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propdec.listlanddec')
+            ->with('error', 'failed to load');
+        }
+}
+public function updatesingleproperty($id, Request $request){
+    try{
+        $propertyid = Crypt::decrypt($id);
+            try {
+                $request->validate([
+                    'mandate' => 'required',
+                ]);
+                //checking if the attachment is there 
+         if ($request->hasFile('mandate')) {
+            $reportdoc = $request->file('mandate');
+            $reportdocname = $request->billingaddress . '.' . $reportdoc->getClientOriginalExtension();
+            $reportdoc->storeAs('public/documents/prop/mandate', $reportdocname);
+        }
+        //checking if the attachment is there 
+        if ($request->hasFile('otherattachment')) {
+            $otherattachment = $request->file('otherattachment');
+            $otherattachmentname = $request->billingaddress. '.' . $otherattachment->getClientOriginalExtension();
+            $otherattachment->storeAs('public/documents/prop/other', $otherattachmentname);
+        }$otherattachmentname = null;
+
+                DB::table('propmanproperty')
+                ->where('id',$propertyid)
+                ->update(['currencycode'=> $request->currencycode, 'landlordid'=> $request->landlordname,'operatorid'=>
+            session('alluser'), 'propertytypeid'=> $request->propertytype, 'city' =>ucfirst($request->city),
+            'location' => ucfirst($request->locationsurburb), 'streetaddress'=> $request->billingaddress,'standnumber'
+            => $request->standnumber, 'comments'=> $request->commentshighlights, 'rooms'=>  $request->rooms,
+            'bedrooms'=> $request->bedrooms, 'bathrooms'=> $request->bathrooms,'stories'=> $request->stories,
+            'totalarea'=> $request->totalarea,'lettablearea'=> $request->lettablearea,'ratesqm'=>
+            $request->expectedrate,'expectedrental'=> $request->expectedrental, 'mandate'=> $reportdocname,
+            'otherattachement'=>$otherattachmentname,'approval'=>'N','provinceid'=> $request->province ]);
+
+            DB::table('propmancommissionpercent')->where('propertyid',$propertyid)
+            ->update( ['setupcommissionoptionid'=>$request->commissiontype, 
+                'percentage'=>$request->commissionpercentage]);
+                return  redirect()->route('propdec.listpropdec') 
+                ->with('success', 'record updated');
+            } catch (\Throwable $th) {
+                return redirect()->route('propdec.editviewprop',$id)
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propdec.editviewprop',$id)
+            ->with('error', 'failed to load');
+        }
+}
+public function deletesingleproperty($id){
+    try{
+        $propertyid = Crypt::decrypt($id);
+            try {
+                if (DB::table('propmanalllease')->select('id')->where('propertyid',
+                 $propertyid)->where('available','=','Y')->exists()) {
+                    return  redirect()->route('propdec.listpropdec')
+                    ->with('error', 'active leases still attached');
+                }
+                DB::table('propmanproperty')
+                ->where('id',$propertyid)
+                ->update(['approval' => 'D' , 'available'=> 'N','approvedby'=>session('alluser'),
+            'dateapproved'=>now()]);
+                return  redirect()->route('propdec.listpropdec') 
+                ->with('success', 'record removed');
+            } catch (\Throwable $th) {
+                return redirect()->route('propdec.listpropdec')
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propdec.listpropdec')
             ->with('error', 'failed to load');
         }
 }
@@ -344,6 +464,30 @@ public function updatesingletenant($id, Request $request){
             }
         }catch (DecryptException $th) {
             return redirect()->route('propdec.editviewten',$id)
+            ->with('error', 'failed to load');
+        }
+}
+public function deletesingletenant($id){
+    try{
+        $tenantid = Crypt::decrypt($id);
+            try {
+                if (DB::table('propmanalllease')->select('id')->where('tenantid',
+                 $tenantid)->where('available','=','Y')->exists()) {
+                    return  redirect()->route('propdec.listtendec')
+                    ->with('error', 'active leases still attached');
+                }
+                DB::table('propmantenant')
+                ->where('id',$tenantid)
+                ->update(['approval' => 'D' , 'available'=> 'N','approvedby'=>session('alluser'),
+            'dateapproved'=>now()]);
+                return  redirect()->route('propdec.listtendec') 
+                ->with('success', 'record removed');
+            } catch (\Throwable $th) {
+                return redirect()->route('propdec.listtendec')
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propdec.listtendec')
             ->with('error', 'failed to load');
         }
 }

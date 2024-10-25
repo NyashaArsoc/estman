@@ -43,7 +43,7 @@
                                      title="view"><i class="ti-pencil mr-0-5"></i>edit</a> @endif
                                      @if (in_array(4,$arraycontrolids))<a class="btn btn-danger btn-sm"
                                       onclick = "rejectapproval(this); return false;"
-                                     id=""href="{{route('propdec.landdel', $id)}}"
+                                     id=""href="{{route('propdec.tendel', $id)}}"
                                      title="view"><i class="ti-close mr-0-5"></i>remove</a> @endif
                             </td>
                             </tr>

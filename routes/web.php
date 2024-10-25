@@ -38,19 +38,11 @@ Route::controller(TenantController::class)->group(function () {
 });
 //Route::resource('property', PropertyController::class);
 Route::controller(PropertyController::class)->group(function () {
-    -Route::get('/edit/{id}/property', 'vieweditproperty')->name('property.editview');
-    Route::any('/reject-property/{id}', 'rejectproperty')->name('property.reject');
-    Route::any('/property-rejected', 'rejected')->name('property.rejected');
-    Route::any('/delete-rejected-property/{id}', 'deleterejected')->name('property.deleterejected');
-    -Route::any('/edit-update-tenant/{id}', 'updateproperty')->name('property.editupdate');
     Route::any('/property-areaavailable/{id}', 'getpropertyareaavailable')->name('property.areaavailable');
-    Route::get('/property/{id}/view-ledgers', 'viewledgers')->name('property.ledgers');
-    Route::post('/property/{id}/sub-ledgers/{product}', 'createsubledgers')->name('property.createsub');
     Route::get('/property-remittance', 'remitlist')->name('property.remit');
     Route::any('/genarate-preremit', 'compilepreremitlist');
     Route::get('/property/{id}/remit/{currency}/{period}', 'prepareremittance')->name('property.remitprepare');
     Route::any('/remit/{id}/property/{currency}', 'addpreremit')->name('property.preremit');
-    --Route::any('/property/{id}/disable', 'disableproperty')->name('property.disable');
 });
 Route::controller(LeaseController::class)->group(function () {
     Route::any('/reject-lease/{id}', 'rejectlease')->name('lease.reject');
@@ -229,7 +221,7 @@ Route::middleware('loginauth')->controller(PropManApprovalController::class)->gr
    Route::get('/prop/list/approval/landlord', 'listlandlordapproval')->name('propapp.listland');
    Route::get('/prop/view/{id}/landlord/approval', 'viewlandlordapproval')->name('propapp.viewland');
    Route::get('/prop/{id}/landlord/approve', 'approvenewsinglelandlordapproval')->name('propapp.landapprove');
-   Route::get('/prop/list/property/approval', 'listpropertyapproval')->name('propapp.listprop');
+   Route::get('/prop/list/approval/property', 'listpropertyapproval')->name('propapp.listprop');
    Route::get('/prop/view/{id}/property/approval', 'viewpropertyapproval')->name('propapp.viewprop');
    Route::any('/prop/property/{id}/approve', 'approvenewproperty')->name('propapp.propapp');
    Route::get('/prop/list/tenant/approval', 'listtenantapproval')->name('propapp.listten');
@@ -265,6 +257,12 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::get('/prop/tenant/list/declined', 'listdeclinetenant')->name('propdec.listtendec');
     Route::get('/prop/view/tenant/{id}/edit/dec', 'vieweditsingletenant')->name('propdec.editviewten');
     Route::any('/prop/{id}/tenant/update/details', 'updatesingletenant')->name('propdec.tenupd'); 
+    Route::any('/prop/property/{id}/decline', 'declinenewproperty')->name('propdec.propdec');
+    Route::get('/prop/property/list/declined', 'listdeclinedproperty')->name('propdec.listpropdec');
+    Route::get('/prop/view/property/{id}/edit', 'vieweditsingleproperty')->name('propdec.editviewprop');
+    Route::any('/prop/{id}/property/update/dec', 'updatesingleproperty')->name('propdec.propupd'); 
+    Route::any('/prop/property/{id}/delete', 'deletesingleproperty')->name('propdec.propdel');
+    Route::any('/prop/tenant/{id}/delete', 'deletesingletenant')->name('propdec.tendel');
 
 });
 /*-------------------end property management declines------------------------ */
