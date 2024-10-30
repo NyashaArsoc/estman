@@ -2,7 +2,7 @@
     $title = 'Approve Lease';
     $description = 'approve lease...';
  if ($lease->propertytypeid == 1){
-    $divclasscompany      =   'dropdwn';
+    $divindividualclass      =   'dropdwn';
  }else{
     $divclasscompany   =   'dropdwn';
  }

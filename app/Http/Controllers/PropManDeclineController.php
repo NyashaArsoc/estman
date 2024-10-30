@@ -193,6 +193,47 @@ public function declinenewlease($id,Request $request){
             ->with('error', 'failed to load');
         }
 }
+public function listdeclinelease(){
+    try {
+        $arr['lease']   = DB::table('propmanalllease')
+        ->where('approval','=' ,'R')
+        ->select('*')->get();
+        return view('propman.declined.list-lease-declined-approval')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+}
+public function vieweditsinglelease($id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+            try {
+                $clienttype = $this->getclienttype();
+                $currencycode = $this->getcurrencycode();
+                $arr['type'] = $clienttype;
+                $arr['currency'] = $currencycode; 
+                $arr['lease']   = DB::table('propmanalllease')->where('id',
+                 $leaseid)->select(columns: '*')->first();  
+                $arr['prepay']   = DB::table('propmantempleaseprepayments')->where('leaseid',
+                 $leaseid) ->select('*')->get();
+                $arr['balance']   = DB::table('propmantempleasearrearsdetails')->where('leaseid',
+                 $leaseid)->select('*')->get();
+                $arr['rates']   = DB::table('propmantempleasecurrentbillrates')->where('leaseid',
+                 $leaseid) ->select('*')->get();
+                $arr['province']   = DB::table('setupprovince')->select('*')->get();
+                $arr['proptype']   = DB::table('setuppropertytype')->select('*')->get();
+                $arr['commtype']   = DB::table('setupcommissionoptions')->select('*')->get();
+                $arr['clienttype']   = DB::table('propmanalltenant')->where('id',
+                 $arr['lease']->tenantid) ->select('*')->first();
+                return view('propman.declined.view-single-lease-edit')->with($arr);
+            } catch (\Throwable $th) {
+                return redirect()->route('propdec.listlanddec')
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propdec.listlanddec')
+            ->with('error', 'failed to load');
+        }
+}
 /*---------------end decline new lease-----------------*/
 /*------------property----------------------------*/
 public function disableproperty($id){

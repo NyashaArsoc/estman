@@ -212,6 +212,10 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::post('/prop/add/{id}/tenant/new/contact', 'addtenantnewcontact')->name('propin.addnewtencon');
     Route::get('/prop/add/{id}/lease/rates', 'addleaserate')->name('propin.addlearate');
     Route::post('/prop/add/new/lease/rates/{id}', 'addnewleaserate')->name('propin.addnewlearate');
+    Route::get('/prop/add/{id}/lease/prepay', 'addleaseprepay')->name('propin.addleapre');
+    Route::post('/prop/add/new/lease/prepay/{id}', 'addnewleaseprepay')->name('propin.addnewleaprepay');
+    Route::get('/prop/add/{id}/lease/arrear', 'addleasearrear')->name('propin.addleaarrer');
+    Route::post('/prop/add/new/lease/arrear/{id}', 'addnewleasearrear')->name('propin.addnewleaarrear');
 
 });
 /*-------------------end property management intake------------------------ */
@@ -263,6 +267,8 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/{id}/property/update/dec', 'updatesingleproperty')->name('propdec.propupd'); 
     Route::any('/prop/property/{id}/delete', 'deletesingleproperty')->name('propdec.propdel');
     Route::any('/prop/tenant/{id}/delete', 'deletesingletenant')->name('propdec.tendel');
+    Route::get('/prop/lease/list/declined', 'listdeclinelease')->name('propdec.listleadec');
+    Route::get('/prop/view/lease/{id}/edit/dec', 'vieweditsinglelease')->name('propdec.editviewlea');
 
 });
 /*-------------------end property management declines------------------------ */

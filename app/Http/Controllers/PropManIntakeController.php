@@ -460,5 +460,77 @@ public function addnewleaserate(Request $request, $id){
         ->with('error', 'failed to load');
     }
 } 
+public function addleaseprepay($id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            $currencycode = $this->getcurrencycode();
+            $arr['currency'] = $currencycode; 
+            $arr['lease']   = DB::table('propmanalllease')
+            ->where('id', $leaseid)->select('*')->first();  
+            return view('propman.intake.add-single-lease-prepay')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propdec.editviewlea',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propdec.editviewlea',$id)
+        ->with('error', 'failed to load');
+    }
+}
+public function addnewleaseprepay(Request $request, $id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            DB::table('propmantempleaseprepayments')->insert( [
+                'currencycode'=>$request->currencycode,
+            'balance'=>$request->amount,'leaseid'=>$leaseid]);
+            return  redirect()->route('propdec.editviewlea',$id) 
+            ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return redirect()->route('propdec.editviewlea',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propdec.editviewlea',$id)
+        ->with('error', 'failed to load');
+    }
+} 
+public function addleasearrear($id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            $currencycode = $this->getcurrencycode();
+            $arr['currency'] = $currencycode; 
+            $arr['lease']   = DB::table('propmanalllease')
+            ->where('id', $leaseid)->select('*')->first();  
+            return view('propman.intake.add-single-lease-arrear')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propdec.editviewlea',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propdec.editviewlea',$id)
+        ->with('error', 'failed to load');
+    }
+}
+public function addnewleasearrear(Request $request, $id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            DB::table('propmantempleasearrearsdetails')->insert( [
+                'currencycode'=>$request->currencycode,'operatorid'=>session('alluser')
+            ,'balrent'=>$request->amount,'leaseid'=>$leaseid]);
+            return  redirect()->route('propdec.editviewlea',$id) 
+            ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return redirect()->route('propdec.editviewlea',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propdec.editviewlea',$id)
+        ->with('error', 'failed to load');
+    }
+} 
   /*---------------end creating new lease-----------------*/
 }

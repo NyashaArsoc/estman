@@ -250,11 +250,11 @@ public function viewleaseapproval($id){
         try {
             $arr['lease']   = DB::table('propmanalllease')
             ->where('id', $leaseid)->select('*')->first();  
-            $arr['prepay']   = DB::table('propmanleaseprepayments')->where('id', $leaseid)
+            $arr['prepay']   = DB::table('propmanleaseprepayments')->where('leaseid', $leaseid)
             ->select('*')->first();
-            $arr['balance']   = DB::table('propmanleasearrearsdetails')->where('id', $leaseid)
+            $arr['balance']   = DB::table('propmanleasearrearsdetails')->where('leaseid', $leaseid)
             ->select('*')->first();
-            $arr['rates']   = DB::table('propmanleasecurrentbillrates')->where('id', $leaseid)
+            $arr['rates']   = DB::table('propmanleasecurrentbillrates')->where('leaseid', $leaseid)
             ->select('*')->get();
 
             return view('propman.approval.view-single-lease-approval')->with($arr);

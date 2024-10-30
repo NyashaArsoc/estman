@@ -1669,3 +1669,11 @@ $("#btn-edit-lease").click(function () {
         return false;
     }
 });
+//btn add lease prepay/arrears 
+$("#btn-add-lease-prepay").click(function () {
+    validateCurrencyCode();validateLeaseRatesCost();
+    try{
+            if(currencycodeError==true && leaseratecostError==true  )
+                {return true}else{return false}
+    }catch(err){return false;}
+});
