@@ -240,13 +240,21 @@ $divcompanyclass = $lease->propertytypeid != 1 ? 'hide': 'dropdwn';
                 <tbody>@php $count=1;@endphp
                     @foreach($rates as $abc)
                     <tr>
+                        @php $itemid= Crypt::encrypt($abc->id); @endphp
                     <td>{{$count ++}}</td>
                     <td>{{ $abc->currencycode }}</td>
                     <td>{{ number_format($abc->ratescosts,2) }}</td>
                     <td>{{ number_format($abc->operationalcosts,2) }}</td>
                     <td>{{ number_format($abc->deposit,2) }}</td>   
                     <td>{{ number_format($abc->adminstrationfee,2) }}</td>
-                    <td></td>                                       
+                    <td>@if (in_array(2,$arraycontrolids))<a class="btn btn-secondary btn-sm"  
+                        href="{{ route('propma.editlandcon',[$id,$itemid]) }}"
+                        title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>@endif
+                        @if (in_array(4,$arraycontrolids))<a class="btn btn-danger btn-sm" 
+                        href="{{ route('propdec.dislancon',[$id,$itemid]) }}"title="disable" 
+                        onclick = "deactivaterecord(this); return false;"><i class="ti-close 
+                        mr-0-5"></i>delete</a>@endif
+                    </td>                                       
                     </tr>  
                     @endforeach
                 </tbody>
@@ -272,10 +280,18 @@ $divcompanyclass = $lease->propertytypeid != 1 ? 'hide': 'dropdwn';
                 <tbody>@php $count=1;@endphp
                     @foreach($prepay as $abc)
                     <tr>
+                        @php $itemid= Crypt::encrypt($abc->id); @endphp
                     <td>{{$count ++}}</td>
                     <td>{{ $abc->currencycode }}</td>
                     <td>{{ number_format($abc->balance,2) }}</td>  
-                    <td></td>                                    
+                    <td>@if (in_array(2,$arraycontrolids))<a class="btn btn-secondary btn-sm" 
+                         href="{{ route('propdec.editleapre',[$id,$itemid]) }}"
+                        title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>@endif
+                        @if (in_array(4,$arraycontrolids))<a class="btn btn-danger btn-sm" 
+                        href="{{ route('propdec.dislancon',[$id,$itemid]) }}"title="disable" 
+                        onclick = "deactivaterecord(this); return false;"><i class="ti-close 
+                        mr-0-5"></i>delete</a>@endif
+                    </td>                                    
                     </tr>  
                     @endforeach
                 </tbody>
@@ -301,10 +317,18 @@ $divcompanyclass = $lease->propertytypeid != 1 ? 'hide': 'dropdwn';
                 <tbody>@php $count=1;@endphp
                     @foreach($balance as $abc)
                     <tr>
+                        @php $itemid= Crypt::encrypt($abc->id); @endphp
                     <td>{{$count ++}}</td>
                     <td>{{ $abc->currencycode }}</td>
                     <td>{{ number_format($abc->balrent,2) }}</td>
-                    <td></td>                                        
+                    <td>@if (in_array(2,$arraycontrolids))<a class="btn btn-secondary btn-sm" 
+                         href="{{route('propdec.editleaarrear',[$id,$itemid])}}"
+                        title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>@endif
+                        @if (in_array(4,$arraycontrolids))<a class="btn btn-danger btn-sm" 
+                        href="{{route('propdec.dislancon',[$id,$itemid]) }}"title="disable" 
+                        onclick = "deactivaterecord(this); return false;"><i class="ti-close 
+                        mr-0-5"></i>delete</a>@endif
+                    </td>                                        
                     </tr>  
                     @endforeach
                 </tbody>

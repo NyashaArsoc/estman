@@ -269,6 +269,10 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/tenant/{id}/delete', 'deletesingletenant')->name('propdec.tendel');
     Route::get('/prop/lease/list/declined', 'listdeclinelease')->name('propdec.listleadec');
     Route::get('/prop/view/lease/{id}/edit/dec', 'vieweditsinglelease')->name('propdec.editviewlea');
+    Route::get('/prop/lease/{id}/prepay/{itemid}/edit', 'vieweditleaseprepaydetails')->name('propdec.editleapre');
+    Route::any('/prop/lease/{id}/prepay/{lid}/update', 'updateleaseprepaydetails')->name('propdec.uptleaprepay');
+    Route::get('/prop/lease/{id}/arrear/{itemid}/edit', 'vieweditleasearreardetails')->name('propdec.editleaarrear');
+    Route::any('/prop/lease/{id}/arrear/{lid}/update', 'updateleasearreardetails')->name('propdec.uptleaprearrear');
 
 });
 /*-------------------end property management declines------------------------ */
