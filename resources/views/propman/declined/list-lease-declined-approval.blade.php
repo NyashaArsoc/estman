@@ -1,7 +1,7 @@
-@php $title = 'Pending Approval'; 
-      $description = 'leases pending approval...'; @endphp
+@php $title = 'Rejected Leases'; 
+      $description = 'all leases rejected...'; @endphp
     @extends('layout.propman-main-menu')
-    @section('title', 'Lease Approval')
+    @section('title', 'Lease Rejected')
     @section('additional css')
     <!-- Additional css Start-->
     <!-- Additional css End-->

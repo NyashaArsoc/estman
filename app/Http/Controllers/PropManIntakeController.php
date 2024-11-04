@@ -532,5 +532,42 @@ public function addnewleasearrear(Request $request, $id){
         ->with('error', 'failed to load');
     }
 } 
+public function addnewleaseratedeclined(Request $request, $id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            DB::table('propmantempleasecurrentbillrates')->insert( [
+                'currencycode'=>$request->currencycode,
+            'operationalcosts'=>$request->leaseoperationalcost, 'ratescosts'=>$request->leaseratescost,
+            'leaseid'=>$leaseid]);
+            return  redirect()->route('propdec.editviewlea',$id) 
+            ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return redirect()->route('propdec.editviewlea',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propdec.editviewlea',$id)
+        ->with('error', 'failed to load');
+    }
+}
+public function addleaseratedeclined($id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            $arr['lease']   = DB::table('propmanalllease')->where('id', $leaseid)
+            ->select('*')->first();  
+            $currencycode = $this->getcurrencycode();
+            $arr['currency'] = $currencycode;
+            return view('propman.intake.add-single-lease-rate-declined')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.edittena',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.edittena',$id)
+        ->with('error', 'failed to load');
+    }
+}
   /*---------------end creating new lease-----------------*/
 }

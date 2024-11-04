@@ -68,24 +68,7 @@ function approveprofomaedited(that) {
         window.location = anchor.attr("href");
     }
 }
-function deactivatelandlord(that) {
-    var proceedto = confirm("proceed to disable this landlord?")
-    if (proceedto) {
-        window.location = anchor.attr("href");
-    }
-}
-function deactivatetenant(that) {
-    var proceedto = confirm("proceed to disable this tenant?")
-    if (proceedto) {
-        window.location = anchor.attr("href");
-    }
-}
-function deactivateproperty(that) {
-    var proceedto = confirm("proceed to disable this property?")
-    if (proceedto) {
-        window.location = anchor.attr("href");
-    }
-}
+
 function deactivaterecord(that) {
     var proceedto = confirm("proceed to disable this entry?")
     if (proceedto) {
@@ -106,6 +89,12 @@ function closeportfolio(that) {
 }
 function closeportfolioreview(that) {
     var proceedto = confirm("all corrections completed on this report?")
+    if (proceedto) {
+        window.location = anchor.attr("href");
+    }
+}
+function deleterecord(that) {
+    var proceedto = confirm("proceed to delete this entry?")
     if (proceedto) {
         window.location = anchor.attr("href");
     }

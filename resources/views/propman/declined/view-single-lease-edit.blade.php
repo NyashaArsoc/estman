@@ -49,7 +49,7 @@ $divcompanyclass = $lease->propertytypeid != 1 ? 'hide': 'dropdwn';
             <!-- Tabs Content -->
         <div class="tab-content" id="clientTabContent">
             <div class="tab-pane show active" id="lease-detail" role="tabpanel" aria-labelledby="lease-detail-tab">
-            <form class="form-material material-primary" action="{{ route('propin.addnewlease') }}"
+            <form class="form-material material-primary" action="{{ route('propdec.uptlea',$id) }}"
             method="POST" enctype="multipart/form-data"> @csrf <hr>
                 <div class="form-group row">
                     <label for="" class="col-sm-2 form-control-label">Client Type</label>
@@ -223,7 +223,10 @@ $divcompanyclass = $lease->propertytypeid != 1 ? 'hide': 'dropdwn';
         </form>
     </div>
     <div class="tab-pane show" id="rates-info" role="tabpanel" aria-labelledby="rates-info-tab">
-        <br/> <h5>Lease Rates  </h5><hr/>
+        <br/> <h5>Lease Rates  </h5>@if (in_array(1,$arraycontrolids))
+        <a  class="btn btn-primary btn-sm" href="{{route('propin.addlearatedec', $id)}}
+        " title="add">create new</a>
+        @endif<hr/>
         <div class="table-responsive" style="margin-top: 15px;">
             <table class="table table-bordered table-hover" id="leaseitems">
                 <thead>
@@ -248,11 +251,11 @@ $divcompanyclass = $lease->propertytypeid != 1 ? 'hide': 'dropdwn';
                     <td>{{ number_format($abc->deposit,2) }}</td>   
                     <td>{{ number_format($abc->adminstrationfee,2) }}</td>
                     <td>@if (in_array(2,$arraycontrolids))<a class="btn btn-secondary btn-sm"  
-                        href="{{ route('propma.editlandcon',[$id,$itemid]) }}"
+                        href="{{ route('propdec.editlearat',[$itemid,$id]) }}"
                         title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>@endif
                         @if (in_array(4,$arraycontrolids))<a class="btn btn-danger btn-sm" 
-                        href="{{ route('propdec.dislancon',[$id,$itemid]) }}"title="disable" 
-                        onclick = "deactivaterecord(this); return false;"><i class="ti-close 
+                        href="{{ route('propdec.dellearate',[$itemid,$id]) }}"title="delete" 
+                        onclick = "deleterecord(this); return false;"><i class="ti-close 
                         mr-0-5"></i>delete</a>@endif
                     </td>                                       
                     </tr>  
@@ -288,8 +291,8 @@ $divcompanyclass = $lease->propertytypeid != 1 ? 'hide': 'dropdwn';
                          href="{{ route('propdec.editleapre',[$id,$itemid]) }}"
                         title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>@endif
                         @if (in_array(4,$arraycontrolids))<a class="btn btn-danger btn-sm" 
-                        href="{{ route('propdec.dislancon',[$id,$itemid]) }}"title="disable" 
-                        onclick = "deactivaterecord(this); return false;"><i class="ti-close 
+                        href="{{ route('propdec.delleaprepay',[$id,$itemid]) }}"title="disable" 
+                        onclick = "deleterecord(this); return false;"><i class="ti-close 
                         mr-0-5"></i>delete</a>@endif
                     </td>                                    
                     </tr>  
@@ -325,8 +328,8 @@ $divcompanyclass = $lease->propertytypeid != 1 ? 'hide': 'dropdwn';
                          href="{{route('propdec.editleaarrear',[$id,$itemid])}}"
                         title="edit"><i class="ti-pencil mr-0-5"></i>edit</a>@endif
                         @if (in_array(4,$arraycontrolids))<a class="btn btn-danger btn-sm" 
-                        href="{{route('propdec.dislancon',[$id,$itemid]) }}"title="disable" 
-                        onclick = "deactivaterecord(this); return false;"><i class="ti-close 
+                        href="{{route('propdec.delleaarrear',[$itemid,$id]) }}"title="delete" 
+                        onclick = "deleterecord(this); return false;"><i class="ti-close 
                         mr-0-5"></i>delete</a>@endif
                     </td>                                        
                     </tr>  
@@ -344,7 +347,7 @@ $divcompanyclass = $lease->propertytypeid != 1 ? 'hide': 'dropdwn';
 @section('additional js')
     <!-- Additional JS Start-->
     <script src="{{ asset('js/validation/intakepropman.js') }}"></script>
-    
+    <script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script> 
     <script src="{{ asset('css/select2/select2.min.js') }}"></script>
     <script src="{{ asset('js/select2.js') }}"></script>
     <script src="{{ asset('js/dropdown.js') }}"></script>

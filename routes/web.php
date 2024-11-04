@@ -216,6 +216,8 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::post('/prop/add/new/lease/prepay/{id}', 'addnewleaseprepay')->name('propin.addnewleaprepay');
     Route::get('/prop/add/{id}/lease/arrear', 'addleasearrear')->name('propin.addleaarrer');
     Route::post('/prop/add/new/lease/arrear/{id}', 'addnewleasearrear')->name('propin.addnewleaarrear');
+    Route::get('/prop/add/{id}/lease/rates/declined', 'addleaseratedeclined')->name('propin.addlearatedec');
+    Route::post('/prop/add/declined/new/lease/rates/{id}', 'addnewleaseratedeclined')->name('propin.addnewlearatedec');
 
 });
 /*-------------------end property management intake------------------------ */
@@ -273,7 +275,13 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/lease/{id}/prepay/{lid}/update', 'updateleaseprepaydetails')->name('propdec.uptleaprepay');
     Route::get('/prop/lease/{id}/arrear/{itemid}/edit', 'vieweditleasearreardetails')->name('propdec.editleaarrear');
     Route::any('/prop/lease/{id}/arrear/{lid}/update', 'updateleasearreardetails')->name('propdec.uptleaprearrear');
-
+    Route::get('/prop/lease/{rid}/edit/{id}/rate/dec', 'vieweditleaserate')->name('propdec.editlearat');
+    Route::any('/prop/lease/{rid}/update/{id}/rates/dec', 'updateleaserate')->name('propdec.updtlearate');
+    Route::any('/prop/lease/{rid}/delete/{id}/rates/dec', 'deleteleaserate')->name('propdec.dellearate');
+    Route::any('/prop/lease/{rid}/delete/{id}/arrear/dec', 'deleteleasearrear')->name('propdec.delleaarrear');
+    Route::any('/prop/lease/{rid}/delete/{id}/prepay/dec', 'deleteleaseprepay')->name('propdec.delleaprepay');
+    Route::any('/prop/update/lease/{id}/dec', 'updatesinglelease')->name('propdec.uptlea');
+    
 });
 /*-------------------end property management declines------------------------ */
 /*-------------------property management declines------------------------ */
@@ -307,7 +315,7 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::get('/prop/edit/{id}/lease', 'vieweditleasedetails')->name('propma.editlea');
     Route::get('/prop/{rid}/edit/{id}/rate/lease', 'vieweditleaserate')->name('propma.editlearat');
     Route::any('/prop/update/{id}/lease', 'updateleasedetails')->name('propma.updtlea');
-    Route::any('/prop//{rid}/update/{id}/lease/rates', 'updateleaserate')->name('propma.updtlearate');
+    Route::any('/prop/{rid}/update/{id}/lease/rates', 'updateleaserate')->name('propma.updtlearate');
 
    });
 /*-------------------end property management declines------------------------ */
