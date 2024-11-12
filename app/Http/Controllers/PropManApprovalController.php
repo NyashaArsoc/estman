@@ -250,11 +250,11 @@ public function viewleaseapproval($id){
         try {
             $arr['lease']   = DB::table('propmanalllease')
             ->where('id', $leaseid)->select('*')->first();  
-            $arr['prepay']   = DB::table('propmanleaseprepayments')->where('leaseid', $leaseid)
-            ->select('*')->first();
-            $arr['balance']   = DB::table('propmanleasearrearsdetails')->where('leaseid', $leaseid)
-            ->select('*')->first();
-            $arr['rates']   = DB::table('propmanleasecurrentbillrates')->where('leaseid', $leaseid)
+            $arr['prepay']   = DB::table('propmantempleaseprepayments')->where('leaseid', $leaseid)
+            ->select('*')->get();
+            $arr['balance']   = DB::table('propmantempleasearrearsdetails')->where('leaseid', $leaseid)
+            ->select('*')->get();
+            $arr['rates']   = DB::table('propmantempleasecurrentbillrates')->where('leaseid', $leaseid)
             ->select('*')->get();
 
             return view('propman.approval.view-single-lease-approval')->with($arr);
@@ -271,15 +271,57 @@ public function approvenewlease($id){
     try{
         $leaseid = Crypt::decrypt($id);
         try {
-            DB::table('propmanlease')
-            ->where('id',$leaseid)
+            $arr['prepay']   = DB::table('propmantempleaseprepayments')->where('leaseid', $leaseid)
+            ->select('*')->get();
+            $arr['balance']   = DB::table('propmantempleasearrearsdetails')->where('leaseid', $leaseid)
+            ->select('*')->get();
+            $lease   = DB::table('propmanalllease')->where('id', $leaseid)
+            ->select('*')->first(); 
+            $property   = DB::table('propmanproperty')->where('id', $lease->propertyid)
+            ->select('*')->first(); 
+            $areatolet = collect(DB::select('EXEC  spGetPropManLeaseAreaToLet ?',
+            [$lease->propertyid]))->first();
+            
+            $prepay = count($arr['prepay']);
+            $balance = count($arr['balance']);
+            //check if the property is fully occupied 
+            if (trim($property->occupation) == 'F'){
+                return redirect()->route('propapp.viewlease',$id)
+                ->with('error', 'property fully occupied');
+            }
+            //check if there is a +ve and -ve balance at the sametime
+            if($prepay >0 AND $balance > 0){
+                return redirect()->route('propapp.viewlease',$id)
+            ->with('error', 'clear arrear/prepay to continue');
+            }
+            //check if the area to be allocated is enough with space remaining for commercial
+            if ($areatolet->areatolet - $lease->areataken  < 0){
+                return redirect()->route('propapp.viewlease',$id)
+                ->with('error', 'space not enough to allocate');
+            }
+            DB::select('EXEC spPostPropManLeaseRatesArrearPrepay ?', [$leaseid]);
+
+            DB::table('propmanlease')->where('id',$leaseid)
             ->update(['approval' => 'Y' , 'available'=> 'Y','approvedby'=>session('alluser'),
-            'dateapproved'=>now()]);
+            'dateapproved'=>now()]);   
+            //update occupation status on the property
+            switch ($lease->propertytypeid){
+                case 1:
+                    DB::table('propmanproperty')->where('id',$lease->propertyid)
+                    ->update(['occupation' => 'F']);
+                  default: 
+                  if ($areatolet->areatolet - $lease->areataken  = 0){
+                    DB::table('propmanproperty')->where('id',$lease->propertyid)
+                    ->update(['occupation' => 'F']);
+                  }
+                  DB::table('propmanproperty')->where('id',$lease->propertyid)
+                    ->update(['occupation' => 'P']);
+                }
             return  redirect()->route('propapp.listlea') 
             ->with('success', 'record approved');
         } catch (\Throwable $th) {
             return redirect()->route('propapp.viewlease',$id)
-            ->with('error', 'failed to load');
+            ->with('error', 'failed to load'.$th);
         }
     }catch (DecryptException $th) {
     return redirect()->route('propapp.viewlease',$id)

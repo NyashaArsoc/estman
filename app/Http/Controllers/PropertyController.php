@@ -15,16 +15,6 @@ public function __construct(){
 }
 
 
-    public function getpropertyareaavailable($id){
-        $arr['prop'] = DB::table('allproperty')
-        ->where('id', $id)
-        ->select('id','lettablearea')
-        ->first();
-        return view('property/get-area-available')
-             ->with($arr);
-    }
-
-
 public function remitlist(){
     try {
         $arr['remit']   = DB::table('preremitlist')

@@ -38,21 +38,12 @@ Route::controller(TenantController::class)->group(function () {
 });
 //Route::resource('property', PropertyController::class);
 Route::controller(PropertyController::class)->group(function () {
-    Route::any('/property-areaavailable/{id}', 'getpropertyareaavailable')->name('property.areaavailable');
     Route::get('/property-remittance', 'remitlist')->name('property.remit');
     Route::any('/genarate-preremit', 'compilepreremitlist');
     Route::get('/property/{id}/remit/{currency}/{period}', 'prepareremittance')->name('property.remitprepare');
     Route::any('/remit/{id}/property/{currency}', 'addpreremit')->name('property.preremit');
 });
 Route::controller(LeaseController::class)->group(function () {
-    Route::any('/reject-lease/{id}', 'rejectlease')->name('lease.reject');
-    Route::any('/edit-update-lease/{id}', 'updatelease')->name('lease.editupdate');
-    Route::get('/lease/{id}/edit', 'vieweditlease')->name('lease.editview');
-    Route::any('/lease-rejected', 'rejected')->name('lease.rejected');
-    -Route::any('/lease/{id}/view', 'viewindividual')->name('lease.view');
-    Route::get('/lease/{id}/view-ledgers', 'viewledgers')->name('lease.ledgers');
-    Route::post('/lease/{id}/sub-ledgers/{product}', 'createsubledgers')->name('lease.createsub');
-    --Route::get('/lease-list', 'listleases')->name('lease.list');
     Route::any('/lease/{id}/disable', 'disablelease')->name('lease.disable');
     Route::get('/lease/{id}/view/renew', 'viewrenewal')->name('lease.viewrenew');
     Route::post('/renew/lease/{id}', 'singlerenewal')->name('lease.singlerenew');

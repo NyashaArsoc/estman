@@ -115,32 +115,99 @@
             </div>
         </div>
         <h5>Additional Details  </h5>
-        <div class="table-responsive" style="margin-top: 15px;">
-            <table class="table table-bordered table-hover" id="leaseitems">
-                <thead>
-                    <tr>
-                    <th class="text-center">No</th>
-                    <th class="text-center">Curreny</th>
-                    <th class="text-center">Rates/Utilities</th>
-                    <th class="text-center">Operation Cost</th>
-                    <th class="text-center">Deposit Paid</th>
-                    <th class="text-center">Admin Fees</th>
-                    </tr>
-                </thead>
-                <tbody>@php $count=1;@endphp
-                    @foreach($rates as $abc)
-                    <tr>
-                    <td>{{$count ++}}</td>
-                    <td>{{ $abc->currencycode }}</td>
-                    <td>{{ number_format($abc->ratescosts,2) }}</td>
-                    <td>{{ number_format($abc->operationalcosts,2) }}</td>
-                    <td>{{ number_format($abc->deposit,2) }}</td>   
-                    <td>{{ number_format($abc->adminstrationfee,2) }}</td>                                      
-                    </tr>  
-                    @endforeach
-                </tbody>
-            </table>
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs" id="clientTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="rates-info-tab" data-toggle="tab" href="#rates-info" role="tab" aria-controls="rates-info" aria-selected="true">Rates</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="prepay-info-tab" data-toggle="tab" href="#prepay-info" role="tab" aria-controls="prepay-info" aria-selected="true">Prepayments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="arrear-info-tab" data-toggle="tab" href="#arrear-info" role="tab" aria-controls="arrear-info" aria-selected="true">Arrears</a>
+            </li>
+        </ul>
+       <!-- Tabs Content -->
+       <div class="tab-content" id="clientTabContent">
+        <!--start-->
+        <div class="tab-pane show active" id="rates-info" role="tabpanel" aria-labelledby="rates-info-tab"><hr/>
+            <div class="table-responsive" style="margin-top: 15px;">
+                <table class="table table-bordered table-hover" id="leaseitems">
+                    <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th class="text-center">Curreny</th>
+                            <th class="text-center">Rates/Utilities</th>
+                            <th class="text-center">Operation Cost</th>
+                            <th class="text-center">Deposit Paid</th>
+                            <th class="text-center">Admin Fees</th> 
+                        </tr>
+                    </thead>
+                    <tbody>@php $count=1;@endphp
+                        @foreach($rates as $abc)
+                        <tr>
+                            <td>{{$count ++}}</td>
+                            <td>{{ $abc->currencycode }}</td>
+                            <td>{{ number_format($abc->ratescosts,2) }}</td>
+                            <td>{{ number_format($abc->operationalcosts,2) }}</td>
+                            <td>{{ number_format($abc->deposit,2) }}</td>
+                            <td>{{ number_format($abc->adminstrationfee,2) }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
+        <!--end-->
+        <!--start-->
+        <div class="tab-pane show" id="prepay-info" role="tabpanel" aria-labelledby="prepay-info-tab"><hr/>
+            <div class="table-responsive" style="margin-top: 15px;">
+                <table class="table table-bordered table-hover" id="leaseitems">
+                    <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th class="text-center">Curreny</th>
+                            <th class="text-center">Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>@php $count=1;@endphp
+                        @foreach($prepay as $abc)
+                        <tr>
+                            <td>{{$count ++}}</td>
+                            <td>{{ $abc->currencycode }}</td>
+                            <td>{{ number_format($abc->balance,2) }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--end-->
+        <!--start-->
+        <div class="tab-pane show" id="arrear-info" role="tabpanel" aria-labelledby="arrear-info-tab"><hr/>
+            <div class="table-responsive" style="margin-top: 15px;">
+                <table class="table table-bordered table-hover" id="leaseitems">
+                    <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th class="text-center">Curreny</th>
+                            <th class="text-center">Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>@php $count=1;@endphp
+                        @foreach($balance as $abc)
+                        <tr>
+                            <td>{{$count ++}}</td>
+                            <td>{{ $abc->currencycode }}</td>
+                            <td>{{ number_format($abc->balrent,2) }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--end-->
+       </div>
         <div class="form-group row">
             <label for="Email" class="col-sm-2 col-form-label">Reason for decline
             </label>

@@ -411,11 +411,6 @@ public function addnewleasedetails(Request $request){
             }
             $a++;
         }
-        if($request->propertytype ==1){
-            DB::table('propmanproperty')
-            ->where('id',$request->propertyaddress)
-            ->update(['occupation' => 'F']);
-        }
         return  redirect()->route('propin.addlease') 
         ->with('success', 'record added');
     } catch (\Throwable $th) {
