@@ -544,5 +544,89 @@ public function updateleaserate($id,$rid,Request $request){
         ->with('error', 'failed to load');
     }
 }
+public function reactivatesinglelease($id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            DB::table('propmanlease')->where('id',$leaseid)
+            ->update(['approval'=> 'N']);
+            return  redirect()->route('propma.lealist') 
+                ->with('success', 'record updated for approval');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.lealist')
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.lealist')
+        ->with('error', 'failed to load');
+    }
+}
+public function viewrenewleasedetails($id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+            try {
+                $currencycode = $this->getcurrencycode();
+                $arr['currency'] = $currencycode; 
+                $arr['lease']   = DB::table('propmanalllease')->where('id',
+                 $leaseid)->select(columns: '*')->first();
+                $arr['rates']   = DB::table('propmanleasecurrentbillrates')->where('leaseid',
+                 $leaseid) ->select('*')->get();
+                $arr['clienttype']   = DB::table('propmanalltenant')->where('id',
+                 $arr['lease']->tenantid) ->select('*')->first();
+                return view('propman.manage.view-single-lease-renewal')->with($arr);
+            } catch (\Throwable $th) {
+                return redirect()->route('propma.lealist')
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propma.lealist')
+            ->with('error', 'failed to load');
+        }
+}
+public function updatesingleleaserenew($id,Request $request){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            $request->validate([
+                'mandate' => 'leaseagreement',
+            ]);
+             //checking if the attachment is there 
+         if ($request->hasFile('leaseagreement')) {
+            $reportdoc = $request->file('leaseagreement');
+            $reportdocname = $request->propertydescription . '.' . $reportdoc->getClientOriginalExtension();
+            $reportdoc->storeAs('public/documents/prop/lease', $reportdocname);
+        }
+            $rental = (trim($request->propertytype) ==1) ? $request->expectedrental
+                        : $request->expectedrate * $request->areataken;
+            $lease   = DB::table('propmanlease')->where('id',
+                        $leaseid)->select('*')->first();
+           
+        DB::table('propmanleaserenewal')->insert(['leaseid'=>$lease->id,'tenantid'=>
+        $lease->tenantid,'propertyid'=>$lease->propertyid,'approvedby'=>$lease->approvedby,
+        'dateapproved'=>$lease->dateapproved,'operatorid'=>$lease->operatorid,'validfrom'=>$lease
+        ->validfrom,'validto'=>$lease->validto,'areataken'=>$lease->areataken,'rental'=>$lease
+        ->rental,'currencycode'=>$lease->currencycode,'approval'=>$lease->approval,'available'=>$lease
+        ->available,'expiry'=>$lease->expiry,'ratesqm'=>$lease->ratesqm,'reasons'=>$lease->reasons,
+        'propertydescription'=>$lease->propertydescription,'landlordcontactid'=>$lease->landlordcontactid,
+        'dateactioned'=>$lease->datestamp,'rentreview'=>$lease->rentreview,'inspectionreview'=>$lease
+        ->inspectionreview,'agreement'=> $lease->agreement]);
+
+            DB::table('propmanlease')->where('id',$leaseid)
+            ->update(['validfrom'=>$request->leasevalidfrom,'validto'=>$request->leasevalidto,
+            'areataken'=>$request->areataken,'rental'=>$rental,'currencycode'=>$request->currencycode,
+            'ratesqm'=>$request->expectedrate,'propertydescription'=>$request->propertydescription,
+            'rentreview'=>$request->rentreviewperiod,'inspectionreview'=>$request->inspectionperiod,
+        'approval'=>'N','expiry'=>'N','agreement'=> $reportdocname,'datestamp'=>now()]);
+            return  redirect()->route('propma.lealist') 
+                ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.renlea',$id)
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.renlea',$id)
+        ->with('error', 'failed to load');
+    }
+}
 /*-----------------------end lease----------------------*/
 }

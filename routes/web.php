@@ -272,7 +272,8 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/lease/{rid}/delete/{id}/arrear/dec', 'deleteleasearrear')->name('propdec.delleaarrear');
     Route::any('/prop/lease/{rid}/delete/{id}/prepay/dec', 'deleteleaseprepay')->name('propdec.delleaprepay');
     Route::any('/prop/update/lease/{id}/dec', 'updatesinglelease')->name('propdec.uptlea');
-    
+    Route::any('/prop/lease/{id}/disable', 'disablesinglelease')->name('propdec.dislea');
+
 });
 /*-------------------end property management declines------------------------ */
 /*-------------------property management declines------------------------ */
@@ -307,6 +308,9 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::get('/prop/{rid}/edit/{id}/rate/lease', 'vieweditleaserate')->name('propma.editlearat');
     Route::any('/prop/update/{id}/lease', 'updateleasedetails')->name('propma.updtlea');
     Route::any('/prop/{rid}/update/{id}/lease/rates', 'updateleaserate')->name('propma.updtlearate');
+    Route::any('/prop/{id}/lease/reactivate', 'reactivatesinglelease')->name('propma.reactlea');
+    Route::get('/prop/lease/{id}/renewal', 'viewrenewleasedetails')->name('propma.renlea');
+    Route::any('/prop/update/lease/{id}/renewal', 'updatesingleleaserenew')->name('propma.uptrenlea');
 
    });
 /*-------------------end property management declines------------------------ */

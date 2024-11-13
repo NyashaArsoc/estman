@@ -30,5 +30,9 @@ class propmanleaseexpiry extends Command
         DB::table('propmanlease')->where('available','=','Y')
                 ->where('validto','<',now())
                 ->update(['expiry' => 'Y' , 'available'=> 'N']);
+        $propertyids = DB::table('propmanlease')
+                ->where('expiry', 'Y')->pluck('propertyid');
+        DB::table('property')->whereIn('id', $propertyids)
+                ->update(['occupation' => 'P']);
     }
 }

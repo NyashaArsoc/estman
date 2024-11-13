@@ -93,7 +93,7 @@ $requiredpdf    = (!is_null($lease->agreement)) ? route('propapp.dwnagrepdf',[$a
                 <table  class="datatable table table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>No</th> <th>Deposit</th> <th>levies</th><th>Operation</th><th>Currency</th>
+                            <th>No</th> <th>Deposit</th> <th>Levies</th><th>Operation</th><th>Currency</th>
                         </tr>
                     </thead>
                     <tbody>@php $count=1;@endphp

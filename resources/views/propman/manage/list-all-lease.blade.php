@@ -37,14 +37,16 @@
                                     $buttondeactivate = '';
                                     $buttonview = '';
                                     $buttonedit = '';
-                                    $buttonrenew = '<a class="btn btn-info btn-sm"  href=""
+                                    $buttonrenew = '<a class="btn btn-info btn-sm"  href="' . route('propma.renlea',$id) . '"
                                      title="renew"><i class="ti-pencil mr-0-5"></i>renew</a>';
+                                     $buttonactivate = '';
                                  }else{
                                     if (trim($abc->available) == 'Y'){
                                         $status = 'available';
                                         $badge = "badge badge-pill bg-success badge-secondary";
-                                        $buttondeactivate = '<a onclick = "deactivatelease(this); 
-                                        return false;" class="btn btn-danger btn-sm" href=""
+                                        $buttonactivate = '';
+                                        $buttondeactivate = '<a onclick = "deactivaterecord(this); 
+                                        return false;" class="btn btn-danger btn-sm" href="' . route('propdec.dislea',$id) . '"
                                      title="disable"><i class="ti-close mr-0-5"></i>disable</a>';
                                      $buttonview = '<a class="btn btn-info btn-sm"  href="' . route('propma.viewlea',$id) . '"
                                      title="view"><i class="ti-eye mr-0-5"></i>view</a>';
@@ -58,6 +60,7 @@
                                         $buttonview = '';
                                         $buttonrenew = '';
                                         $buttonedit = '';
+                                        $buttonactivate = '';
                                     }else{
                                     if (trim($abc->approval) == 'R'){ 
                                         $status = 'rejected';
@@ -65,12 +68,20 @@
                                         $buttondeactivate = '';
                                         $buttonview = '';
                                         $buttonrenew = '';
+                                        $buttonactivate = '';
                                     }else{
                                         $status = 'inactive';
                                         $badge = 'badge badge-pill bg-danger badge-secondary';
                                         $buttondeactivate ='';
                                         $buttonview = '';
                                         $buttonrenew = '';
+                                        $buttonactivate = '';
+                                        if (trim($abc->available) == 'N' AND trim($abc->approval) == 'Y'){
+                                            $buttonactivate = '<a onclick = "activaterecord(this); 
+                                        return false;" class="btn btn-success btn-sm" href="' . route('propma.reactlea',$id) . '"
+                                     title="activate"><i class="ti-tick mr-0-5"></i>activate</a>';
+                                        }
+                                        
                                     }
                                     $buttonedit = '';
                                     }
@@ -87,6 +98,7 @@
                                         @if (in_array(7,$arraycontrolids)){!! $buttondeactivate !!} @endif
                                         @if (in_array(8,$arraycontrolids)){!! $buttonrenew !!}  @endif
                                         @if (in_array(2,$arraycontrolids)){!! $buttonedit !!} @endif
+                                        @if (in_array(8,$arraycontrolids)){!! $buttonactivate !!} @endif
                             </td>
                             </tr>
                             @endforeach

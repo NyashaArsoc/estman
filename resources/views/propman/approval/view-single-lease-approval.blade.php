@@ -1,11 +1,9 @@
 @php
     $title = 'Approve Lease';
     $description = 'approve lease...';
- if ($lease->propertytypeid == 1){
-    $divindividualclass      =   'dropdwn';
- }else{
-    $divclasscompany   =   'dropdwn';
- }
+ 
+ $divindividualclass = $lease->propertytypeid == 1 ? 'hide': 'dropdwn';
+ $divclasscompany = $lease->propertytypeid != 1 ? 'hide': 'dropdwn';
  $id= Crypt::encrypt($lease->id);
  $agreement= Crypt::encrypt($lease->agreement);
  $requiredpdf    = (!is_null($lease->agreement)) ? route('propapp.dwnagrepdf',[$agreement]) : '';

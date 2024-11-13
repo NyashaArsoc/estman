@@ -99,3 +99,9 @@ function deleterecord(that) {
         window.location = anchor.attr("href");
     }
 }
+function activaterecord(that) {
+    var proceedto = confirm("proceed to activate this entry?")
+    if (proceedto) {
+        window.location = anchor.attr("href");
+    }
+}

@@ -434,6 +434,33 @@ public function updatesinglelease($id,Request $request){
         ->with('error', 'failed to load');
     }
 }
+public function disablesinglelease($id){
+    try{
+        $leaseid = Crypt::decrypt($id);
+        try {
+            $lease   = DB::table('propmanalllease')->where('id', $leaseid)
+            ->select('*')->first();
+            DB::table('propmanlease')->where('id',$leaseid)
+            ->update(['available'=> 'N']);
+            switch ($lease->propertytypeid){
+                case 1:
+                    DB::table('propmanproperty')->where('id',$lease->propertyid)
+                    ->update(['occupation' => 'N']);
+                  default: 
+                  DB::table('propmanproperty')->where('id',$lease->propertyid)
+                    ->update(['occupation' => 'P']);
+                }
+            return  redirect()->route('propma.lealist') 
+                ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.lealist')
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propma.lealist')
+        ->with('error', 'failed to load');
+    }
+}
 /*---------------end decline new lease-----------------*/
 /*------------property----------------------------*/
 public function disableproperty($id){

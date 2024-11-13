@@ -294,26 +294,30 @@ public function approvenewlease($id){
                 return redirect()->route('propapp.viewlease',$id)
             ->with('error', 'clear arrear/prepay to continue');
             }
-            //check if the area to be allocated is enough with space remaining for commercial
-            if ($areatolet->areatolet - $lease->areataken  < 0){
-                return redirect()->route('propapp.viewlease',$id)
-                ->with('error', 'space not enough to allocate');
-            }
+            if ($areatolet !== null) {
+                //check if the area to be allocated is enough with space remaining for commercial
+                if ($areatolet->areatolet - $lease->areataken  < 0){
+                    return redirect()->route('propapp.viewlease',$id)
+                    ->with('error', 'space not enough to allocate');
+                }
+            }            
             DB::select('EXEC spPostPropManLeaseRatesArrearPrepay ?', [$leaseid]);
 
             DB::table('propmanlease')->where('id',$leaseid)
             ->update(['approval' => 'Y' , 'available'=> 'Y','approvedby'=>session('alluser'),
             'dateapproved'=>now()]);   
             //update occupation status on the property
-            switch ($lease->propertytypeid){
+            switch (trim($lease->propertytypeid)){
                 case 1:
                     DB::table('propmanproperty')->where('id',$lease->propertyid)
                     ->update(['occupation' => 'F']);
                   default: 
-                  if ($areatolet->areatolet - $lease->areataken  = 0){
-                    DB::table('propmanproperty')->where('id',$lease->propertyid)
-                    ->update(['occupation' => 'F']);
-                  }
+                  if ($areatolet !== null) {
+                    if ($areatolet->areatolet - $lease->areataken  = 0){
+                        DB::table('propmanproperty')->where('id',$lease->propertyid)
+                        ->update(['occupation' => 'F']);
+                      }
+                  }                  
                   DB::table('propmanproperty')->where('id',$lease->propertyid)
                     ->update(['occupation' => 'P']);
                 }
