@@ -43,11 +43,6 @@ Route::controller(PropertyController::class)->group(function () {
     Route::get('/property/{id}/remit/{currency}/{period}', 'prepareremittance')->name('property.remitprepare');
     Route::any('/remit/{id}/property/{currency}', 'addpreremit')->name('property.preremit');
 });
-Route::controller(LeaseController::class)->group(function () {
-    Route::any('/lease/{id}/disable', 'disablelease')->name('lease.disable');
-    Route::get('/lease/{id}/view/renew', 'viewrenewal')->name('lease.viewrenew');
-    Route::post('/renew/lease/{id}', 'singlerenewal')->name('lease.singlerenew');
-});
 
 Route::controller(InvoiceController::class)->group(function (){
     Route::any('/genaratepre-preinvoice', 'compilepreinvoice')->name('invoice.compilepre');
