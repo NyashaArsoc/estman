@@ -60,6 +60,71 @@ function validateTextDescription() {
             }
     }
 }
+//period
+$("#periodrangecheck").hide();
+let periodrangeError = true;
+$("#periodrange").keyup(function () {
+    validatePeriodRange();
+});
+function validatePeriodRange() {
+    let textValue = $("#periodrange").val();
+    if (textValue.length == "") {
+        $("#periodrangecheck").show();
+        periodrangeError = false;
+        return false;
+    } else {
+        periodrangeError = true;
+        $("#periodrangecheck").hide();
+    }
+}
+// lease list by tenant
+$("#leaselistcheck").hide();
+  let leasenameError = true;
+  $("#leaselist").keyup(function () {
+      validateLeaseDescription();
+  });
+  function validateLeaseDescription() {
+      let textValue = $("#leaselist").val();
+      if (textValue.length == "") {
+          $("#leaselistcheck").show();
+          leasenameError = false;
+          return false;
+      } else {
+        leasenameError = true;
+          $("#leaselistcheck").hide();
+      }
+  }
+  //valid numeric value required
+$("#numericrequiredcheck").hide();
+let numericrequiredError = true;
+$("#numericrequired").keyup(function () {
+    validateNumericValueRequired();
+});
+function validateNumericValueRequired() {
+    let textValue = $("#numericrequired").val();
+    if (textValue.length == "") {
+        $("#numericrequiredcheck").show();
+        numericrequiredError = false;
+        return false;
+    } else if (textValue.length < 1) {
+        $("#numericrequiredcheck").show();
+        $("#numericrequiredcheck").html("**invalid input");
+        numericrequiredError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+            charscheck =  specialChars.test(textValue);
+            if (charscheck == true){
+                 $("#numericrequiredcheck").show();
+                $("#numericrequiredcheck").html("**digits only or (3.5)");
+                numericrequiredError = false;
+                return false;
+            }else{
+                numericrequiredError = true;
+                $("#numericrequiredcheck").hide();
+            }
+    }
+}
 /*--------------------starting buttons --------------------------*/
  //button currency code
  $("#btn-submit-currency").click(function () {
@@ -75,5 +140,13 @@ function validateTextDescription() {
     try {
         if (textdescriptionError == true ){return true;
         }else{ return false; }
+    } catch (err) { return false;}
+});
+ //button lease interest
+ $("#btn-submit-lease-interest").click(function () {
+    validateNumericValueRequired(); validateLeaseDescription();validatePeriodRange();
+    try {
+        if (numericrequiredError == true && periodrangeError==true && leasenameError==true ){return true;
+        }else{ return false;}
     } catch (err) { return false;}
 });

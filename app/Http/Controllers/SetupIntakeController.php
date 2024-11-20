@@ -91,4 +91,35 @@ public function addnewprovince(Request $request){
      }
 }
    /*---------------end creating new province-----------------*/
+   /*---------------lease interest-----------------*/
+public function addleaseinterest(){
+   try {
+      $leaseids = DB::table('setupleaseinterestrates')->pluck('leaseid');
+      $arr['lease'] = DB::table('propmanalllease')->whereNotIn('id', $leaseids)
+      ->where('available','=','Y')->select('*')->get();;
+      return view('setup.intake.add-lease-interest')->with($arr);
+  } catch (\Throwable $th) {
+      return  redirect()->route('dash.setup');
+  }
+}
+public function addnewleaseinterest(Request $request){
+   try {
+       // Validate the request
+       $request->validate([
+         'daysrange' => 'required|integer',
+         'combinedleases' => 'required|array' ]);
+         // Insert data into setupleaseinterestrates
+        foreach ($request->combinedleases as $abc) {
+             DB::table('setupleaseinterestrates')->insert(['leaseid' => $abc,
+             'rate' => $request->percentagerate,
+             'days' => $request->daysrange,'operatorid'=> session('alluser'),]);
+      } 
+      return  redirect()->route('setin.addintrst') 
+      ->with('success', 'record added');
+  } catch (\Throwable $th) {
+      return  redirect()->route('setin.addintrst')
+      ->with('error', 'failed to load');
+  }
+}
+   /*---------------end lease interest-----------------*/
 }

@@ -319,6 +319,9 @@ Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(
      Route::post('/set-up/add/new/property-type', 'addnewpropertytype')->name('setin.addnewpropty');
      Route::get('/set-up/add/province', 'addprovince')->name('setin.addprov');
      Route::post('/set-up/add/new/province', 'addnewprovince')->name('setin.addnewprov');
+     Route::get('/set-up/add/lease/interest', 'addleaseinterest')->name('setin.addintrst');
+     Route::post('/set-up/add/new/lease/interest', 'addnewleaseinterest')->name('setin.addnewintrst');
+
 });
 /*-------------------end setup intake------------------------ */
 /*-------------------setup manage------------------------ */
