@@ -96,7 +96,7 @@ public function addleaseinterest(){
    try {
       $leaseids = DB::table('setupleaseinterestrates')->pluck('leaseid');
       $arr['lease'] = DB::table('propmanalllease')->whereNotIn('id', $leaseids)
-      ->where('available','=','Y')->select('*')->get();;
+      ->where('available','=','Y')->select('*')->get();
       return view('setup.intake.add-lease-interest')->with($arr);
   } catch (\Throwable $th) {
       return  redirect()->route('dash.setup');
@@ -122,4 +122,33 @@ public function addnewleaseinterest(Request $request){
   }
 }
    /*---------------end lease interest-----------------*/
+   /*--------------- vat config-----------------*/
+public function addvatconfig(){
+   try {
+      $proptypeids = DB::table('setupvatconfig')->pluck('propertytypeid');
+      $arr['proptype'] = DB::table('setuppropertytype')->whereNotIn('id', $proptypeids)
+      ->get();
+      return view('setup.intake.add-vat-config')->with($arr);
+  } catch (\Throwable $th) {
+      return  redirect()->route('dash.setup');
+  }
+}
+public function addnewvatconfig(Request $request){
+   try {
+       // Validate the request
+       $request->validate([
+         'combinedleases' => 'required|array' ]);
+         // Insert data into setupleaseinterestrates
+        foreach ($request->combinedleases as $abc) {
+             DB::table('setupvatconfig')->insert(['propertytypeid' => $abc,
+             'rate' => $request->percentagerate,'operatorid'=> session('alluser'),]);
+      } 
+      return  redirect()->route('setin.addvat') 
+      ->with('success', 'record added');
+  } catch (\Throwable $th) {
+      return  redirect()->route('setin.addvat')
+      ->with('error', 'failed to load');
+  }
+}
+   /*---------------end vat config-----------------*/
 }

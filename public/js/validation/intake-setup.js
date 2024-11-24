@@ -150,3 +150,11 @@ function validateNumericValueRequired() {
         }else{ return false;}
     } catch (err) { return false;}
 });
+ //button lease interest
+ $("#btn-submit-vat-config").click(function () {
+    validateNumericValueRequired(); validateLeaseDescription();
+    try {
+        if (numericrequiredError == true && leasenameError==true ){return true;
+        }else{ return false;}
+    } catch (err) { return false;}
+});

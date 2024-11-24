@@ -321,6 +321,8 @@ Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(
      Route::post('/set-up/add/new/province', 'addnewprovince')->name('setin.addnewprov');
      Route::get('/set-up/add/lease/interest', 'addleaseinterest')->name('setin.addintrst');
      Route::post('/set-up/add/new/lease/interest', 'addnewleaseinterest')->name('setin.addnewintrst');
+     Route::get('/set-up/add/vat/config', 'addvatconfig')->name('setin.addvat');
+     Route::post('/set-up/add/new/vat/config', 'addnewvatconfig')->name('setin.addnewvat');
 
 });
 /*-------------------end setup intake------------------------ */

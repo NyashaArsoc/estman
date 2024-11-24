@@ -57,7 +57,7 @@
                         </a>
                     </li><li class="menu-title">Setup</li>
                     <li class="with-sub">
-                        <a href="{{route('dash.val')}}" class="waves-effect  waves-light">
+                        <a href="{{route('dash.setup')}}" class="waves-effect  waves-light">
                             
                             <span class="s-icon"><i class="ti-anchor"></i></span>
                             <span class="s-text">Dashboard</span>
