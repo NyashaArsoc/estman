@@ -19,27 +19,6 @@ class InvoiceController extends Controller
     public function __construct(){
         $this->middleware(['loginauth']);
     }
-
-    public function compilepreinvoice(){
-        try {
-            $arr= DB::select('EXEC spPostPreInvoice');
-            if(is_null($arr)){
-                return 'problem in connection';
-            }else{
-                $result = $arr[0]->ReturnValue;
-                if($result ==0){
-                    //success full run 
-                    return 'success';
-                }else{
-                    //already run 
-                    return 'you can only run once';
-                }
-            }
-        } catch (QueryException $th) {
-            return 'failed to execute query';
-        }
-        
-    }
 public function listpreinvoice(){
     try {
         $arr['invoice']   = DB::table('preinvoice')
@@ -54,20 +33,7 @@ public function listpreinvoice(){
     }
 
 }
-public function viewprofoma($id){
-    $invoiceid = Crypt::decrypt($id);
-    try {
-        $arr['invoice']   = DB::table('preinvoice')
-        ->where('id',$invoiceid)
-        ->select('*')
-        ->first();
-        return view('invoice/view-pre-invoice')
-        ->with($arr);
-    } catch (QueryException $e) {
-        return  redirect()->route('invoice.listpre') 
-        ->with('error', 'failed to load');
-    }  
-}
+
 public function vieweditprofomamount($id){
     $invoiceid = Crypt::decrypt($id);
     try {

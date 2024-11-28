@@ -45,8 +45,6 @@ Route::controller(PropertyController::class)->group(function () {
 });
 
 Route::controller(InvoiceController::class)->group(function (){
-    Route::any('/genaratepre-preinvoice', 'compilepreinvoice')->name('invoice.compilepre');
-    Route::get('/pre-invoice', 'listpreinvoice')->name('invoice.listpre');
     Route::any('/view-pro-foma/{id}', 'viewprofoma')->name('invoice.viewpro');
     Route::any('/edit-pro-foma/{id}', 'vieweditprofomamount')->name('invoice.editviewpro');
     Route::any('/update-view-pro-foma/{id}', 'updateprofoma')->name('invoice.updateviewpro');
@@ -230,6 +228,9 @@ Route::middleware('loginauth')->controller(PropManApprovalController::class)->gr
    Route::any('/prop-pdf/{path}/other/download', 'downloadotherpdf')->name('propapp.dwnothrpdf');
    Route::any('/prop-pdf/{path}/lease-download/agreement', 'downloadleaseagreementpdf')->name('propapp.dwnagrepdf');
    /*-----------end download property documents-------------------- */
+   Route::get('/prop/pre-invoice/list', 'listallpreinvoice')->name('propapp.listpre');
+   Route::get('/prop/{id}/pre-invoice/view', 'viewinvoicebilled')->name('propapp.viewpre');
+
 });
 /*-------------------end property management approval------------------------ */
 /*-------------------property management declines------------------------ */
@@ -268,6 +269,8 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/lease/{rid}/delete/{id}/prepay/dec', 'deleteleaseprepay')->name('propdec.delleaprepay');
     Route::any('/prop/update/lease/{id}/dec', 'updatesinglelease')->name('propdec.uptlea');
     Route::any('/prop/lease/{id}/disable', 'disablesinglelease')->name('propdec.dislea');
+    Route::any('/prop/update/{id}/preinvoice/', 'updateinvoicebilled')->name('propdec.updtpre');
+    Route::get('/prop/edit/{id}/pre-invoice/view', 'editinvoicebilled')->name('propdec.editpre');
 
 });
 /*-------------------end property management declines------------------------ */

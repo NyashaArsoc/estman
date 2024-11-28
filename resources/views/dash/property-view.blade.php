@@ -26,6 +26,15 @@
                     </div>
                 </div>
             </div> 
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <div class="box box-block bg-white tile tile-4 mb-2">
+                    <div class="t-icon left bg-warning"><i class="ti-receipt"></i></div>
+                    <div class="t-content text-xs-right">
+                        <h6 class="text-uppercase">Invoices</h6>
+                        <h2 class="mb-0">{{$invoice}}</h2>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row"> 
             <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">

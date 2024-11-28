@@ -760,4 +760,46 @@ public function deletesingletenant($id){
         }
 }
 /*------------end tenant------------------------*/
+/*------------invoicing------------------------*/
+public function editinvoicebilled($id){
+    try {
+        $invoiceid = Crypt::decrypt($id);
+        try {
+            $arr['invoice']   = DB::table('propmaninvoicepre')
+            ->where('id', $invoiceid)->select('*')->first();  
+            $arr['lease']   = DB::table('propmanalllease')->where('id', $arr['invoice']->leaseid)
+            ->select('*')->first();
+            $arr['vat']   = DB::table('setupvatconfig')->where('propertytypeid', $arr['lease']->propertyid)
+            ->select('*')->first();
+            return view('propman.approval.view-edit-invoice-billed')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propapp.listpre')
+                ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('propapp.listpre')
+        ->with('error', 'failed to load');
+    }
+}
+public function updateinvoicebilled($id,Request $request){
+    try {
+        $invoiceid = Crypt::decrypt($id);
+        try {
+            DB::table('propmaninvoicepre')->where('id',$invoiceid)
+            ->update([ 'rental'=>$request->rental,'rates'=>$request->rateslevies,
+            'operationalcost'=>$request->operationcosts,'vat'=>$request->vat
+            ,'isedited' => 'Y','editedby'=>session('alluser')]);
+
+            return  redirect()->route('propapp.listpre') 
+                ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propdec.editpre',$id)
+                ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('propdec.editpre',$id)
+        ->with('error', 'failed to load');
+    }
+}
+/*------------end invoice------------------------*/
 }

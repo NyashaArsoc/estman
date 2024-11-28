@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('app:propmanleaseexpiry')->daily()->withoutOverlapping();
+        $schedule->command('app:propmanruninvoice')->everyFiveMinutes()->withoutOverlapping();
     }
 
     /**

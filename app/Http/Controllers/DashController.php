@@ -28,6 +28,7 @@ public function propertyview(){
         $arr['lease']   = DB::table('propmanalllease')->where('available','=' ,'Y')
         ->where('validto','>',$arr['sysdates'])->where('validto',
         '<',$leasedue) ->select('*')->take(5)->get();
+        $arr['invoice']   = DB::table('propmaninvoicepre')->get()->count();
     return view('dash/property-view')->with($arr);
         }
 }

@@ -205,11 +205,11 @@ public function viewtenantapproval($id){
             ->select('*')->latest('id')->first();
             return view('propman.approval.view-single-tenant-approval')->with($arr);
         } catch (\Throwable $th) {
-            return redirect()->route('propapp.listland')
+            return redirect()->route('propapp.listten')
                 ->with('error', 'failed to load');
         }
     } catch (DecryptException $th) {
-    return redirect()->route('propapp.listland')
+    return redirect()->route('propapp.listten')
         ->with('error', 'failed to load');
     }
 }
@@ -259,11 +259,11 @@ public function viewleaseapproval($id){
 
             return view('propman.approval.view-single-lease-approval')->with($arr);
         } catch (\Throwable $th) {
-            return redirect()->route('propapp.listland')
+            return redirect()->route('propapp.listlea')
                 ->with('error', 'failed to load');
         }
     } catch (DecryptException $th) {
-    return redirect()->route('propapp.listland')
+    return redirect()->route('propapp.listlea')
         ->with('error', 'failed to load');
     }
 }
@@ -333,4 +333,35 @@ public function approvenewlease($id){
     }
 }
 /*---------------end approval new lease-----------------*/
+/*----------------------invoicing */
+public function listallpreinvoice(){
+    try {
+        $arr['invoice']   = DB::table('propmaninvoicepre')
+        ->where('isedited','=' ,'N')
+        ->select('*')->get();
+        return view('propman.approval.list-pre-invoice')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+}
+public function viewinvoicebilled($id){
+    try {
+        $invoiceid = Crypt::decrypt($id);
+        try {
+            $arr['invoice']   = DB::table('propmaninvoicepre')
+            ->where('id', $invoiceid)->select('*')->first();  
+            $arr['lease']   = DB::table('propmanalllease')->where('id', $arr['invoice']->leaseid)
+            ->select('*')->first();
+            return view('propman.approval.view-single-invoice-billed')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propapp.listpre')
+                ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('propapp.listpre')
+        ->with('error', 'failed to load');
+    }
+}
+
+/*--------------------end invoicing */
 }
