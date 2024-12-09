@@ -801,5 +801,53 @@ public function updateinvoicebilled($id,Request $request){
         ->with('error', 'failed to load');
     }
 }
+
+public function listalleditedpreinvoice(){
+    try {
+        $arr['invoice']   = DB::table('propmaninvoicepre')
+        ->where('isedited','=' ,'Y')
+        ->select('*')->get();
+        return view('propman.declined.list-pre-invoice')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+}
+public function vieweditedinvoicebilled($id){
+    try {
+        $invoiceid = Crypt::decrypt($id);
+        try {
+            $arr['invoice']   = DB::table('propmaninvoicepre')
+            ->where('id', $invoiceid)->select('*')->first();  
+            $arr['lease']   = DB::table('propmanalllease')->where('id', $arr['invoice']->leaseid)
+            ->select('*')->first();
+            return view('propman.declined.view-single-invoice-billed-edited')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propdec.listpre')
+                ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('propdec.listpre')
+        ->with('error', 'failed to load');
+    }
+}
+public function approveupdateinvoicebilled($id,Request $request){
+    try {
+        $invoiceid = Crypt::decrypt($id);
+        try {
+            DB::table('propmaninvoicepre')->where('id',$invoiceid)
+            ->update(['approvedon'=>now(),'isedited' => 'N',
+            'approvedby'=>session('alluser')]);
+
+            return  redirect()->route('propdec.listpre') 
+                ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            return redirect()->route('propdec.vieweditpre',$id)
+                ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('propdec.vieweditpre',$id)
+        ->with('error', 'failed to load');
+    }
+}
 /*------------end invoice------------------------*/
 }
