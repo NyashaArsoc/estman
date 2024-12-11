@@ -1,188 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
     <style>
-        .invoice-box {
-            max-width: 800px;
-            margin: auto;
-            padding: 30px;
-            border: 1px solid #eee;
-            box-shadow: 0 0 10px rgba(0, 0, 0, .15);
-            font-size: 11px;
-            line-height: 24px;
-            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
-            color: #555;
+        #firsttable {
+            width: 60%;
+            border-collapse: collapse; /* Remove borders */
+            margin-right: 0;
+            margin-left: auto; /* Push table to the right */
         }
-
-        .invoice-box table {
+        .right-cell {
+        padding: 10px;
+            text-align: right; /* Align text to the right for the right cell */
+        }
+        .logo {
+            width: 50%;
+            max-width: 150px;
+        }
+          #addresstable {
             width: 100%;
-            line-height: inherit;
+            border-collapse: collapse; /* Remove borders */
+            margin-right: 0;
+            margin-left: auto; /* Push table to the right */
+        }
+          #descrptiontable {
+            width: 100%;
             text-align: left;
+            border-collapse: collapse; /* Remove borders */
         }
-
-        .invoice-box table td {
-            padding: 1.4px;
-            vertical-align: top;
+        /* Styles for the second row (with borders) */
+        .bordered td {
+            border: 1px solid #000; /* Black border */
+            padding: 3px; /* Padding for spacing */
         }
-
-        .invoice-box table tr td:nth-child(2) {
-            text-align: right;
+        #bottomline {
+            border-bottom: 1px solid #000; /* Bottom border for the last cell */
         }
-
-        .invoice-box table tr.top table td {
-            padding-bottom: 10px;
-        }
-
-        .invoice-box table tr.top table td.title {
-            font-size: 25px;
-            line-height: 45px;
-            color: #333;
-        }
-
-        .invoice-box table tr.information table td {
-            padding-bottom: 3px;
-        }
-
-        .invoice-box table tr.heading td {
-            background: #eee;
-            border-bottom: 1px solid #ddd;
-            font-weight: bold;
-        }
-
-        .invoice-box table tr.details td {
-            padding-bottom: 20px;
-        }
-
-        .invoice-box table tr.item td {
-            border-bottom: 1px solid #eee;
-        }
-
-        .invoice-box table tr.item.last td {
-            border-bottom: none;
-        }
-
-        .invoice-box table tr.total td:nth-child(2) {
-            border-top: 2px solid #eee;
-            font-weight: bold;
-        }
-
-        @media only screen and (max-width: 600px) {
-            .invoice-box table tr.top table td {
-                width: 100%;
-                display: block;
-                text-align: center;
-            }
-
-            .invoice-box table tr.information table td {
-                width: 100%;
-                display: block;
-                text-align: center;
-            }
-        }
-
-        /** RTL **/
-        .rtl {
-            direction: rtl;
-            font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
-        }
-
-        .rtl table {
-            text-align: right;
-        }
-
-        .rtl table tr td:nth-child(2) {
-            text-align: left;
-        }
-.logo{width:100%; max-width:200px;}
+        #textright{text-align: right;}
+        #textleft{text-align: left;}
     </style>
-
 </head>
 <body>
-    <div class="invoice-box">
-        <table cellpadding="0"cellspacing="0"><!--first table-->
-            <tr class="top">
-                <td colspan="1">
-                    <table><!--2nd table--><header> <h1>Invoice</h1></header> 
-                        <tr>
-                            <td>
-                                Integrated Properties<br> 
-                                6th Floor Green Bridge<br> 
-                            Eastgate, Harare 
-                            </td>
-                            <td class="title">
-                                <img src="img/intpro logo 2020.png" class="logo">
-                            </td>
-                        </tr>
-                        <tr class="information">
-                            <td colspan="3">
-                                <table><!--3rd table-->
-                                    <tr>
-                                        <td>
-                                            <strong>To,</strong><br> 
-                                            {{ $tenantname }} <br> 
-                                            {{ $propdesc }} <br> 
-                                            VAT:{{ $tenantvatnumber }}, TIN: {{ $tenantvatnumber }}
-                                            <br> Deposit: {{ $deposit }}
-                                        </td>
-                                        <td>
-                                            TIN: 2000528132<br>   
-                                            Date: {{ $today }} <br>  
-                                            Period: {{\Carbon\Carbon::createFromTimestamp(strtotime
-                                                ($period))->format('M-Y')}}<br> 
-                                            Invoice No: {{ $invoicenumber }}<br> 
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td> Currency:  {{ $currencycode }}</td>
-                                        <td> Amount B/f: {{ $balancebd }} </td>
-                                    </tr>
-                                </table><!--3rd table-->
-                            </td>
-                        </tr>
-                        <tr class="heading">
-                            <td>Description</td>
-                            <td>Total Inc</td>
-                        </tr>
-                        <tr class="item">
-                            <td>Rent</td>
-                            <td>{{ $rent }}</td>
-                        </tr>
-                        <tr class="item">
-                            <td>Rates & Levies</td>
-                            <td>{{ $rateswater }}</td>
-                        </tr>
-                        <tr class="item">
-                            <td>Other Expenses</td>
-                            <td>{{ $operational }}</td>
-                        </tr>
-                        <tr class="item last">
-                            <td>Interest Charged</td>
-                            <td>{{ $interestcharged }}</td>
-                        </tr>
-                        <tr class="total">
-                            <td></td>
-                            <td>Current Invoice: {{ $billedtotal }}</td>
-                        </tr>
-                        <tr class="total">
-                            <td></td>
-                            <td>VAT on Rent: {{ $rentvat }}</td>
-                        </tr>
-                        <tr class="total">
-                            <td></td>
-                            <td>Invoice Total: {{ $totalvatincl }} </td>
-                        </tr>
-                    </table><!--2nd table-->
-                    <table><!--4th table-->
-                        <tr><td><hr></td></tr>
-                        <tr class="heading"><td>Banking Details</td></tr>
-                        <tr class="item"><td>Integrated Properties ({{ $currencycode }})<br>{{ $bankname }} <br>
-                            {{ $branch }} <br> {{ $accountnumber }}</td></tr>
-                        <tr><td><hr></td></tr>
-                        <tr class="item"><td>STATEMENT <br> Closing Remarks</td></tr>
-                    </table><!--4th table-->
-                </td>
-            </tr>
-        </table><!--first table-->
-    </div>
+<table id="firsttable">
+    <tr><td></td><td class="right-cell">Technologies Technologies</td></tr>
+    <tr><td><strong>Invoice<strong></td>
+        <td class="right-cell"><img src="https://intpro.co.zw/wp-content/uploads/2023/02/newlogo2.png" class="logo"></td> </tr>
+</table>
+<table id="addresstable"><tr><td>Attention: {{$tenantname}}<br>{{$propdesc}}
+</td><td class="right-cell">6th Floor Green Bridge<br/>Eastgate, Harare<br/>Tel. +263 8677030000</td></tr>
+	<tr><td>VAT Number: {{$tenantvatnumber ?? ''}}<br>TIN: {{$tenanttinnumber ?? ''}}
+</td></tr>
+<tr><td></td><td class="right-cell">Technologies Technologies VAT: 220141335<br> Technologies Technologies TIN: 2000036892</td></tr></table>
+<table id="firsttable"> 
+<tr><td>Currency</td><td>Period</td><td>Invoice Date</td><td>Invoice No</td></tr>
+<tr class="bordered"><td>{{$currencycode ?? ''}}</td><td>{{$period ?? ''}}</td><td>{{$today ?? ''}}</td><td>{{$invoicenumber ?? ''}}</td></tr>
+</table>
+<table id="addresstable">
+<tr><td>Deposit: {{$deposit ?? 0}}</td><td></td><td class="right-cell">Balance bd: {{$balancebd ?? 0}}</td></tr>
+</table>
+<table id="descrptiontable"><thead><tr id="bottomline"> <th id="textleft">No</th><th id="textleft">Item Description</th><th id="textright">Amount (Exc)</th><th id="textright">Amount (Inc)</th></tr> </thead><tbody>
+<tr><td>1</td><td>Rental:</td><td id="textright">{{$rentbeforevat ?? 0}}</td><td id="textright">{{$rent ?? 0}}</td> </tr>
+<tr><td>2</td><td>Rates & Levies:</td><td id="textright">{{$rateswater ?? 0}}</td><td id="textright">{{$rateswater ?? 0}}</td> </tr>
+<tr><td>3</td><td>Operational Costs:</td><td id="textright">{{$operational ?? 0}}</td><td id="textright">{{$operational ?? 0}}</td> </tr>
+<tr><td>4</td><td>Interest:</td><td id="textright">{{$interestcharged ?? 0}}</td><td id="textright">{{$interestcharged ?? 0}}</td> </tr>
+<tr id="bottomline"> </tr>
+<tr><td></td><td></td><td>Total (Exc)</td><td id="textright">{{$totalbilledexc ?? 0}}</td> </tr>
+<tr><td></td><td></td><td>VAT </td><td id="textright">{{$rentvat ?? 0}}</td> </tr>
+<tr><td></td><td></td><td>Total (Inc)</td><td id="textright">{{$totalvatincl ?? 0}}</td> </tr>
+<tr ><td></td><td></td><td id="bottomline"></td><td id="bottomline"></td> </tr>
+<tr><td></td><td></td><td>Total</td><td id="textright">{{$invoicetotal ?? 0}}</td> </tr>
+<tr id="bottomline"><td></td><td></td><td></td><td></td></tr>
+</tbody>
+</table><br>
+<table id="descrptiontable">
+   <tr><td>Banking Details</td></tr>
+    <tr><td>Integrated Properties ( $currencycode )<br> $bankname <br>
+       $branch  <br> $accountnumber </td></tr>
+   <tr id="bottomline"> </tr>
+     <tr ><td>STATEMENT <br> Closing Remarks</td></tr>
+</table>
 </body>
+</html>

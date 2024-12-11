@@ -6,6 +6,8 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 
 class PropManApprovalController extends Controller
 {
@@ -362,6 +364,78 @@ public function viewinvoicebilled($id){
         ->with('error', 'failed to load');
     }
 }
+public function approvalpreinvoice($id){
+    try {
+        $invoiceid = Crypt::decrypt($id);
+        try {
+            $invoice   = DB::table('propmaninvoicepre')
+            ->where('id', $invoiceid)->select('*')->first(); 
+            $tenant = DB::table('propmanalllease')->join('propmanalltenant','propmanalllease.tenantid'
+            ,'=','propmanalltenant.id')->select('propmanalltenant.email',
+            'propmanalltenant.vatnumber','propmanalltenant.tinnumber','propmanalllease.propertyid'
+            )->where('propmanalllease.id'
+            ,$invoice->leaseid)->first();
+            $vatpercent   = DB::table('setupvatconfig')
+            ->where('propertytypeid', $tenant->propertyid)->select('*')->first();
+           //tenant name 
+            $tenantname     = "{$invoice->companyname} {$invoice->fullname}";
+                //totals
+                $rentbeforevat     = $invoice->rental - $invoice->vat;
+                $totalbilledexc = $rentbeforevat + $invoice->rates + $invoice->operationalcost 
+                + $invoice->interest;
+                 $totalvatincl = $rentbeforevat + $invoice->rates + $invoice->operationalcost +
+                  $invoice->interest + $invoice->vat;
+             $invoicetotal = $rentbeforevat + $invoice->rates + $invoice->operationalcost +
+             $invoice->interest + $invoice->vat + $invoice->balancebd ;
+             
 
+            //invoice data
+            $arr["email"]               = "marcos@intpro.co.zw";
+            $arr["ccemail"]             = "kudzchitz@gmail.com";
+            $arr["title"]               = "Invoice for $tenantname";
+            $arr["tenantname"]          = $tenantname;
+            $arr["propdesc"]            = $invoice->propertydescription;
+            $arr["period"]              = $invoice->period;
+            $arr["tenantvatnumber"]     = $tenant->vatnumber;
+            $arr["tenanttinnumber"]     = $tenant->tinnumber;
+            $arr["invoicenumber"]       = $invoice->id;
+            $arr["currencycode"]        = $invoice->currencycode;
+            $arr["balancebd"]           = number_format($invoice->balancebd,2);
+            $arr["rent"]                = number_format($invoice->rental,2);
+            $arr["rateswater"]          = number_format($invoice->rates,2);
+            $arr["interestcharged"]     = number_format($invoice->interest,2);
+            $arr["operational"]         = number_format($invoice->operationalcost,2);
+            $arr["rentvat"]             = number_format($invoice->vat,2);
+            $arr["rentbeforevat"]       = number_format($rentbeforevat,2);
+            $arr["totalbilledexc"]      = number_format($totalbilledexc,2);
+            $arr["totalvatincl"]        = number_format($totalvatincl,2);
+            $arr["invoicetotal"]        = number_format($invoicetotal,2);
+            $arr['today']               = date('d-M-Y');
+            $arr["deposit"]             = number_format($invoice->deposit,2);
+
+
+            //convert to pdf
+            $invoicepdf =   PDF::loadView('tomail/invoice',$arr);
+             //mail the invoice
+             Mail::raw( 'Monthly Invoice.',function($message)use($arr, $invoicepdf) {
+                $message->to('kudzchitz@gmail.com')
+                      ->subject($arr["period"].' Invoice')
+                      ->attachData($invoicepdf->output(), ''.$arr["title"].'.pdf'); 
+            });
+            //post data into invoices & arrear details and clear preinvoice 
+            DB::select ('EXEC spPostPropManInvoiceAndArrears ?,?',
+            [$invoiceid,session('alluser')]);
+
+            return redirect()->route('propapp.listpre')
+            ->with('success', 'invoice send');
+        } catch (\Throwable $th) {
+            return redirect()->route('propapp.listpre')
+                ->with('error', 'failed to load'.$th);
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('propapp.listpre')
+        ->with('error', 'failed to load');
+    }
+}
 /*--------------------end invoicing */
 }
