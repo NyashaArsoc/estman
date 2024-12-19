@@ -27,6 +27,30 @@ class SetupIntakeController extends Controller
       ->with('error', 'failed to load');
    }
  }
+ public function addcurrencyrate(){
+   try {
+      $arr['currency']   = DB::table('setupcurrency')
+            ->select('code')->whereNotIn('code',DB::table('setupcurrencybase')
+                ->select('code')->limit(1))
+            ->get();
+            $arr['basecurrency']   = DB::table('setupcurrencybase')
+            ->select('code')->get(); 
+       return view('setup.intake.add-exchange-rate')->with($arr);
+   } catch (\Throwable $th) {
+       return  redirect()->route('dash.setup');
+   } 
+}public function addexchangerate(Request $request){
+   try {
+       DB::table('setupcurrencyrate')->insert(['currencycode'=> $request->currencycode
+       ,'buyingrate'=> $request->buyingrate,'sellingrate'=> $request->sellingrate,
+       'operatorid'=>session('alluser')]);
+       return  redirect()->route('setin.ratecurr') 
+       ->with('success', 'rates set');
+   } catch (\Throwable $th) {
+       return  redirect()->route('setin.ratecurr') 
+           ->with('error', 'failed to load');
+   }
+}
  /*---------------end creating new currency-----------------*/
      /*---------------creating new client type-----------------*/
 public function addclienttype(){

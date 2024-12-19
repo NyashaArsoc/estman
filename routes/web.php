@@ -46,6 +46,7 @@ Route::controller(PropertyController::class)->group(function () {
 
 Route::controller(InvoiceController::class)->group(function (){
     Route::any('/approve-edited-pro-foma/{id}', 'approveeditedprofoma')->name('invoice.approveeditedprofoma');
+    Route::any('/approve/{id}/pro-foma/{lease}', 'approveprofoma')->name('invoice.approveprofoma');
     Route::get('/invoice/generated', 'listinvoice')->name('invoice.listinv');
     Route::get('/invoice/view/{id}/generated', 'viewgeneratedinvoice')->name('invoice.viewgen');
     Route::get('/invoice/{id}/print{lease}', 'printgeneratedinvoice')->name('invoice.print');
@@ -196,7 +197,7 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::post('/prop/add/new/lease/arrear/{id}', 'addnewleasearrear')->name('propin.addnewleaarrear');
     Route::get('/prop/add/{id}/lease/rates/declined', 'addleaseratedeclined')->name('propin.addlearatedec');
     Route::post('/prop/add/declined/new/lease/rates/{id}', 'addnewleaseratedeclined')->name('propin.addnewlearatedec');
-
+    Route::get('/prop/add/customer/receipt', 'createreceipting')->name('propin.payment');
 });
 /*-------------------end property management intake------------------------ */
 
@@ -278,6 +279,7 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::get('/prop/landlord/single/type/{id}', 'getlandlordbytype');
     Route::get('/prop/tenant/single/type/{id}', 'gettenantbytype');
     Route::get('/prop/property/single/type/{id}', 'getpropertybytype');
+    Route::get('/prop/tenant/single/details/{id}', 'gettenantbyid');
     Route::get('/prop/landlord/contact/propertyaddress/{id}', 'getlandlordbyproperty');
     Route::get('/prop/landlord/{id}/view', 'viewlandlorddetails')->name('propma.viewland');
     Route::get('/prop/edit/{id}/landlord', 'vieweditlandlorddetails')->name('propma.editland');
@@ -324,6 +326,8 @@ Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(
      Route::post('/set-up/add/new/lease/interest', 'addnewleaseinterest')->name('setin.addnewintrst');
      Route::get('/set-up/add/vat/config', 'addvatconfig')->name('setin.addvat');
      Route::post('/set-up/add/new/vat/config', 'addnewvatconfig')->name('setin.addnewvat');
+     Route::get('/set-up/add/currency/exchangerate', 'addcurrencyrate')->name('setin.ratecurr');
+     Route::post('/set-up/add/new/dcurrency/exchangerate', 'addexchangerate')->name('setin.newratecurr');
 
 });
 /*-------------------end setup intake------------------------ */

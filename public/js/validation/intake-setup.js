@@ -125,6 +125,69 @@ function validateNumericValueRequired() {
             }
     }
 }
+// buying rate 
+$("#buyingratecheck").hide();
+let buyingrateError = true;
+$("#buyingrate").keyup(function () {
+    validateBuyingRate();
+});
+function validateBuyingRate() {
+    let textValue = $("#buyingrate").val();
+    let SellingValue = $("#SellingRate").val();
+    let MeanRate; 
+    if (textValue.length == "") {
+        $("#buyingratecheck").show();
+        buyingrateError = false;
+        return false;
+    } else{
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck =  specialChars.test(textValue);
+        if (charscheck == true){
+             $("#buyingratecheck").show();
+            $("#buyingratecheck").html("**digits only or (35.9098)");
+            buyingrateError = false;
+            return false;
+        }else{
+            MeanRate = (parseFloat(textValue)  + parseFloat(SellingValue) )/2
+            $("#meanratecheck").html(MeanRate);
+            buyingrateError = true;
+            $("#buyingratecheck").hide();
+        }
+    }
+      
+}
+// selling rate 
+$("#sellingratecheck").hide();
+let sellingrateError = true;
+$("#sellingrate").keyup(function () {
+    validateSellingRate();
+});
+function validateSellingRate() {
+    let textValue = $("#sellingrate").val();
+    let BuyingValue = $("#buyingrate").val();
+    let MeanRate; 
+    if (textValue.length == "") {
+        $("#sellingratecheck").show();
+        sellingrateError = false;
+        return false;
+    } else{
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck =  specialChars.test(textValue);
+        if (charscheck == true){
+            
+             $("#sellingratecheck").show();
+            $("#sellingratecheck").html("**digits only or (35.9098)");
+            sellingrateError = false;
+            return false;
+        }else{
+            MeanRate = (parseFloat(textValue)  + parseFloat(BuyingValue) )/2
+            $("#meanratecheck").html(MeanRate);
+            sellingrateError = true;
+            $("#sellingratecheck").hide();
+        }
+    }
+       
+}
 /*--------------------starting buttons --------------------------*/
  //button currency code
  $("#btn-submit-currency").click(function () {
@@ -157,4 +220,18 @@ function validateNumericValueRequired() {
         if (numericrequiredError == true && leasenameError==true ){return true;
         }else{ return false;}
     } catch (err) { return false;}
+});
+//button add exchange rate
+$("#btn-submit-exchange-rate").click(function () {
+    validateSellingRate(); validateBuyingRate();validateCurrencyCode();
+    try {
+        if (buyingrateError==true && sellingrateError ==true && currencycodeError ==true){
+            return true;
+        }else{
+             return false;
+        }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
 });
