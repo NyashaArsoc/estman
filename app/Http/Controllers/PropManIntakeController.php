@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Carbon\Carbon;
 class PropManIntakeController extends Controller
 {
     private $monthlyvalue;   private $quarterlyvalue; 
@@ -565,4 +566,176 @@ public function addleaseratedeclined($id){
     }
 }
   /*---------------end creating new lease-----------------*/
+  /*---------------payments -----------------*/
+public function createreceipting(){
+    try {
+        $currencycode = $this->getcurrencycode();
+        $arr['currency'] = $currencycode; 
+        $arr['lease']   = DB::table('propmanalllease')->where('available','=','Y')
+        ->select('*')->get();
+        return view('propman.intake.lease-recepting')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+        
+}
+public function processleasepayment(Request $request){
+    try {
+        $currentperioddate      =       Carbon::now()->format('Y-m-d');
+        $trxid                  =       $this->gettransationid();
+        $basecurrency           =       $this->getbasecurrency();
+        switch(true){
+            case($basecurrency == 'failed'):
+                return  redirect()->route('dash.main');
+            default:
+            $basecurrency == $basecurrency;
+        }
+        // get payment period 
+        $periodrun =  DB::table('setupperiodrun')->where('isremitlistrun','=',0)->select('*')->latest('id')->first();
+        $receiptperiod   = DB::table('setuppropertypaymentperiod')
+        ->where('openclose','=','O')->select('*')->latest('id')->first();
+        $currentperiod = ($periodrun=== null) ? $currentperioddate : $periodrun->period;
+        $periodreceipt = ($receiptperiod=== null) ? $currentperiod :  $receiptperiod->period;
+        //get exchange rate 
+        $exchangerate= DB::table('setupcurrencyrate')->where('currencycode', 
+        $request->receiptcurrency)->select('meanrate')->orderby('id','DESC')->first();
+      
+        /*---------check if multicurrency is enables------------------ */
+        $ismulticurrency = $request->has('multicurrency');
+          if ($ismulticurrency) {
+        /*--------yes multi currency--------- */
+            
+             /*-------------get the arrears of the lease */
+            $arrears   = DB::table('propmanleasearrearsdetails')->where('leaseid',
+            $request->lease)->select('*')->get();
+
+            $remainingamount = $request->receiptamount;
+            //loop through the arrears to clear the balances
+            foreach ($arrears as $abc) {
+                if ($remainingamount <= 0) {   break; } //stop if there is no balance left
+                $meanrate = (trim($abc->currencycode) == $request->receiptcurrency) ? 1: $exchangerate->meanrate;
+                //convert the arrears balance 
+                $currentarrearbalance = $abc->balrent * $meanrate;
+                //check the amount to clear
+                $amountcleared = min($currentarrearbalance, $remainingamount);
+                // Clear the arrear
+                $currentarrearbalance -= $amountcleared; 
+                $remainingamount -= $amountcleared; //reduce from input amount
+                $trxamount      = $amountcleared/$meanrate;
+                // Save the updated arrear
+                if ($currentarrearbalance <= 0) {
+                    // Delete the row if cleared to zero
+                   DB::table('propmanleasearrearsdetails')->where('id', $abc->id)->delete();
+                } else {
+                    $currentarrearbalance /=$meanrate;
+                     DB::table('propmanleasearrearsdetails')->where('id', $abc->id)
+                     ->update(['balrent' => $currentarrearbalance]);
+                }
+                 /*------recording all transactions---------------- */
+                DB::table('propmanleasetranscations')->insert(['trxleaseid'=>$request->lease,
+                'trxcurrencycode'=>$abc->currencycode,'trxdescription'=>'Payment','trxtype'=>'TD',
+                'trxamount'=>$trxamount,'trxratedamount'=>$amountcleared,'trxexchangerate'
+                =>$meanrate,'trxcreatedby'=>session('alluser'),'trxrefence'=>$trxid  ]);
+                /*i Think we need to convert the remaining amount back to origin currency 
+                    so we devide by meanrate
+                    $remainingamount /= $meanrate; */
+            }//end loop
+
+            // Check if there's remaining amount after clearing arrears
+            if ($remainingamount > 0) {
+                // Store as prepayment
+                $prepaymentamount = abs($remainingamount);
+                $existingprepayment= DB::table('propmanleaseprepayments')->where('currencycode', 
+                $request->receiptcurrency)->where('leaseid',$request->lease)->first();
+
+                $meanrate = (trim($basecurrency) === $request->receiptcurrency) ? 1: $exchangerate->meanrate;
+                $trxratedamount      = $prepaymentamount * $meanrate;
+                if ($existingprepayment) {
+                    DB::table('propmanleaseprepayments') // Replace with your actual table name
+                    ->where('id', $existingprepayment->id) // Assuming `id` is the primary key
+                    ->update(['balance' => $existingprepayment->balance + $prepaymentamount]);
+                }else{
+                    DB::table('propmanleaseprepayments') // Replace with your actual table name
+                    ->insert(['leaseid' => $request->lease,
+                        'balance' => $prepaymentamount,'currencycode' => $request->receiptcurrency]);
+                }
+                 /*------recording all transactions---------------- */
+                DB::table('propmanleasetranscations')->insert(['trxleaseid'=>$request->lease,
+                'trxcurrencycode'=>$request->receiptcurrency,'trxdescription'=>'Payment','trxtype'=>'TD',
+                'trxamount'=>$prepaymentamount,'trxratedamount'=>$trxratedamount,'trxexchangerate'
+                =>$meanrate,'trxcreatedby'=>session('alluser'),'trxrefence'=>$trxid  ]);
+            }
+        }else{
+        /*--------no multicurrency-------------------- */
+          /*-------------get the arrears of the lease */
+          $arrears   = DB::table('propmanleasearrearsdetails')->where('leaseid',
+          $request->lease)->where('currencycode',$request->receiptcurrency)
+          ->select('*')->get();
+          $meanrate = (trim($basecurrency) === $request->receiptcurrency) ? 1: $exchangerate->meanrate;
+
+          $remainingamount = $request->receiptamount;
+          //loop through the arrears to clear the balances
+          foreach ($arrears as $abc) {
+              if ($remainingamount <= 0) {   break; } //stop if there is no balance left
+              //check the amount to clear
+              $amountcleared = min($abc->balrent, $remainingamount);
+              // Clear the arrear
+              $abc->balrent -= $amountcleared; 
+              $remainingamount -= $amountcleared; //reduce from input amount
+              $trxratedamount      = $amountcleared / $meanrate;
+              // Save the updated arrear
+              if ($abc->balrent <= 0) {
+                  // Delete the row if cleared to zero
+                  DB::table('propmanleasearrearsdetails')->where('id', $abc->id)->delete();
+              } else {
+                  DB::table('propmanleasearrearsdetails')->where('id', $abc->id)
+                  ->update(['balrent' => $abc->balrent]);
+              }
+              /*------recording all transactions---------------- */
+              DB::table('propmanleasetranscations')->insert(['trxleaseid'=>$request->lease,
+              'trxcurrencycode'=>$request->receiptcurrency,'trxdescription'=>'Payment','trxtype'=>'TD',
+              'trxamount'=>$amountcleared,'trxratedamount'=>$trxratedamount,'trxexchangerate'
+              =>$meanrate,'trxcreatedby'=>session('alluser'),'trxrefence'=>$trxid  ]);
+          }//end loop
+          // Check if there's remaining amount after clearing arrears
+          if ($remainingamount > 0) {
+              // Store as prepayment
+           
+              $prepaymentamountremain = abs($remainingamount);
+              $existingprepayment= DB::table('propmanleaseprepayments')->where('currencycode', 
+              $request->receiptcurrency)->where('leaseid',$request->lease)->first();
+
+              $trxratedamount      = $prepaymentamountremain * $meanrate;
+
+              if ($existingprepayment) {
+                 $prepaymentamount = $existingprepayment->balance + $prepaymentamountremain;
+                  DB::table('propmanleaseprepayments') 
+                  ->where('id', $existingprepayment->id) 
+                  ->update(['balance' => $prepaymentamount]);
+              }else{
+                   DB::table('propmanleaseprepayments') 
+                  ->insert(['leaseid' => $request->lease,
+                      'balance' => $prepaymentamountremain,'currencycode' => $request->receiptcurrency]);
+              }
+               /*------recording all transactions---------------- */
+              DB::table('propmanleasetranscations')->insert(['trxleaseid'=>$request->lease,
+                'trxcurrencycode'=>$request->receiptcurrency,'trxdescription'=>'Payment','trxtype'=>'TD',
+                'trxamount'=>$prepaymentamountremain,'trxratedamount'=>$trxratedamount,'trxexchangerate'
+                =>$meanrate,'trxcreatedby'=>session('alluser'),'trxrefence'=>$trxid  ]);
+          }
+        }
+        /*--------post the payment as is */
+        DB::table('propmanleasereceipts')->insert(['receiptnumber'=>$trxid,'leaseid'=>$request->lease
+        ,'currencycode'=>$request->receiptcurrency,'amountpaid'=>$request->receiptamount,
+        'receiptdate'=>$request->receiptdate,'operatorid'=>session('alluser'),
+            'period'=>$periodreceipt,'receiptreference'=>$request->receiptreference,'multicurrency'=>$ismulticurrency]);
+        /*---------end check if multicurrency is enables------------------ */
+        return  redirect()->route('propin.payment') 
+        ->with('success', 'record added');
+    } catch (\Throwable $th) {
+        return redirect()->route('propin.payment')
+        ->with('error', 'failed to load');
+    }
+}
+  /*---------------end payments -----------------*/
 }

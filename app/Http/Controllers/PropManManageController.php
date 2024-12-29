@@ -61,6 +61,21 @@ public function getlandlordbyproperty ($id){
         return  redirect()->route('dash.property');
     } 
 }
+public function gettenantbyid($id){
+   
+        try {
+            $lease   = DB::table('propmanalllease')->where('id', $id)
+            ->select('*')->first();
+            $arr['tenant']   = DB::table('propmanalltenant')->where('id', $lease->tenantid)
+        ->select('*')->first();
+        $arr['balances']    = DB::select ('EXEC spGetPropManSingleLeaseCurrentAmountDue ?',
+        [$id]);
+            return view('propman.manage.get-single-tenant-leaseid')->with($arr);
+        } catch (\Throwable $th) {
+             return redirect()->route('dash.property')
+             ->with('error', 'failed to load');
+        }
+}
 /*------------end get by client type */
 /*-----------------view landlord------ */
 public function viewlandlorddetails($id){
@@ -628,5 +643,6 @@ public function updatesingleleaserenew($id,Request $request){
         ->with('error', 'failed to load');
     }
 }
+
 /*-----------------------end lease----------------------*/
 }

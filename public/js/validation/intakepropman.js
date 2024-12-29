@@ -1391,6 +1391,40 @@ function validateDateRange() {
         return true;
     } 
 }
+//valid receipting leaseid
+$("#receiptleasecheck").hide();
+let receiptingleaseError = true;
+$("#leasenumber").keyup(function () {
+    validateReceiptLeaseNumber();
+});
+function validateReceiptLeaseNumber() {
+   let textValue = $("#leasenumber").val();
+   if (textValue.length == "") {
+       $("#receiptleasecheck").show();
+       receiptingleaseError = false;
+       return false;
+   } else {
+    receiptingleaseError = true;
+       $("#receiptleasecheck").hide();
+   }
+}
+ //daterequired
+ $("#daterequiredcheck").hide();
+ let daterequiredError = true;
+ $("#daterequired").keyup(function () {
+     validateDateRequired();
+ });
+ function validateDateRequired() {
+     let textValue = $("#daterequired").val();
+     if (textValue.length == "") {
+         $("#daterequiredcheck").show();
+         daterequiredError = false;
+         return false;
+     } else {
+        daterequiredError = true;
+         $("#daterequiredcheck").hide();
+     }
+ }
 /*-----------------------------buttons submit ----------------------- */
 /*-----------------------------add banking details table ----------------------- */
 $('#add-banking-item').on('click', function() {
@@ -1676,4 +1710,17 @@ $("#btn-add-lease-prepay").click(function () {
             if(currencycodeError==true && leaseratecostError==true  )
                 {return true}else{return false}
     }catch(err){return false;}
+});
+// button process receipt 
+$("#add-lease-receipt").click(function () {
+    validateCurrencyCode();validateReceiptLeaseNumber();
+    validateNumericValueRequired(); validateDateRequired();
+    if(currencycodeError==true && receiptingleaseError==true && numericrequiredError == true
+         && daterequiredError==true ){
+        //valid
+        return true;
+    }else{
+        //failed
+        return false;
+    }
 });

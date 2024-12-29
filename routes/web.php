@@ -198,6 +198,8 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::get('/prop/add/{id}/lease/rates/declined', 'addleaseratedeclined')->name('propin.addlearatedec');
     Route::post('/prop/add/declined/new/lease/rates/{id}', 'addnewleaseratedeclined')->name('propin.addnewlearatedec');
     Route::get('/prop/add/customer/receipt', 'createreceipting')->name('propin.payment');
+    Route::any('/prop/process/customer/payment', 'processleasepayment')->name('propin.procpay');
+
 });
 /*-------------------end property management intake------------------------ */
 

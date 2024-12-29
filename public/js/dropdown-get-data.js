@@ -120,3 +120,14 @@ function getpropmanlandlordlistbyproperty() {
         	}
 	});
 }
+//get tenant details on receipting by leaseID 
+function getpropmantenantbyleaseid() {
+    var textValue = $("#leasenumber").val();
+	$.ajax({          
+        	type: "GET",
+        	url: "/prop/tenant/single/details/"+textValue,
+        	success: function(data){
+        		$("#tenantdetailsform").html(data);
+        	}
+	});
+}

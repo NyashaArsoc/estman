@@ -72,13 +72,10 @@ public function userforcelogout($error){
 public function getbasecurrency(){
     try {      
         $basecurrency   = DB::table('setupcurrencybase')
-        ->select('*')->where('active','=','Y')
+        ->select('code')->where('active','=','Y')
         ->latest('id')->first();
-        if(is_null($basecurrency)){
-            return 'failed';
-        }else{
-            return $basecurrency->code;
-        }
+        $basecurrency = ($basecurrency === null) ? 'failed' : $basecurrency->code;
+        return $basecurrency;
     } catch (QueryException $th) {
        return 'failed';
     }
@@ -103,6 +100,16 @@ public function getclienttype(){
         return $description;
     } catch (\Throwable $th) {
         return  redirect()->route('dash.main')->with('error', 'no client type');
+    }
+}
+/*--------get the last transaction id */
+public function gettransationid(){
+    try {
+        $trxid = collect(DB::select('EXEC spGETSetupTriggerTrxID'))->first();
+        $trxid = ($trxid !== null) ? $trxid->trxid : 'failed';
+        return $trxid;
+    } catch (\Throwable $th) {
+       return 'failed'.$th;
     }
 }
 /* take the transaction id for all transactions
