@@ -75,6 +75,12 @@
             </div>
         </div>
         <div class="row row-md mb-2">
+            <div class="col-md-5">
+                <div class="box box-block bg-white">
+                <h5 class="t-content text-xs-center">Yearly Collections {{$base->code}}</h5>
+                <canvas id="rentalbilledcollectionschart"></canvas>
+                </div>
+            </div>
             <div class="col-md-7">
                 <div class="box bg-white">
                     <div class="box-block clearfix">
@@ -108,8 +114,44 @@
         </div>
     </div>
     <!-- Content End-->
+    
 @endsection
-
+<script>
+    // Ensure the script runs after the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+     const ctx = document.getElementById('rentalbilledcollectionschart').getContext('2d');
+        const rentalbilledcollectionschart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {!! json_encode($dates) !!}, // Dates for the month
+                datasets: [
+                    {
+                        label: 'Collections',
+                        data: {!! json_encode($rentalcollected) !!}, // Collected amounts
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                    },
+                    {
+                        label: 'Invoices',
+                        data: {!! json_encode($rentalbilled) !!}, // Billed amounts
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        fill: true,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
 @section('additional js')
     <!-- Additional JS Start-->
     <script src="{{ asset('js/validation/lease.js') }}"></script>
