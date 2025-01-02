@@ -643,6 +643,72 @@ public function updatesingleleaserenew($id,Request $request){
         ->with('error', 'failed to load');
     }
 }
-
 /*-----------------------end lease----------------------*/
+/*-----------------------invoicing --------------------------*/
+public function listallpropertyinvoice(){
+    try {
+        $arr['property']    = DB::select ('EXEC spGetPropManInvoicedProperty');
+        return view('propman.manage.list-all-property-invoice')->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+}
+public function viewsinglepropertyinvoice($id){
+    try{
+        $propertyid = Crypt::decrypt($id);
+            try {
+                $arr['tenant']    = DB::select ('EXEC spGetPropManInvoicedTenant ?', [$propertyid]);
+                $arr['property']   = DB::table('propmanallproperty')
+                ->where('id', $propertyid)->select('*')->first(); 
+                return view('propman.manage.view-single-property-invoice')->with($arr);
+            } catch (\Throwable $th) {
+                return redirect()->route('propma.propinvo')
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propma.propinvo')
+            ->with('error', 'failed to load');
+        }
+}
+public function viewsingletenantinvoice($tid,$pid){
+    try{
+        $tenantid       =   Crypt::decrypt($tid);
+        $propertyid     =   Crypt::decrypt($pid);
+            try {
+                $arr['lease']    = DB::select ('EXEC spGetPropManInvoicedLease ?,?',
+                 [$propertyid,$tenantid]);
+                $arr['tenant']   = DB::table('propmanalltenant')
+                ->where('id', $tenantid)->select('*')->first(); 
+                $arr['property']   = DB::table('propmanallproperty')
+                ->where('id', $propertyid)->select('*')->first();
+                return view('propman.manage.view-single-tenant-invoice')->with($arr);
+            } catch (\Throwable $th) {
+                return redirect()->route('propma.propinvo')
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propma.propinvo')
+            ->with('error', 'failed to load');
+        }
+}
+public function viewsingleleaseinvoice($id,){
+    try{
+        $leaseid       =   Crypt::decrypt($id);
+            try {
+                 $arr['invoice']   = DB::table('propmaninvoicegenerated')
+                ->where('leaseid', $leaseid)->select('*')->get(); 
+                $arr['lease']   = DB::table('propmanalllease')
+                ->where('id', $leaseid)->select('*')->first();
+                return view('propman.manage.view-single-lease-invoice')->with($arr);
+            } catch (\Throwable $th) {
+                return redirect()->route('propma.propinvo')
+                ->with('error', 'failed to load');
+            }
+        }catch (DecryptException $th) {
+            return redirect()->route('propma.propinvo')
+            ->with('error', 'failed to load');
+        }
+}
+/*----------------------end invoicing--------------------*/
+
 }

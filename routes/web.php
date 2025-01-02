@@ -45,8 +45,6 @@ Route::controller(PropertyController::class)->group(function () {
 });
 
 Route::controller(InvoiceController::class)->group(function (){
-    Route::any('/approve-edited-pro-foma/{id}', 'approveeditedprofoma')->name('invoice.approveeditedprofoma');
-    Route::any('/approve/{id}/pro-foma/{lease}', 'approveprofoma')->name('invoice.approveprofoma');
     Route::get('/invoice/generated', 'listinvoice')->name('invoice.listinv');
     Route::get('/invoice/view/{id}/generated', 'viewgeneratedinvoice')->name('invoice.viewgen');
     Route::get('/invoice/{id}/print{lease}', 'printgeneratedinvoice')->name('invoice.print');
@@ -55,10 +53,6 @@ Route::controller(InvoiceController::class)->group(function (){
 });
 
 Route::controller(TransactionController::class)->group(function (){
-    Route::get('/new-lease/unposted-balances', 'viewnewbalances')->name('transact.newbal');
-    Route::any('/transact-lease/{id}/post/{code}/{name}', 'postnewleasebalances')->name('transact.postnewbal');
-    Route::get('/customer/receipt', 'receipting')->name('transact.payment');
-    Route::any('/receipt/tenant', 'processreceipt')->name('transact.addreceipt');
     Route::get('/remit/property', 'viewremit')->name('transact.remit');
     Route::get('/remit/{id}/property', 'addscheduleremit')->name('transact.scheduleremit');
     Route::any('/process/{id}/remit/{pid}/prop/{currency}/details/{lid}', 'processremit')->name('transact.payremit');
@@ -311,6 +305,10 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::any('/prop/{id}/lease/reactivate', 'reactivatesinglelease')->name('propma.reactlea');
     Route::get('/prop/lease/{id}/renewal', 'viewrenewleasedetails')->name('propma.renlea');
     Route::any('/prop/update/lease/{id}/renewal', 'updatesingleleaserenew')->name('propma.uptrenlea');
+    Route::get('/prop/list/property/invoice', 'listallpropertyinvoice')->name('propma.propinvo');
+    Route::get('/prop/view/{id}/property/invoice', 'viewsinglepropertyinvoice')->name('propma.viewpropinvo');
+    Route::get('/prop/view/{tid}/tenant/invoice/{pid}', 'viewsingletenantinvoice')->name('propma.viewteninvo');
+    Route::get('/prop/view/{id}/lease/invoice', 'viewsingleleaseinvoice')->name('propma.viewleainvo');
 
    });
 /*-------------------end property management declines------------------------ */
