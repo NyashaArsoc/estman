@@ -14,7 +14,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind('reporttcpdf', function () {
+            return config('reporttcpdf'); });
     }
 
     /**

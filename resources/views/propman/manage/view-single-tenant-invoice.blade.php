@@ -1,10 +1,10 @@
 @php
-$title = 'Tenant Invoices';
-$description = 'list of all tenant invoices...'; 
+$title = 'Lease Invoices';
+$description = 'list of all lease invoices...'; 
 $id = Crypt::encrypt($property->id);
 @endphp
 @extends('layout.no-menu-layout')
-@section('title', 'Tenant Invoices')
+@section('title', 'Lease Invoices')
 @section('content')
     <!-- Content Start-->
     <div class="container-fluid">

@@ -309,6 +309,8 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::get('/prop/view/{id}/property/invoice', 'viewsinglepropertyinvoice')->name('propma.viewpropinvo');
     Route::get('/prop/view/{tid}/tenant/invoice/{pid}', 'viewsingletenantinvoice')->name('propma.viewteninvo');
     Route::get('/prop/view/{id}/lease/invoice', 'viewsingleleaseinvoice')->name('propma.viewleainvo');
+    Route::get('/prop/view/{id}/generated/{lid}/invoice', 'viewsinglegeneratedinvoice')->name('propma.viewgeninvo');
+    Route::get('/prop/download/{id}/generated/invoice-pdf/{lid}', 'pdfsinglegeneratedinvoice')->name('propma.pdfgeninvo');
 
    });
 /*-------------------end property management declines------------------------ */

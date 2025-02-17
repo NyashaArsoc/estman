@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\PDFReporting\pdfreport;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 
 class PropManManageController extends Controller
 {
@@ -708,6 +710,165 @@ public function viewsingleleaseinvoice($id,){
             return redirect()->route('propma.propinvo')
             ->with('error', 'failed to load');
         }
+}
+public function viewsinglegeneratedinvoice($id,$lid){
+    try {
+        $invoiceid = Crypt::decrypt($id);
+        try {
+            $arr['invoice']   = DB::table('propmaninvoicegenerated')
+            ->where('id', $invoiceid)->select('*')->first();  
+            $arr['lease']   = DB::table('propmanalllease')->where('id', $arr['invoice']->leaseid)
+            ->select('*')->first();
+            return view('propman.manage.view-single-invoice-generated')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.viewleainvo',$lid)
+                ->with('error', 'failed to load');
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('propma.viewleainvo',$lid)
+        ->with('error', 'failed to load');
+    }
+}
+public function pdfsinglegeneratedinvoice($id,$lid){
+    try {
+        $invoiceid = Crypt::decrypt($id);
+        try {
+            $arr['invoice']   = DB::table('propmaninvoicegenerated')
+            ->where('id', $invoiceid)->select('*')->first();  
+            // $arr['lease']   = DB::table('propmanalllease')->where('id', $arr['invoice']->leaseid)
+            // ->select('*')->first();
+           // return view('propman.manage.view-single-invoice-generated')->with($arr);
+        /*--------------------------------------- */
+         // Create new PDF document
+    $pdf = new pdfreport(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
+    // remove default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+    //header title
+    //--$pdf->setHeaderTitle('Model Balances');
+    //document information 
+    $pdf->SetCreator(PDF_CREATOR);
+    //--$pdf->SetHeaderData(PDF_HEADER_LOGO,19);
+    // Set margins
+    $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+  /*  $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); */
+    // Enable auto page breaks
+    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+    $pdf->AddPage();
+    $imageFile = base_path('public/img/ESTMANLOGO.png');
+    $tbl = <<<EOD
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                    #firsttable {
+                        width: 60%;
+                        border-collapse: collapse; /* Remove borders */
+                        margin-right: 0;
+                        margin-left: 0; /* Push table to the right */
+                    }
+                    #festtable{
+                     float: right;
+                    }
+                    .right-cell {
+                        padding: 10px;
+                        text-align: right; /* Align text to the right for the right cell */
+                    }
+                    .logo {
+                        width: 100%;
+                        max-width: 50%;
+                    }
+                    #addresstable {
+                        width: 100%;
+                        border-collapse: collapse; /* Remove borders */
+                        margin-right: 0;
+                        margin-left: auto; /* Push table to the right */
+                    }
+                    #descrptiontable {
+                        width: 100%;
+                        text-align: left;
+                        border-collapse: collapse; /* Remove borders */
+                    }
+                    /* Styles for the second row (with borders) */
+                    .bordered td {
+                        border: 1px solid #000; /* Black border */
+                        padding: 3px; /* Padding for spacing */
+                    }
+                    #bottomline {
+                        border-bottom: 1px solid #000; /* Bottom border for the last cell */
+                    }
+                    #textright { text-align: right; }
+                    #textleft { text-align: left; }
+                </style>
+</head>
+<body>
+            <table id="firsttable">
+                <tr><td></td><td class="right-cell">Technologies Technologies</td></tr>
+                <tr><td style="padding: 10px; text-align:right;"><strong>Invoice - Copy</strong></td>
+                    <td class="right-cell"><img src="$imageFile" width="122px" height="26px"></td></tr>
+            </table>
+            <table id="addresstable">
+                <tr><td>Attention: tenantname<br>propdesc</td>
+                    <td class="right-cell">6th Floor Green Bridge<br/>Eastgate, Harare<br/>Tel. +263 8677030000</td></tr>
+                <tr><td>VAT Number: tenantvatnumber<br>TIN: tenanttinnumber ?? ''</td></tr>
+                <tr><td></td>
+                    <td class="right-cell">Technologies Technologies VAT: 220141335<br>Technologies Technologies TIN: 2000036892</td></tr>
+            </table>
+            <table id="festtable" width="60%"> 
+                <tr ><td>Currency</td><td>Period</td><td>Invoice Date</td><td>Invoice No</td></tr>
+                <tr class="bordered"><td>ZWG ?? ''</td><td>period ?? ''</td><td>today ?? ''</td><td>89 ?? ''</td></tr>
+            </table>
+            <table id="addresstable">
+                <tr><td>Deposit: deposit ?? 0</td><td></td><td class="right-cell">Balance bd: balancebd ?? 0</td></tr>
+            </table>
+            <table id="descrptiontable">
+                <thead>
+                    <tr id="bottomline">
+                        <th id="textleft">No</th>
+                        <th id="textleft">Item Description</th>
+                        <th id="textright">Amount (Exc)</th>
+                        <th id="textright">Amount (Inc)</th>
+                    </tr>
+                </thead>
+             <tbody>
+                    <tr><td>1</td><td>Rental:</td><td id="textright"> 0</td><td id="textright"> 0</td></tr>
+                    <tr><td>2</td><td>Rates & Levies:</td><td id="textright"> 0</td><td id="textright"> 0</td></tr>
+                    <tr><td>3</td><td>Operational Costs:</td><td id="textright"> 0</td><td id="textright"> 0</td></tr>
+                    <tr><td>4</td><td>Interest:</td><td id="textright"> 0</td><td id="textright"> 0</td></tr>
+                   
+                     <tr><td></td><td></td><td>Total (Exc)</td><td id="textright">totalbilledexc ?? 0</td></tr>
+                    <tr><td></td><td></td><td>VAT</td><td id="textright">rentvat ?? 0</td></tr>
+                    <tr><td></td><td></td><td>Total (Inc)</td><td id="textright"></td></tr>
+                    <tr><td></td><td></td><td id="bottomline"></td><td id="bottomline"></td></tr>
+                    <tr><td id="bottomline"></td><td></td><td>Total</td><td id="textright"> 0 </td></tr>
+
+                </tbody>
+            </table>
+              <br>
+            <table id="descrptiontable">
+                <tr><td>Banking Details</td></tr>
+                <tr><td>Integrated Properties (currencycode)<br>bankname<br>branch<br>accountnumber</td></tr>
+                <tr><td>STATEMENT<br>Closing Remarks</td></tr>
+            </table>
+
+</body>
+</html>
+EOD; 
+    
+$pdf->writeHTML($tbl, true, false, false, false, '');
+$pdf->Output('invoice.pdf', 'D');
+        /*--------------------------------------- */
+        } catch (\Throwable $th) {
+            return redirect()->route('propma.viewgeninvo',[$id,$lid])
+                ->with('error', 'failed to load' .$th);
+        }
+    } catch (DecryptException $th) {
+    return redirect()->route('propma.viewgeninvo',[$id,$lid])
+        ->with('error', 'failed to load');
+    }
 }
 /*----------------------end invoicing--------------------*/
 
