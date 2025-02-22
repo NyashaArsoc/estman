@@ -35,11 +35,11 @@ function validatePassword() {
 //password check
 $("#confirmpasswordcheck").hide();
 let confirmpasswordError = true;
-$("#ConfirmPassword").keyup(function () {
+$("#confirmpassword").keyup(function () {
     validateConfirmPassword();
 });
 function validateConfirmPassword() {
-    let textValue       = $("#ConfirmPassword").val();
+    let textValue       = $("#confirmpassword").val();
     let passwordValue   = $("#password").val();
     if (textValue.length == "") {
         $("#confirmpasswordcheck").show();
@@ -57,12 +57,38 @@ function validateConfirmPassword() {
        
     }
 }
+//old password check
+$("#currentpasswordcheck").hide();
+let currentpasswordError = true;
+$("#currentpassword").keyup(function () {
+    validateCurrentPassword();
+});
+function validateCurrentPassword() {
+    let textValue = $("#currentpassword").val();
+    if (textValue.length == "") {
+        $("#currentpasswordcheck").show();
+        currentpasswordError = false;
+        return false;
+    }else {
+        currentpasswordError = true;
+        $("#currentpasswordcheck").hide();
+    }
+}
+//button disable submit
+function disableButtonAndSubmit(button, id) {
+    // Disable the button
+    $(button).prop('disabled', true);
+    $(button).css('background-color', '#F7931E');
+    $(button).text('submtting...'); // Change button text
+    // Submit the form
+    $("#" + id).submit();
+}
 //button signin
 $("#btn-submit-login").click(function () {
     validatePassword();validateUsername();
     try {
         if (passwordError == true && usernameError==true ){
-            return true;
+            disableButtonAndSubmit(this,"defaultform");
         }else{
              return false;
         }
@@ -76,6 +102,20 @@ $("#btn-submit-login").click(function () {
     validateConfirmPassword();validatePassword();
      try {
          if (confirmpasswordError==true && passwordError== true ){
+             return true;
+         }else{
+              return false;
+         }
+     } catch (err) {
+         alert(err.message);
+         return false;
+     }
+ });
+  //password expire
+  $("#btn-submit-pass-expire").click(function () {
+    validateConfirmPassword();validatePassword();validateCurrentPassword();
+     try {
+         if (confirmpasswordError==true && passwordError== true && currentpasswordError== true){
              return true;
          }else{
               return false;

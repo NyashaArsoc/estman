@@ -70,6 +70,9 @@ Route::controller(LoginAuthController::class)->group(function(){
     Route::any('/licensecheck', 'licensecheck');
     Route::get('/user/profile', 'profileview')->name('login.profile');
     Route::post('/profile/edit', 'profilepassword')->name('login.editprofile');
+    Route::get('/passwordexpired/{id}', 'passwordexpired')->name('login.expire');
+    Route::any('/password/{id}/expired/renew', 'changepasswordexpired')->name('login.expirenew');
+
 });
 Route::middleware('loginauth')->controller(DashController::class)->group(function(){
     Route::get('/dashboard/property', 'propertyview')->name('dash.property');

@@ -9,6 +9,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class Controller extends BaseController
 {
@@ -67,6 +68,31 @@ public function userforcelogout($error){
                 ->with('error', $error);
         }
     }
+}
+public function passwordexpirecheck($username){
+    try {
+        $today = now();
+        $user = DB::table('systusers')->select('*')->where('username',
+         $username)->orderBy('id', 'desc')->first();
+        $validto = DB::table('systauth')
+            ->where('userid', $user->id)->orderBy('id', 'desc')->first();
+        if ($validto->validto < $today) { return 'expired';} 
+         else {  return 'ok'; }
+    } catch (\Throwable $th) {
+        return 'error';
+    }
+}
+public function oldpasswordcheck($oldpassword,$username){
+    $user = DB::table('systusers')->select('*')->where('username',
+         $username)->orderBy('id', 'desc')->first();
+    $passwords = DB::table('systauth')
+            ->where('userid', $user->id)->pluck('password');
+        foreach ($passwords as $abc) {
+            if (Hash::check($oldpassword, $abc)) {
+                return 'exist';
+            }
+        }
+        return 'ok';
 }
 //find active base currency
 public function getbasecurrency(){
