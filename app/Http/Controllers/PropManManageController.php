@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 
 class PropManManageController extends Controller
@@ -729,144 +731,66 @@ public function viewsinglegeneratedinvoice($id,$lid){
         ->with('error', 'failed to load');
     }
 }
-public function pdfsinglegeneratedinvoice($id,$lid){
+
+public function pdfsinglegeneratedinvoice($id){
     try {
         $invoiceid = Crypt::decrypt($id);
         try {
-            $arr['invoice']   = DB::table('propmaninvoicegenerated')
-            ->where('id', $invoiceid)->select('*')->first();  
-            // $arr['lease']   = DB::table('propmanalllease')->where('id', $arr['invoice']->leaseid)
-            // ->select('*')->first();
-           // return view('propman.manage.view-single-invoice-generated')->with($arr);
-        /*--------------------------------------- */
-         // Create new PDF document
-    $pdf = new pdfreport(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
-    // remove default header/footer
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
-    //header title
-    //--$pdf->setHeaderTitle('Model Balances');
-    //document information 
-    $pdf->SetCreator(PDF_CREATOR);
-    //--$pdf->SetHeaderData(PDF_HEADER_LOGO,19);
-    // Set margins
-    $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-  /*  $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); */
-    // Enable auto page breaks
-    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-    $pdf->AddPage();
-    $imageFile = base_path('public/img/ESTMANLOGO.png');
-    $tbl = <<<EOD
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <style>
-                    #firsttable {
-                        width: 60%;
-                        border-collapse: collapse; /* Remove borders */
-                        margin-right: 0;
-                        margin-left: 0; /* Push table to the right */
-                    }
-                    #festtable{
-                     float: right;
-                    }
-                    .right-cell {
-                        padding: 10px;
-                        text-align: right; /* Align text to the right for the right cell */
-                    }
-                    .logo {
-                        width: 100%;
-                        max-width: 50%;
-                    }
-                    #addresstable {
-                        width: 100%;
-                        border-collapse: collapse; /* Remove borders */
-                        margin-right: 0;
-                        margin-left: auto; /* Push table to the right */
-                    }
-                    #descrptiontable {
-                        width: 100%;
-                        text-align: left;
-                        border-collapse: collapse; /* Remove borders */
-                    }
-                    /* Styles for the second row (with borders) */
-                    .bordered td {
-                        border: 1px solid #000; /* Black border */
-                        padding: 3px; /* Padding for spacing */
-                    }
-                    #bottomline {
-                        border-bottom: 1px solid #000; /* Bottom border for the last cell */
-                    }
-                    #textright { text-align: right; }
-                    #textleft { text-align: left; }
-                </style>
-</head>
-<body>
-            <table id="firsttable">
-                <tr><td></td><td class="right-cell">Technologies Technologies</td></tr>
-                <tr><td style="padding: 10px; text-align:right;"><strong>Invoice - Copy</strong></td>
-                    <td class="right-cell"><img src="$imageFile" width="122px" height="26px"></td></tr>
-            </table>
-            <table id="addresstable">
-                <tr><td>Attention: tenantname<br>propdesc</td>
-                    <td class="right-cell">6th Floor Green Bridge<br/>Eastgate, Harare<br/>Tel. +263 8677030000</td></tr>
-                <tr><td>VAT Number: tenantvatnumber<br>TIN: tenanttinnumber ?? ''</td></tr>
-                <tr><td></td>
-                    <td class="right-cell">Technologies Technologies VAT: 220141335<br>Technologies Technologies TIN: 2000036892</td></tr>
-            </table>
-            <table id="festtable" width="60%"> 
-                <tr ><td>Currency</td><td>Period</td><td>Invoice Date</td><td>Invoice No</td></tr>
-                <tr class="bordered"><td>ZWG ?? ''</td><td>period ?? ''</td><td>today ?? ''</td><td>89 ?? ''</td></tr>
-            </table>
-            <table id="addresstable">
-                <tr><td>Deposit: deposit ?? 0</td><td></td><td class="right-cell">Balance bd: balancebd ?? 0</td></tr>
-            </table>
-            <table id="descrptiontable">
-                <thead>
-                    <tr id="bottomline">
-                        <th id="textleft">No</th>
-                        <th id="textleft">Item Description</th>
-                        <th id="textright">Amount (Exc)</th>
-                        <th id="textright">Amount (Inc)</th>
-                    </tr>
-                </thead>
-             <tbody>
-                    <tr><td>1</td><td>Rental:</td><td id="textright"> 0</td><td id="textright"> 0</td></tr>
-                    <tr><td>2</td><td>Rates & Levies:</td><td id="textright"> 0</td><td id="textright"> 0</td></tr>
-                    <tr><td>3</td><td>Operational Costs:</td><td id="textright"> 0</td><td id="textright"> 0</td></tr>
-                    <tr><td>4</td><td>Interest:</td><td id="textright"> 0</td><td id="textright"> 0</td></tr>
-                   
-                     <tr><td></td><td></td><td>Total (Exc)</td><td id="textright">totalbilledexc ?? 0</td></tr>
-                    <tr><td></td><td></td><td>VAT</td><td id="textright">rentvat ?? 0</td></tr>
-                    <tr><td></td><td></td><td>Total (Inc)</td><td id="textright"></td></tr>
-                    <tr><td></td><td></td><td id="bottomline"></td><td id="bottomline"></td></tr>
-                    <tr><td id="bottomline"></td><td></td><td>Total</td><td id="textright"> 0 </td></tr>
+            $invoice   = DB::table('propmaninvoicegenerated')->where('id', $invoiceid)->select('*')->first();  
+            $tenant = DB::table('propmanalllease')->join('propmanalltenant','propmanalllease.tenantid'
+            ,'=','propmanalltenant.id')->select('propmanalltenant.email',
+            'propmanalltenant.vatnumber','propmanalltenant.tinnumber','propmanalllease.propertyid'
+            )->where('propmanalllease.id'
+            ,$invoice->leaseid)->first();
+            
+           //tenant name 
+            $tenantname     = "{$invoice->companyname} {$invoice->fullname}";
+                //totals
+                $rentbeforevat     = $invoice->rental - $invoice->vat;
+                $totalbilledexc = $rentbeforevat + $invoice->rates + $invoice->operationalcost 
+                + $invoice->interest;
+                 $totalvatincl = $rentbeforevat + $invoice->rates + $invoice->operationalcost +
+                  $invoice->interest + $invoice->vat;
+             $invoicetotal = $rentbeforevat + $invoice->rates + $invoice->operationalcost +
+             $invoice->interest + $invoice->vat + $invoice->balancebd ;
+             
 
-                </tbody>
-            </table>
-              <br>
-            <table id="descrptiontable">
-                <tr><td>Banking Details</td></tr>
-                <tr><td>Integrated Properties (currencycode)<br>bankname<br>branch<br>accountnumber</td></tr>
-                <tr><td>STATEMENT<br>Closing Remarks</td></tr>
-            </table>
+            //invoice data
+            $arr["invoicetitle"]        = "Invoice Copy";
+            $arr["title"]               = "Invoice for $tenantname";
+            $arr["tenantname"]          = $tenantname;
+            $arr["propdesc"]            = $invoice->propertydescription;
+            $arr["period"]              = $invoice->period;
+            $arr["tenantvatnumber"]     = $tenant->vatnumber;
+            $arr["tenanttinnumber"]     = $tenant->tinnumber;
+            $arr["invoicenumber"]       = $invoice->id;
+            $arr["currencycode"]        = $invoice->currencycode;
+            $arr["balancebd"]           = number_format($invoice->balancebd,2);
+            $arr["rent"]                = number_format($invoice->rental,2);
+            $arr["rateswater"]          = number_format($invoice->rates,2);
+            $arr["interestcharged"]     = number_format($invoice->interest,2);
+            $arr["operational"]         = number_format($invoice->operationalcost,2);
+            $arr["rentvat"]             = number_format($invoice->vat,2);
+            $arr["rentbeforevat"]       = number_format($rentbeforevat,2);
+            $arr["totalbilledexc"]      = number_format($totalbilledexc,2);
+            $arr["totalvatincl"]        = number_format($totalvatincl,2);
+            $arr["invoicetotal"]        = number_format($invoicetotal,2);
+            $arr['today']               = date('d-M-Y');
+            $arr["deposit"]             = number_format($invoice->deposit,2);
 
-</body>
-</html>
-EOD; 
-    
-$pdf->writeHTML($tbl, true, false, false, false, '');
-$pdf->Output('invoice.pdf', 'D');
-        /*--------------------------------------- */
+
+            //convert to pdf
+            $invoicepdf =   PDF::loadView('tomail/invoice',$arr);
+            $invoicepdf->setPaper('A4', 'portrait');
+            $pdfname = 'Invoice_'.$tenantname.'_'.date('d-M-Y').'.pdf';
+            return $invoicepdf->download($pdfname);
+
         } catch (\Throwable $th) {
-            return redirect()->route('propma.viewgeninvo',[$id,$lid])
-                ->with('error', 'failed to load' .$th);
+            return redirect()->route('propma.viewgeninvo',$id)
+                ->with('error', 'failed to load');
         }
     } catch (DecryptException $th) {
-    return redirect()->route('propma.viewgeninvo',[$id,$lid])
+    return redirect()->route('propma.viewgeninvo',$id)
         ->with('error', 'failed to load');
     }
 }

@@ -78,7 +78,7 @@ function validateCurrentPassword() {
 function disableButtonAndSubmit(button, id) {
     // Disable the button
     $(button).prop('disabled', true);
-    $(button).css('background-color', '#F7931E');
+    $(button).css('background-color', '#adb2f0');
     $(button).text('submtting...'); // Change button text
     // Submit the form
     $("#" + id).submit();

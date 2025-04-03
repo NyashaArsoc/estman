@@ -393,6 +393,7 @@ public function approvalpreinvoice($id){
             $arr["email"]               = "marcos@intpro.co.zw";
             $arr["ccemail"]             = "kudzchitz@gmail.com";
             $arr["title"]               = "Invoice for $tenantname";
+            $arr["invoicetitle"]        = "Invoice";
             $arr["tenantname"]          = $tenantname;
             $arr["propdesc"]            = $invoice->propertydescription;
             $arr["period"]              = $invoice->period;
@@ -430,7 +431,7 @@ public function approvalpreinvoice($id){
             ->with('success', 'invoice send');
         } catch (\Throwable $th) {
             return redirect()->route('propapp.listpre')
-                ->with('error', 'failed to load'.$th);
+                ->with('error', 'failed to load');
         }
     } catch (DecryptException $th) {
     return redirect()->route('propapp.listpre')
