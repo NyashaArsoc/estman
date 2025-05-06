@@ -128,7 +128,7 @@
                     <div class="row text-xs-center">
                         <div class="col-sm-5 text-sm-left mb-0-5 mb-sm-0">
                             © <a class="nav-link text-black" target="new"
-                                href="https://www.arsoc.co.zw"> Arsoc</a> - All rights reserved
+                                href="https://www.arsoc.co.zw"> arsoc</a> - All rights reserved
                         </div>
                         <div class="col-sm-7 text-sm-right">
 

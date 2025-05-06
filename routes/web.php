@@ -34,8 +34,6 @@ use Illuminate\Support\Facades\Route;
 /*
 //Route::resource('property', PropertyController::class);
 Route::controller(PropertyController::class)->group(function () {
-    Route::get('/property-remittance', 'remitlist')->name('property.remit');
-    Route::any('/genarate-preremit', 'compilepreremitlist');
     Route::get('/property/{id}/remit/{currency}/{period}', 'prepareremittance')->name('property.remitprepare');
     Route::any('/remit/{id}/property/{currency}', 'addpreremit')->name('property.preremit');
 });                  
@@ -184,7 +182,8 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::post('/prop/add/declined/new/lease/rates/{id}', 'addnewleaseratedeclined')->name('propin.addnewlearatedec');
     Route::get('/prop/add/customer/receipt', 'createreceipting')->name('propin.payment');
     Route::any('/prop/process/customer/payment', 'processleasepayment')->name('propin.procpay');
-
+    Route::get('/prop/prepare/rent-roll', 'createrentroll')->name('propin.preremit');
+    Route::get('/prop/view/{id}/pre/rentroll', 'viewpropertypreroll')->name('propin.viewpreroll');
 });
 /*-------------------end property management intake------------------------ */
 

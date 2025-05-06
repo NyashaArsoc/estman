@@ -738,4 +738,45 @@ public function processleasepayment(Request $request){
     }
 }
   /*---------------end payments -----------------*/
+public function createrentroll(){
+    try {
+        $arr['remit']   = DB::table('propmanremitpre')->select('*')->where('status','N')->get();
+        return view('propman.intake.list-preremittance')
+        ->with($arr);
+    } catch (\Throwable $th) {
+        return  redirect()->route('dash.property');
+    }
+        
+}
+public function viewpropertypreroll($id){
+    try{
+        $remitid = Crypt::decrypt($id);
+        try {
+            $arr['roll']= DB::table('propmanremitpre')->where('id', $remitid)->select('*')->first();
+            $arr['property']= DB::table('propmanallproperty')->where('id',
+             $arr['roll']->propertyid)->select('*')->first();
+             $leaseids = DB::table('propmanalllease')->where('propertyid', $arr['roll']->propertyid)->pluck('id');
+             $arr['bank']= DB::table('propmanlandlordbank')->where([['landlordid',
+             $arr['roll']->landlordid],['available','Y'],['currencycode',$arr['roll']->currencycode]])->select('*')->get();
+             $arr['invoice']= DB::table('propmaninvoicegenerated')->whereIn('leaseid', $leaseids)
+             ->where([['period',$arr['roll']->period],['currencycode',$arr['roll']->currencycode]])
+             ->select('*')->get();
+             $arr['receipt']   = DB::table('propmanleasereceipts')
+             ->select('propmanalllease.tenantcompanyname','propmanalllease.tenantfullname','propmanleasereceipts.*')
+             ->join('propmanalllease', 'propmanalllease.id','=','propmanleasereceipts.leaseid')
+             ->where('propmanalllease.propertyid',$arr['roll']->propertyid)
+             ->where([['propmanleasereceipts.period',$arr['roll']->period],['propmanleasereceipts.currencycode',$arr['roll']->currencycode]])->get();
+
+            return view('propman.intake.prepare-rent-roll')
+        ->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('propin.preremit')
+            ->with('error', 'failed to load');
+        }
+    }catch (DecryptException $th) {
+    return redirect()->route('propin.preremit')
+        ->with('error', 'failed to load');
+    } 
+}
+   /*---------------end pre-remittance -----------------*/
 }

@@ -14,47 +14,6 @@ public function __construct(){
         $this->middleware(['loginauth']);
 }
 
-
-public function remitlist(){
-    try {
-        $arr['remit']   = DB::table('preremitlist')
-        ->select('*')
-        ->get();
-        return view('property/remittance-list')
-        ->with($arr);
-    } catch (\Throwable $th) {
-        return  redirect()->route('property.rejected') 
-            ->with('error', 'failed to load property list');
-    }
-}
-public function compilepreremitlist(){
-    try {
-        $period = DB::table('checkperiodrun')
-                ->where('isinvoicerun','=',1)
-                ->where('isremitlistrun','=',0)
-                ->select('*')->latest('id')->first();
-        if(is_null($period)){
-            return 'no pending period';
-        }
-
-        $arr= DB::select('EXEC spGetRemitList ?',[$period->period]);
-        if(is_null($arr)){
-            return 'problem in connection';
-        }else{
-            $result = $arr[0]->ReturnValue;
-            if($result ==1){
-                //success full run 
-                return 'success';
-            }else{
-                //already run 
-                return 'you can only run once';
-            }
-        }
-    } catch (QueryException $th) {
-        return 'failed to execute query';
-    }
-    
-}
 public function prepareremittance($id,$currency,$period){
     $propertyid = Crypt::decrypt($id);
     $currencycode = Crypt::decrypt($currency);

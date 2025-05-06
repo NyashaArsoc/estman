@@ -1425,7 +1425,52 @@ function validateReceiptLeaseNumber() {
          $("#daterequiredcheck").hide();
      }
  }
-/*-----------------------------buttons submit ----------------------- */
+ let securityError = true;
+
+function calculateRentRollTotalDeduction() {
+    let security = $('#securitycharge').val() || 0;
+    let caretaker = parseFloat($('#caretakercharge').val()) || 0;
+    let otherexpense = parseFloat($('#otherexpensecharge').val()) || 0;
+    let vat = parseFloat($('#vat').val()) || 0;
+    let interest = parseFloat($('#interest').val()) || 0;
+    let commission = parseFloat($('#commission').val()) || 0;
+    let rates = parseFloat($('#rates').val()) || 0;
+    let operationcost = parseFloat($('#operationalcost').val()) || 0;
+    let receipts = parseFloat($('#receipts').val()) || 0;
+    
+    const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z\sA-Z]/;
+    
+    let securitycharscheck      =   specialChars.test(security);
+    let caretakercheck          =   specialChars.test(caretaker);
+
+    if (securitycharscheck) {
+        $("#securitychargecheck").show();
+        $("#securitychargecheck").html("digits only");
+        securityError = false; 
+        return false; 
+    } else {
+        $("#securitychargecheck").hide();
+        securityError = true; 
+    }
+
+    // Proceed with calculations only if input is valid
+    let totalvalue = (parseFloat(security) + caretaker + otherexpense + vat + interest
+                      + commission + rates + operationcost);
+    let toremit = receipts - totalvalue;
+    $("#remitcalcdeductionscheck").html(totalvalue);
+    $("#remitcalcremittancecheck").html(toremit);
+}
+ $("#securitycharge").keyup(function () {
+    calculateRentRollTotalDeduction();
+});
+$("#caretakercharge").keyup(function () {
+    calculateRentRollTotalDeduction();
+});
+$("#otherexpensecharge").keyup(function () {
+    calculateRentRollTotalDeduction();
+});
+/*****************************-------buttons submit ----------------------- */
+
 /*-----------------------------add banking details table ----------------------- */
 $('#add-banking-item').on('click', function() {
 	var currencycode		=	$('#currencycode').val();
