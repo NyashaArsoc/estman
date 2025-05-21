@@ -48,7 +48,8 @@ Route::controller(TransactionController::class)->group(function (){
     Route::any('/creditor-payment', 'creditorpayment')->name('transact.paycreditor');
 });
 */
-Route::controller(LoginAuthController::class)->group(function(){
+
+Route::controller(LoginAuthController::class)->group(function () {
     Route::get('/login', 'signin')->name('login.signin');
     Route::get('/', 'defaultport');
     Route::post('/user/login', 'userlogin')->name('login.login');
@@ -58,9 +59,8 @@ Route::controller(LoginAuthController::class)->group(function(){
     Route::post('/profile/edit', 'profilepassword')->name('login.editprofile');
     Route::get('/passwordexpired/{id}', 'passwordexpired')->name('login.expire');
     Route::any('/password/{id}/expired/renew', 'changepasswordexpired')->name('login.expirenew');
-
 });
-Route::middleware('loginauth')->controller(DashController::class)->group(function(){
+Route::middleware('loginauth')->controller(DashController::class)->group(function () {
     Route::get('/dashboard/property', 'propertyview')->name('dash.property');
     Route::get('/welcome', 'maindashboard')->name('dash.main');
     Route::get('/valuation/dashboard', 'valuationdashboard')->name('dash.val');
@@ -83,7 +83,7 @@ Route::controller(ReportController::class)->group(function(){
     Route::get('/report/lease/statament', 'viewleasestatement')->name('report.leastatement');
     Route::get('/print/lease/statement', 'printleasestatement')->name('report.printstatement');
 }); */
-Route::controller(ValIntakeController::class)->group(function(){
+Route::controller(ValIntakeController::class)->group(function () {
     Route::get('/val/add/client', 'addclientdetails')->name('valin.addclient'); /*done*/
     Route::any('/val/add/new/client', 'addnewclientdetails')->name('valin.addnewclient');/*done*/
     Route::get('/val/{id}/client/type', 'getsingleclient');/*done*/
@@ -100,14 +100,13 @@ Route::controller(ValIntakeController::class)->group(function(){
     Route::any('/val/submit/page/normal-instr', 'addinstructionnormalsubmit')->name('valin.subnom');/*done*/
     Route::get('/val/{id}/nom/{vid}/inst/{cid}/pur/{pid}/typ/{tid}/pay/{payid}/{accessdate}', 'addinstructionnormalsteptwo')->name('valin.lstpropallo');
     Route::any('/val/add/new/normal-instr', 'addnewinstructionnormal')->name('valin.addnewnom');/*done*/
-       
 });
-Route::controller(ValManageController::class)->group(function(){
+Route::controller(ValManageController::class)->group(function () {
     Route::get('/val/list/client', 'listallclient')->name('valman.listclient');/*done*/
     Route::get('/val/{id}/client/edit', 'editsingleclient')->name('valman.editclient');
     Route::get('/val/{id}/client/view', 'viewsingleclient')->name('valman.viewclient');/*done*/
 });
-Route::controller(ValApprovalController::class)->group(function(){
+Route::controller(ValApprovalController::class)->group(function () {
     Route::get('/val/list/acknowledgement', 'listallinstructionacknowledgement')->name('valapp.listackn');/*done*/
     Route::get('/val/{id}/view-single/{instr_id}/acknowledgement', 'viewsingleacknowledge')->name('valapp.viewsinglackn');
     Route::any('/val/{id}/acknow/{instr_id}/decline', 'declineacknowledgement')->name('valapp.declacknow');/*done*/
@@ -148,14 +147,14 @@ Route::controller(ValApprovalController::class)->group(function(){
     Route::any('/val-report/{instr_id}/excel/download', 'downloadreportexcel')->name('valapp.dwnexc');
     /*-----------end download reports-------------------- */
 });
-Route::controller(ValDeclinedController::class)->group(function(){
+Route::controller(ValDeclinedController::class)->group(function () {
     Route::get('/val/list/acknowledgement/declined', 'listalldeclinedacknowledgement')->name('valdec.listackn');
     Route::get('/declined/val/{propid}/view-single/{instr_id}/acknowledgement', 'viewdeclinedsingleacknowledge')->name('valdec.viewsinglackn');
     Route::get('/val/list/quality-check/declined', 'listalldeclinedinstructionqualitycheck')->name('valdec.listquality');
     Route::get('/declined/val/{propid}/view-single/{instr_id}/quality', 'viewdeclinedsinglequalitycheck')->name('valdec.viewsinglqlty');
 });
 /*-------------------property management intake------------------------ */
-Route::middleware('loginauth')->controller(PropManIntakeController::class)->group(function(){
+Route::middleware('loginauth')->controller(PropManIntakeController::class)->group(function () {
     Route::get('/prop/add/landlord', 'addlandlorddetails')->name('propin.addlandlord');
     Route::post('/prop/add/new/landlord', 'addnewlandlorddetails')->name('propin.addnewlandlord');
     Route::get('/prop/add/property', 'addpropertydetails')->name('propin.addproperty');
@@ -184,45 +183,46 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::any('/prop/process/customer/payment', 'processleasepayment')->name('propin.procpay');
     Route::get('/prop/prepare/rent-roll', 'createrentroll')->name('propin.preremit');
     Route::get('/prop/view/{id}/pre/rentroll', 'viewpropertypreroll')->name('propin.viewpreroll');
+    Route::any('/prop/pre-pare/{id}/rentroll', 'addnewrentrol')->name('propin.prepareroll');
+    Route::get('/prop/download/{id}/summary/rentroll', 'preremitpdf')->name('propin.downrentsum');
 });
 /*-------------------end property management intake------------------------ */
 
 /*-------------------property management approval------------------------ */
-Route::middleware('loginauth')->controller(PropManApprovalController::class)->group(function(){
-   Route::get('/prop/list/approval/landlord', 'listlandlordapproval')->name('propapp.listland');
-   Route::get('/prop/view/{id}/landlord/approval', 'viewlandlordapproval')->name('propapp.viewland');
-   Route::get('/prop/{id}/landlord/approve', 'approvenewsinglelandlordapproval')->name('propapp.landapprove');
-   Route::get('/prop/list/approval/property', 'listpropertyapproval')->name('propapp.listprop');
-   Route::get('/prop/view/{id}/property/approval', 'viewpropertyapproval')->name('propapp.viewprop');
-   Route::any('/prop/property/{id}/approve', 'approvenewproperty')->name('propapp.propapp');
-   Route::get('/prop/list/tenant/approval', 'listtenantapproval')->name('propapp.listten');
-   Route::get('/prop/view/{id}/tenant/approval', 'viewtenantapproval')->name('propapp.viewten');
-   Route::any('/prop/tenant/{id}/approve', 'approvenewtenant')->name('propapp.tenappv');
-   Route::get('/prop/list/lease/approval', 'listleaseapproval')->name('propapp.listlea');
-   Route::get('/prop/view/{id}/lease/approval', 'viewleaseapproval')->name('propapp.viewlease');
-   Route::any('/prop/lease/{id}/approve', 'approvenewlease')->name('propapp.leaappv');
-   Route::get('/prop/list/approval/landlord-contact', 'listlandlordcontactapproval')->name('propapp.listlandcont');
-   Route::any('/prop/landlord-contact/{id}/approve', 'approvenewlandlordcontact')->name('propapp.landcont');
+Route::middleware('loginauth')->controller(PropManApprovalController::class)->group(function () {
+    Route::get('/prop/list/approval/landlord', 'listlandlordapproval')->name('propapp.listland');
+    Route::get('/prop/view/{id}/landlord/approval', 'viewlandlordapproval')->name('propapp.viewland');
+    Route::get('/prop/{id}/landlord/approve', 'approvenewsinglelandlordapproval')->name('propapp.landapprove');
+    Route::get('/prop/list/approval/property', 'listpropertyapproval')->name('propapp.listprop');
+    Route::get('/prop/view/{id}/property/approval', 'viewpropertyapproval')->name('propapp.viewprop');
+    Route::any('/prop/property/{id}/approve', 'approvenewproperty')->name('propapp.propapp');
+    Route::get('/prop/list/tenant/approval', 'listtenantapproval')->name('propapp.listten');
+    Route::get('/prop/view/{id}/tenant/approval', 'viewtenantapproval')->name('propapp.viewten');
+    Route::any('/prop/tenant/{id}/approve', 'approvenewtenant')->name('propapp.tenappv');
+    Route::get('/prop/list/lease/approval', 'listleaseapproval')->name('propapp.listlea');
+    Route::get('/prop/view/{id}/lease/approval', 'viewleaseapproval')->name('propapp.viewlease');
+    Route::any('/prop/lease/{id}/approve', 'approvenewlease')->name('propapp.leaappv');
+    Route::get('/prop/list/approval/landlord-contact', 'listlandlordcontactapproval')->name('propapp.listlandcont');
+    Route::any('/prop/landlord-contact/{id}/approve', 'approvenewlandlordcontact')->name('propapp.landcont');
 
-   /*-----------download property documents-------------------- */
-   Route::any('/prop-pdf/{path}/download/mandate', 'downloadmandatepdf')->name('propapp.dwnmandpdf');
-   Route::any('/prop-pdf/{path}/other/download', 'downloadotherpdf')->name('propapp.dwnothrpdf');
-   Route::any('/prop-pdf/{path}/lease-download/agreement', 'downloadleaseagreementpdf')->name('propapp.dwnagrepdf');
-   /*-----------end download property documents-------------------- */
-   Route::get('/prop/pre-invoice/list', 'listallpreinvoice')->name('propapp.listpre');
-   Route::get('/prop/{id}/pre-invoice/view', 'viewinvoicebilled')->name('propapp.viewpre');
-   Route::post('/prop/{id}/preinvoice/approved', 'approvalpreinvoice')->name('propapp.preapp');
-
+    /*-----------download property documents-------------------- */
+    Route::any('/prop-pdf/{path}/download/mandate', 'downloadmandatepdf')->name('propapp.dwnmandpdf');
+    Route::any('/prop-pdf/{path}/other/download', 'downloadotherpdf')->name('propapp.dwnothrpdf');
+    Route::any('/prop-pdf/{path}/lease-download/agreement', 'downloadleaseagreementpdf')->name('propapp.dwnagrepdf');
+    /*-----------end download property documents-------------------- */
+    Route::get('/prop/pre-invoice/list', 'listallpreinvoice')->name('propapp.listpre');
+    Route::get('/prop/{id}/pre-invoice/view', 'viewinvoicebilled')->name('propapp.viewpre');
+    Route::post('/prop/{id}/preinvoice/approved', 'approvalpreinvoice')->name('propapp.preapp');
 });
 /*-------------------end property management approval------------------------ */
 /*-------------------property management declines------------------------ */
-Route::middleware('loginauth')->controller(PropManDeclineController::class)->group(function(){
+Route::middleware('loginauth')->controller(PropManDeclineController::class)->group(function () {
     Route::any('/prop/landlord/{id}/decline', 'declinenewlandlord')->name('propdec.landdec');
     Route::get('/prop/landlord/list/declined', 'listdeclinelandlord')->name('propdec.listlanddec');
     Route::get('/prop/view/landlord/{id}/edit', 'vieweditsinglelandlord')->name('propdec.editviewland');
     Route::any('/prop/landlord/{id}/delete', 'deletesinglelandlord')->name('propdec.landdel');
-    Route::any('/prop/{id}/landlord/{contactid}/update', 'updatesinglelandlord')->name('propdec.landupd'); 
-    Route::any('/prop/lease/{id}/decline', 'declinenewlease')->name('propdec.leadec'); 
+    Route::any('/prop/{id}/landlord/{contactid}/update', 'updatesinglelandlord')->name('propdec.landupd');
+    Route::any('/prop/lease/{id}/decline', 'declinenewlease')->name('propdec.leadec');
     Route::any('/prop/disable/{id}/landlord/contact/{cid}', 'disablelandlordcontact')->name('propdec.dislancon');
     Route::any('/prop/disable/{id}/landlord', 'disablelandlord')->name('propdec.disland');
     Route::any('/prop/disable/{id}/property', 'disableproperty')->name('propdec.disprop');
@@ -231,11 +231,11 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::any('/prop/tenant/{id}/decline', 'declinenewtenant')->name('propdec.tendec');
     Route::get('/prop/tenant/list/declined', 'listdeclinetenant')->name('propdec.listtendec');
     Route::get('/prop/view/tenant/{id}/edit/dec', 'vieweditsingletenant')->name('propdec.editviewten');
-    Route::any('/prop/{id}/tenant/update/details', 'updatesingletenant')->name('propdec.tenupd'); 
+    Route::any('/prop/{id}/tenant/update/details', 'updatesingletenant')->name('propdec.tenupd');
     Route::any('/prop/property/{id}/decline', 'declinenewproperty')->name('propdec.propdec');
     Route::get('/prop/property/list/declined', 'listdeclinedproperty')->name('propdec.listpropdec');
     Route::get('/prop/view/property/{id}/edit', 'vieweditsingleproperty')->name('propdec.editviewprop');
-    Route::any('/prop/{id}/property/update/dec', 'updatesingleproperty')->name('propdec.propupd'); 
+    Route::any('/prop/{id}/property/update/dec', 'updatesingleproperty')->name('propdec.propupd');
     Route::any('/prop/property/{id}/delete', 'deletesingleproperty')->name('propdec.propdel');
     Route::any('/prop/tenant/{id}/delete', 'deletesingletenant')->name('propdec.tendel');
     Route::get('/prop/lease/list/declined', 'listdeclinelease')->name('propdec.listleadec');
@@ -256,11 +256,10 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::get('/prop/invoice/list/billed/edited', 'listalleditedpreinvoice')->name('propdec.listpre');
     Route::get('/prop/view/{id}/pre-invoice/edited', 'vieweditedinvoicebilled')->name('propdec.vieweditpre');
     Route::any('/prop/update/{id}/preinvoice/approve', 'approveupdateinvoicebilled')->name('propdec.updtpre');
-
 });
 /*-------------------end property management declines------------------------ */
 /*-------------------property management declines------------------------ */
-Route::middleware('loginauth')->controller(PropManManageController::class)->group(function(){
+Route::middleware('loginauth')->controller(PropManManageController::class)->group(function () {
     Route::get('/prop/list/landlord', 'listalllandlords')->name('propma.landlist');
     Route::get('/prop/landlord/single/type/{id}', 'getlandlordbytype');
     Route::get('/prop/tenant/single/type/{id}', 'gettenantbytype');
@@ -301,30 +300,28 @@ Route::middleware('loginauth')->controller(PropManManageController::class)->grou
     Route::get('/prop/view/{id}/lease/invoice', 'viewsingleleaseinvoice')->name('propma.viewleainvo');
     Route::get('/prop/view/{id}/generated/{lid}/invoice', 'viewsinglegeneratedinvoice')->name('propma.viewgeninvo');
     Route::get('/prop/download/{id}/generated/invoice-pdf/{lid}', 'pdfsinglegeneratedinvoice')->name('propma.pdfgeninvo');
-
-   });
+});
 /*-------------------end property management declines------------------------ */
 /*-------------------setup intake------------------------ */
-Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(function(){
-     Route::get('/set-up/add/currency', 'addcurrency')->name('setin.addcurr');
-     Route::post('/set-up/add/new/currency', 'addnewcurrency')->name('setin.addnewcurr');
-     Route::get('/set-up/add/client-type', 'addclienttype')->name('setin.addcltyp');
-     Route::post('/set-up/add/new/client-type', 'addnewclienttype')->name('setin.addnewcltyp');
-     Route::get('/set-up/add/property-type', 'addpropertytype')->name('setin.addpropty');
-     Route::post('/set-up/add/new/property-type', 'addnewpropertytype')->name('setin.addnewpropty');
-     Route::get('/set-up/add/province', 'addprovince')->name('setin.addprov');
-     Route::post('/set-up/add/new/province', 'addnewprovince')->name('setin.addnewprov');
-     Route::get('/set-up/add/lease/interest', 'addleaseinterest')->name('setin.addintrst');
-     Route::post('/set-up/add/new/lease/interest', 'addnewleaseinterest')->name('setin.addnewintrst');
-     Route::get('/set-up/add/vat/config', 'addvatconfig')->name('setin.addvat');
-     Route::post('/set-up/add/new/vat/config', 'addnewvatconfig')->name('setin.addnewvat');
-     Route::get('/set-up/add/currency/exchangerate', 'addcurrencyrate')->name('setin.ratecurr');
-     Route::post('/set-up/add/new/dcurrency/exchangerate', 'addexchangerate')->name('setin.newratecurr');
-
+Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(function () {
+    Route::get('/set-up/add/currency', 'addcurrency')->name('setin.addcurr');
+    Route::post('/set-up/add/new/currency', 'addnewcurrency')->name('setin.addnewcurr');
+    Route::get('/set-up/add/client-type', 'addclienttype')->name('setin.addcltyp');
+    Route::post('/set-up/add/new/client-type', 'addnewclienttype')->name('setin.addnewcltyp');
+    Route::get('/set-up/add/property-type', 'addpropertytype')->name('setin.addpropty');
+    Route::post('/set-up/add/new/property-type', 'addnewpropertytype')->name('setin.addnewpropty');
+    Route::get('/set-up/add/province', 'addprovince')->name('setin.addprov');
+    Route::post('/set-up/add/new/province', 'addnewprovince')->name('setin.addnewprov');
+    Route::get('/set-up/add/lease/interest', 'addleaseinterest')->name('setin.addintrst');
+    Route::post('/set-up/add/new/lease/interest', 'addnewleaseinterest')->name('setin.addnewintrst');
+    Route::get('/set-up/add/vat/config', 'addvatconfig')->name('setin.addvat');
+    Route::post('/set-up/add/new/vat/config', 'addnewvatconfig')->name('setin.addnewvat');
+    Route::get('/set-up/add/currency/exchangerate', 'addcurrencyrate')->name('setin.ratecurr');
+    Route::post('/set-up/add/new/dcurrency/exchangerate', 'addexchangerate')->name('setin.newratecurr');
 });
 /*-------------------end setup intake------------------------ */
 /*-------------------setup manage------------------------ */
-Route::middleware('loginauth')->controller(SetupManageController::class)->group(function(){
+Route::middleware('loginauth')->controller(SetupManageController::class)->group(function () {
     Route::get('/set-up/base/currency', 'setbasecurrency')->name('setman.addbasecurr');
     Route::post('/set-up/set/base/currency', 'addnewbasecurrency')->name('setman.addbewcode');
 });

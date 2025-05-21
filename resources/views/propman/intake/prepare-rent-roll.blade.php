@@ -13,10 +13,10 @@ $roll->operationalcost );
 }else{
 $comissioncharged = 0;
 }
-$id= Crypt::encrypt($roll->propertyid);
+$id= Crypt::encrypt($roll->id);
 $currency= Crypt::encrypt($roll->currencycode);
 @endphp
-@extends('layout.propman-main-menu')
+@extends('layout.no-menu-layout')
 @section('title', 'Rent Roll')
 @section('additional css')
 <!-- Additional css Start-->
@@ -48,7 +48,7 @@ $currency= Crypt::encrypt($roll->currencycode);
         </div>
         <ul class="nav nav-tabs" id="clientTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="rentroll-detail-tab" data-toggle="tab" href="#rentroll-detail" role="tab" aria-controls="rentroll-detail" aria-selected="true">Rent-roll Details</a>
+                <a class="nav-link active" id="rentroll-detail-tab" data-toggle="tab" href="#rentroll-detail" role="tab" aria-controls="rentroll-detail" aria-selected="true">Rent-Roll Details</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="billing-info-tab" data-toggle="tab" href="#billing-info" role="tab" aria-controls="billing-info" aria-selected="true">Billing Information</a>
@@ -59,10 +59,10 @@ $currency= Crypt::encrypt($roll->currencycode);
         </ul>
         <div class="b-a b-a-primary b-a-width-1 mb-0-5"></div>
         <!-- Tabs Content -->
-        <div class="tab-content" id="clientTabContent"><br/>
+        <div class="tab-content" id="clientTabContent"><br />
             <div class="tab-pane show active" id="rentroll-detail" role="tabpanel" aria-labelledby="rentroll-detail-tab">
-                <form class="form-material material-primary" id="add property"
-                    action="" method="put">
+                <form class="form-material material-primary" id="defaultform"
+                    action="{{ route('propin.prepareroll',$id) }}" method="post"> @csrf
                     <div class="form-group row">
                         <label for="PropertyType" class="col-sm-2 form-control-label">Rental Balancebd</label>
                         <div class="col-sm-4"></div>
@@ -111,7 +111,7 @@ $currency= Crypt::encrypt($roll->currencycode);
                         <label for="" class="col-sm-2 col-form-label">Rates/Levies</label>
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control" id="rates"
+                            <input type="text" class="form-control" id="rates" name="rates"
                                 value="{{ number_format($roll->rates, 2, '.', ',')}}" readonly>
                         </div>
                     </div>
@@ -119,7 +119,7 @@ $currency= Crypt::encrypt($roll->currencycode);
                         <label for="" class="col-sm-2 col-form-label">Operational Costs</label>
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control" id="operationalcost"
+                            <input type="text" class="form-control" id="operationalcost" name="operationalcost"
                                 value="{{ number_format($roll->operationalcost, 2, '.', ',')}}" readonly>
                         </div>
                     </div>
@@ -127,7 +127,7 @@ $currency= Crypt::encrypt($roll->currencycode);
                         <label for="" class="col-sm-2 col-form-label">VAT</label>
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
-                            <input type="text" class="form-control" id="vat"
+                            <input type="text" class="form-control" id="vat" name="vat"
                                 value="{{ number_format($roll->vat, 2, '.', ',')}}" readonly>
                         </div>
                     </div>
@@ -137,23 +137,25 @@ $currency= Crypt::encrypt($roll->currencycode);
                         <div class="col-sm-2">
                             <input type="text" class="form-control" name="securitycharge"
                                 id="securitycharge" />
-                        <small id="securitychargecheck" style="color: red;"></small>
+                            <small id="securitychargecheck" style="color: red;"></small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="" class="col-sm-2 col-form-label">Caretaker</label>
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
-                            <input type="number" class="form-control" name="caretakercharge"
+                            <input type="text" class="form-control" name="caretakercharge"
                                 id="caretakercharge" autocomplete="off" min="0" />
+                            <small id="caretakerchargecheck" style="color: red;"></small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="" class="col-sm-2 col-form-label">Other Expenses</label>
                         <div class="col-sm-4"> </div>
                         <div class="col-sm-2">
-                            <input type="number" class="form-control" name="otherexpensecharge"
-                                id="otherexpensecharge" autocomplete="off" min="0"/>
+                            <input type="text" class="form-control" name="otherexpensecharge"
+                                id="otherexpensecharge" autocomplete="off" min="0" />
+                            <small id="otherexpensechargecheck" style="color: red;"></small>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -194,10 +196,11 @@ $currency= Crypt::encrypt($roll->currencycode);
                         </div>
                     </div>
                     <div class="form-group row">
+                        @if (in_array(1,$arraycontrolids))
                         <div class="offset-sm-2 col-sm-10">
-                            <button type="submit" class="btn btn-primary" id="btn-pre-remit"
-                                value="Submit">submit</button>
+                            <button type="submit" class="btn btn-primary" id="btn-pre-remit">submit</button>
                         </div>
+                        @endif
                     </div>
                     @include('layout.arlet')
                 </form>
@@ -217,15 +220,18 @@ $currency= Crypt::encrypt($roll->currencycode);
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($invoice as $abc)
-                    <tr>
-                    <td>{{ $abc->invoicenumber }}</td>
-                    <td>{{ $abc->companyname}} {{ $abc->fullname}}</td>
-                    <td>{{ number_format($abc->totalbilled, 2, '.', ',') }}</td><td>{{ number_format($abc->rental, 2, '.', ',') }}</td>
-                    <td>{{ number_format($abc->rates, 2, '.', ',') }}</td><td>{{ number_format($abc->operationalcost, 2, '.', ',') }}</td>
-                    <td>{{ number_format($abc->vat, 2, '.', ',') }}</td><td>{{ number_format($abc->interest, 2, '.', ',') }}</td>
-                    </tr>
-                    @endforeach
+                        @foreach($invoice as $abc)
+                        <tr>
+                            <td>{{ $abc->invoicenumber }}</td>
+                            <td>{{ $abc->companyname}} {{ $abc->fullname}}</td>
+                            <td>{{ number_format($abc->totalbilled, 2, '.', ',') }}</td>
+                            <td>{{ number_format($abc->rental, 2, '.', ',') }}</td>
+                            <td>{{ number_format($abc->rates, 2, '.', ',') }}</td>
+                            <td>{{ number_format($abc->operationalcost, 2, '.', ',') }}</td>
+                            <td>{{ number_format($abc->vat, 2, '.', ',') }}</td>
+                            <td>{{ number_format($abc->interest, 2, '.', ',') }}</td>
+                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -241,15 +247,15 @@ $currency= Crypt::encrypt($roll->currencycode);
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($receipt as $abc)
-                    <tr>
-                    <td>{{ $abc->receiptnumber }}</td>
-                    <td>{{ $abc->tenantcompanyname}} {{ $abc->tenantfullname}}</td>
-                    <td>{{ number_format($abc->amountpaid, 2, '.', ',') }}</td>
-                    <td>{{ Carbon\Carbon::parse($abc->datestamp)->format('F j, Y') ?? ''}}</td>
-                    <td>{{ $abc->operatorid }}</td>
-                    </tr>
-                    @endforeach
+                        @foreach($receipt as $abc)
+                        <tr>
+                            <td>{{ $abc->receiptnumber }}</td>
+                            <td>{{ $abc->tenantcompanyname}} {{ $abc->tenantfullname}}</td>
+                            <td>{{ number_format($abc->amountpaid, 2, '.', ',') }}</td>
+                            <td>{{ Carbon\Carbon::parse($abc->datestamp)->format('F j, Y') ?? ''}}</td>
+                            <td>{{ $abc->operatorid }}</td>
+                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

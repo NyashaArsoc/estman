@@ -44,10 +44,14 @@ $description = 'list of all properties for monthly rent-roll...';
                         <td>{{ $abc->currencycode }}</td>
                         <td>{{ number_format($abc->totalbilled, 2, '.', ',');}}</td>
                         <td>{{ $abc->period }}</td>
-                        <td>@php $id= Crypt::encrypt($abc->id)@endphp   
-                          @if (in_array(3,$arraycontrolids))<a class="btn btn-info btn-sm" id=""
-                          href="{{route('propin.viewpreroll',$id)}}"
-                           title="view"><i class="ti-eye mr-0-5"></i>view</a>  @endif   
+                        <td>@php $id= Crypt::encrypt($abc->id)@endphp
+                            @if (in_array(3,$arraycontrolids))<a class="btn btn-info btn-sm" id=""
+                                href="{{route('propin.viewpreroll',$id)}}"
+                                title="view"><i class="ti-eye mr-0-5"></i>view</a> @endif
+                            @if (in_array(3,$arraycontrolids))<a class="btn btn-secondary btn-sm"
+                                onclick="rentsummary(this); return false;"
+                                href="{{route('propin.downrentsum',$id)}}"
+                                title="view"><i class="ti-download mr-0-5"></i>download</a> @endif
                         </td>
                     </tr>
                     @endforeach
@@ -74,7 +78,6 @@ $description = 'list of all properties for monthly rent-roll...';
 <!-- Additional JS Start-->
 <script src="{{ asset('css/select2/select2.min.js') }}"></script>
 <script src="{{ asset('js/select2.js') }}"></script>
-<script src="{{ asset('js/dropdown.js') }}"></script>
-<script src="{{ asset('js/add-banking-details.js') }}"></script>
+<script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script>
 <!-- Additional JS End-->
 @endsection

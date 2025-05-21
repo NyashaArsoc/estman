@@ -105,3 +105,14 @@ function activaterecord(that) {
         window.location = anchor.attr("href");
     }
 }
+//download rent summary
+function rentsummary(that) {
+    var proceedto = confirm("proceed to download?")
+    if (proceedto) {
+        var $button = $(that); // Convert 'that' to a jQuery object
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
+        window.location.href = $button.attr("href");
+    }
+}

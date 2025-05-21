@@ -34,16 +34,16 @@ function validateFirstName() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/]/;
-            charscheck =  specialChars.test(firstnameValue);
-            if (charscheck == true){
-                 $("#firstnamecheck").show();
-                $("#firstnamecheck").html("**follow the required format/remove space/special");
-                firstnameError = false;
-                return false;
-            }else{
-                firstnameError = true;
-                $("#firstnamecheck").hide();
-            }
+        charscheck = specialChars.test(firstnameValue);
+        if (charscheck == true) {
+            $("#firstnamecheck").show();
+            $("#firstnamecheck").html("**follow the required format/remove space/special");
+            firstnameError = false;
+            return false;
+        } else {
+            firstnameError = true;
+            $("#firstnamecheck").hide();
+        }
     }
 }
 // lastname
@@ -65,13 +65,13 @@ function validateLastName() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/]/;
-        charscheck =  specialChars.test(lastnameValue);
-        if (charscheck == true){
-             $("#lastnamecheck").show();
+        charscheck = specialChars.test(lastnameValue);
+        if (charscheck == true) {
+            $("#lastnamecheck").show();
             $("#lastnamecheck").html("**follow the required format/remove space/special");
             lastnameError = false;
             return false;
-        }else{
+        } else {
             lastnameError = true;
             $("#lastnamecheck").hide();
         }
@@ -89,33 +89,33 @@ function validateNationalID() {
         $("#nationalidcheck").show();
         nationalidError = false;
         return false;
-  }else if (textValue.length == 11 || textValue.length == 12) {
-      const specialChars =  /^(\d{8}|\d{9})[A-Z]\d{2}$/;
-      charscheck =  specialChars.test(textValue);
-      if (charscheck == true){
-        nationalidError = true;
-          $("#nationalidcheck").hide();
-      }else{
-          $("#nationalidcheck").show();
-          $("#nationalidcheck").html("**follow the required format 22113344H55");
-          nationalidError = false;
-          return false;
-      }
-  }else {
-      $("#nationalidcheck").show();
-      $("#nationalidcheck").html("**invalid id number");
-      nationalidError = false;
-      return false;
-        
-  }
+    } else if (textValue.length == 11 || textValue.length == 12) {
+        const specialChars = /^(\d{8}|\d{9})[A-Z]\d{2}$/;
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            nationalidError = true;
+            $("#nationalidcheck").hide();
+        } else {
+            $("#nationalidcheck").show();
+            $("#nationalidcheck").html("**follow the required format 22113344H55");
+            nationalidError = false;
+            return false;
+        }
+    } else {
+        $("#nationalidcheck").show();
+        $("#nationalidcheck").html("**invalid id number");
+        nationalidError = false;
+        return false;
+
+    }
 }
- //valid company name
- $("#companynamecheck").hide();
- let companynameError = true;
- $("#companyname").keyup(function () {
-     validateCompanyName();
- });
- function validateCompanyName() {
+//valid company name
+$("#companynamecheck").hide();
+let companynameError = true;
+$("#companyname").keyup(function () {
+    validateCompanyName();
+});
+function validateCompanyName() {
     let textValue = $("#companyname").val();
     if (textValue.length == "") {
         $("#companynamecheck").show();
@@ -128,16 +128,16 @@ function validateNationalID() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#companynamecheck").show();
-                $("#companynamecheck").html("**follow the required format");
-                companynameError = false;
-                return false;
-            }else{
-                companynameError = true;
-                $("#companynamecheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#companynamecheck").show();
+            $("#companynamecheck").html("**follow the required format");
+            companynameError = false;
+            return false;
+        } else {
+            companynameError = true;
+            $("#companynamecheck").hide();
+        }
     }
 }
 //valid company number
@@ -159,16 +159,16 @@ function validateCompanyNumber() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?~a-z\sA-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#companynumbercheck").show();
-                $("#companynumbercheck").html("**follow the required format 000/00");
-                companynumberError = false;
-                return false;
-            }else{
-                companynumberError = true;
-                $("#companynumbercheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#companynumbercheck").show();
+            $("#companynumbercheck").html("**follow the required format 000/00");
+            companynumberError = false;
+            return false;
+        } else {
+            companynumberError = true;
+            $("#companynumbercheck").hide();
+        }
     }
 }
 //valid numeric value not required eg VAT or property stories
@@ -186,16 +186,16 @@ function validateNumericValueNotRequired() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#numericnotrequiredcheck").show();
-                $("#numericnotrequiredcheck").html("**digits only or (35)");
-                numericnotrequiredError = false;
-                return false;
-            }else{
-                numericnotrequiredError = true;
-                $("#numericnotrequiredcheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#numericnotrequiredcheck").show();
+            $("#numericnotrequiredcheck").html("**digits only or (35)");
+            numericnotrequiredError = false;
+            return false;
+        } else {
+            numericnotrequiredError = true;
+            $("#numericnotrequiredcheck").hide();
+        }
     }
 }
 //valid numeric value not required
@@ -217,16 +217,16 @@ function validateNumericValueRequired() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#numericrequiredcheck").show();
-                $("#numericrequiredcheck").html("**digits only or (35)");
-                numericrequiredError = false;
-                return false;
-            }else{
-                numericrequiredError = true;
-                $("#numericrequiredcheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#numericrequiredcheck").show();
+            $("#numericrequiredcheck").html("**digits only or (35)");
+            numericrequiredError = false;
+            return false;
+        } else {
+            numericrequiredError = true;
+            $("#numericrequiredcheck").hide();
+        }
     }
 }
 //cel----------------
@@ -236,90 +236,90 @@ $("#cell").keyup(function () {
     validateCell();
 });
 function validateCell() {
-   let cellValue = $("#cell").val();
-   if (cellValue.length == "") {
-       $("#cellcheck").show();
-       cellError = false;
-       return false;
-   } else if (cellValue.length < 10) {
-       $("#cellcheck").show();
-       $("#cellcheck").html("**invalid cell");
-       cellError = false;
-       return false;
-   } else {
-       const specialChars = /[`!@#$%^&*()_\-=\[\]{};':"\\|,.<>\/?~a-z/\s/A-Z]/;
-       charscheck         =  specialChars.test(cellValue);
-       if (charscheck == true){
+    let cellValue = $("#cell").val();
+    if (cellValue.length == "") {
+        $("#cellcheck").show();
+        cellError = false;
+        return false;
+    } else if (cellValue.length < 10) {
+        $("#cellcheck").show();
+        $("#cellcheck").html("**invalid cell");
+        cellError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_\-=\[\]{};':"\\|,.<>\/?~a-z/\s/A-Z]/;
+        charscheck = specialChars.test(cellValue);
+        if (charscheck == true) {
             $("#cellcheck").show();
-           $("#cellcheck").html("**follow the required format 0701000123 or +263701000123");
-           cellError = false;
-           return false;
-       }else{
-           cellError = true;
-           $("#cellcheck").hide();
-       }
-   }
+            $("#cellcheck").html("**follow the required format 0701000123 or +263701000123");
+            cellError = false;
+            return false;
+        } else {
+            cellError = true;
+            $("#cellcheck").hide();
+        }
+    }
 }
- // address check
- $("#billingaddresscheck").hide();
- let billingaddressError = true;
- $("#billingaddress").keyup(function () {
-     validateBillingAddress();
- }); 
- function validateBillingAddress() {
-     let textValue = $("#billingaddress").val();
-     if (textValue.length == "") {
-         $("#billingaddresscheck").show();
-         billingaddressError = false;
-         return false;
-     }else if (textValue.length < 3) {
-         $("#billingaddresscheck").show();
-         $("#billingaddresscheck").html("**invalid address");
-         billingaddressError = false;
-         return false;
-     }else {
-         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|<>\/?~]/;
-         charscheck =  specialChars.test(textValue);
-         if (charscheck == true){
-              $("#billingaddresscheck").show();
-             $("#billingaddresscheck").html("**remove characters");
-             billingaddressError = false;
-             return false;
-         }else{
+// address check
+$("#billingaddresscheck").hide();
+let billingaddressError = true;
+$("#billingaddress").keyup(function () {
+    validateBillingAddress();
+});
+function validateBillingAddress() {
+    let textValue = $("#billingaddress").val();
+    if (textValue.length == "") {
+        $("#billingaddresscheck").show();
+        billingaddressError = false;
+        return false;
+    } else if (textValue.length < 3) {
+        $("#billingaddresscheck").show();
+        $("#billingaddresscheck").html("**invalid address");
+        billingaddressError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|<>\/?~]/;
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#billingaddresscheck").show();
+            $("#billingaddresscheck").html("**remove characters");
+            billingaddressError = false;
+            return false;
+        } else {
             billingaddressError = true;
-             $("#billingaddresscheck").hide();
-         }
-     }
+            $("#billingaddresscheck").hide();
+        }
+    }
 }
 //valid email
 $("#emailcheck").hide();
-  let emailError = true;
-  $("#email").keyup(function () {
-      validateEmail();
+let emailError = true;
+$("#email").keyup(function () {
+    validateEmail();
 });
 function validateEmail() {
-      let emailValue = $("#email").val();
-      if (emailValue.length == "") {
-          $("#emailcheck").show();
-          emailError = false;
-          return false;
-      } else {
-          const emailvalid = document.getElementById("email");
-          emailvalid.addEventListener("blur", () => {
-              let regex =
-              /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
-              let emailvalue = emailvalid.value;
-              if (regex.test(emailvalue)) {
-                  $("#emailcheck").hide();
-                  emailError = true;
-              } else {
-                  $("#emailcheck").show();
-                  $("#emailcheck").html("**follow the required format example@example.com");
-                  emailError = false;
-                  return false;
-              }
-          });
-      }
+    let emailValue = $("#email").val();
+    if (emailValue.length == "") {
+        $("#emailcheck").show();
+        emailError = false;
+        return false;
+    } else {
+        const emailvalid = document.getElementById("email");
+        emailvalid.addEventListener("blur", () => {
+            let regex =
+                /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
+            let emailvalue = emailvalid.value;
+            if (regex.test(emailvalue)) {
+                $("#emailcheck").hide();
+                emailError = true;
+            } else {
+                $("#emailcheck").show();
+                $("#emailcheck").html("**follow the required format example@example.com");
+                emailError = false;
+                return false;
+            }
+        });
+    }
 }
 //valid contact person firstname
 $("#contactfirstnamecheck").hide();
@@ -328,29 +328,29 @@ $("#contactfirstname").keyup(function () {
     validateContactFirstName();
 });
 function validateContactFirstName() {
-   let textValue = $("#contactfirstname").val();
-   if (textValue.length == "") {
-       $("#contactfirstnamecheck").show();
-       contactfirstnameError = false;
-       return false;
-   } else if (textValue.length < 3) {
-       $("#contactfirstnamecheck").show();
-       $("#contactfirstnamecheck").html("**invalid firstname");
-       contactfirstnameError = false;
-       return false;
-   } else {
-       const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/]/;
-           charscheck =  specialChars.test(textValue);
-           if (charscheck == true){
-                $("#contactfirstnamecheck").show();
-               $("#contactfirstnamecheck").html("**follow the required format");
-               contactfirstnameError = false;
-               return false;
-           }else{
-               contactfirstnameError = true;
-               $("#contactfirstnamecheck").hide();
-           }
-   }
+    let textValue = $("#contactfirstname").val();
+    if (textValue.length == "") {
+        $("#contactfirstnamecheck").show();
+        contactfirstnameError = false;
+        return false;
+    } else if (textValue.length < 3) {
+        $("#contactfirstnamecheck").show();
+        $("#contactfirstnamecheck").html("**invalid firstname");
+        contactfirstnameError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/]/;
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#contactfirstnamecheck").show();
+            $("#contactfirstnamecheck").html("**follow the required format");
+            contactfirstnameError = false;
+            return false;
+        } else {
+            contactfirstnameError = true;
+            $("#contactfirstnamecheck").hide();
+        }
+    }
 }
 //valid contact person lastname
 $("#contactlastnamecheck").hide();
@@ -371,13 +371,13 @@ function validateContactLastName() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/]/;
-        charscheck =  specialChars.test(textValue);
-        if (charscheck == true){
-             $("#contactlastnamecheck").show();
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#contactlastnamecheck").show();
             $("#contactlastnamecheck").html("**follow the required format");
             contactlastnameError = false;
             return false;
-        }else{
+        } else {
             contactlastnameError = true;
             $("#contactlastnamecheck").hide();
         }
@@ -402,13 +402,13 @@ function validateContactCell() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_\-=\[\]{};':"\\|,.<>\/?~a-z/\s/A-Z]/;
-        charscheck         =  specialChars.test(textValue);
-        if (charscheck == true){
-             $("#contactcellcheck").show();
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#contactcellcheck").show();
             $("#contactcellcheck").html("**follow the required format 0701000123 or +263701000123");
             contactcellError = false;
             return false;
-        }else{
+        } else {
             contactcellError = true;
             $("#contactcellcheck").hide();
         }
@@ -430,7 +430,7 @@ function validateContactEmail() {
         const emailvalid = document.getElementById("contactemail");
         emailvalid.addEventListener("blur", () => {
             let regex =
-            /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
+                /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
             let textValue = emailvalid.value;
             if (regex.test(textValue)) {
                 $("#contactemailcheck").hide();
@@ -463,16 +463,16 @@ function validateRequiredGeneralTextCaps() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?~0-9]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#requiredgeneraltextcapscheck").show();
-                $("#requiredgeneraltextcapscheck").html("**follow the required format");
-                requiredgeneraltextcapsError = false;
-                return false;
-            }else{
-                requiredgeneraltextcapsError = true;
-                $("#requiredgeneraltextcapscheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#requiredgeneraltextcapscheck").show();
+            $("#requiredgeneraltextcapscheck").html("**follow the required format");
+            requiredgeneraltextcapsError = false;
+            return false;
+        } else {
+            requiredgeneraltextcapsError = true;
+            $("#requiredgeneraltextcapscheck").hide();
+        }
     }
 }
 // required acount name
@@ -494,16 +494,16 @@ function validateAccountName() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#accountnamecheck").show();
-                $("#accountnamecheck").html("**follow the required format");
-                accountnameError = false;
-                return false;
-            }else{
-                accountnameError = true;
-                $("#accountnamecheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#accountnamecheck").show();
+            $("#accountnamecheck").html("**follow the required format");
+            accountnameError = false;
+            return false;
+        } else {
+            accountnameError = true;
+            $("#accountnamecheck").hide();
+        }
     }
 }
 // required acount name
@@ -525,16 +525,16 @@ function validateBankName() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#banknamecheck").show();
-                $("#banknamecheck").html("**follow the required format");
-                banknameError = false;
-                return false;
-            }else{
-                banknameError = true;
-                $("#banknamecheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#banknamecheck").show();
+            $("#banknamecheck").html("**follow the required format");
+            banknameError = false;
+            return false;
+        } else {
+            banknameError = true;
+            $("#banknamecheck").hide();
+        }
     }
 }
 // not required general text with Caps
@@ -545,23 +545,23 @@ $("#notrequiredgeneraltextcaps").keyup(function () {
 });
 function validateNotRequiredGeneralTextCaps() {
     let textValue = $("#notrequiredgeneraltextcaps").val();
-         if (textValue.length < 2) {
+    if (textValue.length < 2) {
         $("#notrequiredgeneraltextcapscheck").show();
         $("#notrequiredgeneraltextcapscheck").html("**invalid text");
         notrequiredgeneraltextcapsError = false;
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?~\/s\0-9]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#notrequiredgeneraltextcapscheck").show();
-                $("#notrequiredgeneraltextcapscheck").html("**follow the required format");
-                notrequiredgeneraltextcapsError = false;
-                return false;
-            }else{
-                notrequiredgeneraltextcapsError = true;
-                $("#notrequiredgeneraltextcapscheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#notrequiredgeneraltextcapscheck").show();
+            $("#notrequiredgeneraltextcapscheck").html("**follow the required format");
+            notrequiredgeneraltextcapsError = false;
+            return false;
+        } else {
+            notrequiredgeneraltextcapsError = true;
+            $("#notrequiredgeneraltextcapscheck").hide();
+        }
     }
 }
 //valid currency
@@ -582,24 +582,24 @@ function validateCurrencyCode() {
     }
 }
 
-  //landlord name
-  $("#landlordlistcheck").hide();
-  let landlordnameError = true;
-  $("#landlordlist").keyup(function () {
-      validateLandlordName();
-  });
-  function validateLandlordName() {
-      let textValue = $("#landlordlist").val();
-      if (textValue.length == "") {
-          $("#landlordlistcheck").show();
-          landlordnameError = false;
-          return false;
-      } else {
+//landlord name
+$("#landlordlistcheck").hide();
+let landlordnameError = true;
+$("#landlordlist").keyup(function () {
+    validateLandlordName();
+});
+function validateLandlordName() {
+    let textValue = $("#landlordlist").val();
+    if (textValue.length == "") {
+        $("#landlordlistcheck").show();
+        landlordnameError = false;
+        return false;
+    } else {
         landlordnameError = true;
-          $("#landlordlistcheck").hide();
-      }
-  }
-    //Province check
+        $("#landlordlistcheck").hide();
+    }
+}
+//Province check
 $("#provincecheck").hide();
 let provinceError = true;
 $("#province").keyup(function () {
@@ -615,7 +615,7 @@ function validateProvince() {
         provinceError = true;
         $("#provincecheck").hide();
     }
-} 
+}
 //valid city
 $("#citycheck").hide();
 let cityError = true;
@@ -635,74 +635,74 @@ function validateCity() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#citycheck").show();
-                $("#citycheck").html("**follow the required format");
-                cityError = false;
-                return false;
-            }else{
-                cityError = true;
-                $("#citycheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#citycheck").show();
+            $("#citycheck").html("**follow the required format");
+            cityError = false;
+            return false;
+        } else {
+            cityError = true;
+            $("#citycheck").hide();
+        }
     }
 }
-    //PropType check
+//PropType check
 $("#propertytypecheck").hide();
 let propertytypeError = true;
 $("#propertytype").keyup(function () {
-        validatePropertyType();
+    validatePropertyType();
 });
 function validatePropertyType() {
-        let textValue = $("#propertytype").val();
-        if (textValue.length == "") {
-            $("#propertytypecheck").show();
-            propertytypeError = false;
-            return false;
-        } else {
-            propertytypeError = true;
-            $("#propertytypecheck").hide();
-        }
+    let textValue = $("#propertytype").val();
+    if (textValue.length == "") {
+        $("#propertytypecheck").show();
+        propertytypeError = false;
+        return false;
+    } else {
+        propertytypeError = true;
+        $("#propertytypecheck").hide();
+    }
 }
- // stand number
- $("#standnumbercheck").hide();
- let standnumberError = true;
- $("#standnumber").keyup(function () {
-     validateStandNumber();
- }); 
- function validateStandNumber() {
-     let textValue = $("#standnumber").val();
-         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|<>\/?~]/;
-         charscheck =  specialChars.test(textValue);
-         if (charscheck == true){
-              $("#standnumbercheck").show();
-             $("#standnumbercheck").html("**remove characters");
-             standnumberError = false;
-             return false;
-         }else{
-            standnumberError = true;
-             $("#standnumbercheck").hide();
-         }
+// stand number
+$("#standnumbercheck").hide();
+let standnumberError = true;
+$("#standnumber").keyup(function () {
+    validateStandNumber();
+});
+function validateStandNumber() {
+    let textValue = $("#standnumber").val();
+    const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|<>\/?~]/;
+    charscheck = specialChars.test(textValue);
+    if (charscheck == true) {
+        $("#standnumbercheck").show();
+        $("#standnumbercheck").html("**remove characters");
+        standnumberError = false;
+        return false;
+    } else {
+        standnumberError = true;
+        $("#standnumbercheck").hide();
+    }
 }
- // comment highlights not required text
- $("#commentshighlightscheck").hide();
- let commentshighlightsError = true;
- $("#commentshighlights").keyup(function () {
-     validateCommentsHighlights();
- }); 
- function validateCommentsHighlights() {
-     let textValue = $("#commentshighlights").val();
-         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|<>\/?~]/;
-         charscheck =  specialChars.test(textValue);
-         if (charscheck == true){
-              $("#commentshighlightscheck").show();
-             $("#commentshighlightscheck").html("**remove characters");
-             commentshighlightsError = false;
-             return false;
-         }else{
-            commentshighlightsError = true;
-             $("#commentshighlightscheck").hide();
-         }
+// comment highlights not required text
+$("#commentshighlightscheck").hide();
+let commentshighlightsError = true;
+$("#commentshighlights").keyup(function () {
+    validateCommentsHighlights();
+});
+function validateCommentsHighlights() {
+    let textValue = $("#commentshighlights").val();
+    const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|<>\/?~]/;
+    charscheck = specialChars.test(textValue);
+    if (charscheck == true) {
+        $("#commentshighlightscheck").show();
+        $("#commentshighlightscheck").html("**remove characters");
+        commentshighlightsError = false;
+        return false;
+    } else {
+        commentshighlightsError = true;
+        $("#commentshighlightscheck").hide();
+    }
 }
 //valid add rooms
 $("#roomscheck").hide();
@@ -723,16 +723,16 @@ function validateAddRooms() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~a-z/\s/A-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#roomscheck").show();
-                $("#roomscheck").html("**digits only");
-                roomsError = false;
-                return false;
-            }else{
-                roomsError = true;
-                $("#roomscheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#roomscheck").show();
+            $("#roomscheck").html("**digits only");
+            roomsError = false;
+            return false;
+        } else {
+            roomsError = true;
+            $("#roomscheck").hide();
+        }
     }
 }
 //valid add bedrooms
@@ -754,16 +754,16 @@ function validateAddBedRooms() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~a-z/\s/A-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#bedroomscheck").show();
-                $("#bedroomscheck").html("**digits only");
-                bedroomsError = false;
-                return false;
-            }else{
-                bedroomsError = true;
-                $("#bedroomscheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#bedroomscheck").show();
+            $("#bedroomscheck").html("**digits only");
+            bedroomsError = false;
+            return false;
+        } else {
+            bedroomsError = true;
+            $("#bedroomscheck").hide();
+        }
     }
 }
 //valid total area 
@@ -785,20 +785,20 @@ function validateAddTotalArea() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#totalareacheck").show();
-                $("#totalareacheck").html("**digits only or (3.5)");
-                totalareaError = false;
-                return false;
-            }else{
-                totalareaError = true;
-                $("#totalareacheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#totalareacheck").show();
+            $("#totalareacheck").html("**digits only or (3.5)");
+            totalareaError = false;
+            return false;
+        } else {
+            totalareaError = true;
+            $("#totalareacheck").hide();
+        }
     }
 }
 //validate rental from lease rate*area taken
-function validateLeaseRentalSqm(){
+function validateLeaseRentalSqm() {
     let rateValue = $("#expectedrate").val();
     let areaValue = $("#lettablearea").val();
     if (areaValue.length != "" && rateValue.length != "") {
@@ -830,17 +830,17 @@ function validateAddLettableArea() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#lettableareacheck").show();
-                $("#lettableareacheck").html("**digits only or (3.5)");
-                lettableareaError = false;
-                return false;
-            }else{
-                lettableareaError = true;
-                    $("#lettableareacheck").hide();
-                
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#lettableareacheck").show();
+            $("#lettableareacheck").html("**digits only or (3.5)");
+            lettableareaError = false;
+            return false;
+        } else {
+            lettableareaError = true;
+            $("#lettableareacheck").hide();
+
+        }
     }
 }
 //valid rate/sqm
@@ -863,16 +863,16 @@ function validateAddExpectedRate() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#expectedratecheck").show();
-                $("#expectedratecheck").html("**digits only or (3.5)");
-                expectedrateError = false;
-                return false;
-            }else{
-                expectedrateError = true;
-                $("#expectedratecheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#expectedratecheck").show();
+            $("#expectedratecheck").html("**digits only or (3.5)");
+            expectedrateError = false;
+            return false;
+        } else {
+            expectedrateError = true;
+            $("#expectedratecheck").hide();
+        }
     }
 }
 //valid rental
@@ -894,16 +894,16 @@ function validateAddExpectedRental() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#expectedrentalcheck").show();
-                $("#expectedrentalcheck").html("**digits only or (3.5)");
-                expectedrentalError = false;
-                return false;
-            }else{
-                expectedrentalError = true;
-                $("#expectedrentalcheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#expectedrentalcheck").show();
+            $("#expectedrentalcheck").html("**digits only or (3.5)");
+            expectedrentalError = false;
+            return false;
+        } else {
+            expectedrentalError = true;
+            $("#expectedrentalcheck").hide();
+        }
     }
 }
 //commission type
@@ -919,10 +919,10 @@ function validateCommissionType() {
         commissiontypeError = false;
         return false;
     } else {
-       commissiontypeError = true;
+        commissiontypeError = true;
         $("#commissiontypecheck").hide();
     }
-} 
+}
 //valid CommissionPercentage
 $("#commissionpercentcheck").hide();
 let commissionpercentError = true;
@@ -942,102 +942,102 @@ function validateCommissionPercent() {
         return false;
     } else {
         const specialChars = /^\d+(\.\d+)?$/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                commissionpercentError = true;
-                $("#commissionpercentcheck").hide();
-            }else{
-                $("#commissionpercentcheck").show();
-                $("#commissionpercentcheck").html("**digits only or (3.5)");
-                commissionpercentError = false;
-                return false;
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            commissionpercentError = true;
+            $("#commissionpercentcheck").hide();
+        } else {
+            $("#commissionpercentcheck").show();
+            $("#commissionpercentcheck").html("**digits only or (3.5)");
+            commissionpercentError = false;
+            return false;
+        }
     }
 }
-  // signed pdf document eg mandate/lease agreement
+// signed pdf document eg mandate/lease agreement
 $("#requiredsignedpdfcheck").hide();
-  let requiredsignedpdfdocumentError = true;
+let requiredsignedpdfdocumentError = true;
 $("#requiredsignedpdf").keyup(function () {
-      validateRequiredSignedPDFDocument();
-}); 
+    validateRequiredSignedPDFDocument();
+});
 function validateRequiredSignedPDFDocument() {
-      let textValue = $("#requiredsignedpdf")[0];
-      if (textValue.files.length === 0) {
-          $("#requiredsignedpdfcheck").show();
-          requiredsignedpdfdocumentError = false;
-          return false;
-      }else {
-          var uploadedfile = textValue.files[0];
-          // Check the file extension
-          var uploadedExtension = uploadedfile.name.split('.').pop().toLowerCase();
-          if (uploadedExtension !== 'pdf') {
-              $("#requiredsignedpdfcheck").show();
-              $("#requiredsignedpdfcheck").html("**file must be pdf ");
-              requiredsignedpdfdocumentError = false;
-              return false;
-            }else{
-              
-              if (uploadedfile.size > 2000*1024){ // file must be less than 2Mb
-                   $("#requiredsignedpdfcheck").show();
-                  $("#requiredsignedpdfcheck").html("**file must be less that 2MB");
-                  requiredsignedpdfdocumentError = false;
-                  return false;
-              }else{
+    let textValue = $("#requiredsignedpdf")[0];
+    if (textValue.files.length === 0) {
+        $("#requiredsignedpdfcheck").show();
+        requiredsignedpdfdocumentError = false;
+        return false;
+    } else {
+        var uploadedfile = textValue.files[0];
+        // Check the file extension
+        var uploadedExtension = uploadedfile.name.split('.').pop().toLowerCase();
+        if (uploadedExtension !== 'pdf') {
+            $("#requiredsignedpdfcheck").show();
+            $("#requiredsignedpdfcheck").html("**file must be pdf ");
+            requiredsignedpdfdocumentError = false;
+            return false;
+        } else {
+
+            if (uploadedfile.size > 2000 * 1024) { // file must be less than 2Mb
+                $("#requiredsignedpdfcheck").show();
+                $("#requiredsignedpdfcheck").html("**file must be less that 2MB");
+                requiredsignedpdfdocumentError = false;
+                return false;
+            } else {
                 requiredsignedpdfdocumentError = true;
-                  $("#requiredsignedpdfcheck").hide();
-              }
-            } 
-      }
-}
-  // not required pdf document
-  $("#notrequiredpdfcheck").hide();
-  let notrequiredpdfdocumentError = true;
-$("#notrequiredpdf").keyup(function () {
-      validateNotRequiredPDFDocument();
-}); 
-function validateNotRequiredPDFDocument() {
-      let textValue = $("#notrequiredpdf")[0];
-      if (textValue.files.length !== 0) {
-          var uploadedfile = textValue.files[0];
-          // Check the file extension
-          var uploadedExtension = uploadedfile.name.split('.').pop().toLowerCase();
-          if (uploadedExtension !== 'pdf') {
-              $("#notrequiredpdfcheck").show();
-              $("#notrequiredpdfcheck").html("**file must be pdf ");
-              notrequiredpdfdocumentError = false;
-              return false;
-            }else{
-              
-              if (uploadedfile.size > 2000*1024){ // file must be less than 2Mb
-                   $("#notrequiredpdfcheck").show();
-                  $("#notrequiredpdfcheck").html("**file must be less that 2MB");
-                  notrequiredpdfdocumentError = false;
-                  return false;
-              }else{
-                notrequiredpdfdocumentError = true;
-                  $("#notrequiredpdfcheck").hide();
-              }
+                $("#requiredsignedpdfcheck").hide();
             }
-        } 
+        }
+    }
+}
+// not required pdf document
+$("#notrequiredpdfcheck").hide();
+let notrequiredpdfdocumentError = true;
+$("#notrequiredpdf").keyup(function () {
+    validateNotRequiredPDFDocument();
+});
+function validateNotRequiredPDFDocument() {
+    let textValue = $("#notrequiredpdf")[0];
+    if (textValue.files.length !== 0) {
+        var uploadedfile = textValue.files[0];
+        // Check the file extension
+        var uploadedExtension = uploadedfile.name.split('.').pop().toLowerCase();
+        if (uploadedExtension !== 'pdf') {
+            $("#notrequiredpdfcheck").show();
+            $("#notrequiredpdfcheck").html("**file must be pdf ");
+            notrequiredpdfdocumentError = false;
+            return false;
+        } else {
+
+            if (uploadedfile.size > 2000 * 1024) { // file must be less than 2Mb
+                $("#notrequiredpdfcheck").show();
+                $("#notrequiredpdfcheck").html("**file must be less that 2MB");
+                notrequiredpdfdocumentError = false;
+                return false;
+            } else {
+                notrequiredpdfdocumentError = true;
+                $("#notrequiredpdfcheck").hide();
+            }
+        }
+    }
 }
 //function to check if lettable < total area
 let lettabletotalareaError = true;
-function validateLettable_TotalArea(){
+function validateLettable_TotalArea() {
     var lettable = parseFloat($("#lettablearea").val());
     var totalarea = parseFloat($("#totalarea").val());
-     //check if all are numbers
-     if (isNaN(lettable) || isNaN(totalarea) ) {
+    //check if all are numbers
+    if (isNaN(lettable) || isNaN(totalarea)) {
         alert("Please enter valid number.");
         lettabletotalareaError = false;
         return false;
-      }
-      if (lettable >= totalarea) {
+    }
+    if (lettable >= totalarea) {
         alert("lettable must be less.");
         lettabletotalareaError = false;
         return false;
-      }
-      lettabletotalareaError = true;
-      return true;
+    }
+    lettabletotalareaError = true;
+    return true;
 }
 //valid keen person firstname
 $("#keenfirstnamecheck").hide();
@@ -1046,29 +1046,29 @@ $("#keenfirstname").keyup(function () {
     validateKeenFirstName();
 });
 function validateKeenFirstName() {
-   let textValue = $("#keenfirstname").val();
-   if (textValue.length == "") {
-       $("#keenfirstnamecheck").show();
-       keenfirstnameError = false;
-       return false;
-   } else if (textValue.length < 3) {
-       $("#keenfirstnamecheck").show();
-       $("#keenfirstnamecheck").html("**invalid");
-       keenfirstnameError = false;
-       return false;
-   } else {
-       const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/]/;
-           charscheck =  specialChars.test(textValue);
-           if (charscheck == true){
-                $("#keenfirstnamecheck").show();
-               $("#keenfirstnamecheck").html("**follow the required format");
-               keenfirstnameError = false;
-               return false;
-           }else{
+    let textValue = $("#keenfirstname").val();
+    if (textValue.length == "") {
+        $("#keenfirstnamecheck").show();
+        keenfirstnameError = false;
+        return false;
+    } else if (textValue.length < 3) {
+        $("#keenfirstnamecheck").show();
+        $("#keenfirstnamecheck").html("**invalid");
+        keenfirstnameError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/]/;
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#keenfirstnamecheck").show();
+            $("#keenfirstnamecheck").html("**follow the required format");
+            keenfirstnameError = false;
+            return false;
+        } else {
             keenfirstnameError = true;
-               $("#keenfirstnamecheck").hide();
-           }
-   }
+            $("#keenfirstnamecheck").hide();
+        }
+    }
 }
 //valid keen person lastname
 $("#keenlastnamecheck").hide();
@@ -1089,13 +1089,13 @@ function validateKeenLastName() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/]/;
-        charscheck =  specialChars.test(textValue);
-        if (charscheck == true){
-             $("#keenlastnamecheck").show();
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#keenlastnamecheck").show();
             $("#keenlastnamecheck").html("**follow the required format");
             keenlastnameError = false;
             return false;
-        }else{
+        } else {
             keenlastnameError = true;
             $("#keenlastnamecheck").hide();
         }
@@ -1120,13 +1120,13 @@ function validateKeenCell() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_\-=\[\]{};':"\\|,.<>\/?~a-z/\s/A-Z]/;
-        charscheck         =  specialChars.test(textValue);
-        if (charscheck == true){
-             $("#keencellcheck").show();
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#keencellcheck").show();
             $("#keencellcheck").html("**follow the required format 0701000123 or +263701000123");
             keencellError = false;
             return false;
-        }else{
+        } else {
             keencellError = true;
             $("#keencellcheck").hide();
         }
@@ -1140,90 +1140,90 @@ $("#keenemail").keyup(function () {
 });
 function validateKeenEmail() {
     let textValue = $("#keenemail").val();
-        const emailvalid = document.getElementById("keenemail");
-        emailvalid.addEventListener("blur", () => {
-            let regex =
+    const emailvalid = document.getElementById("keenemail");
+    emailvalid.addEventListener("blur", () => {
+        let regex =
             /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
-            let textValue = emailvalid.value;
-            if (regex.test(textValue)) {
-                $("#keenemailcheck").hide();
-                keenemailError = true;
-            } else {
-                $("#keenemailcheck").show();
-                $("#keenemailcheck").html("**follow the required format example@example.com");
-                keenemailError = false;
-                return false;
-            }
-        });
+        let textValue = emailvalid.value;
+        if (regex.test(textValue)) {
+            $("#keenemailcheck").hide();
+            keenemailError = true;
+        } else {
+            $("#keenemailcheck").show();
+            $("#keenemailcheck").html("**follow the required format example@example.com");
+            keenemailError = false;
+            return false;
+        }
+    });
 }
 // tenant list by client type
 $("#tenantlistcheck").hide();
-  let tenantnameError = true;
-  $("#tenantlist").keyup(function () {
-      validateTenantName();
-  });
-  function validateTenantName() {
-      let textValue = $("#tenantlist").val();
-      if (textValue.length == "") {
-          $("#tenantlistcheck").show();
-          tenantnameError = false;
-          return false;
-      } else {
+let tenantnameError = true;
+$("#tenantlist").keyup(function () {
+    validateTenantName();
+});
+function validateTenantName() {
+    let textValue = $("#tenantlist").val();
+    if (textValue.length == "") {
+        $("#tenantlistcheck").show();
+        tenantnameError = false;
+        return false;
+    } else {
         tenantnameError = true;
-          $("#tenantlistcheck").hide();
-      }
-  } 
- //date valid from
- $("#datefromcheck").hide();
- let datefromError = true;
- $("#datefrom").keyup(function () {
-     validateDateFrom();
- });
- function validateDateFrom() {
-     let textValue = $("#datefrom").val();
-     if (textValue.length == "") {
-         $("#datefromcheck").show();
-         datefromError = false;
-         return false;
-     } else {
+        $("#tenantlistcheck").hide();
+    }
+}
+//date valid from
+$("#datefromcheck").hide();
+let datefromError = true;
+$("#datefrom").keyup(function () {
+    validateDateFrom();
+});
+function validateDateFrom() {
+    let textValue = $("#datefrom").val();
+    if (textValue.length == "") {
+        $("#datefromcheck").show();
+        datefromError = false;
+        return false;
+    } else {
         datefromError = true;
-         $("#datefromcheck").hide();
-     }
- }
- //valid to
- $("#datetocheck").hide();
- let datetoError = true;
- $("#dateto").keyup(function () {
-     validateDateTo();
- });
- function validateDateTo() {
-     let textValue = $("#dateto").val();
-     if (textValue.length == "") {
-         $("#datetocheck").show();
-         datetoError = false;
-         return false;
-     } else {
+        $("#datefromcheck").hide();
+    }
+}
+//valid to
+$("#datetocheck").hide();
+let datetoError = true;
+$("#dateto").keyup(function () {
+    validateDateTo();
+});
+function validateDateTo() {
+    let textValue = $("#dateto").val();
+    if (textValue.length == "") {
+        $("#datetocheck").show();
+        datetoError = false;
+        return false;
+    } else {
         datetoError = true;
-         $("#datetocheck").hide();
-     }
- }
-  //inspection period
-  $("#periodlistcheck").hide();
-  let periodlistError = true;
-  $("#periodlist").keyup(function () {
-      validatePeriodList();
-  });
-  function validatePeriodList() {
-      let textValue = $("#periodlist").val();
-      if (textValue.length == "") {
-          $("#periodlistcheck").show();
-          periodlistError = false;
-          return false;
-      } else {
+        $("#datetocheck").hide();
+    }
+}
+//inspection period
+$("#periodlistcheck").hide();
+let periodlistError = true;
+$("#periodlist").keyup(function () {
+    validatePeriodList();
+});
+function validatePeriodList() {
+    let textValue = $("#periodlist").val();
+    if (textValue.length == "") {
+        $("#periodlistcheck").show();
+        periodlistError = false;
+        return false;
+    } else {
         periodlistError = true;
-          $("#periodlistcheck").hide();
-      }
-  }
+        $("#periodlistcheck").hide();
+    }
+}
 //rent review period
 $("#rentreviewcheck").hide();
 let rentreviewError = true;
@@ -1237,125 +1237,125 @@ function validateRentReview() {
         rentreviewError = false;
         return false;
     } else {
-       rentreviewError = true;
+        rentreviewError = true;
         $("#rentreviewcheck").hide();
     }
 }
 //valid balance bd input eg lease bd on new lease
 $("#balancebdinputcheck").hide();
 let leasebalancebdinputError = true;
-$("#balancebdinput").keyup(function() {
-   validateLeaseBalanceBDInput();
+$("#balancebdinput").keyup(function () {
+    validateLeaseBalanceBDInput();
 });
 
-function validateLeaseBalanceBDInput(){
-    let textValue         = $("#balancebdinput").val();
-    if(textValue!=''){
+function validateLeaseBalanceBDInput() {
+    let textValue = $("#balancebdinput").val();
+    if (textValue != '') {
         const specialChars = /[`!@#$%^&*()_+\=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-        charscheck =  specialChars.test(textValue);
-        if (charscheck == true){
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
             $("#balancebdinputcheck").show();
-           $("#balancebdinputcheck").html("**digits only or (13.5)");
-           leasebalancebdinputError = false;
-           return false;
-       }else{
+            $("#balancebdinputcheck").html("**digits only or (13.5)");
+            leasebalancebdinputError = false;
+            return false;
+        } else {
+            leasebalancebdinputError = true;
+            $("#balancebdinputcheck").hide();
+        }
+    } else {
         leasebalancebdinputError = true;
-           $("#balancebdinputcheck").hide();
-       }
-    }else {
-        leasebalancebdinputError = true;
-       $("#balancebdinputcheck").hide();
-   }
+        $("#balancebdinputcheck").hide();
+    }
 }
 //valid lease item rate cost
 $("#leaseratescostcheck").hide();
 let leaseratecostError = true;
-$("#leaseratescost").keyup(function() {
-   validateLeaseRatesCost();
+$("#leaseratescost").keyup(function () {
+    validateLeaseRatesCost();
 });
 
-function validateLeaseRatesCost(){
-    let textValue         = $("#leaseratescost").val();
-    if(textValue!=''){
+function validateLeaseRatesCost() {
+    let textValue = $("#leaseratescost").val();
+    if (textValue != '') {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-        charscheck =  specialChars.test(textValue);
-        if (charscheck == true){
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
             $("#leaseratescostcheck").show();
-           $("#leaseratescostcheck").html("**digits only or (13.5)");
-           leaseratecostError = false;
-           return false;
-       }else{
-        leaseratecostError = true;
-           $("#leaseratescostcheck").hide();
-       }
+            $("#leaseratescostcheck").html("**digits only or (13.5)");
+            leaseratecostError = false;
+            return false;
+        } else {
+            leaseratecostError = true;
+            $("#leaseratescostcheck").hide();
+        }
     }
 }
 //valid lease item operation cost
 $("#leaseoperationcostcheck").hide();
 let leaseoperationcostError = true;
-$("#leaseoperationalcost").keyup(function() {
+$("#leaseoperationalcost").keyup(function () {
     validateLeaseOperationalCost();
 });
 
-function validateLeaseOperationalCost(){
-    let textValue         = $("#leaseoperationalcost").val();
-    if(textValue!=''){
+function validateLeaseOperationalCost() {
+    let textValue = $("#leaseoperationalcost").val();
+    if (textValue != '') {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-        charscheck =  specialChars.test(textValue);
-        if (charscheck == true){
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
             $("#leaseoperationcostcheck").show();
-           $("#leaseoperationcostcheck").html("**digits only or (13.5)");
-           leaseoperationcostError = false;
-           return false;
-       }else{
-        leaseoperationcostError = true;
-           $("#leaseoperationcostcheck").hide();
-       }
+            $("#leaseoperationcostcheck").html("**digits only or (13.5)");
+            leaseoperationcostError = false;
+            return false;
+        } else {
+            leaseoperationcostError = true;
+            $("#leaseoperationcostcheck").hide();
+        }
     }
 }
 //valid lease item deposit
 $("#leasedepositpaidcheck").hide();
 let leasedepositcheckError = true;
-$("#leasedepositpaid").keyup(function() {
-   validateLeaseDepositPaid();
+$("#leasedepositpaid").keyup(function () {
+    validateLeaseDepositPaid();
 });
 
-function validateLeaseDepositPaid(){
-    let textValue         = $("#leasedepositpaid").val();
-    if(textValue!=''){
+function validateLeaseDepositPaid() {
+    let textValue = $("#leasedepositpaid").val();
+    if (textValue != '') {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-        charscheck =  specialChars.test(textValue);
-        if (charscheck == true){
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
             $("#leasedepositpaidcheck").show();
-           $("#leasedepositpaidcheck").html("**digits only or (13.5)");
-           leasedepositcheckError = false;
-           return false;
-       }else{
-        leasedepositcheckError = true;
-           $("#leasedepositpaidcheck").hide();
-       }
+            $("#leasedepositpaidcheck").html("**digits only or (13.5)");
+            leasedepositcheckError = false;
+            return false;
+        } else {
+            leasedepositcheckError = true;
+            $("#leasedepositpaidcheck").hide();
+        }
     }
 }
 //valid lease item admin
 $("#leaseadminpaidcheck").hide();
 let leaseadmincheckError = true;
-$("#leaseadminpaid").keyup(function() {
-   validateLeaseAdminPaid();
+$("#leaseadminpaid").keyup(function () {
+    validateLeaseAdminPaid();
 });
-function validateLeaseAdminPaid(){
-    let textValue         = $("#leaseadminpaid").val();
-    if(textValue!=''){
+function validateLeaseAdminPaid() {
+    let textValue = $("#leaseadminpaid").val();
+    if (textValue != '') {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-        charscheck =  specialChars.test(textValue);
-        if (charscheck == true){
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
             $("#leaseadminpaidcheck").show();
-           $("#leaseadminpaidcheck").html("**digits only or (13.5)");
-           leaseadmincheckError = false;
-           return false;
-       }else{
-        leaseadmincheckError = true;
-           $("#leaseadminpaidcheck").hide();
-       }
+            $("#leaseadminpaidcheck").html("**digits only or (13.5)");
+            leaseadmincheckError = false;
+            return false;
+        } else {
+            leaseadmincheckError = true;
+            $("#leaseadminpaidcheck").hide();
+        }
     }
 }
 //valid currency
@@ -1378,18 +1378,18 @@ function validateLeaseItemCurrencyCode() {
 //validate date bigger than
 let daterangeError = true;
 function validateDateRange() {
-    var date_from          = new Date($ ('#datefrom').val());
-    var date_to            = new Date($ ('#dateto').val());
-    if (date_from >= date_to){
+    var date_from = new Date($('#datefrom').val());
+    var date_to = new Date($('#dateto').val());
+    if (date_from >= date_to) {
         $("#datetocheck").show();
         $("#datetocheck").html("invalid date range");
         daterangeError = false;
         return false;
-    }else{
+    } else {
         $("#datetocheck").hide();
         daterangeError = true;
         return true;
-    } 
+    }
 }
 //valid receipting leaseid
 $("#receiptleasecheck").hide();
@@ -1398,69 +1398,92 @@ $("#leasenumber").keyup(function () {
     validateReceiptLeaseNumber();
 });
 function validateReceiptLeaseNumber() {
-   let textValue = $("#leasenumber").val();
-   if (textValue.length == "") {
-       $("#receiptleasecheck").show();
-       receiptingleaseError = false;
-       return false;
-   } else {
-    receiptingleaseError = true;
-       $("#receiptleasecheck").hide();
-   }
+    let textValue = $("#leasenumber").val();
+    if (textValue.length == "") {
+        $("#receiptleasecheck").show();
+        receiptingleaseError = false;
+        return false;
+    } else {
+        receiptingleaseError = true;
+        $("#receiptleasecheck").hide();
+    }
 }
- //daterequired
- $("#daterequiredcheck").hide();
- let daterequiredError = true;
- $("#daterequired").keyup(function () {
-     validateDateRequired();
- });
- function validateDateRequired() {
-     let textValue = $("#daterequired").val();
-     if (textValue.length == "") {
-         $("#daterequiredcheck").show();
-         daterequiredError = false;
-         return false;
-     } else {
+//daterequired
+$("#daterequiredcheck").hide();
+let daterequiredError = true;
+$("#daterequired").keyup(function () {
+    validateDateRequired();
+});
+function validateDateRequired() {
+    let textValue = $("#daterequired").val();
+    if (textValue.length == "") {
+        $("#daterequiredcheck").show();
+        daterequiredError = false;
+        return false;
+    } else {
         daterequiredError = true;
-         $("#daterequiredcheck").hide();
-     }
- }
- let securityError = true;
+        $("#daterequiredcheck").hide();
+    }
+}
+let securityError = true;
+let caretakerError = true;
+let otherexpenseError = true;
 
 function calculateRentRollTotalDeduction() {
     let security = $('#securitycharge').val() || 0;
-    let caretaker = parseFloat($('#caretakercharge').val()) || 0;
-    let otherexpense = parseFloat($('#otherexpensecharge').val()) || 0;
+    let caretaker = $('#caretakercharge').val() || 0;
+    let otherexpense = $('#otherexpensecharge').val() || 0;
     let vat = parseFloat($('#vat').val()) || 0;
     let interest = parseFloat($('#interest').val()) || 0;
     let commission = parseFloat($('#commission').val()) || 0;
     let rates = parseFloat($('#rates').val()) || 0;
     let operationcost = parseFloat($('#operationalcost').val()) || 0;
     let receipts = parseFloat($('#receipts').val()) || 0;
-    
+
     const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z\sA-Z]/;
-    
-    let securitycharscheck      =   specialChars.test(security);
-    let caretakercheck          =   specialChars.test(caretaker);
+
+    let securitycharscheck = specialChars.test(security);
+    let caretakercharscheck = specialChars.test(caretaker);
+    let otherexpensecharscheck = specialChars.test(otherexpense);
 
     if (securitycharscheck) {
         $("#securitychargecheck").show();
         $("#securitychargecheck").html("digits only");
-        securityError = false; 
-        return false; 
+        securityError = false;
+        return false;
     } else {
         $("#securitychargecheck").hide();
-        securityError = true; 
+        securityError = true;
+    }
+
+    if (caretakercharscheck) {
+        $("#caretakerchargecheck").show();
+        $("#caretakerchargecheck").html("digits only");
+        caretakerError = false;
+        return false;
+    } else {
+        $("#caretakerchargecheck").hide();
+        caretakerError = true;
+    }
+
+    if (otherexpensecharscheck) {
+        $("#otherexpensechargecheck").show();
+        $("#otherexpensechargecheck").html("digits only");
+        otherexpenseError = false;
+        return false;
+    } else {
+        $("#otherexpensechargecheck").hide();
+        otherexpenseError = true;
     }
 
     // Proceed with calculations only if input is valid
-    let totalvalue = (parseFloat(security) + caretaker + otherexpense + vat + interest
-                      + commission + rates + operationcost);
+    let totalvalue = (parseFloat(security) + parseFloat(caretaker) + parseFloat(otherexpense) + vat + interest
+        + commission + rates + operationcost);
     let toremit = receipts - totalvalue;
     $("#remitcalcdeductionscheck").html(totalvalue);
     $("#remitcalcremittancecheck").html(toremit);
 }
- $("#securitycharge").keyup(function () {
+$("#securitycharge").keyup(function () {
     calculateRentRollTotalDeduction();
 });
 $("#caretakercharge").keyup(function () {
@@ -1470,27 +1493,35 @@ $("#otherexpensecharge").keyup(function () {
     calculateRentRollTotalDeduction();
 });
 /*****************************-------buttons submit ----------------------- */
-
+//button disable submit
+function disableButtonAndSubmit(button, id) {
+    // Disable the button
+    $(button).prop('disabled', true);
+    $(button).css('background-color', '#ccc');
+    $(button).text('submitting...'); // Change button text
+    // Submit the form
+    $("#" + id).submit();
+}
 /*-----------------------------add banking details table ----------------------- */
-$('#add-banking-item').on('click', function() {
-	var currencycode		=	$('#currencycode').val();
-	var accountname		=	$('#accountname').val();
-	var bankname		=	$('#bankname').val();
-	var branch			=	$('#notrequiredgeneraltextcaps').val();
-	var accountnumber	=	$('#numericrequired').val();
-	var count = $('#landlordbanking tr').length - 1;
+$('#add-banking-item').on('click', function () {
+    var currencycode = $('#currencycode').val();
+    var accountname = $('#accountname').val();
+    var bankname = $('#bankname').val();
+    var branch = $('#notrequiredgeneraltextcaps').val();
+    var accountnumber = $('#numericrequired').val();
+    var count = $('#landlordbanking tr').length - 1;
 
-    validateAccountName();validateBankName();validateNotRequiredGeneralTextCaps();
+    validateAccountName(); validateBankName(); validateNotRequiredGeneralTextCaps();
     validateNumericValueRequired(); validateCurrencyCode();
 
-    try{
-        if(accountnameError==true && banknameError==true && notrequiredgeneraltextcapsError==true &&
-            numericrequiredError==true && currencycodeError==true){
-                if(branch ==''){ branch = 'n/a'; }
-        $('#landlordbanking tbody').append('<tr class="child"><td>'+count+'</td><td><input name="currencycode[]" class="form-control" value='+currencycode+' readonly/></td><td><input name="accountname[]" class="form-control" value='+accountname+' readonly /></td><td><input name="bankname[]" class="form-control" value='+bankname+' readonly /></td><td> <input name="branch[]" class="form-control " value='+branch+' readonly/></td><td><input name="accountnumber[]" class="form-control " value='+accountnumber+' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="delete" onclick="deletelandlordbankrow(this)">delete</button></td></tr>');
-		$('#accountname').val('');  $('#bankname').val('');   $('#notrequiredgeneraltextcaps').val(''); $('#numericrequired').val('');      
-            }
-    }catch(err){  alert(err.message); }
+    try {
+        if (accountnameError == true && banknameError == true && notrequiredgeneraltextcapsError == true &&
+            numericrequiredError == true && currencycodeError == true) {
+            if (branch == '') { branch = 'n/a'; }
+            $('#landlordbanking tbody').append('<tr class="child"><td>' + count + '</td><td><input name="currencycode[]" class="form-control" value=' + currencycode + ' readonly/></td><td><input name="accountname[]" class="form-control" value=' + accountname + ' readonly /></td><td><input name="bankname[]" class="form-control" value=' + bankname + ' readonly /></td><td> <input name="branch[]" class="form-control " value=' + branch + ' readonly/></td><td><input name="accountnumber[]" class="form-control " value=' + accountnumber + ' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="delete" onclick="deletelandlordbankrow(this)">delete</button></td></tr>');
+            $('#accountname').val(''); $('#bankname').val(''); $('#notrequiredgeneraltextcaps').val(''); $('#numericrequired').val('');
+        }
+    } catch (err) { alert(err.message); }
 });
 function deletelandlordbankrow(t) {
     var a = $("#landlordbanking > tbody > tr").length;
@@ -1501,33 +1532,33 @@ function deletelandlordbankrow(t) {
     }
 }
 var count = 2,
-limits = 3;
+    limits = 3;
 /*-----------------------------end add banking details table ----------------------- */
 /*-----------------------------add lease addtional information details table ----------------------- */
-$('#add-lease-item').on('click', function() {
-	var currencycode		=	$('#leaseitemcurrencycode').val();
-	var balancebd		    =	$('#balancebdinput').val();
-	var rateutilities		=	$('#leaseratescost').val();
-	var operationalcost		=	$('#leaseoperationalcost').val();
-	var depositpaid	        =	$('#leasedepositpaid').val();
-    var adminpaid	        =	$('#leaseadminpaid').val();
-	var count = $('#leaseitems tr').length - 1;
+$('#add-lease-item').on('click', function () {
+    var currencycode = $('#leaseitemcurrencycode').val();
+    var balancebd = $('#balancebdinput').val();
+    var rateutilities = $('#leaseratescost').val();
+    var operationalcost = $('#leaseoperationalcost').val();
+    var depositpaid = $('#leasedepositpaid').val();
+    var adminpaid = $('#leaseadminpaid').val();
+    var count = $('#leaseitems tr').length - 1;
 
-    validateLeaseItemCurrencyCode();validateLeaseRatesCost();validateLeaseBalanceBDInput();
-    validateLeaseOperationalCost();validateLeaseDepositPaid();validateLeaseAdminPaid();
+    validateLeaseItemCurrencyCode(); validateLeaseRatesCost(); validateLeaseBalanceBDInput();
+    validateLeaseOperationalCost(); validateLeaseDepositPaid(); validateLeaseAdminPaid();
 
-    try{
-        if(leaseitemcurrencycodeError==true && leasebalancebdinputError==true && leaseratecostError==true 
-        && leaseoperationcostError==true && leasedepositcheckError==true && leaseadmincheckError==true){
-            if(balancebd ==''){balancebd = 0;}
-            if(rateutilities ==''){rateutilities = 0;}
-            if(operationalcost ==''){operationalcost = 0;}
-            if(depositpaid ==''){depositpaid = 0;}
-            if(adminpaid ==''){adminpaid = 0;}
-        $('#leaseitems tbody').append('<tr class="child"><td>'+count+'</td><td><input name="leaseitemcurrencycode[]" class="form-control" value='+currencycode+' readonly/></td><td><input name="leasebalancebd[]" class="form-control" value='+balancebd+' readonly /></td><td><input name="leaseratescost[]" class="form-control" value='+rateutilities+' readonly /></td><td> <input name="leaseoperationalcost[]" class="form-control " value='+operationalcost+' readonly/></td><td><input name="leasedepositpaid[]" class="form-control " value='+depositpaid+' readonly /></td><td><input name="leaseadminpaid[]" class="form-control " value='+adminpaid+' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="delete" onclick="deleteleaseitemrow(this)">delete</button></td></tr>');
-		$('#balancebdinput').val('');  $('#leaseratescost').val('');   $('#leaseoperationalcost').val(''); $('#leasedepositpaid').val(''); $('#leaseadminpaid').val('');      
-            }
-    }catch(err){  alert(err.message); }
+    try {
+        if (leaseitemcurrencycodeError == true && leasebalancebdinputError == true && leaseratecostError == true
+            && leaseoperationcostError == true && leasedepositcheckError == true && leaseadmincheckError == true) {
+            if (balancebd == '') { balancebd = 0; }
+            if (rateutilities == '') { rateutilities = 0; }
+            if (operationalcost == '') { operationalcost = 0; }
+            if (depositpaid == '') { depositpaid = 0; }
+            if (adminpaid == '') { adminpaid = 0; }
+            $('#leaseitems tbody').append('<tr class="child"><td>' + count + '</td><td><input name="leaseitemcurrencycode[]" class="form-control" value=' + currencycode + ' readonly/></td><td><input name="leasebalancebd[]" class="form-control" value=' + balancebd + ' readonly /></td><td><input name="leaseratescost[]" class="form-control" value=' + rateutilities + ' readonly /></td><td> <input name="leaseoperationalcost[]" class="form-control " value=' + operationalcost + ' readonly/></td><td><input name="leasedepositpaid[]" class="form-control " value=' + depositpaid + ' readonly /></td><td><input name="leaseadminpaid[]" class="form-control " value=' + adminpaid + ' readonly /></td><td><button style="text-align: right;" class="btn btn-danger" type="button" value="delete" onclick="deleteleaseitemrow(this)">delete</button></td></tr>');
+            $('#balancebdinput').val(''); $('#leaseratescost').val(''); $('#leaseoperationalcost').val(''); $('#leasedepositpaid').val(''); $('#leaseadminpaid').val('');
+        }
+    } catch (err) { alert(err.message); }
 });
 function deleteleaseitemrow(t) {
     var a = $("#leaseitems > tbody > tr").length;
@@ -1538,81 +1569,84 @@ function deleteleaseitemrow(t) {
     }
 }
 var count = 2,
-limits = 3;
+    limits = 3;
 /*-----------------------------end add addtional information details  table ----------------------- */
 $("#btn-add-landlord").click(function () {
-    validateBillingAddress();validateCell();validateContactCell();validateContactEmail();
-    validateContactLastName(); validateContactFirstName();validateEmail();validateClientType();
+    validateBillingAddress(); validateCell(); validateContactCell(); validateContactEmail();
+    validateContactLastName(); validateContactFirstName(); validateEmail(); validateClientType();
     var clienttypevalue = $("#clienttype").val();
-    try{
-        if(clienttypevalue == 1){
-            validateFirstName();validateLastName(); validateNationalID();
-            if(billingaddressError==true && cellError==true && emailError==true &&
-                contactcellError==true && contactfirstnameError==true && contactlastnameError==true &&
-                contactemailError==true && clienttypeError==true && firstnameError==true && 
-                lastnameError==true && nationalidError==true){return true}else{return false}
-        }else{
-            validateCompanyName();validateCompanyNumber();validateNumericValueNotRequired();
-            if(billingaddressError==true && cellError==true && emailError==true &&
-                contactcellError==true && contactfirstnameError==true && contactlastnameError==true &&
-                contactemailError==true && clienttypeError==true && companynameError==true && 
-                companynumberError && numericnotrequiredError==true){
-                return true;}else{ return false;}
+    try {
+        if (clienttypevalue == 1) {
+            validateFirstName(); validateLastName(); validateNationalID();
+            if (billingaddressError == true && cellError == true && emailError == true &&
+                contactcellError == true && contactfirstnameError == true && contactlastnameError == true &&
+                contactemailError == true && clienttypeError == true && firstnameError == true &&
+                lastnameError == true && nationalidError == true) { return true } else { return false }
+        } else {
+            validateCompanyName(); validateCompanyNumber(); validateNumericValueNotRequired();
+            if (billingaddressError == true && cellError == true && emailError == true &&
+                contactcellError == true && contactfirstnameError == true && contactlastnameError == true &&
+                contactemailError == true && clienttypeError == true && companynameError == true &&
+                companynumberError && numericnotrequiredError == true) {
+                return true;
+            } else { return false; }
         }
-    }catch(err){return false;}
+    } catch (err) { return false; }
 });
 //button submit new property 
 $("#btn-add-property").click(function () {
     try {
-        validateLandlordName(); validateProvince();validateCity();validatePropertyType();
-        validateRequiredGeneralTextCaps();validateBillingAddress();validateStandNumber();
-        validateCommentsHighlights();validateCurrencyCode();validateCommissionType();
-        validateCommissionPercent();validateRequiredSignedPDFDocument();validateNotRequiredPDFDocument();
-        
-        if(landlordnameError==true && provinceError==true && cityError==true && propertytypeError==true
-            && requiredgeneraltextcapsError==true && billingaddressError==true && standnumberError==true
-            && commentshighlightsError==true && currencycodeError==true && commissiontypeError==true &&
-            commissionpercentError==true && requiredsignedpdfdocumentError==true && notrequiredpdfdocumentError==true){
-                var propertytypevalue =  $("#propertytype").val();
-                if(propertytypevalue==1){//residential property 
-                validateAddRooms();validateAddBedRooms();validateNumericValueRequired();
+        validateLandlordName(); validateProvince(); validateCity(); validatePropertyType();
+        validateRequiredGeneralTextCaps(); validateBillingAddress(); validateStandNumber();
+        validateCommentsHighlights(); validateCurrencyCode(); validateCommissionType();
+        validateCommissionPercent(); validateRequiredSignedPDFDocument(); validateNotRequiredPDFDocument();
+
+        if (landlordnameError == true && provinceError == true && cityError == true && propertytypeError == true
+            && requiredgeneraltextcapsError == true && billingaddressError == true && standnumberError == true
+            && commentshighlightsError == true && currencycodeError == true && commissiontypeError == true &&
+            commissionpercentError == true && requiredsignedpdfdocumentError == true && notrequiredpdfdocumentError == true) {
+            var propertytypevalue = $("#propertytype").val();
+            if (propertytypevalue == 1) {//residential property 
+                validateAddRooms(); validateAddBedRooms(); validateNumericValueRequired();
                 validateNumericValueNotRequired();
-                if(roomsError==true && bedroomsError==true && numericrequiredError==true && 
-                    numericnotrequiredError==true){return true;}else{return false;}
-                }else{// not residential ie commercial
-                    validateAddTotalArea();validateAddLettableArea();validateAddExpectedRate();
-                    validateLettable_TotalArea();
-                    if(totalareaError==true && lettableareaError==true && expectedrateError==true &&
-                        lettabletotalareaError==true){
-                        return true;}else{return false;}
-                }
-        }else{return false;}
+                if (roomsError == true && bedroomsError == true && numericrequiredError == true &&
+                    numericnotrequiredError == true) { return true; } else { return false; }
+            } else {// not residential ie commercial
+                validateAddTotalArea(); validateAddLettableArea(); validateAddExpectedRate();
+                validateLettable_TotalArea();
+                if (totalareaError == true && lettableareaError == true && expectedrateError == true &&
+                    lettabletotalareaError == true) {
+                    return true;
+                } else { return false; }
+            }
+        } else { return false; }
     } catch (err) {
         alert(err.message);
         return false;
-    }  
+    }
 });
 //button submit new tenant
 $("#btn-add-tenant").click(function () {
-    validateClientType();validateBillingAddress();validateCell();validateEmail();
+    validateClientType(); validateBillingAddress(); validateCell(); validateEmail();
     var clienttypevalue = $("#clienttype").val();
     try {
-        if(clienttypevalue == 1){
-            validateFirstName();validateLastName(); validateNationalID();validateKeenEmail();
-            validateKeenLastName();validateKeenFirstName();validateKeenCell();
-            if(billingaddressError==true && cellError==true && emailError==true &&
-                clienttypeError==true && firstnameError==true && keencellError==true && keenemailError==true
-               && lastnameError==true && nationalidError==true && keenfirstnameError==true &&
-            keenlastnameError==true){return true}else{return false}
-        }else{
-            validateCompanyName();validateCompanyNumber();validateNumericValueNotRequired();
-            validateContactCell();validateContactEmail();validateContactLastName();
-             validateContactFirstName();
-            if(billingaddressError==true && cellError==true && emailError==true &&
-                contactcellError==true && contactfirstnameError==true && contactlastnameError==true &&
-                contactemailError==true && clienttypeError==true && companynameError==true && 
-                companynumberError && numericnotrequiredError==true){
-                return true;}else{ return false;}
+        if (clienttypevalue == 1) {
+            validateFirstName(); validateLastName(); validateNationalID(); validateKeenEmail();
+            validateKeenLastName(); validateKeenFirstName(); validateKeenCell();
+            if (billingaddressError == true && cellError == true && emailError == true &&
+                clienttypeError == true && firstnameError == true && keencellError == true && keenemailError == true
+                && lastnameError == true && nationalidError == true && keenfirstnameError == true &&
+                keenlastnameError == true) { return true } else { return false }
+        } else {
+            validateCompanyName(); validateCompanyNumber(); validateNumericValueNotRequired();
+            validateContactCell(); validateContactEmail(); validateContactLastName();
+            validateContactFirstName();
+            if (billingaddressError == true && cellError == true && emailError == true &&
+                contactcellError == true && contactfirstnameError == true && contactlastnameError == true &&
+                contactemailError == true && clienttypeError == true && companynameError == true &&
+                companynumberError && numericnotrequiredError == true) {
+                return true;
+            } else { return false; }
         }
     } catch (err) {
         alert(err.message);
@@ -1622,23 +1656,25 @@ $("#btn-add-tenant").click(function () {
 // --------------btn add new lease
 $("#btn-add-lease").click(function () {
     try {
-        validateTenantName();validateLandlordName();validateBillingAddress();validateDateFrom();
-        validateDateTo();validateRentReview();validatePeriodList();validateCurrencyCode();validateDateRange();
+        validateTenantName(); validateLandlordName(); validateBillingAddress(); validateDateFrom();
+        validateDateTo(); validateRentReview(); validatePeriodList(); validateCurrencyCode(); validateDateRange();
         validateRequiredSignedPDFDocument();
-        var propertytype    =  $("#propertytype").val();
-        if(tenantnameError==true && landlordnameError==true && billingaddressError==true && 
-            datefromError==true && datetoError==true && rentreviewError==true && periodlistError==true &&
-            currencycodeError==true && daterangeError==true && requiredsignedpdfdocumentError==true){
-            if(propertytype == 1) {//residential 
+        var propertytype = $("#propertytype").val();
+        if (tenantnameError == true && landlordnameError == true && billingaddressError == true &&
+            datefromError == true && datetoError == true && rentreviewError == true && periodlistError == true &&
+            currencycodeError == true && daterangeError == true && requiredsignedpdfdocumentError == true) {
+            if (propertytype == 1) {//residential 
                 validateAddExpectedRental();
-                if(expectedrateError == true && expectedrentalError==true){
-                    return true;}else{return false;}
-            }else{ validateAddLettableArea(); validateAddExpectedRate();
-                if(lettableareaError==true && expectedrateError==true){return true;}else{return false;}
-             }
-        }else{return false;}
-            
-            
+                if (expectedrateError == true && expectedrentalError == true) {
+                    return true;
+                } else { return false; }
+            } else {
+                validateAddLettableArea(); validateAddExpectedRate();
+                if (lettableareaError == true && expectedrateError == true) { return true; } else { return false; }
+            }
+        } else { return false; }
+
+
     } catch (err) {
         alert(err.message);
         return false;
@@ -1646,103 +1682,107 @@ $("#btn-add-lease").click(function () {
 });
 // -----------btn edit landlord 
 $("#btn-edit-landlord").click(function () {
-    validateBillingAddress();validateCell();validateClientType();validateEmail();
+    validateBillingAddress(); validateCell(); validateClientType(); validateEmail();
     var clienttypevalue = $("#clienttype").val();
-    try{
-        if(clienttypevalue == 1){
-            validateFirstName();validateLastName(); validateNationalID();
-            if(billingaddressError==true && cellError==true && emailError==true 
-                 && clienttypeError==true && firstnameError==true && 
-                lastnameError==true && nationalidError==true){return true}else{return false}
-        }else{
-            validateCompanyName();validateCompanyNumber();validateNumericValueNotRequired();
-            if(billingaddressError==true && cellError==true && emailError==true
-                 && clienttypeError==true && companynameError==true && 
-                companynumberError && numericnotrequiredError==true){
-                return true;}else{ return false;}
+    try {
+        if (clienttypevalue == 1) {
+            validateFirstName(); validateLastName(); validateNationalID();
+            if (billingaddressError == true && cellError == true && emailError == true
+                && clienttypeError == true && firstnameError == true &&
+                lastnameError == true && nationalidError == true) { return true } else { return false }
+        } else {
+            validateCompanyName(); validateCompanyNumber(); validateNumericValueNotRequired();
+            if (billingaddressError == true && cellError == true && emailError == true
+                && clienttypeError == true && companynameError == true &&
+                companynumberError && numericnotrequiredError == true) {
+                return true;
+            } else { return false; }
         }
-    }catch(err){return false;}
+    } catch (err) { return false; }
 });
 //--------- btn add landlord new contact 
 $("#btn-add-landlord-contact").click(function () {
-    validateContactCell();validateContactEmail();
+    validateContactCell(); validateContactEmail();
     validateContactLastName(); validateContactFirstName();
-    try{
-            if(contactcellError==true && contactfirstnameError==true && contactlastnameError==true &&
-                contactemailError==true ){return true}else{return false}
-    }catch(err){return false;}
+    try {
+        if (contactcellError == true && contactfirstnameError == true && contactlastnameError == true &&
+            contactemailError == true) { return true } else { return false }
+    } catch (err) { return false; }
 });
 //--------- btn edit landlord bank
 $("#btn-edit-landlord-bank").click(function () {
-    validateAccountName();validateBankName();validateNotRequiredGeneralTextCaps();
+    validateAccountName(); validateBankName(); validateNotRequiredGeneralTextCaps();
     validateNumericValueRequired(); validateCurrencyCode();
-    try{
-        if(accountnameError==true && banknameError==true && notrequiredgeneraltextcapsError==true &&
-            numericrequiredError==true && currencycodeError==true){
-                return true;}else{ return false;}
-    }catch(err){ return false;}
+    try {
+        if (accountnameError == true && banknameError == true && notrequiredgeneraltextcapsError == true &&
+            numericrequiredError == true && currencycodeError == true) {
+            return true;
+        } else { return false; }
+    } catch (err) { return false; }
 });
 //button submit new property 
 $("#btn-edit-property").click(function () {
     try {
-         validateProvince();validateCity();validatePropertyType();
-        validateRequiredGeneralTextCaps();validateBillingAddress();validateStandNumber();
-        validateCommentsHighlights();validateCurrencyCode();
+        validateProvince(); validateCity(); validatePropertyType();
+        validateRequiredGeneralTextCaps(); validateBillingAddress(); validateStandNumber();
+        validateCommentsHighlights(); validateCurrencyCode();
         validateCommissionPercent();
-        
-        if(provinceError==true && cityError==true && propertytypeError==true
-            && requiredgeneraltextcapsError==true && billingaddressError==true && standnumberError==true
-            && commentshighlightsError==true && currencycodeError==true && 
-            commissionpercentError==true ){
-                var propertytypevalue =  $("#propertytype").val();
-                if(propertytypevalue=='Residential Building'){//residential property 
-                validateAddRooms();validateAddBedRooms();validateNumericValueRequired();
+
+        if (provinceError == true && cityError == true && propertytypeError == true
+            && requiredgeneraltextcapsError == true && billingaddressError == true && standnumberError == true
+            && commentshighlightsError == true && currencycodeError == true &&
+            commissionpercentError == true) {
+            var propertytypevalue = $("#propertytype").val();
+            if (propertytypevalue == 'Residential Building') {//residential property 
+                validateAddRooms(); validateAddBedRooms(); validateNumericValueRequired();
                 validateNumericValueNotRequired();
-                if(roomsError==true && bedroomsError==true && numericrequiredError==true && 
-                    numericnotrequiredError==true){return true;}else{return false;}
-                }else{// not residential ie commercial
-                    validateAddTotalArea();validateAddLettableArea();validateAddExpectedRate();
-                    validateLettable_TotalArea();
-                    if(totalareaError==true && lettableareaError==true && expectedrateError==true &&
-                        lettabletotalareaError==true){
-                        return true;}else{return false;}
-                }
-        }else{return false;}
+                if (roomsError == true && bedroomsError == true && numericrequiredError == true &&
+                    numericnotrequiredError == true) { return true; } else { return false; }
+            } else {// not residential ie commercial
+                validateAddTotalArea(); validateAddLettableArea(); validateAddExpectedRate();
+                validateLettable_TotalArea();
+                if (totalareaError == true && lettableareaError == true && expectedrateError == true &&
+                    lettabletotalareaError == true) {
+                    return true;
+                } else { return false; }
+            }
+        } else { return false; }
     } catch (err) {
         alert(err.message);
         return false;
-    }  
+    }
 });
 //btn add lease rates 
 $("#btn-add-lease-rate").click(function () {
-    validateCurrencyCode();validateLeaseOperationalCost();
+    validateCurrencyCode(); validateLeaseOperationalCost();
     validateLeaseRatesCost();
-    try{
-            if(currencycodeError==true && leaseoperationcostError==true && leaseratecostError==true  )
-                {return true}else{return false}
-    }catch(err){return false;}
+    try {
+        if (currencycodeError == true && leaseoperationcostError == true && leaseratecostError == true) { return true } else { return false }
+    } catch (err) { return false; }
 });
 // --------------btn edit lease
 $("#btn-edit-lease").click(function () {
     try {
-        validateBillingAddress();validateDateFrom();
-        validateDateTo();validateRentReview();validatePeriodList();
-        validateCurrencyCode();validateDateRange();
-       
-        var propertytype    =  $("#propertytype").val();
-        if(billingaddressError==true && 
-            datefromError==true && datetoError==true && rentreviewError==true && periodlistError==true &&
-            currencycodeError==true && daterangeError==true){
-            if(propertytype == 1) {//residential 
+        validateBillingAddress(); validateDateFrom();
+        validateDateTo(); validateRentReview(); validatePeriodList();
+        validateCurrencyCode(); validateDateRange();
+
+        var propertytype = $("#propertytype").val();
+        if (billingaddressError == true &&
+            datefromError == true && datetoError == true && rentreviewError == true && periodlistError == true &&
+            currencycodeError == true && daterangeError == true) {
+            if (propertytype == 1) {//residential 
                 validateAddExpectedRental();
-                if(expectedrateError == true && expectedrentalError==true){
-                    return true;}else{return false;}
-            }else{ validateAddLettableArea(); validateAddExpectedRate();
-                if(lettableareaError==true && expectedrateError==true){return true;}else{return false;}
-             }
-        }else{return false;}
-            
-            
+                if (expectedrateError == true && expectedrentalError == true) {
+                    return true;
+                } else { return false; }
+            } else {
+                validateAddLettableArea(); validateAddExpectedRate();
+                if (lettableareaError == true && expectedrateError == true) { return true; } else { return false; }
+            }
+        } else { return false; }
+
+
     } catch (err) {
         alert(err.message);
         return false;
@@ -1750,21 +1790,30 @@ $("#btn-edit-lease").click(function () {
 });
 //btn add lease prepay/arrears 
 $("#btn-add-lease-prepay").click(function () {
-    validateCurrencyCode();validateLeaseRatesCost();
-    try{
-            if(currencycodeError==true && leaseratecostError==true  )
-                {return true}else{return false}
-    }catch(err){return false;}
+    validateCurrencyCode(); validateLeaseRatesCost();
+    try {
+        if (currencycodeError == true && leaseratecostError == true) { return true } else { return false }
+    } catch (err) { return false; }
 });
 // button process receipt 
 $("#add-lease-receipt").click(function () {
-    validateCurrencyCode();validateReceiptLeaseNumber();
+    validateCurrencyCode(); validateReceiptLeaseNumber();
     validateNumericValueRequired(); validateDateRequired();
-    if(currencycodeError==true && receiptingleaseError==true && numericrequiredError == true
-         && daterequiredError==true ){
+    if (currencycodeError == true && receiptingleaseError == true && numericrequiredError == true
+        && daterequiredError == true) {
         //valid
         return true;
-    }else{
+    } else {
+        //failed
+        return false;
+    }
+});
+//button add category
+$("#btn-pre-remit").click(function () {
+    calculateRentRollTotalDeduction();
+    if (caretakerError == true && otherexpenseError == true && securityError == true) {
+        disableButtonAndSubmit(this, "defaultform");
+    } else {
         //failed
         return false;
     }
