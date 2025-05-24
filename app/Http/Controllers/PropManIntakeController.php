@@ -1012,9 +1012,10 @@ class PropManIntakeController extends Controller
                 $totaldeduction = $request->interest + $request->commission +
                     $request->rates + $request->operationalcost + $request->vat + $request->securitycharge +
                     $request->caretakercharge + $request->otherexpensecharge;
+
                 $update = ['deductsecurity' => $request->securitycharge, 'deductcaretaker' =>
                 $request->caretakercharge, 'deductother' => $request->otherexpensecharge, 'deductcommission' =>
-                $request->commission, 'toremit' => $totaldeduction, 'operatorid' => session('alluser'), 'completedon' => now(), 'status' => 'Y'];
+                $request->commission, 'operatorid' => session('alluser'), 'completedon' => now(), 'status' => 'Y'];
                 DB::table('propmanremitpre')->where('id', $remitid)->update($update);
                 return redirect()->route('propin.preremit')
                     ->with('success', 'record created');

@@ -1808,7 +1808,7 @@ $("#add-lease-receipt").click(function () {
         return false;
     }
 });
-//button add category
+//button add remit
 $("#btn-pre-remit").click(function () {
     calculateRentRollTotalDeduction();
     if (caretakerError == true && otherexpenseError == true && securityError == true) {

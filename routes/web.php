@@ -32,12 +32,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 /*
-//Route::resource('property', PropertyController::class);
-Route::controller(PropertyController::class)->group(function () {
-    Route::get('/property/{id}/remit/{currency}/{period}', 'prepareremittance')->name('property.remitprepare');
-    Route::any('/remit/{id}/property/{currency}', 'addpreremit')->name('property.preremit');
-});                  
-
+              
 Route::controller(TransactionController::class)->group(function (){
     Route::get('/remit/property', 'viewremit')->name('transact.remit');
     Route::get('/remit/{id}/property', 'addscheduleremit')->name('transact.scheduleremit');
@@ -213,6 +208,9 @@ Route::middleware('loginauth')->controller(PropManApprovalController::class)->gr
     Route::get('/prop/pre-invoice/list', 'listallpreinvoice')->name('propapp.listpre');
     Route::get('/prop/{id}/pre-invoice/view', 'viewinvoicebilled')->name('propapp.viewpre');
     Route::post('/prop/{id}/preinvoice/approved', 'approvalpreinvoice')->name('propapp.preapp');
+    Route::get('/prop/rent-roll', 'createrentroll')->name('propapp.preroll');
+    Route::get('/prop/rent-roll/{id}/remit', 'addscheduleremit')->name('propapp.addremit');
+    Route::any('/prop/schedule/{id}/rent-roll/remit', 'processremittance')->name('propapp.processremit');
 });
 /*-------------------end property management approval------------------------ */
 /*-------------------property management declines------------------------ */
