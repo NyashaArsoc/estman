@@ -11,6 +11,62 @@ use Carbon\Carbon;
 
 class ValIntakeController extends Controller
 {
+    /*------------ new valuation client ---------*/
+    function addnewclientdetails()
+    {
+        try {
+            $arr['type']   = DB::table('setupclienttype')->select('*')->get();
+            return view('valuation.intake.add-client-details')->with($arr);
+        } catch (\Throwable $th) {
+            return  redirect()->route('dash.val');
+        }
+    }
+    function createnewclientdetails(Request $request)
+    {
+        try {
+            if (!is_null($request->email)) {
+                if (DB::table('valclientdetail')->select('id')->where('email', $request->email)->exists()) {
+                    return  redirect()->route('valin.newclient')
+                        ->with('error', 'client exists');
+                }
+            } elseif (!is_null($request->contactemail)) {
+                if (DB::table('valclientcontactperson')->select('id')->where('email', $request->contactemail)->exists()) {
+                    return  redirect()->route('valin.newclient')
+                        ->with('error', 'contact exists');
+                }
+            }
+            $clientid = DB::table('valclientdetail')->insertGetId(
+                [
+                    'clienttypeid' => $request->clienttype,
+                    'firstname' => $request->firstname,
+                    'cell' => $request->cell,
+                    'email' => $request->email,
+                    'tel' => $request->tel,
+                    'operatorid' => session('alluser'),
+                    'lastname' => $request->lastname,
+                    'contactaddress' => $request->contactaddress,
+                    'companyname' => $request->companyname
+                ]
+            );
+            if ($request->clienttype <> 1) {
+                DB::table('valclientcontactperson')->insert([
+                    'email' => $request->contactemail,
+                    'cell' => $request->contactcell,
+                    'lastname' => $request->contactlastname,
+                    'firstname' => $request->contactfirstname,
+                    'operatorid' => session('alluser'),
+                    'clientid' => $clientid
+                ]);
+            }
+
+            return  redirect()->route('valin.newclient')
+                ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return  redirect()->route('valin.newclient')
+                ->with('error', 'failed to load' . $th);
+        }
+    }
+    /*
 public function __construct(){
     $this->middleware(['loginauth']);
 }
@@ -63,6 +119,7 @@ public function addnewclientdetails(Request $request){
     }
 }
 /*get client by clienttype id*/
+    /*
 public function getsingleclient($id){
     $arr['client']   =DB::table('valclientdetail')->where('clienttypeid',$id)
           ->select('*')->get();
@@ -293,5 +350,5 @@ public function addnewinstructionnormal(Request $request){
         return  redirect()->route('valin.addinstnom') 
                 ->with('error', 'failed to load'.$th);
     }
-}
+}*/
 }

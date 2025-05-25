@@ -1,11 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\LandlordController;
-use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\LoginAuthController;
-use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropManApprovalController;
 use App\Http\Controllers\PropManDeclineController;
 use App\Http\Controllers\PropManIntakeController;
@@ -13,8 +9,6 @@ use App\Http\Controllers\PropManManageController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SetupIntakeController;
 use App\Http\Controllers\SetupManageController;
-use App\Http\Controllers\TenantController;
-use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ValApprovalController;
 use App\Http\Controllers\ValDeclinedController;
 use App\Http\Controllers\ValIntakeController;
@@ -31,12 +25,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-/*
-              
+/*            
 Route::controller(TransactionController::class)->group(function (){
-    Route::get('/remit/property', 'viewremit')->name('transact.remit');
-    Route::get('/remit/{id}/property', 'addscheduleremit')->name('transact.scheduleremit');
-    Route::any('/process/{id}/remit/{pid}/prop/{currency}/details/{lid}', 'processremit')->name('transact.payremit');
     Route::get('/creditor/payment', 'creditorview')->name('transact.viewpay');
     Route::get('/single-landlord/remit/{id}', 'getlandlorddetails');
     Route::get('/single-creditor/bal/{column}/{id}', 'getcreditorbal');
@@ -58,7 +48,8 @@ Route::controller(LoginAuthController::class)->group(function () {
 Route::middleware('loginauth')->controller(DashController::class)->group(function () {
     Route::get('/dashboard/property', 'propertyview')->name('dash.property');
     Route::get('/welcome', 'maindashboard')->name('dash.main');
-    Route::get('/valuation/dashboard', 'valuationdashboard')->name('dash.val');
+    Route::get('/dashboard/valuation', 'valuationview')->name('dash.val');
+    // Route::get('/valuation/dashboard', 'valuationdashboard')->name('dash.val');
     Route::get('/set-up/dashboard', 'setupdashboard')->name('dash.setup');
 });
 /*
@@ -78,37 +69,40 @@ Route::controller(ReportController::class)->group(function(){
     Route::get('/report/lease/statament', 'viewleasestatement')->name('report.leastatement');
     Route::get('/print/lease/statement', 'printleasestatement')->name('report.printstatement');
 }); */
+/*
 Route::controller(ValIntakeController::class)->group(function () {
-    Route::get('/val/add/client', 'addclientdetails')->name('valin.addclient'); /*done*/
-    Route::any('/val/add/new/client', 'addnewclientdetails')->name('valin.addnewclient');/*done*/
-    Route::get('/val/{id}/client/type', 'getsingleclient');/*done*/
-    Route::get('/val/{id}/client/contact', 'getsingleclientcontact');/*done*/
-    Route::any('/val/add/property', 'addpropertydetails')->name('valin.addprop');/*done*/
-    Route::any('/val/add/new/property', 'addnewpropertydetails')->name('valin.addnewprop');/*done*/
-    Route::get('/val/add/new/portfolio', 'createportfolio')->name('valin.crtportfoli');/*done*/
-    Route::post('/val/create/new/portfolio', 'createnewportfolio')->name('valin.crtmewport');/*done*/
-    Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');/*done*/
-    Route::any('/val/submit/page/port-instr', 'addinstructionportsubmit')->name('valin.subport');/*done*/
-    Route::get('/val/{id}/port/{vid}/inst', 'addinstructionportsteptwo')->name('valin.portlstpropallo');/*done*/
-    Route::any('/val/add/new/port-instr', 'addnewinstructionport')->name('valin.addnewport');/*done*/
-    Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');/*done*/
-    Route::any('/val/submit/page/normal-instr', 'addinstructionnormalsubmit')->name('valin.subnom');/*done*/
+    
+    
+    Route::get('/val/{id}/client/type', 'getsingleclient');
+    Route::get('/val/{id}/client/contact', 'getsingleclientcontact');
+    Route::any('/val/add/property', 'addpropertydetails')->name('valin.addprop');
+    Route::any('/val/add/new/property', 'addnewpropertydetails')->name('valin.addnewprop');
+    Route::get('/val/add/new/portfolio', 'createportfolio')->name('valin.crtportfoli');
+    Route::post('/val/create/new/portfolio', 'createnewportfolio')->name('valin.crtmewport');
+    Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');
+    Route::any('/val/submit/page/port-instr', 'addinstructionportsubmit')->name('valin.subport');
+    Route::get('/val/{id}/port/{vid}/inst', 'addinstructionportsteptwo')->name('valin.portlstpropallo');
+    Route::any('/val/add/new/port-instr', 'addnewinstructionport')->name('valin.addnewport');
+    Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');
+    Route::any('/val/submit/page/normal-instr', 'addinstructionnormalsubmit')->name('valin.subnom');
     Route::get('/val/{id}/nom/{vid}/inst/{cid}/pur/{pid}/typ/{tid}/pay/{payid}/{accessdate}', 'addinstructionnormalsteptwo')->name('valin.lstpropallo');
-    Route::any('/val/add/new/normal-instr', 'addnewinstructionnormal')->name('valin.addnewnom');/*done*/
-});
+    Route::any('/val/add/new/normal-instr', 'addnewinstructionnormal')->name('valin.addnewnom');
+});*/
+/*
 Route::controller(ValManageController::class)->group(function () {
-    Route::get('/val/list/client', 'listallclient')->name('valman.listclient');/*done*/
+    Route::get('/val/list/client', 'listallclient')->name('valman.listclient');
     Route::get('/val/{id}/client/edit', 'editsingleclient')->name('valman.editclient');
-    Route::get('/val/{id}/client/view', 'viewsingleclient')->name('valman.viewclient');/*done*/
-});
+    Route::get('/val/{id}/client/view', 'viewsingleclient')->name('valman.viewclient');
+}); */
+/*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::get('/val/list/acknowledgement', 'listallinstructionacknowledgement')->name('valapp.listackn');/*done*/
+    Route::get('/val/list/acknowledgement', 'listallinstructionacknowledgement')->name('valapp.listackn');
     Route::get('/val/{id}/view-single/{instr_id}/acknowledgement', 'viewsingleacknowledge')->name('valapp.viewsinglackn');
-    Route::any('/val/{id}/acknow/{instr_id}/decline', 'declineacknowledgement')->name('valapp.declacknow');/*done*/
-    Route::any('/val/{id}/acknow/{instr_id}/accept/{to_id}', 'acceptacknowledgement')->name('valapp.accptacknow');/*done*/
+    Route::any('/val/{id}/acknow/{instr_id}/decline', 'declineacknowledgement')->name('valapp.declacknow');
+    Route::any('/val/{id}/acknow/{instr_id}/accept/{to_id}', 'acceptacknowledgement')->name('valapp.accptacknow');
     Route::get('/val/list/compilation', 'listallinstructioncompile')->name('valapp.listcomp');
     Route::get('/val/{id}/view-single/{instr_id}/compile', 'viewsinglecompile')->name('valapp.viewsinglacomp');
-    Route::any('/val/{id}/compile/{instr_id}/{propid}', 'submitcompilation')->name('valapp.sbtcomp');/*done*/
+    Route::any('/val/{id}/compile/{instr_id}/{propid}', 'submitcompilation')->name('valapp.sbtcomp');
     Route::get('/val/list/quality-check', 'listallinstructionqualitycheck')->name('valapp.listquality');
     Route::get('/val/{id}/view-single/{instr_id}/quality/check', 'viewsinglequalitycheck')->name('valapp.viewsinglqlty');
     Route::any('/val/{id}/quality/{instr_id}', 'submitqualitycheck')->name('valapp.sbtqty');
@@ -120,7 +114,7 @@ Route::controller(ValApprovalController::class)->group(function () {
     Route::any('/val/{id}/report/{instr_id}/print', 'submitprinting')->name('valapp.sbtprint');
     Route::get('/val/list/invoicing', 'listallinstructioninvoice')->name('valapp.listinvoice');
     Route::get('/val/{id}/view-single/{instr_id}/invoice', 'viewsingleinvoicing')->name('valapp.viewsinglinvo');
-    Route::get('/val-invoice/{id}/view-port', 'viewsingleinvoicingportfolio')->name('valapp.viewsinglinvoport');/*portfolio*/
+    Route::get('/val-invoice/{id}/view-port', 'viewsingleinvoicingportfolio')->name('valapp.viewsinglinvoport');
     Route::any('/val/{id}/report/invoicing', 'submitinvoicing')->name('valapp.sbtinvoic');
     Route::any('/val/{id}/portfolio/invoicing', 'submitinvoicingportfolio')->name('valapp.sbtinvoicport');
     Route::get('/val/list/dispatch', 'listallinstructiondispatch')->name('valapp.listdispatch');
@@ -138,16 +132,18 @@ Route::controller(ValApprovalController::class)->group(function () {
     Route::any('/val/portfolio/review', 'submitportfolioreviewedreports')->name('valapp.sbtreviewport');
     Route::any('/val/portfolio/{id}/review', 'closeportfolioreview')->name('valapp.portclosereview');
     /*-----------download reports-------------------- */
-    Route::any('/val-report/{instr_id}/download/doc', 'downloadreportword')->name('valapp.dwndoc');
-    Route::any('/val-report/{instr_id}/excel/download', 'downloadreportexcel')->name('valapp.dwnexc');
-    /*-----------end download reports-------------------- */
-});
+// Route::any('/val-report/{instr_id}/download/doc', 'downloadreportword')->name('valapp.dwndoc');
+// Route::any('/val-report/{instr_id}/excel/download', 'downloadreportexcel')->name('valapp.dwnexc');
+/*-----------end download reports-------------------- */
+/*}); */
+/*
 Route::controller(ValDeclinedController::class)->group(function () {
     Route::get('/val/list/acknowledgement/declined', 'listalldeclinedacknowledgement')->name('valdec.listackn');
     Route::get('/declined/val/{propid}/view-single/{instr_id}/acknowledgement', 'viewdeclinedsingleacknowledge')->name('valdec.viewsinglackn');
     Route::get('/val/list/quality-check/declined', 'listalldeclinedinstructionqualitycheck')->name('valdec.listquality');
     Route::get('/declined/val/{propid}/view-single/{instr_id}/quality', 'viewdeclinedsinglequalitycheck')->name('valdec.viewsinglqlty');
 });
+*/
 /*-------------------property management intake------------------------ */
 Route::middleware('loginauth')->controller(PropManIntakeController::class)->group(function () {
     Route::get('/prop/add/landlord', 'addlandlorddetails')->name('propin.addlandlord');
@@ -182,7 +178,6 @@ Route::middleware('loginauth')->controller(PropManIntakeController::class)->grou
     Route::get('/prop/download/{id}/summary/rentroll', 'preremitpdf')->name('propin.downrentsum');
 });
 /*-------------------end property management intake------------------------ */
-
 /*-------------------property management approval------------------------ */
 Route::middleware('loginauth')->controller(PropManApprovalController::class)->group(function () {
     Route::get('/prop/list/approval/landlord', 'listlandlordapproval')->name('propapp.listland');
@@ -324,3 +319,9 @@ Route::middleware('loginauth')->controller(SetupManageController::class)->group(
     Route::post('/set-up/set/base/currency', 'addnewbasecurrency')->name('setman.addbewcode');
 });
 /*-------------------end setup manage------------------------ */
+/*-------------------valuations intake------------------------ */
+Route::middleware('loginauth')->controller(ValIntakeController::class)->group(function () {
+    Route::get('/val/new/client', 'addnewclientdetails')->name('valin.newclient');
+    Route::any('/val/add/new/client', 'createnewclientdetails')->name('valin.createclient');
+});
+/*-------------------end valuations intake------------------------ */

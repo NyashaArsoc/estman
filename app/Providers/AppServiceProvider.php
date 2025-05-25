@@ -15,7 +15,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind('reporttcpdf', function () {
-            return config('reporttcpdf'); });
+            return config('reporttcpdf');
+        });
     }
 
     /**
@@ -23,8 +24,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer(views:'*',callback:RolePermission::class);
-        View::composer(views:['layout.val-main-menu','layout.propman-main-menu','layout.setup-main-menu'
-    ],callback:MenuComposer::class);
+        View::composer(views: '*', callback: RolePermission::class);
+        View::composer(views: [
+            'layout.valuation-main-menu',
+            'layout.propman-main-menu',
+            'layout.setup-main-menu'
+        ], callback: MenuComposer::class);
     }
 }

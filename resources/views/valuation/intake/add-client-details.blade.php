@@ -1,7 +1,7 @@
 @php
 $title = 'Add Client';
 $description = 'add new client to the system...'; @endphp
-@extends('layout.val-main-menu')
+@extends('layout.valuation-main-menu')
 @section('title', 'Add CLient')
 @section('additional css')
 <!-- Additional css Start-->
@@ -22,66 +22,58 @@ $description = 'add new client to the system...'; @endphp
         <h5>{{ $title }}</h5>
         <p class="font-90 text-muted mb-1"> {{ $description }}</p>
         <form class="form-material material-primary" id="defaultform" method="POST"
-            action="{{ route('valin.addnewclient') }}">@csrf
+            action="{{ route('valin.createclient') }}">@csrf
             <div class="form-group row">
                 <label for="ClientType" class="col-sm-2 form-control-label">Type</label>
                 <div class="col-sm-4">
                     <select class="js-example-basic-single w-100" name="clienttype" id="clienttype"
-                        onchange="optionlandlordtype(this)" />
+                        onchange="optionclienttype(this)" />
                     <option value="">Select Client Type</option>
                     @foreach($type as $abc)
                     <option value="{{ $abc->id }}"> {{ $abc->description }}
                     </option>
                     @endforeach
                     </select>
-                    <small id="clientypecheck" style="color: red;"> select client type </small>
+                    <small id="clienttypecheck" style="color: red;">required</small>
                 </div>
             </div>
             <div id="individualgroup" class="dropdwn">
                 <div class="form-group row">
-                    <label for="FirstName" class="col-sm-2 form-control-label">First Name
-
-                    </label>
+                    <label for="FirstName" class="col-sm-2 form-control-label">First Name </label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="firstname" name="firstname"
                             placeholder="First Name" autocomplete="off">
-                        <small id="firstnamecheck" style="color: red;"> first name is required</small>
+                        <small id="firstnamecheck" style="color: red;">required</small>
                     </div>
-                    <label for="LastName" class="col-sm-2 form-control-label">Last Name
-
-                    </label>
+                    <label for="LastName" class="col-sm-2 form-control-label">Last Name</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="lastname" name="lastname"
                             placeholder="Last Name" autocomplete="off">
-                        <small id="lastnamecheck" style="color: red;"> last name is required</small>
+                        <small id="lastnamecheck" style="color: red;">required</small>
                     </div>
                 </div>
             </div>
             <div id="corporategroup" class="dropdwn">
                 <div class="form-group row">
-                    <label for="CompanyName" class="col-sm-2 form-control-label">Company Name
-
-                    </label>
+                    <label for="CompanyName" class="col-sm-2 form-control-label">Company Name</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="companyname" name="companyname"
                             placeholder="Company Name" autocomplete="off">
-                        <small id="companynamecheck" style="color: red;"> company name is required</small>
+                        <small id="companynamecheck" style="color: red;">required</small>
                     </div>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="Cell" class="col-sm-2 col-form-label">Cell
-
-                </label>
+                <label for="Cell" class="col-sm-2 col-form-label">Cell</label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" id="cell" name="cell" placeholder="cell"
                         autocomplete="off">
-                    <small id="cellcheck" style="color: red;"> cell number is required</small>
+                    <small id="cellcheck" style="color: red;">required</small>
                 </div>
                 <label for="Tel" class="col-sm-2 col-form-label">Tel</label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" id="tel" name="tel"
-                        placeholder="024456787/9" onkeypress='' autocomplete="off">
+                        placeholder="024456787/9" autocomplete="off">
                 </div>
             </div>
             <div class="form-group row">
@@ -90,36 +82,29 @@ $description = 'add new client to the system...'; @endphp
                     <textarea type="text" class="form-control" name="contactaddress" rows="2" cols="3"
                         id="ContactAddress"></textarea>
                 </div>
-                <label for="Email" class="col-sm-2 col-form-label">Email
-                </label>
+                <label for="Email" class="col-sm-2 col-form-label">Email</label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" id="email" name="email"
                         placeholder="example@example.com" autocomplete="off">
-                    <small id="emailcheck" style="color: red;"> email is required</small>
+                    <small id="emailcheck" style="color: red;">required</small>
                 </div>
             </div>
-            <div id="corporategroup" class="dropdwn">
+            <div id="companycontactgroup" class="dropdwn">
                 <br />
                 <h5>company contact person </h5>
                 <div class="form-group row">
-                    <label for="FirstName" class="col-sm-2 form-control-label">First Name
-
-                    </label>
+                    <label for="FirstName" class="col-sm-2 form-control-label">First Name</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="contactfirstname"
                             name="contactfirstname" placeholder="First Name" autocomplete="off">
-                        <small id="contactfirstnamecheck" style="color: red;">first name
-                            is required</small>
+                        <small id="contactfirstnamecheck" style="color: red;">required</small>
                     </div>
 
-                    <label for="LastName" class="col-sm-2 form-control-label">Last Name
-
-                    </label>
+                    <label for="LastName" class="col-sm-2 form-control-label">Last Name</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="contactlastname"
                             name="contactlastname" placeholder="Last Name" autocomplete="off">
-                        <small id="contactlastnamecheck" style="color: red;"> last name
-                            is required</small>
+                        <small id="contactlastnamecheck" style="color: red;">required</small>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -129,7 +114,7 @@ $description = 'add new client to the system...'; @endphp
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="contactcell" name="contactcell"
                             placeholder="Cell" autocomplete="off">
-                        <small id="contactcellcheck" style="color: red;">cell is required</small>
+                        <small id="contactcellcheck" style="color: red;">required</small>
                     </div>
                     <label for="Email" class="col-sm-2 col-form-label">Email
 
@@ -137,7 +122,7 @@ $description = 'add new client to the system...'; @endphp
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="contactemail" name="contactemail"
                             placeholder="example@example.com" onkeypress='' autocomplete="off">
-                        <small id="contactemailcheck" style="color: red;">email is required</small>
+                        <small id="contactemailcheck" style="color: red;">required</small>
                     </div>
                 </div>
             </div>
@@ -157,7 +142,7 @@ $description = 'add new client to the system...'; @endphp
 
 @endsection
 @section('additional js')
-<script src="{{ asset('js/validation/intake.js') }}"></script>
+<script src="{{ asset('js/validation/intakevaluation.js') }}"></script>
 <script src="{{ asset('css/select2/select2.min.js') }}"></script>
 <script src="{{ asset('js/select2.js') }}"></script>
 <script src="{{ asset('js/dropdown.js') }}"></script>
