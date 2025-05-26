@@ -66,6 +66,48 @@ class ValIntakeController extends Controller
                 ->with('error', 'failed to load' . $th);
         }
     }
+    function addnewpropertydetails()
+    {
+        try {
+            $arr['type']   = DB::table('setupclienttype')->select('*')->get();
+            $arr['proptype']   = DB::table('setuppropertytype')->select('*')->get();
+            $arr['town']   = DB::table('vallocations')->select('*')->get();
+            return view('valuation.intake.add-new-property')->with($arr);
+        } catch (\Throwable $th) {
+            return  redirect()->route('dash.val');
+        }
+    }
+    function createnewpropertydetails(Request $request)
+    {
+        try {
+            $numbersinarray         =       count($request->propertyaddress);
+            $a = 0;
+            while ($a   <   $numbersinarray) {
+                $propertytypeid = strstr($request->propertytype[$a], "-", true);
+                $suburbid = strstr($request->propertysurbub[$a], "-", true);
+                DB::table('valclientproperty')
+                    ->insert([
+                        'clientid' => $request->propertyclientname,
+                        'propertytypeid' => $propertytypeid,
+                        'suburbid' => $suburbid,
+                        'streetaddress' => $request->propertyaddress[$a],
+                        'operatorid' => session('alluser')
+                    ]);
+                $a++;
+            }
+            return  redirect()->route('valin.newprop')
+                ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return  redirect()->route('valin.newprop')
+                ->with('error', 'failed to load');
+        }
+    }
+    function getsingleclientbytype($id)
+    {
+        $arr['client']   = DB::table('valclientdetail')->where('clienttypeid', $id)
+            ->select('*')->get();
+        return view('valuation.intake.get-clients-bytype')->with($arr);
+    }
     /*
 public function __construct(){
     $this->middleware(['loginauth']);

@@ -73,10 +73,9 @@ Route::controller(ReportController::class)->group(function(){
 Route::controller(ValIntakeController::class)->group(function () {
     
     
-    Route::get('/val/{id}/client/type', 'getsingleclient');
+    
     Route::get('/val/{id}/client/contact', 'getsingleclientcontact');
-    Route::any('/val/add/property', 'addpropertydetails')->name('valin.addprop');
-    Route::any('/val/add/new/property', 'addnewpropertydetails')->name('valin.addnewprop');
+   
     Route::get('/val/add/new/portfolio', 'createportfolio')->name('valin.crtportfoli');
     Route::post('/val/create/new/portfolio', 'createnewportfolio')->name('valin.crtmewport');
     Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');
@@ -323,5 +322,8 @@ Route::middleware('loginauth')->controller(SetupManageController::class)->group(
 Route::middleware('loginauth')->controller(ValIntakeController::class)->group(function () {
     Route::get('/val/new/client', 'addnewclientdetails')->name('valin.newclient');
     Route::any('/val/add/new/client', 'createnewclientdetails')->name('valin.createclient');
+    Route::get('/val/new/property', 'addnewpropertydetails')->name('valin.newprop');
+    Route::any('/val/add/new/property', 'createnewpropertydetails')->name('valin.createprop');
+    Route::get('/val/client/{id}/bytype', 'getsingleclientbytype');
 });
 /*-------------------end valuations intake------------------------ */

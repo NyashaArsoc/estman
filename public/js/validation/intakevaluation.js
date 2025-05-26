@@ -292,6 +292,89 @@ function validateCompanyName() {
         }
     }
 }
+//valid property type
+$("#propertytypecheck").hide();
+let propertytypeError = true;
+$("#propertytype").keyup(function () {
+    validatePropertyType();
+});
+function validatePropertyType() {
+    let textValue = $("#propertytype").val();
+    if (textValue.length == "") {
+        $("#propertytypecheck").show();
+        propertytypeError = false;
+        return false;
+    } else {
+        propertytypeError = true;
+        $("#propertytypecheck").hide();
+    }
+}
+//valid property surbub
+$("#propertysurbubcheck").hide();
+let propertysurbubError = true;
+$("#propertysurbub").keyup(function () {
+    validatePropertySurbub();
+});
+function validatePropertySurbub() {
+    let textValue = $("#propertysurbub").val();
+    if (textValue.length == "") {
+        $("#propertysurbubcheck").show();
+        propertysurbubError = false;
+        return false;
+    } else {
+        propertysurbubError = true;
+        $("#propertysurbubcheck").hide();
+    }
+}
+//valid property address
+$("#propertyaddresscheck").hide();
+let propertyaddressError = true;
+$("#propertyaddress").keyup(function () {
+    validatePropertyAddress();
+});
+function validatePropertyAddress() {
+    let textValue = $("#propertyaddress").val();
+    if (textValue.length == "") {
+        $("#propertyaddresscheck").show();
+        propertyaddressError = false;
+        return false;
+    } else if (textValue.length < 5) {
+        $("#propertyaddresscheck").show();
+        $("#propertyaddresscheck").html("**invalid address");
+        propertyaddressError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_\-=\[\]{};':"\\|,.<>?~\/]/;
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#propertyaddresscheck").show();
+            $("#propertyaddresscheck").html("**remove special chars");
+            propertyaddressError = false;
+            return false;
+        } else {
+            propertyaddressError = true;
+            $("#propertyaddresscheck").hide();
+        }
+    }
+}
+//valid client name
+$("#propertyclientnamecheck").hide();
+let propertyclientnameError = true;
+$("#propertyclientname").keyup(function () {
+    validatePropertyClientName();
+});
+function validatePropertyClientName() {
+    let textValue = $("#propertyclientname").val();
+    if (textValue.length == "") {
+        $("#propertyclientnamecheck").show();
+        propertyclientnameError = false;
+        return false;
+    } else {
+        propertyclientnameError = true;
+        $("#propertyclientnamecheck").hide();
+    }
+}
+
 /*---------------------button submit------------------------------------------*/
 //button disable submit
 function disableButtonAndSubmit(button, id) {
@@ -302,6 +385,44 @@ function disableButtonAndSubmit(button, id) {
     // Submit the form
     $("#" + id).submit();
 }
+/*-----------------------------add loan products details table ----------------------- */
+$('#add-new-property-item').on('click', function () {
+    var propertyaddress = $('#propertyaddress').val();
+    var propertytype = $('#propertytype').val();
+    var propertysurbub = $('#propertysurbub').val();
+    var count = $('#addpropertyitem tr').length - 1;
+
+    validatePropertyAddress(); validatePropertyType(); validatePropertySurbub();
+
+    try {
+        if (propertytypeError == true && propertysurbubError == true && propertyaddressError == true && count < 11) {
+
+            var newRow = $('<tr class="child">');
+
+            newRow.append('<td>' + count + '</td>');
+            newRow.append('<td><input name="propertytype[]" class="form-control" value="' + propertytype + '" readonly /></td>');
+            newRow.append('<td><input name="propertysurbub[]" class="form-control" value="' + propertysurbub + '" readonly /></td>');
+            newRow.append('<td><input name="propertyaddress[]" class="form-control" value="' + propertyaddress + '" readonly /></td>');
+            newRow.append('<td><button style="text-align: right;" class="btn btn-danger delete-row" type="button">Delete</button></td>');
+
+            $('#addpropertyitem tbody').append(newRow);
+
+            $('#propertyaddress').val(''); $('#propertytype').val(''); $('#propertysurbub').val('');
+        } else if (count >= 11) {
+            alert("the maximum number of rows (10).");
+        }
+    } catch (err) {
+        alert(err.message);
+    }
+});
+$('#addpropertyitem tbody').on('click', '.delete-row', function () {
+    var a = $("#addpropertyitem > tbody > tr").length;
+    if (a <= 1) {
+        alert("There must be at least one row.");
+    } else {
+        $(this).closest('tr').remove();
+    }
+});
 // add val new client
 $("#btn-val-new-client").click(function () {
     validateClientType(); validateCell(); validateEmail();
@@ -318,6 +439,17 @@ $("#btn-val-new-client").click(function () {
                 contactfirstnameError == true && contactlastnameError == true && contactemailError == true
                 && clienttypeError == true && companynameError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false }
         }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+// add val new property
+$("#btn-val-new-property").click(function () {
+    validatePropertyClientName();
+    try {
+        if (propertyclientnameError) { disableButtonAndSubmit(this, "defaultform"); }
+        else { return false; }
     } catch (err) {
         alert(err.message);
         return false;
