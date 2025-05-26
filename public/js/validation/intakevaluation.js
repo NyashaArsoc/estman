@@ -374,6 +374,121 @@ function validatePropertyClientName() {
         $("#propertyclientnamecheck").hide();
     }
 }
+$("#portfolioduedatecheck").hide();
+let portfolioduedateError = true;
+$("#portfolioduedate").keyup(function () {
+    validatePortfolioDueDate();
+});
+function validatePortfolioDueDate() {
+    let textValue = $("#portfolioduedate").val();
+    if (textValue.length == "") {
+        $("#portfolioduedatecheck").show();
+        portfolioduedateError = false;
+        return false;
+    } else {
+        portfolioduedateError = true;
+        $("#portfolioduedatecheck").hide();
+    }
+}
+//valid total number of portfolio
+$("#totalnumberpropertyportfoliocheck").hide();
+let totalnumberpropertyportfolioError = true;
+$("#totalnumberpropertyportfolio").keyup(function () {
+    validateNoOfPortfolioProperty();
+});
+function validateNoOfPortfolioProperty() {
+    let textValue = $("#totalnumberpropertyportfolio").val();
+    if (textValue.length == "") {
+        $("#totalnumberpropertyportfoliocheck").show();
+        totalnumberpropertyportfolioError = false;
+        return false;
+    } else if (textValue.length < 1) {
+        $("#totalnumberpropertyportfoliocheck").show();
+        $("#totalnumberpropertyportfoliocheck").html("**at least ten properties");
+        totalnumberpropertyportfolioError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~a-z/\s/A-Z]/;
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#totalnumberpropertyportfoliocheck").show();
+            $("#totalnumberpropertyportfoliocheck").html("**digits only or (35)");
+            totalnumberpropertyportfolioError = false;
+            return false;
+        } else {
+            totalnumberpropertyportfolioError = true;
+            $("#totalnumberpropertyportfoliocheck").hide();
+        }
+    }
+}
+//valid valuationpaymentagreement
+$("#valuationpaymentagreementcheck").hide();
+let valuationpaymentagreementError = true;
+$("#valuationpaymentagreement").keyup(function () {
+    validateValuationPaymentAgreement();
+});
+function validateValuationPaymentAgreement() {
+    let textValue = $("#valuationpaymentagreement").val();
+    if (textValue.length == "") {
+        $("#valuationpaymentagreementcheck").show();
+        valuationpaymentagreementError = false;
+        return false;
+    } else {
+        valuationpaymentagreementError = true;
+        $("#valuationpaymentagreementcheck").hide();
+    }
+}
+//valid valuationpurpose
+$("#valuationpurposecheck").hide();
+let valuationpurposeError = true;
+$("#valuationpurpose").keyup(function () {
+    validateValuationPurpose();
+});
+function validateValuationPurpose() {
+    let textValue = $("#valuationpurpose").val();
+    if (textValue.length == "") {
+        $("#valuationpurposecheck").show();
+        valuationpurposeError = false;
+        return false;
+    } else {
+        valuationpurposeError = true;
+        $("#valuationpurposecheck").hide();
+    }
+}
+//valid valuationtype 
+$("#valuationtypecheck").hide();
+let valuationtypeError = true;
+$("#valuationtype").keyup(function () {
+    validateClientContactName();
+});
+function validateValuationType() {
+    let textValue = $("#valuationtype").val();
+    if (textValue.length == "") {
+        $("#valuationtypecheck").show();
+        valuationtypeError = false;
+        return false;
+    } else {
+        valuationtypeError = true;
+        $("#valuationtypecheck").hide();
+    }
+}
+//valid client contact name
+$("#clientcontactnamecheck").hide();
+let clientcontactnameError = true;
+$("#clientcontactname").keyup(function () {
+    validateClientContactName();
+});
+function validateClientContactName() {
+    let textValue = $("#clientcontactname").val();
+    if (textValue.length == "") {
+        $("#clientcontactnamecheck").show();
+        clientcontactnameError = false;
+        return false;
+    } else {
+        clientcontactnameError = true;
+        $("#clientcontactnamecheck").hide();
+    }
+}
 
 /*---------------------button submit------------------------------------------*/
 //button disable submit
@@ -450,6 +565,22 @@ $("#btn-val-new-property").click(function () {
     try {
         if (propertyclientnameError) { disableButtonAndSubmit(this, "defaultform"); }
         else { return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+// add val create portfolio
+$("#btn-val-new-portfolio").click(function () {
+    validatePortfolioDueDate(); validateNoOfPortfolioProperty();
+    validateValuationPaymentAgreement(); validateValuationPurpose();
+    validateValuationType(); validateClientContactName();
+    try {
+        if (portfolioduedateError == true && totalnumberpropertyportfolioError == true &&
+            valuationpaymentagreementError == true && valuationpurposeError == true &&
+            valuationtypeError == true && clientcontactnameError == true) {
+            disableButtonAndSubmit(this, "defaultform");
+        } else { return false; }
     } catch (err) {
         alert(err.message);
         return false;

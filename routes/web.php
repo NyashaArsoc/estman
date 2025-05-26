@@ -74,10 +74,7 @@ Route::controller(ValIntakeController::class)->group(function () {
     
     
     
-    Route::get('/val/{id}/client/contact', 'getsingleclientcontact');
    
-    Route::get('/val/add/new/portfolio', 'createportfolio')->name('valin.crtportfoli');
-    Route::post('/val/create/new/portfolio', 'createnewportfolio')->name('valin.crtmewport');
     Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');
     Route::any('/val/submit/page/port-instr', 'addinstructionportsubmit')->name('valin.subport');
     Route::get('/val/{id}/port/{vid}/inst', 'addinstructionportsteptwo')->name('valin.portlstpropallo');
@@ -325,5 +322,8 @@ Route::middleware('loginauth')->controller(ValIntakeController::class)->group(fu
     Route::get('/val/new/property', 'addnewpropertydetails')->name('valin.newprop');
     Route::any('/val/add/new/property', 'createnewpropertydetails')->name('valin.createprop');
     Route::get('/val/client/{id}/bytype', 'getsingleclientbytype');
+    Route::get('/val/create/new/portfolio', 'createportfolio')->name('valin.newportfoli');
+    Route::post('/val/add/new/portfolio', 'createnewportfolio')->name('valin.createport');
+    Route::get('/val/client/{id}/contact', 'getsingleclientcontact');
 });
 /*-------------------end valuations intake------------------------ */

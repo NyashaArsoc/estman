@@ -60,7 +60,7 @@ function getvalclientcontact() {
 	var textValue = $("#propertyclientname").val();
 	$.ajax({
 		type: "GET",
-		url: "/val/" + textValue + "/client/contact",
+		url: "/val/client/" + textValue + "/contact",
 		success: function (data) {
 			$("#clientcontactname").html(data);
 		}

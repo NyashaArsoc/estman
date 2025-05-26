@@ -108,6 +108,49 @@ class ValIntakeController extends Controller
             ->select('*')->get();
         return view('valuation.intake.get-clients-bytype')->with($arr);
     }
+    function createportfolio()
+    {
+        try {
+            $arr['type']   = DB::table('setupclienttype')->select('*')->get();
+            $arr['purpose']   = DB::table('valpurpose')->select('id', 'description')->get();
+            $arr['valtype']   = DB::table('valtype')->select('id', 'description')->get();
+            $arr['payment']   = DB::table('valpaymentagreement')->select('id', 'description')->get();
+            return view('valuation.intake.create-new-portfolio')->with($arr);
+        } catch (\Throwable $th) {
+            return  redirect()->route('dash.val');
+        }
+    }
+    function createnewportfolio(Request $request)
+    {
+        try {
+            $invoicedatedue = Carbon::parse(now())->addMinutes(60);
+            $id = DB::table('valinstrportfolio')->insertGetId([
+                'datedue' => $request->portfolioduedate,
+                'totalproperties' => $request->totalnumberpropertyportfolio,
+                'operatorid' => session('alluser'),
+                'purpose' => $request->valuationpurpose,
+                'type' => $request->valuationtype,
+                'paymentterms' => $request->valuationpaymentagreement,
+                'clientcontactid' => $request->clientcontactname,
+                'clientid' => $request->propertyclientname
+            ]);
+
+            DB::table('valinstrinvoicingportfolio')->insert(['portfolioid' => $id, 'operatorid' =>
+            session('alluser'), 'datedue' => $invoicedatedue]);
+
+            return  redirect()->route('valin.newportfoli')
+                ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return  redirect()->route('valin.newportfoli')
+                ->with('error', 'failed to load');
+        }
+    }
+    function getsingleclientcontact($id)
+    {
+        $arr['client']   = DB::table('valclientcontactperson')->where('clientid', $id)
+            ->where('isavailable', '=', 'Y')->select('*')->get();
+        return view('valuation.intake.get-all-client-contacts')->with($arr);
+    }
     /*
 public function __construct(){
     $this->middleware(['loginauth']);
