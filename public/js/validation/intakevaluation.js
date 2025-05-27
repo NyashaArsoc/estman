@@ -489,6 +489,40 @@ function validateClientContactName() {
         $("#clientcontactnamecheck").hide();
     }
 }
+//valid valuationpaymentagreement
+$("#valuernamecheck").hide();
+let valuernameError = true;
+$("#valuername").keyup(function () {
+    validateValuationValuerName();
+});
+function validateValuationValuerName() {
+    let textValue = $("#valuername").val();
+    if (textValue.length == "") {
+        $("#valuernamecheck").show();
+        valuernameError = false;
+        return false;
+    } else {
+        valuernameError = true;
+        $("#valuernamecheck").hide();
+    }
+}
+//valid valuationpaymentagreement
+$("#portfolionamecheck").hide();
+let portfolionameError = true;
+$("#portfolioname").keyup(function () {
+    validateInstructionPortfolioName();
+});
+function validateInstructionPortfolioName() {
+    let textValue = $("#portfolioname").val();
+    if (textValue.length == "") {
+        $("#portfolionamecheck").show();
+        portfolionameError = false;
+        return false;
+    } else {
+        portfolionameError = true;
+        $("#portfolionamecheck").hide();
+    }
+}
 
 /*---------------------button submit------------------------------------------*/
 //button disable submit
@@ -585,4 +619,18 @@ $("#btn-val-new-portfolio").click(function () {
         alert(err.message);
         return false;
     }
+});
+// add val new portfolio instruction
+$("#btn-val-instr-portfolio-1").click(function () {
+    validateValuationValuerName(); validateInstructionPortfolioName();
+    try {
+        if (valuernameError == true && portfolionameError == true) { disableButtonAndSubmit(this, "defaultform"); }
+        else { return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+$("#btn-allocate").click(function () {
+    disableButtonAndSubmit(this, "defaultform");
 });

@@ -75,10 +75,8 @@ Route::controller(ValIntakeController::class)->group(function () {
     
     
    
-    Route::get('/val/new/instruction/portfolio', 'addinstructionportfolio')->name('valin.addinstport');
-    Route::any('/val/submit/page/port-instr', 'addinstructionportsubmit')->name('valin.subport');
-    Route::get('/val/{id}/port/{vid}/inst', 'addinstructionportsteptwo')->name('valin.portlstpropallo');
-    Route::any('/val/add/new/port-instr', 'addnewinstructionport')->name('valin.addnewport');
+    
+    
     Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');
     Route::any('/val/submit/page/normal-instr', 'addinstructionnormalsubmit')->name('valin.subnom');
     Route::get('/val/{id}/nom/{vid}/inst/{cid}/pur/{pid}/typ/{tid}/pay/{payid}/{accessdate}', 'addinstructionnormalsteptwo')->name('valin.lstpropallo');
@@ -325,5 +323,9 @@ Route::middleware('loginauth')->controller(ValIntakeController::class)->group(fu
     Route::get('/val/create/new/portfolio', 'createportfolio')->name('valin.newportfoli');
     Route::post('/val/add/new/portfolio', 'createnewportfolio')->name('valin.createport');
     Route::get('/val/client/{id}/contact', 'getsingleclientcontact');
+    Route::get('/val/new/portfolio-instruction', 'addnewinstructionportfolio')->name('valin.addinstport');
+    Route::any('/val/submit/page/port-instr', 'addportfoliosubmitpage')->name('valin.portpage1');
+    Route::get('/val/{id}/port/{vid}/page', 'addinstructionportsteptwo')->name('valin.portpage2');
+    Route::any('/val/allocate/new/port-instr', 'allocateinstructionport')->name('valin.alloport');
 });
 /*-------------------end valuations intake------------------------ */
