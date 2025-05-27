@@ -70,15 +70,6 @@ Route::controller(ReportController::class)->group(function(){
     Route::get('/print/lease/statement', 'printleasestatement')->name('report.printstatement');
 }); */
 /*
-Route::controller(ValIntakeController::class)->group(function () {
-    
-    
-    
-   
-    
-    
-});*/
-/*
 Route::controller(ValManageController::class)->group(function () {
     Route::get('/val/list/client', 'listallclient')->name('valman.listclient');
     Route::get('/val/{id}/client/edit', 'editsingleclient')->name('valman.editclient');

@@ -523,6 +523,36 @@ function validateInstructionPortfolioName() {
         $("#portfolionamecheck").hide();
     }
 }
+$("#reasonscheck").hide();
+let reasonsError = true;
+$("#reasonsfordecline").keyup(function () {
+    validateReasonsComment();
+});
+function validateReasonsComment() {
+    let textValue = $("#reasonsfordecline").val();
+    if (textValue.length == "") {
+        $("#reasonscheck").show();
+        reasonsError = false;
+        return false;
+    } else if (textValue.length < 3) {
+        $("#reasonscheck").show();
+        $("#reasonscheck").html("**write a proper comment");
+        reasonsError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/;
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#reasonscheck").show();
+            $("#reasonscheck").html("**follow the required format");
+            reasonsError = false;
+            return false;
+        } else {
+            reasonsError = true;
+            $("#reasonscheck").hide();
+        }
+    }
+}
 
 /*---------------------button submit------------------------------------------*/
 //button disable submit
