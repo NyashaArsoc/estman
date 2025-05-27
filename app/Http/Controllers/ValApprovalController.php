@@ -11,6 +11,128 @@ use Illuminate\Support\Facades\Storage;
 
 class ValApprovalController extends Controller
 {
+    function listallinstructionacknowledge()
+    {
+        try {
+            $user = $this->userdetail();
+            $nom['normal'] = DB::select('EXEC spGetValInstAcknowledgeNormal ?', [$user->id]);
+            $port['portfolio'] = DB::select('EXEC spGetValInstAcknowledgePortfolio ?', [$user->id]);
+            $arr['acknow'] = array_merge($nom['normal'], $port['portfolio']);
+            return view('valuation.approval.list-instruction-acknowledge')->with($arr);
+        } catch (\Throwable $th) {
+            return  redirect()->route('dash.val');
+        }
+    }
+    function viewsingleinstructionacknowledge($id, $instrid)
+    {
+        try {
+            $acknowledgeid = Crypt::decrypt($id);
+            $instructionid = Crypt::decrypt($instrid);
+            try {
+                $arr['type']   = DB::table('setupclienttype')->select('*')->get();
+
+                $arr['instr']   = DB::table('valinstructions')->where('id', $instructionid)
+                    ->select('*')->first();
+                $arr['acknow']   = DB::table('valinstracknowledgement')->where('id', $acknowledgeid)
+                    ->select('*')->first();
+                $arr['properties']   = collect(DB::select(
+                    'EXEC spGetValInstrSingleProperty ?',
+                    [$arr['instr']->propertyid]
+                ))->first();
+
+                $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
+                    'N' => DB::table('valinstructions')->where('id', $instructionid)
+                        ->select('*')->first(),
+                    default => DB::table('valinstrportfolio')
+                        ->where('id', $arr['instr']->portfolioid)
+                        ->select('*')->first(),
+                };
+                $arr['client'] = match (trim($arr['instr']->isportfolio)) {
+                    'N' => DB::table('valclientcontactperson')->join(
+                        'valclientdetail',
+                        'valclientcontactperson.clientid',
+                        '=',
+                        'valclientdetail.id'
+                    )
+                        ->where('valclientcontactperson.id', $arr['instr']->contactid)
+                        ->select(
+                            'valclientdetail.companyname',
+                            'valclientdetail.lastname',
+                            'valclientdetail.firstname',
+                            'valclientcontactperson.firstname As contactfirstname',
+                            'valclientcontactperson.lastname As contactlastname',
+                            'valclientcontactperson.cell',
+                            'valclientcontactperson.email',
+                            'valclientdetail.contactddress'
+                        )->first(),
+                    default => DB::table('valclientcontactperson')->join(
+                        'valclientdetail',
+                        'valclientcontactperson.clientid',
+                        '=',
+                        'valclientdetail.id'
+                    )
+                        ->where('valclientcontactperson.id', $arr['purpose']->clientcontactid)
+                        ->select(
+                            'valclientdetail.companyname',
+                            'valclientdetail.lastname',
+                            'valclientdetail.firstname',
+                            'valclientcontactperson.firstname As contactfirstname',
+                            'valclientcontactperson.lastname As contactlastname',
+                            'valclientcontactperson.cell',
+                            'valclientcontactperson.email',
+                            'valclientdetail.contactddress'
+                        )->first(),
+                };
+                return view('valuation.approval.view-single-instruct-acknowledge')->with($arr);
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.listacknw')
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.listacknw')
+                ->with('error', 'failed to load');
+        }
+    }
+    function confirmacknowledgement($id, $instr_id, $to_id)
+    {
+        try {
+            $acknowledgeid = Crypt::decrypt($id);
+            $instructionid = Crypt::decrypt($instr_id);
+            $allocatedid = Crypt::decrypt($to_id);
+            try {
+                $user = $this->userdetail();
+                $typeid =  DB::table('valinstructions')->join(
+                    'valclientproperty',
+                    'valinstructions.propertyid',
+                    '=',
+                    'valclientproperty.id'
+                )
+                    ->where('valinstructions.id', $instructionid)
+                    ->select('valclientproperty.propertytypeid')->first();
+                $minsexpected =  DB::table('valinstrexpectedmins')->where('propertytypeid', $typeid->propertytypeid)
+                    ->select('*')->first();
+                $datestamp =     DB::table('valinstrcompile')->where('allocatedto', $user->id)
+                    ->where('status', '=', 'P')->select('*')->orderBy('id', 'desc')->first();
+                $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
+                //check if due date is current or old
+                $currentdatedue = $newdatestamp <= now() ? now() : $newdatestamp;
+                $datedue = Carbon::parse($currentdatedue)->addMinutes($minsexpected->minsexpectedtocompile);
+                DB::table('valinstracknowledgement')->where('id', $acknowledgeid)
+                    ->update(['completedby' => session('alluser'), 'status' => 'C', 'completedon' => now()]);
+                DB::table('valinstrcompile')->insert(['instructionid' => $instructionid, 'operatorid' =>
+                session('alluser'), 'allocatedto' => $allocatedid, 'datedue' => $datedue]);
+                return redirect()->route('valapp.listacknw')
+                    ->with('success', 'record confirmed');
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.listacknw')
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.listacknw')
+                ->with('error', 'failed to load');
+        }
+    }
+    /*
 public function __construct(){
      $this->middleware(['loginauth']);
 }
@@ -130,6 +252,7 @@ public function acceptacknowledgement($id,$instr_id,$to_id){
     }
 }
 /*-----------instruction compilation--------------*/
+    /*
 public function listallinstructioncompile(){
     try {
         $user = $this->userdetail();
@@ -244,6 +367,7 @@ public function submitcompilation(Request $request,$id,$instr_id,$propid){
     }
 }
 /*quality check */
+    /*
 public function listallinstructionqualitycheck(){
     try{
         $nom['normal'] = DB::select('EXEC spValGetInstQualityNormal');
@@ -344,6 +468,7 @@ public function submitqualitycheck(Request $request,$id,$instr_id){
         ->update(['completedby' => session('alluser'),'status' => 'C',
         'completedon' => now(),'comments'=>$request->commentshighlights]);
        /*-------------------check if portfolio dont put to invoice-------------------- */
+    /*
         if (trim($instructiontype->isportfolio)=='N') {
             DB::table('valinstrinvoicing') ->insert(['instructionid'=>$instructionid,'operatorid'=>
             session('alluser'),'datedue'=>$invoicedatedue]);
@@ -367,6 +492,7 @@ public function submitqualitycheck(Request $request,$id,$instr_id){
     }
 }
 /*-----------report approval ----------------- */
+    /*
 public function listallinstructionfinalapproval(){
     try{
         $nom['normal'] = DB::select('EXEC spValGetInstFinalApprovalNormal');
@@ -490,7 +616,8 @@ public function submitfinalapproval(Request $request,$id,$instr_id){
         ->with('error', 'failed to load');
     }
 }
-/*------------printing reports-----------------------------*/ 
+/*------------printing reports-----------------------------*/
+    /*
 public function listallinstructionprint(){
     try{
         $nom['normal'] = DB::select('EXEC spValGetInstPrintNormal');
@@ -579,6 +706,7 @@ public function submitprinting(Request $request,$id,$instr_id){
     }
 }
 /*------------- report invoicing ----------------- */
+    /*
 public function listallinstructioninvoice(){
     try{
         $nom['normal'] = DB::select('EXEC spValGetInstInvoicingNormal');
@@ -699,6 +827,7 @@ public function submitinvoicingportfolio(Request $request,$id){
     }
 }
 /*--------------------dispatch ----------------*/
+    /*
 public function listallinstructiondispatch(){
     try{
         $nom['normal'] = DB::select('EXEC spValGetInstDispatchNormal');
@@ -776,6 +905,7 @@ public function submitdispatch($id){
     }
 }
 /*------------------start download reports------------------------ */
+    /*
 public function downloadreportword($instr_id) {
     try {
         $instructionid = Crypt::decrypt($instr_id);
@@ -829,7 +959,8 @@ public function deletereportdoc($filename) {
    
 }
 /*------------------end download reports------------------------ */
-/* ----------------compile portfolio---------------------------------*/
+    /* ----------------compile portfolio---------------------------------*/
+    /*
 public function listallportfoliocompile(){
     try {
         $arr['portfolio'] = DB::select('EXEC spValGetPortfolioCompilation');
@@ -908,7 +1039,8 @@ public function closeportfolio($id){
     }
 }
 /* -----------------------end compile portfolio */
-/*-----------------------------send soft copies---------------------*/
+    /*-----------------------------send soft copies---------------------*/
+    /*
 public function listallinstructionsendingsoftcopy(){
     try{
         $arr['stage'] = DB::select('EXEC spValGetInstEmailNormal');
@@ -988,7 +1120,8 @@ public function submitsoftcopy($id){
     }
 }
 /*--------------------close send soft copy report------------------- */
-/*=======================review portfolio============================== */
+    /*=======================review portfolio============================== */
+    /*
 public function listallportfolioreview(){
     try {
         $arr['portfolio'] = DB::select('EXEC spValGetPortfolioReview');

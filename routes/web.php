@@ -77,10 +77,7 @@ Route::controller(ValManageController::class)->group(function () {
 }); */
 /*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::get('/val/list/acknowledgement', 'listallinstructionacknowledgement')->name('valapp.listackn');
-    Route::get('/val/{id}/view-single/{instr_id}/acknowledgement', 'viewsingleacknowledge')->name('valapp.viewsinglackn');
     Route::any('/val/{id}/acknow/{instr_id}/decline', 'declineacknowledgement')->name('valapp.declacknow');
-    Route::any('/val/{id}/acknow/{instr_id}/accept/{to_id}', 'acceptacknowledgement')->name('valapp.accptacknow');
     Route::get('/val/list/compilation', 'listallinstructioncompile')->name('valapp.listcomp');
     Route::get('/val/{id}/view-single/{instr_id}/compile', 'viewsinglecompile')->name('valapp.viewsinglacomp');
     Route::any('/val/{id}/compile/{instr_id}/{propid}', 'submitcompilation')->name('valapp.sbtcomp');
@@ -320,3 +317,9 @@ Route::middleware('loginauth')->controller(ValIntakeController::class)->group(fu
     Route::any('/val/allocate/new/normal-instr', 'allocateinstructionnorm')->name('valin.allonom');
 });
 /*-------------------end valuations intake------------------------ */
+/*-------------------valuations approval------------------------ */
+Route::middleware('loginauth')->controller(ValApprovalController::class)->group(function () {
+    Route::get('/val/list/acknowledgement/pending', 'listallinstructionacknowledge')->name('valapp.listacknw');
+    Route::get('/val/{id}/view-single/{instr_id}/acknowledgement', 'viewsingleinstructionacknowledge')->name('valapp.viewsinglackwn');
+    Route::any('/val/{id}/acknowledge/{instr_id}/accept/{to_id}', 'confirmacknowledgement')->name('valapp.confirmacknow');
+});
