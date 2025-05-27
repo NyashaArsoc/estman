@@ -616,7 +616,6 @@ $("#btn-val-new-portfolio").click(function () {
             disableButtonAndSubmit(this, "defaultform");
         } else { return false; }
     } catch (err) {
-        alert(err.message);
         return false;
     }
 });
@@ -627,10 +626,23 @@ $("#btn-val-instr-portfolio-1").click(function () {
         if (valuernameError == true && portfolionameError == true) { disableButtonAndSubmit(this, "defaultform"); }
         else { return false; }
     } catch (err) {
-        alert(err.message);
         return false;
     }
 });
 $("#btn-allocate").click(function () {
     disableButtonAndSubmit(this, "defaultform");
+});
+// add val new normal instruction
+$("#btn-val-instr-normal-1").click(function () {
+    validateValuationValuerName(); validatePortfolioDueDate();
+    validateValuationPaymentAgreement(); validateValuationPurpose();
+    validateValuationType(); validateClientContactName();
+    try {
+        if (valuernameError == true && valuationpaymentagreementError == true && portfolioduedateError == true &&
+            valuationpurposeError == true && valuationtypeError == true &&
+            clientcontactnameError == true) { disableButtonAndSubmit(this, "defaultform"); }
+        else { return false; }
+    } catch (err) {
+        return false;
+    }
 });

@@ -77,10 +77,6 @@ Route::controller(ValIntakeController::class)->group(function () {
    
     
     
-    Route::get('/val/new/instruction/normal', 'addinstructionnormal')->name('valin.addinstnom');
-    Route::any('/val/submit/page/normal-instr', 'addinstructionnormalsubmit')->name('valin.subnom');
-    Route::get('/val/{id}/nom/{vid}/inst/{cid}/pur/{pid}/typ/{tid}/pay/{payid}/{accessdate}', 'addinstructionnormalsteptwo')->name('valin.lstpropallo');
-    Route::any('/val/add/new/normal-instr', 'addnewinstructionnormal')->name('valin.addnewnom');
 });*/
 /*
 Route::controller(ValManageController::class)->group(function () {
@@ -327,5 +323,9 @@ Route::middleware('loginauth')->controller(ValIntakeController::class)->group(fu
     Route::any('/val/submit/page/port-instr', 'addportfoliosubmitpage')->name('valin.portpage1');
     Route::get('/val/{id}/port/{vid}/page', 'addinstructionportsteptwo')->name('valin.portpage2');
     Route::any('/val/allocate/new/port-instr', 'allocateinstructionport')->name('valin.alloport');
+    Route::get('/val/new/normal-instruction', 'addnewinstructionnormal')->name('valin.addinstnorm');
+    Route::post('/val/submit/page/normal-instr', 'addnormalsubmitpage')->name('valin.normpage1');
+    Route::get('/val/{id}/nom/{vid}/inst/{cid}/pur/{pid}/typ/{tid}/pay/{payid}/{accessdate}', 'addinstructionnormalsteptwo')->name('valin.normpage2');
+    Route::any('/val/allocate/new/normal-instr', 'allocateinstructionnorm')->name('valin.allonom');
 });
 /*-------------------end valuations intake------------------------ */
