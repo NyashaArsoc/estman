@@ -77,8 +77,6 @@ Route::controller(ValManageController::class)->group(function () {
 }); */
 /*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::any('/val/{id}/acknow/{instr_id}/decline', 'declineacknowledgement')->name('valapp.declacknow');
-    Route::get('/val/list/compilation', 'listallinstructioncompile')->name('valapp.listcomp');
     Route::get('/val/{id}/view-single/{instr_id}/compile', 'viewsinglecompile')->name('valapp.viewsinglacomp');
     Route::any('/val/{id}/compile/{instr_id}/{propid}', 'submitcompilation')->name('valapp.sbtcomp');
     Route::get('/val/list/quality-check', 'listallinstructionqualitycheck')->name('valapp.listquality');
@@ -322,4 +320,6 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
     Route::get('/val/list/acknowledgement/pending', 'listallinstructionacknowledge')->name('valapp.listacknw');
     Route::get('/val/{id}/view-single/{instr_id}/acknowledgement', 'viewsingleinstructionacknowledge')->name('valapp.viewsinglackwn');
     Route::any('/val/{id}/acknowledge/{instr_id}/accept/{to_id}', 'confirmacknowledgement')->name('valapp.confirmacknow');
+    Route::get('/val/list/compilation', 'listallinstructioncompile')->name('valapp.listcomp');
+    Route::any('/val/{id}/decline/{instr_id}/acknowledge', 'declineacknowledgement')->name('valapp.declineacknow');
 });

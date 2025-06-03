@@ -48,7 +48,7 @@ $description = 'acknowledge instruction ...';
                         <td><a class="btn btn-info btn-sm " id=""
                                 href="{{route('valapp.viewsinglackwn',[$id,$instr_id])}}"
                                 title="view"><i class="ti-eye mr-0-5"></i>view</a>
-                            <a class="btn btn-success btn-sm " id=""
+                            <a class="btn btn-success btn-sm " onclick="confirminstruction(this); return false;"
                                 href="{{route('valapp.confirmacknow',[$id,$instr_id,$to_id])}}"
                                 title="accept"><i class="ti-check mr-0-5"></i>accept</a>
                         </td>
@@ -72,4 +72,9 @@ $description = 'acknowledge instruction ...';
     </div>
 </div>
 <!-- Content End-->
+@endsection
+@endsection
+@section('additional js')
+<script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script>
+<!-- Additional JS End-->
 @endsection

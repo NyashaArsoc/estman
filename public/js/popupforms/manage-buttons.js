@@ -78,7 +78,11 @@ function deactivaterecord(that) {
 function rejectapproval(that) {
     var proceedto = confirm("proceed to decline?")
     if (proceedto) {
-        window.location = anchor.attr("href");
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
+        window.location.href = $button.attr("href");
     }
 }
 function closeportfolio(that) {
@@ -109,7 +113,18 @@ function activaterecord(that) {
 function rentsummary(that) {
     var proceedto = confirm("proceed to download?")
     if (proceedto) {
-        var $button = $(that); // Convert 'that' to a jQuery object
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
+        window.location.href = $button.attr("href");
+    }
+}
+//download rent summary
+function confirminstruction(that) {
+    var proceedto = confirm("proceed to confirm?")
+    if (proceedto) {
+        var $button = $(that);
         $button.prop("disabled", true)
             .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
             .html('loading');

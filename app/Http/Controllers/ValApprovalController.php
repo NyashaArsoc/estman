@@ -132,6 +132,27 @@ class ValApprovalController extends Controller
                 ->with('error', 'failed to load');
         }
     }
+    function declineacknowledgement($id, $instr_id, Request $request)
+    {
+        try {
+            $acknowledgeid = Crypt::decrypt($id);
+            $instructionid = Crypt::decrypt($instr_id);
+            try {
+                DB::table('valinstracknowledgement')->where('id', $acknowledgeid)
+                    ->update(['comments' => $request->reasonsfordecline, 'status' => 'D']);
+                DB::table('valinstructions')->where('id', $instructionid)
+                    ->update(['status' => 'declined', 'completedon' => now()]);
+                return redirect()->route('valapp.listacknw')
+                    ->with('success', 'instruction declined');
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.listacknw')
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.listacknw')
+                ->with('error', 'failed to load');
+        }
+    }
     /*
 public function __construct(){
      $this->middleware(['loginauth']);

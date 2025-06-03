@@ -21,7 +21,7 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
     <h4>{{ $title }}</h4>
     <ol class="breadcrumb no-bg mb-1">
         <li class="breadcrumb-item"><a href="{{ route('dash.val') }}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('valapp.listackn') }}">List</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('valapp.listacknw') }}">List</a></li>
         <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
     <div class="box box-block bg-white">
@@ -42,7 +42,7 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
             </li>
         </ul>
         <form class="form-material material-primary" id="defaultform" method="POST"
-            action="{{ route('valapp.declacknow',[$id,$instr_id]) }}">@csrf
+            action="{{ route('valapp.declineacknow',[$id,$instr_id]) }}">@csrf
             <!-- Tabs Content -->
             <div class="tab-content" id="clientTabContent">
                 <div class="tab-pane show active" id="instruction-info" role="tabpanel" aria-labelledby="instruction-info-tab">
@@ -128,13 +128,14 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
                 <div class="col-sm-4">
                     <input type="text" class="form-control" name="reasonsfordecline"
                         id="reasonsfordecline" />
-                    <small id="reasonscheck" style="color: red;"> reasons for rejection</small>
+                    <small id="reasonscheck" style="color: red;">required</small>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="offset-sm-2 col-sm-4">
-                    <a class="btn btn-success btn-sm" href="{{route('valapp.accptacknow',
-                [$id,$instr_id,$to_id])}}" title="accept"><i class="ti-check mr-0-5"></i>accept</a>
+                    <a class="btn btn-success btn-sm" href="{{route('valapp.confirmacknow',[$id,$instr_id,
+                    $to_id])}}" title="accept" onclick="confirminstruction(this); return false;">
+                        <i class="ti-check mr-0-5"></i>accept</a>
                     <button type="submit" class="btn btn-danger btn-sm" id="reject-instruction-ack"
                         onclick="rejectapproval(this); return false;"><i class="ti-close mr-0-5">
                         </i>decline</button>
