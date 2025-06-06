@@ -63,7 +63,7 @@ class ValApprovalController extends Controller
                             'valclientcontactperson.lastname As contactlastname',
                             'valclientcontactperson.cell',
                             'valclientcontactperson.email',
-                            'valclientdetail.contactddress'
+                            'valclientdetail.contactaddress'
                         )->first(),
                     default => DB::table('valclientcontactperson')->join(
                         'valclientdetail',
@@ -80,13 +80,13 @@ class ValApprovalController extends Controller
                             'valclientcontactperson.lastname As contactlastname',
                             'valclientcontactperson.cell',
                             'valclientcontactperson.email',
-                            'valclientdetail.contactddress'
+                            'valclientdetail.contactaddress'
                         )->first(),
                 };
                 return view('valuation.approval.view-single-instruct-acknowledge')->with($arr);
             } catch (\Throwable $th) {
                 return redirect()->route('valapp.listacknw')
-                    ->with('error', 'failed to load');
+                    ->with('error', 'failed to load' . $th);
             }
         } catch (DecryptException $th) {
             return redirect()->route('valapp.listacknw')
@@ -116,7 +116,7 @@ class ValApprovalController extends Controller
                 $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
                 //check if due date is current or old
                 $currentdatedue = $newdatestamp <= now() ? now() : $newdatestamp;
-                $datedue = Carbon::parse($currentdatedue)->addMinutes($minsexpected->minsexpectedtocompile);
+                $datedue = Carbon::parse($currentdatedue)->addMinutes((int)$minsexpected->minsexpectedtocompile);
                 DB::table('valinstracknowledgement')->where('id', $acknowledgeid)
                     ->update(['completedby' => session('alluser'), 'status' => 'C', 'completedon' => now()]);
                 DB::table('valinstrcompile')->insert(['instructionid' => $instructionid, 'operatorid' =>
@@ -125,7 +125,7 @@ class ValApprovalController extends Controller
                     ->with('success', 'record confirmed');
             } catch (\Throwable $th) {
                 return redirect()->route('valapp.listacknw')
-                    ->with('error', 'failed to load');
+                    ->with('error', 'failed to load' . $th);
             }
         } catch (DecryptException $th) {
             return redirect()->route('valapp.listacknw')

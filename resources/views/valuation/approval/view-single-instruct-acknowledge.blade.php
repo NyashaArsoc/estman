@@ -90,7 +90,7 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
                             </tr>
                             <tr>
                                 <td><strong>Contact Address:</strong></td>
-                                <td>{{$client->contactddress ?? ''}}</td>
+                                <td>{{$client->contactaddress ?? ''}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -127,8 +127,8 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
                 </label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" name="reasonsfordecline"
-                        id="reasonsfordecline" />
-                    <small id="reasonscheck" style="color: red;">required</small>
+                        id="rejectreason" />
+                    <small id="rejectreasoncheck" style="color: red;">required</small>
                 </div>
             </div>
             <div class="form-group row">
@@ -136,8 +136,7 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
                     <a class="btn btn-success btn-sm" href="{{route('valapp.confirmacknow',[$id,$instr_id,
                     $to_id])}}" title="accept" onclick="confirminstruction(this); return false;">
                         <i class="ti-check mr-0-5"></i>accept</a>
-                    <button type="submit" class="btn btn-danger btn-sm" id="reject-instruction-ack"
-                        onclick="rejectapproval(this); return false;"><i class="ti-close mr-0-5">
+                    <button type="submit" class="btn btn-danger btn-sm" id="btn-reject-entry"><i class="ti-close mr-0-5">
                         </i>decline</button>
                 </div>
             </div>
@@ -147,7 +146,6 @@ $to_id= Crypt::encrypt($acknow->allocatedto);
 <!-- Content End -->
 @endsection
 @section('additional js')
-<script src="{{ asset('js/validation/intake.js') }}"></script>
-<script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script>
+<script src="{{ asset('js/validation/approvalvaluation.js') }}"></script>
 <!-- Additional JS End-->
 @endsection

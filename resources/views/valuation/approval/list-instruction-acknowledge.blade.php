@@ -73,7 +73,6 @@ $description = 'acknowledge instruction ...';
 </div>
 <!-- Content End-->
 @endsection
-@endsection
 @section('additional js')
 <script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script>
 <!-- Additional JS End-->
