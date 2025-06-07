@@ -355,6 +355,18 @@ function validateReportSchedule() {
         }
     }
 }
+let isprintedError = true;
+$("#isreportprintcheck").hide();
+function validateReportPrint() {
+    if (!$("#isreportprint").is(":checked")) {
+        $("#isreportprintcheck").show();
+        isprintedError = false;
+        return false;
+    }
+    $("#isreportprintcheck").hide();
+    isprintedError = true;
+    return true;
+}
 /*****************************-------buttons submit ----------------------- */
 //button disable submit
 function disableButtonAndSubmit(button, id) {
@@ -417,6 +429,17 @@ $("#btn-val-final-approve").click(function () {
         if (drcError == true && fairvalueError == true && forcedsalestimateError == true &&
             depreciationvalueError == true && grcError == true && landvalueError == true &&
             marketvalueError == true && rentalvalueError == true && reportdocumentError == true) { disableButtonAndSubmit(this, "defaultform"); }
+        else { return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+// report printed 
+$("#btn-val-isprinted").click(function () {
+    validateReportPrint();
+    try {
+        if (isprintedError == true) { disableButtonAndSubmit(this, "defaultform"); }
         else { return false; }
     } catch (err) {
         alert(err.message);

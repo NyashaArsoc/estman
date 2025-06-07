@@ -9,18 +9,7 @@
 
 
 
-let isprintedError = true;
-$("#isreportprintcheck").hide();
-function validateReportPrint() {
-    if (!$("#isreportprint").is(":checked")) {
-        $("#isreportprintcheck").show();
-        isprintedError = false;
-        return false;
-    }
-    $("#isreportprintcheck").hide();
-    isprintedError = true;
-    return true;
-}
+
 //valid currency code
 $("#currencycodecheck").hide();
 let currencycodeError = true;
@@ -42,17 +31,7 @@ function validateCurrencyCode() {
 
 
 
-// report printed 
-$("#btn-val-isprinted").click(function () {
-    validateReportPrint();
-    try {
-        if (isprintedError == true) { return true; }
-        else { return false; }
-    } catch (err) {
-        alert(err.message);
-        return false;
-    }
-});
+
 // btn invoicing  
 $("#btn-val-invoicing").click(function () {
     validateCurrencyCode(); validateMarketValue();

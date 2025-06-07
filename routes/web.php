@@ -77,8 +77,6 @@ Route::controller(ValManageController::class)->group(function () {
 }); */
 /*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::get('/val/list/printing', 'listallinstructionprint')->name('valapp.listprint');
-    Route::get('/val/{id}/view-single/{instr_id}/printing', 'viewsingleprint')->name('valapp.viewsinglpri');
     Route::any('/val/{id}/report/{instr_id}/print', 'submitprinting')->name('valapp.sbtprint');
     Route::get('/val/list/invoicing', 'listallinstructioninvoice')->name('valapp.listinvoice');
     Route::get('/val/{id}/view-single/{instr_id}/invoice', 'viewsingleinvoicing')->name('valapp.viewsinglinvo');
@@ -322,4 +320,6 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
     Route::get('/val/list/report-approval', 'listallinstructionfinalapproval')->name('valapp.listreportapp');
     Route::get('/val/{id}/view-single/{instr_id}/instruction/approval', 'viewsingleinstructionapproval')->name('valapp.viewinstrapp');
     Route::any('/val/{id}/instruction/{instr_id}/approval', 'submitreportapproval')->name('valapp.reportapproval');
+    Route::get('/val/list/printing/pending', 'listallinstructionprinting')->name('valapp.listallprint');
+    Route::get('/val/{id}/view-instruction/{instr_id}/printing', 'viewsingleintructionprint')->name('valapp.viewsinglprint');
 });
