@@ -43,7 +43,7 @@ $reportdoc = ($upload !== null && !is_null($upload->reportdoc)) ? route('valapp.
             </li>
         </ul>
         <form class="form-material material-primary" id="defaultform" method="POST"
-            action="">@csrf
+            action="{{ route('valapp.printreport',[$id,$instr_id]) }}">@csrf
             <!-- Tabs Content -->
             <div class="tab-content" id="clientTabContent">
                 <div class="tab-pane fade" id="instruction-info" role="tabpanel" aria-labelledby="instruction-info-tab">

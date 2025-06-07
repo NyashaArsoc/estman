@@ -754,6 +754,36 @@ class ValApprovalController extends Controller
                 ->with('error', 'failed to load');
         }
     }
+    function submitprinting(Request $request, $id, $instr_id)
+    {
+        try {
+            $printid = Crypt::decrypt($id);
+            $instructionid = Crypt::decrypt($instr_id);
+            try {
+                $datestamp =     DB::table('valinstrdispatch')
+                    ->where('status', '=', 'P')->select('*')->orderBy('id', 'desc')->first();
+                $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
+                $newdatestampdatedue = $newdatestamp <= now() ? now() : $newdatestamp;
+                $datedue = Carbon::parse($newdatestampdatedue)->addMinutes(60);
+                DB::table('valinstrprinting')->where('id', $printid)
+                    ->update([
+                        'completedby' => session('alluser'),
+                        'status' => 'C',
+                        'completedon' => now()
+                    ]);
+                DB::table('valinstrdispatch')->insert(['instructionid' => $instructionid, 'operatorid' =>
+                session('alluser'), 'datedue' => $datedue]);
+                return redirect()->route('valapp.listallprint')
+                    ->with('success', 'record added');
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.listallprint')
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.listallprint')
+                ->with('error', 'failed to load');
+        }
+    }
     /*
 public function __construct(){
      $this->middleware(['loginauth']);
@@ -1253,32 +1283,7 @@ public function listallinstructionprint(){
 public function viewsingleprint($id,$instrid){
   
 }
-public function submitprinting(Request $request,$id,$instr_id){
-    try{
-        $printid = Crypt::decrypt($id);
-        $instructionid = Crypt::decrypt($instr_id);
-        try{
-        $datestamp =     DB::table('valinstrdispatch')
-        ->where('status','=','P')->select('*')->orderBy('id', 'desc')->first();
-        $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
-        $newdatestampdatedue = $newdatestamp <= now() ? now() : $newdatestamp;
-        $datedue = Carbon::parse($newdatestampdatedue)->addMinutes(60);
-        DB::table('valinstrprinting')->where('id', $printid)
-        ->update(['completedby' => session('alluser'),'status' => 'C',
-        'completedon' => now()]);
-        DB::table('valinstrdispatch') ->insert(['instructionid'=>$instructionid,'operatorid'=>
-        session('alluser'),'datedue'=>$datedue]);
-        return redirect()->route('valapp.listprint')
-            ->with('success', 'instruction updated');
-        } catch (\Throwable $th) {
-            return redirect()->route('valapp.listprint')
-        ->with('error', 'failed to load');
-        }
-    } catch (DecryptException $th) {
-        return redirect()->route('valapp.listprint')
-        ->with('error', 'failed to load');
-    }
-}
+
 /*------------- report invoicing ----------------- */
     /*
 public function listallinstructioninvoice(){
