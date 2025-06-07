@@ -77,7 +77,6 @@ Route::controller(ValManageController::class)->group(function () {
 }); */
 /*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::any('/val/{id}/quality/{instr_id}', 'submitqualitycheck')->name('valapp.sbtqty');
     Route::get('/val/list/final-approve', 'listallinstructionfinalapproval')->name('valapp.listallappro');
     Route::get('/val/{id}/view-single/{instr_id}/final/approval', 'viewsinglefinalapproval')->name('valapp.viewsinglfinapr');
     Route::any('/val/{id}/instruction/{instr_id}/approval', 'submitfinalapproval')->name('valapp.sbtfinalap');
@@ -322,4 +321,5 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
     Route::any('/val-report/{instr_id}/download/doc', 'downloadreportword')->name('valapp.downdoc');
     Route::any('/val-report/{instr_id}/excel/download', 'downloadreportexcel')->name('valapp.downexc');
     /*-----------end download reports-------------------- */
+    Route::any('/val/{id}/quality/{instr_id}', 'submitqualitycheck')->name('valapp.sbtquality');
 });

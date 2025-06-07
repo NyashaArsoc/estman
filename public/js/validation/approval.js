@@ -40,17 +40,7 @@ function validateCurrencyCode() {
 }
 /*------------------------------------submit buttons -----------------*/
 
-// btn quality check 
-$("#btn-val-quality").click(function () {
-    validateReportDocument();
-    try {
-        if (reportdocumentError == true) { return true; }
-        else { return false; }
-    } catch (err) {
-        alert(err.message);
-        return false;
-    }
-});
+
 // btn final approval
 $("#btn-val-final-approve").click(function () {
     validateDRC(); validateFairValue();

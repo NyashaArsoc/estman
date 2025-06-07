@@ -396,3 +396,14 @@ $("#btn-val-compile").click(function () {
         return false;
     }
 });
+// btn quality check 
+$("#btn-val-quality").click(function () {
+    validateReportDocument();
+    try {
+        if (reportdocumentError == true) { disableButtonAndSubmit(this, "defaultform"); }
+        else { return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});

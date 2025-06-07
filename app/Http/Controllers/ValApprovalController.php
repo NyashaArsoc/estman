@@ -437,6 +437,85 @@ class ValApprovalController extends Controller
             return redirect()->route('dash.val');
         }
     }
+    function submitqualitycheck(Request $request, $id, $instr_id)
+    {
+        try {
+            $qualityid = Crypt::decrypt($id);
+            $instructionid = Crypt::decrypt($instr_id);
+            try {
+                $request->validate([
+                    'reportdocument' => 'required',
+                ]);
+                $instructiontype = DB::table('valinstructions')->where('id', $instructionid)->select('*')->first();
+                $filename   = DB::table('valinstruploads')->where('instructionid', $instructionid)
+                    ->select('reportdoc')->first();
+                if (!is_null($filename)) {
+                    $this->deletereportdoc($filename->reportdoc);
+                }
+                if ($request->hasFile('reportdocument')) {
+                    $reportdoc = $request->file('reportdocument');
+                    $reportdocname = $request->propertyaddress . '.' . $reportdoc->getClientOriginalExtension();
+                    $reportdoc->storeAs('public/documents/valuation/doc', $reportdocname);
+                } else {
+                    $reportdocname = null;
+                }
+
+                $isprint = (is_null($request->isprintreport)) ? 'N' : 'Y';
+
+                $approvaldatestamp =     DB::table('valinstrfinalapproval')
+                    ->where('status', '=', 'P')->select('*')->orderBy('id', 'desc')->first();
+                $invoicedatestamp =     DB::table('valinstrinvoicing')
+                    ->where('status', '=', 'P')->select('*')->orderBy('id', 'desc')->first();
+
+                $newapprovaldatestamp = is_null($approvaldatestamp) ? now() : $approvaldatestamp->datedue;
+                $newinvoicedatestamp  = is_null($invoicedatestamp) ? now() : $invoicedatestamp->datedue;
+
+                $newapprovalcurrentdatedue = $newapprovaldatestamp <= now() ? now() : $newapprovaldatestamp;
+                $approvaldatedue = Carbon::parse($newapprovalcurrentdatedue)->addMinutes(60);
+                $newinvoicedapprovalcurrentdatedue = $newinvoicedatestamp <= now() ? now() : $newinvoicedatestamp;
+                $invoicedatedue = Carbon::parse($newinvoicedapprovalcurrentdatedue)->addMinutes(60);
+
+                DB::table('valinstrqualitycheck')->where('id', $qualityid)
+                    ->update([
+                        'completedby' => session('alluser'),
+                        'status' => 'C',
+                        'completedon' => now(),
+                        'comments' => $request->commentshighlights
+                    ]);
+                /*-------------------check if portfolio dont put to invoice-------------------- */
+
+                if (trim($instructiontype->isportfolio) == 'N') {
+                    DB::table('valinstrinvoicing')->insert(['instructionid' => $instructionid, 'operatorid' =>
+                    session('alluser'), 'datedue' => $invoicedatedue]);
+                }
+
+                DB::table('valinstrfinalapproval')->insert(['instructionid' => $instructionid, 'operatorid' =>
+                session('alluser'), 'datedue' => $approvaldatedue, 'isprint' => $isprint]);
+
+                DB::table('valinstruploads')->where('instructionid', $instructionid)
+                    ->update(['reportdoc' => $reportdocname]);
+
+                return redirect()->route('valapp.listquality')
+                    ->with('success', 'record added');
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.listquality')
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.listquality')
+                ->with('error', 'failed to load');
+        }
+    }
+    function deletereportdoc($filename)
+    {
+        //check the existance of receipt first
+        if (Storage::disk('public')->exists("documents/valuation/doc/{$filename}")) {
+            Storage::disk('public')->delete("documents/valuation/doc/{$filename}");
+            return 'success';
+        } else {
+            return 'notfound';
+        }
+    }
     /*
 public function __construct(){
      $this->middleware(['loginauth']);
