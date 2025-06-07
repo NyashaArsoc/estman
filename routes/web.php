@@ -77,7 +77,6 @@ Route::controller(ValManageController::class)->group(function () {
 }); */
 /*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::any('/val/{id}/compile/{instr_id}/{propid}', 'submitcompilation')->name('valapp.sbtcomp');
     Route::get('/val/list/quality-check', 'listallinstructionqualitycheck')->name('valapp.listquality');
     Route::get('/val/{id}/view-single/{instr_id}/quality/check', 'viewsinglequalitycheck')->name('valapp.viewsinglqlty');
     Route::any('/val/{id}/quality/{instr_id}', 'submitqualitycheck')->name('valapp.sbtqty');
@@ -322,4 +321,5 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
     Route::get('/val/list/compilation', 'listallinstructioncompile')->name('valapp.listcomp');
     Route::any('/val/{id}/decline/{instr_id}/acknowledge', 'declineacknowledgement')->name('valapp.declineacknow');
     Route::get('/val/{id}/view-single/{instr_id}/compilation', 'viewsingleinstructioncompile')->name('valapp.viewsinglcomp');
+    Route::any('/val/{id}/compile/{instr_id}/{propid}/submit', 'submitcompilation')->name('valapp.sbtcompl');
 });

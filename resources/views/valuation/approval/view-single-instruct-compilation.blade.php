@@ -41,7 +41,7 @@ $propid= Crypt::encrypt($instr->propertyid);
             </li>
         </ul>
         <form class="form-material material-primary" id="defaultform" method="POST" enctype="multipart/form-data"
-            action="">@csrf
+            action="{{ route('valapp.sbtcompl',[$id,$instr_id,$propid]) }}">@csrf
             <!-- Tabs Content -->
             <div class="tab-content" id="clientTabContent">
                 <div class="tab-pane fade" id="instruction-info" role="tabpanel" aria-labelledby="instruction-info-tab">
@@ -176,18 +176,18 @@ $propid= Crypt::encrypt($instr->propertyid);
             </div>
             <h5>Property Attachements</h5>
             <div class="form-group row">
-                <label for="Cell" class="col-sm-2 col-form-label">Report
+                <label for="" class="col-sm-2 col-form-label">Report
                 </label>
                 <div class="col-sm-4">
                     <input type="file" class="form-control" id="reportdocument" name="reportdocument"
-                        accept=".doc">
+                        accept=".doc, .docx, .odt">
                     <small id="reportdocumentcheck" style="color: red;">required</small>
                 </div>
-                <label for="Email" class="col-sm-2 col-form-label">Schedule
+                <label for="" class="col-sm-2 col-form-label">Schedule
                 </label>
                 <div class="col-sm-4">
                     <input type="file" class="form-control" id="reportschedule" name="reportschedule"
-                        accept=".Xls">
+                        accept=".xls, .xlsx, .csv, .ods">
                     <small id="reportschedulecheck" style="color: red;">required</small>
                 </div>
             </div>
@@ -222,6 +222,6 @@ $propid= Crypt::encrypt($instr->propertyid);
 <!-- Content End -->
 @endsection
 @section('additional js')
-<script src="{{ asset('js/validation/approval.js') }}"></script>
+<script src="{{ asset('js/validation/approvalvaluation.js') }}"></script>
 <!-- Additional JS End-->
 @endsection

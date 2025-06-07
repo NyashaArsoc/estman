@@ -235,6 +235,79 @@ class ValApprovalController extends Controller
                 ->with('error', 'failed to load');
         }
     }
+    function submitcompilation(Request $request, $id, $instr_id, $propid)
+    {
+        try {
+            $compileid = Crypt::decrypt($id);
+            $instructionid = Crypt::decrypt($instr_id);
+            $propertyid = Crypt::decrypt($propid);
+            try {
+                $request->validate([
+                    'reportdocument' => 'required',
+                    'reportschedule' => 'required',
+                ]);
+                $properties   = collect(DB::select(
+                    'EXEC spGetValInstrSingleProperty ?',
+                    [$propertyid]
+                ))->first();
+                //checking if the attachment is there 
+                if ($request->hasFile('reportdocument')) {
+                    $reportdoc = $request->file('reportdocument');
+                    $reportdocname = $properties->streetaddress . '.' . $reportdoc->getClientOriginalExtension();
+                    $reportdoc->storeAs('public/documents/valuation/doc', $reportdocname);
+                } else {
+                    $reportdocname = '';
+                }
+
+                if ($request->hasFile('reportschedule')) {
+                    $reportexcel = $request->file('reportschedule');
+                    $reportexcelname = $properties->streetaddress . '.' . $reportexcel->getClientOriginalExtension();
+                    $reportexcel->storeAs('public/documents/valuation/excel', $reportexcelname);
+                } else {
+                    $reportexcelname = '';
+                }
+
+                $datestamp =     DB::table('valinstrqualitycheck')
+                    ->where('status', '=', 'P')->select('*')->orderBy('id', 'desc')->first();
+                $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
+                //check if due date is current or old
+                $currentdatedue = $newdatestamp <= now() ? now() : $newdatestamp;
+                $datedue = Carbon::parse($currentdatedue)->addMinutes(60);
+                DB::table('valinstrcompile')->where('id', $compileid)
+                    ->update([
+                        'completedby' => session('alluser'),
+                        'status' => 'C',
+                        'completedon' => now(),
+                        'marketvalue' => $request->marketvalue,
+                        'grc' => $request->grc,
+                        'forcedsale' => $request->forcedsalestimate,
+                        'depreciation' => $request->depreciationvalue,
+                        'rentalvalue' => $request->rentalvalue,
+                        'landvalue'
+                        => $request->landvalue,
+                        'drc' => $request->drc,
+                        'fairvalue' => $request->fairvalue,
+                        'comments' =>
+                        $request->commentshighlights
+                    ]);
+                DB::table('valclientproperty')->where('id', $propertyid)
+                    ->update(['standnumber' => $request->standnumber]);
+
+                DB::table('valinstrqualitycheck')->insert(['instructionid' => $instructionid, 'operatorid' =>
+                session('alluser'), 'datedue' => $datedue]);
+                DB::table('valinstruploads')->insert(['instructionid' => $instructionid, 'reportdoc' =>
+                $reportdocname, 'reportexcel' => $reportexcelname]);
+                return redirect()->route('valapp.listcomp')
+                    ->with('success', 'record added');
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.listcomp')
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.listcomp')
+                ->with('error', 'failed to load');
+        }
+    }
     /*
 public function __construct(){
      $this->middleware(['loginauth']);
