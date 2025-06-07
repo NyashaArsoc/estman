@@ -367,6 +367,23 @@ function validateReportPrint() {
     isprintedError = true;
     return true;
 }
+//valid currency code
+$("#currencycodecheck").hide();
+let currencycodeError = true;
+$("#currencycode").keyup(function () {
+    validateCurrencyCode();
+});
+function validateCurrencyCode() {
+    let textValue = $("#currencycode").val();
+    if (textValue.length == "") {
+        $("#currencycodecheck").show();
+        currencycodeError = false;
+        return false;
+    } else {
+        currencycodeError = true;
+        $("#currencycodecheck").hide();
+    }
+}
 /*****************************-------buttons submit ----------------------- */
 //button disable submit
 function disableButtonAndSubmit(button, id) {
@@ -440,6 +457,17 @@ $("#btn-val-isprinted").click(function () {
     validateReportPrint();
     try {
         if (isprintedError == true) { disableButtonAndSubmit(this, "defaultform"); }
+        else { return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+// btn invoicing  
+$("#btn-val-invoicing").click(function () {
+    validateCurrencyCode(); validateMarketValue();
+    try {
+        if (currencycodeError == true && marketvalueError == true) { disableButtonAndSubmit(this, "defaultform"); }
         else { return false; }
     } catch (err) {
         alert(err.message);
