@@ -669,6 +669,91 @@ class ValApprovalController extends Controller
                 ->with('error', 'failed to load');
         }
     }
+    /*------------printing reports-----------------------------*/
+    function listallinstructionprinting()
+    {
+        try {
+            $nom['normal'] = DB::select('EXEC spGetValInstPrintNormal');
+            $port['portfolio'] = DB::select('EXEC spGetValInstPrintPortfolio');
+            $arr['stage'] = array_merge($nom['normal'], $port['portfolio']);
+            return view('valuation.approval.list-instruct-printing')->with($arr);
+        } catch (\Throwable $th) {
+            return  redirect()->route('dash.val');
+        }
+    }
+    function viewsingleintructionprint($id, $instrid)
+    {
+        try {
+            $printid = Crypt::decrypt($id);
+            $instructionid = Crypt::decrypt($instrid);
+            try {
+                $arr['type']   = DB::table('setupclienttype')->select('*')->get();
+                $arr['instr']   = DB::table('valinstructions')->where('id', $instructionid)
+                    ->select('*')->first();
+                $arr['prevstage']   = DB::table('valinstrcompile')->where('instructionid', $instructionid)
+                    ->select('*')->orderBy('id', 'desc')->first();
+                $arr['currstage']   = DB::table('valinstrprinting')->where('id', $printid)
+                    ->select('*')->first();
+                $arr['properties']   = collect(DB::select(
+                    'EXEC spGetValInstrSingleProperty ?',
+                    [$arr['instr']->propertyid]
+                ))->first();
+                $arr['upload']   = DB::table('valinstruploads')->where('instructionid', $instructionid)
+                    ->select('*')->first();
+
+                $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
+                    'N' => DB::table('valinstructions')->where('id', $instructionid)
+                        ->select('*')->first(),
+                    default => DB::table('valinstrportfolio')
+                        ->where('id', $arr['instr']->portfolioid)
+                        ->select('*')->first(),
+                };
+                $arr['client'] = match (trim($arr['instr']->isportfolio)) {
+                    'N' => DB::table('valclientcontactperson')->join(
+                        'valclientdetail',
+                        'valclientcontactperson.clientid',
+                        '=',
+                        'valclientdetail.id'
+                    )
+                        ->where('valclientcontactperson.id', $arr['instr']->contactid)
+                        ->select(
+                            'valclientdetail.companyname',
+                            'valclientdetail.lastname',
+                            'valclientdetail.firstname',
+                            'valclientcontactperson.firstname As contactfirstname',
+                            'valclientcontactperson.lastname As contactlastname',
+                            'valclientcontactperson.cell',
+                            'valclientcontactperson.email',
+                            'valclientdetail.contactaddress'
+                        )->first(),
+                    default => DB::table('valclientcontactperson')->join(
+                        'valclientdetail',
+                        'valclientcontactperson.clientid',
+                        '=',
+                        'valclientdetail.id'
+                    )
+                        ->where('valclientcontactperson.id', $arr['purpose']->clientcontactid)
+                        ->select(
+                            'valclientdetail.companyname',
+                            'valclientdetail.lastname',
+                            'valclientdetail.firstname',
+                            'valclientcontactperson.firstname As contactfirstname',
+                            'valclientcontactperson.lastname As contactlastname',
+                            'valclientcontactperson.cell',
+                            'valclientcontactperson.email',
+                            'valclientdetail.contactaddress'
+                        )->first(),
+                };
+                return view('valuation.approval.view-single-printing')->with($arr);
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.listallprint')
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.listallprint')
+                ->with('error', 'failed to load');
+        }
+    }
     /*
 public function __construct(){
      $this->middleware(['loginauth']);
@@ -1166,55 +1251,7 @@ public function listallinstructionprint(){
     }
 }
 public function viewsingleprint($id,$instrid){
-    try {
-        $printid = Crypt::decrypt($id);
-        $instructionid = Crypt::decrypt($instrid);
-        try {
-            $arr['type']   = DB::table('clienttype')
-                ->select('id','description')->get();
-            $arr['instr']   = DB::table('valinstructions')->where('id',$instructionid)
-                ->select('*')->first();
-            $arr['prevstage']   = DB::table('valinstrcompile')->where('instructionid',$instructionid)
-                ->select('*')->orderBy('id', 'desc')->first();
-            $arr['currstage']   = DB::table('valinstrprinting')->where('id',$printid)
-                ->select('*')->first();
-            $arr['properties']   = collect(DB::select('EXEC spValGetInstrSingleProperty ?'
-            ,[$arr['instr']->propertyid]))->first();
-            $arr['upload']   = DB::table('valinstruploads')->where('instructionid',$instructionid)
-            ->select('*')->first();
-        
-            $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
-                'N' => DB::table('valinstructions') ->where('id', $instructionid)
-                    ->select('*') ->first(),
-                default => DB::table('valinstrportfolio')
-                    ->where('id', $arr['instr']->portfolioid)
-                    ->select('*')->first(),
-            };
-            $arr['client'] = match (trim($arr['instr']->isportfolio)) {
-                'N' => DB::table('valclientcontactperson')->join('valclientdetail', 
-                'valclientcontactperson.clientid','=', 'valclientdetail.id')
-                ->where('valclientcontactperson.id', $arr['instr']->contactid)
-                    ->select('valclientdetail.companyname','valclientdetail.lastname',
-                    'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
-                    ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
-                    'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
-                default => DB::table('valclientcontactperson')->join('valclientdetail', 
-                'valclientcontactperson.clientid','=', 'valclientdetail.id')
-                ->where('valclientcontactperson.id', $arr['purpose']->clientcontactid)
-                    ->select('valclientdetail.companyname','valclientdetail.lastname',
-                    'valclientdetail.firstname','valclientcontactperson.firstname As contactfirstname'
-                    ,'valclientcontactperson.lastname As contactlastname','valclientcontactperson.cell',
-                    'valclientcontactperson.email','valclientdetail.contactddress') ->first(),
-            };
-            return view('val.approval.view-single-printing')->with($arr);
-        } catch (\Throwable $th) {
-            return redirect()->route('valapp.listallappro')
-        ->with('error', 'failed to load');
-        }
-    } catch (DecryptException $th) {
-    return redirect()->route('valapp.listallappro')
-        ->with('error', 'failed to load');
-    }
+  
 }
 public function submitprinting(Request $request,$id,$instr_id){
     try{
