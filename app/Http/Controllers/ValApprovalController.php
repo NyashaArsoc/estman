@@ -516,6 +516,91 @@ class ValApprovalController extends Controller
             return 'notfound';
         }
     }
+    /*----------------------report approval----------------------------------*/
+    function listallinstructionfinalapproval()
+    {
+        try {
+            $nom['normal'] = DB::select('EXEC spGetValInstFinalApprovalNormal');
+            $port['portfolio'] = DB::select('EXEC spGetValInstFinalApprovalPortfolio');
+            $arr['stage'] = array_merge($nom['normal'], $port['portfolio']);
+            return view('valuation.approval.list-instruct-final-approval')->with($arr);
+        } catch (\Throwable $th) {
+            return  redirect()->route('dash.val');
+        }
+    }
+    function viewsingleinstructionapproval($id, $instr_id)
+    {
+        try {
+            $approvalid = Crypt::decrypt($id);
+            $instructionid = Crypt::decrypt($instr_id);
+            try {
+                $arr['type']   = DB::table('setupclienttype')->select('*')->get();
+                $arr['instr']   = DB::table('valinstructions')->where('id', $instructionid)
+                    ->select('*')->first();
+                $arr['prevstage']   = DB::table('valinstrcompile')->where('instructionid', $instructionid)
+                    ->select('*')->orderBy('id', 'desc')->first();
+                $arr['currstage']   = DB::table('valinstrfinalapproval')->where('id', $approvalid)
+                    ->select('*')->first();
+                $arr['properties']   = collect(DB::select(
+                    'EXEC spGetValInstrSingleProperty ?',
+                    [$arr['instr']->propertyid]
+                ))->first();
+                $arr['upload']   = DB::table('valinstruploads')->where('instructionid', $instructionid)
+                    ->select('*')->first();
+
+                $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
+                    'N' => DB::table('valinstructions')->where('id', $instructionid)
+                        ->select('*')->first(),
+                    default => DB::table('valinstrportfolio')
+                        ->where('id', $arr['instr']->portfolioid)
+                        ->select('*')->first(),
+                };
+                $arr['client'] = match (trim($arr['instr']->isportfolio)) {
+                    'N' => DB::table('valclientcontactperson')->join(
+                        'valclientdetail',
+                        'valclientcontactperson.clientid',
+                        '=',
+                        'valclientdetail.id'
+                    )
+                        ->where('valclientcontactperson.id', $arr['instr']->contactid)
+                        ->select(
+                            'valclientdetail.companyname',
+                            'valclientdetail.lastname',
+                            'valclientdetail.firstname',
+                            'valclientcontactperson.firstname As contactfirstname',
+                            'valclientcontactperson.lastname As contactlastname',
+                            'valclientcontactperson.cell',
+                            'valclientcontactperson.email',
+                            'valclientdetail.contactaddress'
+                        )->first(),
+                    default => DB::table('valclientcontactperson')->join(
+                        'valclientdetail',
+                        'valclientcontactperson.clientid',
+                        '=',
+                        'valclientdetail.id'
+                    )
+                        ->where('valclientcontactperson.id', $arr['purpose']->clientcontactid)
+                        ->select(
+                            'valclientdetail.companyname',
+                            'valclientdetail.lastname',
+                            'valclientdetail.firstname',
+                            'valclientcontactperson.firstname As contactfirstname',
+                            'valclientcontactperson.lastname As contactlastname',
+                            'valclientcontactperson.cell',
+                            'valclientcontactperson.email',
+                            'valclientdetail.contactaddress'
+                        )->first(),
+                };
+                return view('valuation.approval.view-single-instruct-final-approval')->with($arr);
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.listallappro')
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.listallappro')
+                ->with('error', 'failed to load');
+        }
+    }
     /*
 public function __construct(){
      $this->middleware(['loginauth']);
