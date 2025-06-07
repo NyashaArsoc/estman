@@ -77,7 +77,6 @@ Route::controller(ValManageController::class)->group(function () {
 }); */
 /*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::any('/val/{id}/instruction/{instr_id}/approval', 'submitfinalapproval')->name('valapp.sbtfinalap');
     Route::get('/val/list/printing', 'listallinstructionprint')->name('valapp.listprint');
     Route::get('/val/{id}/view-single/{instr_id}/printing', 'viewsingleprint')->name('valapp.viewsinglpri');
     Route::any('/val/{id}/report/{instr_id}/print', 'submitprinting')->name('valapp.sbtprint');
@@ -322,4 +321,5 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
     Route::any('/val/{id}/quality/{instr_id}', 'submitqualitycheck')->name('valapp.sbtquality');
     Route::get('/val/list/report-approval', 'listallinstructionfinalapproval')->name('valapp.listreportapp');
     Route::get('/val/{id}/view-single/{instr_id}/instruction/approval', 'viewsingleinstructionapproval')->name('valapp.viewinstrapp');
+    Route::any('/val/{id}/instruction/{instr_id}/approval', 'submitreportapproval')->name('valapp.reportapproval');
 });

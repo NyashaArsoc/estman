@@ -407,3 +407,19 @@ $("#btn-val-quality").click(function () {
         return false;
     }
 });
+// btn final approval
+$("#btn-val-final-approve").click(function () {
+    validateDRC(); validateFairValue();
+    validateForcedSaleEstimate(); validateGRC(); validateLandValue();
+    validateMarketValue(); validateRentalValue(); validateDepreciationValue();
+    validateReportDocument();
+    try {
+        if (drcError == true && fairvalueError == true && forcedsalestimateError == true &&
+            depreciationvalueError == true && grcError == true && landvalueError == true &&
+            marketvalueError == true && rentalvalueError == true && reportdocumentError == true) { disableButtonAndSubmit(this, "defaultform"); }
+        else { return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});

@@ -45,7 +45,7 @@ $reportexc = ($upload !== null && !is_null($upload->reportexcel)) ? route('valap
             </li>
         </ul>
         <form class="form-material material-primary" id="defaultform" enctype="multipart/form-data"
-            method="POST" action="">@csrf
+            method="POST" action="{{ route('valapp.reportapproval',[$id,$instr_id]) }}">@csrf
             <!-- Tabs Content -->
             <div class="tab-content" id="clientTabContent">
                 <div class="tab-pane fade" id="instruction-info" role="tabpanel" aria-labelledby="instruction-info-tab">

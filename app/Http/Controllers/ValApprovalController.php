@@ -593,11 +593,79 @@ class ValApprovalController extends Controller
                 };
                 return view('valuation.approval.view-single-instruct-final-approval')->with($arr);
             } catch (\Throwable $th) {
-                return redirect()->route('valapp.listallappro')
+                return redirect()->route('valapp.listreportapp')
                     ->with('error', 'failed to load');
             }
         } catch (DecryptException $th) {
-            return redirect()->route('valapp.listallappro')
+            return redirect()->route('valapp.listreportapp')
+                ->with('error', 'failed to load');
+        }
+    }
+    function submitreportapproval(Request $request, $id, $instr_id)
+    {
+        try {
+            $approvalid = Crypt::decrypt($id);
+            $instructionid = Crypt::decrypt($instr_id);
+            try {
+                $request->validate([
+                    'reportdocument' => 'required',
+                ]);
+                $filename   = DB::table('valinstruploads')->where('instructionid', $instructionid)
+                    ->select('reportdoc')->first();
+                if (!is_null($filename)) {
+                    $this->deletereportdoc($filename->reportdoc);
+                }
+                if ($request->hasFile('reportdocument')) {
+                    $reportdoc = $request->file('reportdocument');
+                    $reportdocname = $request->propertyaddress . '.' . $reportdoc->getClientOriginalExtension();
+                    $reportdoc->storeAs('public/documents/valuation/doc', $reportdocname);
+                } else {
+                    $reportdocname = null;
+                }
+
+                $datestamp =     DB::table('valinstrprinting')
+                    ->where('status', '=', 'P')->select('*')->orderBy('id', 'desc')->first();
+                $compileid =     DB::table('valinstrcompile')
+                    ->where('instructionid', $instructionid)->select('id')->orderBy('id', 'desc')->first();
+                $isprint     =     DB::table('valinstrfinalapproval')->where('id', $approvalid)
+                    ->select('*')->first();
+                $newdatestamp = is_null($datestamp) ? now() : $datestamp->datedue;
+                $newdatestampdatedue = $newdatestamp <= now() ? now() : $newdatestamp;
+                $datedue = Carbon::parse($newdatestampdatedue)->addMinutes(60);
+
+
+                if (trim($isprint->isprint) == 'Y') {
+                    DB::table('valinstrprinting')->insert(['instructionid' => $instructionid, 'operatorid' =>
+                    session('alluser'), 'datedue' => $datedue]);
+                }
+                DB::table('valinstrsendingreport')->insert(['instructionid' => $instructionid, 'operatorid' =>
+                session('alluser'), 'datedue' => $datedue]);
+
+                DB::table('valinstrcompile')->where('id', $compileid->id)
+                    ->update(['marketvalue' => $request->marketvalue, 'grc' => $request->grc, 'forcedsale' =>
+                    $request->forcedsalestimate, 'depreciation' => $request->depreciationvalue, 'rentalvalue' =>
+                    $request->rentalvalue, 'landvalue' => $request->landvalue, 'drc' => $request->drc, 'fairvalue' =>
+                    $request->fairvalue]);
+
+                DB::table('valinstrfinalapproval')->where('id', $approvalid)
+                    ->update([
+                        'completedby' => session('alluser'),
+                        'status' => 'C',
+                        'completedon' => now()
+                    ]);
+                DB::table('valinstruploads')->where('instructionid', $instructionid)
+                    ->update(['reportdoc' => $reportdocname]);
+                DB::table('valinstructions')->where('id', $instructionid)
+                    ->update(['status' => 'C']);
+
+                return redirect()->route('valapp.listreportapp')
+                    ->with('success', 'record added');
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.listreportapp')
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.listreportapp')
                 ->with('error', 'failed to load');
         }
     }
