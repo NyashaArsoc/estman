@@ -308,6 +308,135 @@ class ValApprovalController extends Controller
                 ->with('error', 'failed to load');
         }
     }
+    function listallinstructionqualitycheck()
+    {
+        try {
+            $nom['normal'] = DB::select('EXEC spGetValInstQualityNormal');
+            $port['portfolio'] = DB::select('EXEC spGetValInstQualityPortfolio');
+            $arr['acknow'] = array_merge($nom['normal'], $port['portfolio']);
+            return view('valuation.approval.list-instruct-quality-check')->with($arr);
+        } catch (\Throwable $th) {
+            return  redirect()->route('dash.val');
+        }
+    }
+    function viewsinglequalitycheck($id, $instrid)
+    {
+        try {
+            $qualityid = Crypt::decrypt($id);
+            $instructionid = Crypt::decrypt($instrid);
+            try {
+                $arr['type']   = DB::table('setupclienttype')->select('*')->get();
+
+                $arr['instr']   = DB::table('valinstructions')->where('id', $instructionid)
+                    ->select('*')->first();
+                $arr['prevstage']   = DB::table('valinstrcompile')->where('instructionid', $instructionid)
+                    ->select('*')->orderBy('id', 'desc')->first();;
+                $arr['currstage']   = DB::table('valinstrqualitycheck')->where('id', $qualityid)
+                    ->select('*')->first();
+                $arr['properties']   = collect(DB::select(
+                    'EXEC spGetValInstrSingleProperty ?',
+                    [$arr['instr']->propertyid]
+                ))->first();
+                $arr['upload']   = DB::table('valinstruploads')->where('instructionid', $instructionid)
+                    ->select('*')->first();
+
+                $arr['purpose'] = match (trim($arr['instr']->isportfolio)) {
+                    'N' => DB::table('valinstructions')->where('id', $instructionid)
+                        ->select('*')->first(),
+                    default => DB::table('valinstrportfolio')
+                        ->where('id', $arr['instr']->portfolioid)
+                        ->select('*')->first(),
+                };
+                $arr['client'] = match (trim($arr['instr']->isportfolio)) {
+                    'N' => DB::table('valclientcontactperson')->join(
+                        'valclientdetail',
+                        'valclientcontactperson.clientid',
+                        '=',
+                        'valclientdetail.id'
+                    )
+                        ->where('valclientcontactperson.id', $arr['instr']->contactid)
+                        ->select(
+                            'valclientdetail.companyname',
+                            'valclientdetail.lastname',
+                            'valclientdetail.firstname',
+                            'valclientcontactperson.firstname As contactfirstname',
+                            'valclientcontactperson.lastname As contactlastname',
+                            'valclientcontactperson.cell',
+                            'valclientcontactperson.email',
+                            'valclientdetail.contactaddress'
+                        )->first(),
+                    default => DB::table('valclientcontactperson')->join(
+                        'valclientdetail',
+                        'valclientcontactperson.clientid',
+                        '=',
+                        'valclientdetail.id'
+                    )
+                        ->where('valclientcontactperson.id', $arr['purpose']->clientcontactid)
+                        ->select(
+                            'valclientdetail.companyname',
+                            'valclientdetail.lastname',
+                            'valclientdetail.firstname',
+                            'valclientcontactperson.firstname As contactfirstname',
+                            'valclientcontactperson.lastname As contactlastname',
+                            'valclientcontactperson.cell',
+                            'valclientcontactperson.email',
+                            'valclientdetail.contactaddress'
+                        )->first(),
+                };
+                return view('valuation.approval.view-single-instruct-quality-check')->with($arr);
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.listquality')
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.listquality')
+                ->with('error', 'failed to load');
+        }
+    }
+    function downloadreportword($instr_id)
+    {
+        try {
+            $instructionid = Crypt::decrypt($instr_id);
+            try {
+                $upload   = DB::table('valinstruploads')->where('instructionid', $instructionid)
+                    ->select('*')->first();
+            } catch (\Throwable $th) {
+                return redirect()->route('dash.val');
+            }
+            if ($upload->reportdoc == '' || is_null($upload->reportdoc)) {
+                return abort(400);
+            }
+            //check the existance of receipt first
+            if (!Storage::disk('public')->exists("documents/valuation/doc/{$upload->reportdoc}")) {
+                return abort(404);
+            }
+            return response()->download(storage_path("app/public/documents/valuation/doc/{$upload->reportdoc}"));
+        } catch (DecryptException $th) {
+            return redirect()->route('dash.val');
+        }
+    }
+    function downloadreportexcel($instr_id)
+    {
+        try {
+            $instructionid = Crypt::decrypt($instr_id);
+            try {
+                $upload   = DB::table('valinstruploads')->where('instructionid', $instructionid)
+                    ->select('*')->first();
+            } catch (\Throwable $th) {
+                return redirect()->route('dash.val');
+            }
+            if ($upload->reportexcel == '' || is_null($upload->reportexcel)) {
+                return abort(400);
+            }
+            //check the existance of receipt first
+            if (!Storage::disk('public')->exists("documents/valuation/excel/{$upload->reportexcel}")) {
+                return abort(404);
+            }
+            return response()->download(storage_path("app/public/documents/valuation/excel/{$upload->reportexcel}"));
+        } catch (DecryptException $th) {
+            return redirect()->route('dash.val');
+        }
+    }
     /*
 public function __construct(){
      $this->middleware(['loginauth']);

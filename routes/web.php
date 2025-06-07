@@ -77,8 +77,6 @@ Route::controller(ValManageController::class)->group(function () {
 }); */
 /*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::get('/val/list/quality-check', 'listallinstructionqualitycheck')->name('valapp.listquality');
-    Route::get('/val/{id}/view-single/{instr_id}/quality/check', 'viewsinglequalitycheck')->name('valapp.viewsinglqlty');
     Route::any('/val/{id}/quality/{instr_id}', 'submitqualitycheck')->name('valapp.sbtqty');
     Route::get('/val/list/final-approve', 'listallinstructionfinalapproval')->name('valapp.listallappro');
     Route::get('/val/{id}/view-single/{instr_id}/final/approval', 'viewsinglefinalapproval')->name('valapp.viewsinglfinapr');
@@ -105,10 +103,6 @@ Route::controller(ValApprovalController::class)->group(function () {
     Route::get('/val/portfolio/{id}/review', 'listallinstructionportfolioreview')->name('valapp.viewsinglportrevie');
     Route::any('/val/portfolio/review', 'submitportfolioreviewedreports')->name('valapp.sbtreviewport');
     Route::any('/val/portfolio/{id}/review', 'closeportfolioreview')->name('valapp.portclosereview');
-    /*-----------download reports-------------------- */
-// Route::any('/val-report/{instr_id}/download/doc', 'downloadreportword')->name('valapp.dwndoc');
-// Route::any('/val-report/{instr_id}/excel/download', 'downloadreportexcel')->name('valapp.dwnexc');
-/*-----------end download reports-------------------- */
 /*}); */
 /*
 Route::controller(ValDeclinedController::class)->group(function () {
@@ -322,4 +316,10 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
     Route::any('/val/{id}/decline/{instr_id}/acknowledge', 'declineacknowledgement')->name('valapp.declineacknow');
     Route::get('/val/{id}/view-single/{instr_id}/compilation', 'viewsingleinstructioncompile')->name('valapp.viewsinglcomp');
     Route::any('/val/{id}/compile/{instr_id}/{propid}/submit', 'submitcompilation')->name('valapp.sbtcompl');
+    Route::get('/val/list/quality-check/pending', 'listallinstructionqualitycheck')->name('valapp.listquality');
+    Route::get('/val/{id}/view/instruction/{instr_id}/quality/check', 'viewsinglequalitycheck')->name('valapp.viewsingleqlty');
+    /*-----------download reports-------------------- */
+    Route::any('/val-report/{instr_id}/download/doc', 'downloadreportword')->name('valapp.downdoc');
+    Route::any('/val-report/{instr_id}/excel/download', 'downloadreportexcel')->name('valapp.downexc');
+    /*-----------end download reports-------------------- */
 });
