@@ -384,6 +384,39 @@ function validateCurrencyCode() {
         $("#currencycodecheck").hide();
     }
 }
+//valid valuationpaymentagreement
+$("#valuernamecheck").hide();
+let valuernameError = true;
+$("#valuername").keyup(function () {
+    validateValuationValuerName();
+});
+function validateValuationValuerName() {
+    let textValue = $("#valuername").val();
+    if (textValue.length == "") {
+        $("#valuernamecheck").show();
+        valuernameError = false;
+        return false;
+    } else {
+        valuernameError = true;
+        $("#valuernamecheck").hide();
+    }
+}
+$("#portfolioduedatecheck").hide();
+let portfolioduedateError = true;
+$("#portfolioduedate").keyup(function () {
+    validatePortfolioDueDate();
+});
+function validatePortfolioDueDate() {
+    let textValue = $("#portfolioduedate").val();
+    if (textValue.length == "") {
+        $("#portfolioduedatecheck").show();
+        portfolioduedateError = false;
+        return false;
+    } else {
+        portfolioduedateError = true;
+        $("#portfolioduedatecheck").hide();
+    }
+}
 /*****************************-------buttons submit ----------------------- */
 //button disable submit
 function disableButtonAndSubmit(button, id) {
@@ -394,7 +427,7 @@ function disableButtonAndSubmit(button, id) {
     // Submit the form
     $("#" + id).submit();
 }
-//button reject entry/landlord
+//button reject entry
 $("#btn-reject-entry").click(function () {
     validateRejectReasons();
     try {
@@ -469,6 +502,20 @@ $("#btn-val-invoicing").click(function () {
     try {
         if (currencycodeError == true && marketvalueError == true) { disableButtonAndSubmit(this, "defaultform"); }
         else { return false; }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+//button reallocate declined instruction acknowledge
+$("#btn-reallocate-entry").click(function () {
+    validatePortfolioDueDate(); validateValuationValuerName();
+    try {
+        if (portfolioduedateError == true && valuernameError == true) {
+            disableButtonAndSubmit(this, "defaultform");
+        } else {
+            return false;
+        }
     } catch (err) {
         alert(err.message);
         return false;

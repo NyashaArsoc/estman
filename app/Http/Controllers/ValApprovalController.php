@@ -909,6 +909,26 @@ class ValApprovalController extends Controller
                 ->with('error', 'failed to load');
         }
     }
+    function submitinvoicingnormal(Request $request, $id)
+    {
+        try {
+            $invoiceid = Crypt::decrypt($id);
+            try {
+                DB::table('valinstrinvoicing')->where('id', $invoiceid)
+                    ->update(['completedby' => session('alluser'), 'status' => 'C', 'completedon'
+                    => now(), 'currencycode' => $request->currencycode, 'amountinvoiced' => $request->invoicedamount]);
+
+                return redirect()->route('valapp.listinvoice')
+                    ->with('success', 'instruction updated');
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.listinvoice')
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.listinvoice')
+                ->with('error', 'failed to load');
+        }
+    }
     /*
 public function __construct(){
      $this->middleware(['loginauth']);
@@ -1429,23 +1449,7 @@ public function viewsingleinvoicingportfolio($id){
     }
 }
 public function submitinvoicing(Request $request,$id){
-    try{
-        $invoiceid = Crypt::decrypt($id);
-        try{
-        DB::table('valinstrinvoicing')->where('id', $invoiceid)
-        ->update(['completedby' => session('alluser'),'status' => 'C', 'completedon' 
-        => now(),'currencycode'=>$request->currencycode,'amountinvoiced'=>$request->invoicedamount]);
-
-        return redirect()->route('valapp.listinvoice')
-            ->with('success', 'instruction updated');
-        } catch (\Throwable $th) {
-            return redirect()->route('valapp.listinvoice')
-        ->with('error', 'failed to load');
-        }
-    } catch (DecryptException $th) {
-        return redirect()->route('valapp.listinvoice')
-        ->with('error', 'failed to load');
-    }
+   
 }
 public function submitinvoicingportfolio(Request $request,$id){
 

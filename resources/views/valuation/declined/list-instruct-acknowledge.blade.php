@@ -2,7 +2,7 @@
 $title = 'Declined Instructions';
 $description = 'declined instructions on acknowledgement ...';
 @endphp
-@extends('layout.val-main-menu')
+@extends('layout.valuation-main-menu')
 @section('title', 'Acknowledgement Declined')
 @section('content')
 <!-- Content Start-->
@@ -25,26 +25,28 @@ $description = 'declined instructions on acknowledgement ...';
                         <th>Contact</th>
                         <th>Property Type</th>
                         <th>Address</th>
-                        <th>Reasons</th>
+                        <th>Valuer</th>
                         <th>Option</th>
                     </tr>
                 </thead>
                 <tbody>@php $count=1;@endphp
-                    @foreach($type as $abc)
+                    @foreach($acknow as $abc)
                     <tr>
+
                         <td>{{$count ++}}</td>
-                        <td>{{$abc->id}}</td>
-                        <td>{{$abc->id}}</td>
-                        <td>{{$abc->id}}</td>
-                        <td>{{$abc->id}}</td>
-                        <td>{{$abc->id}}</td>
-                        @php $id= Crypt::encrypt($abc->id); @endphp
+                        <td>{{$abc->companyname ?? ''}} {{$abc->clientfullname ?? ''}}</td>
+                        <td>{{$abc->contactname}}</td>
+                        <td>{{$abc->propertytype}}</td>
+                        <td>{{$abc->streetaddress}}</td>
+                        <td> {{ $abc->completedby }} </td>
+                        @php $id= Crypt::encrypt($abc->id);$to_id= Crypt::encrypt($abc->allocatedto);
+                        $instr_id= Crypt::encrypt($abc->instructionid); @endphp
                         <td><a class="btn btn-info btn-sm " id=""
-                                href=""
+                                href="{{route('valapp.viewsinglackwn',[$id,$instr_id])}}"
                                 title="view"><i class="ti-eye mr-0-5"></i>view</a>
-                            <a class="btn btn-success btn-sm " id=""
-                                href=""
-                                title="accept"><i class="ti-check mr-0-5"></i>accept</a>
+                            <!-- <a class="btn btn-warning btn-sm " onclick="confirminstruction(this); return false;"
+                                href="{{route('valapp.confirmacknow',[$id,$instr_id,$to_id])}}"
+                                title="archive"><i class="ti-files mr-0-5"></i>archive</a> -->
                         </td>
                     </tr>
                     @endforeach
@@ -56,7 +58,7 @@ $description = 'declined instructions on acknowledgement ...';
                         <th>Contact</th>
                         <th>Property Type</th>
                         <th>Address</th>
-                        <th>Reasons</th>
+                        <th>Valuer</th>
                         <th>Option</th>
                     </tr>
                 </tfoot>

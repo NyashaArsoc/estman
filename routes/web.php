@@ -77,7 +77,6 @@ Route::controller(ValManageController::class)->group(function () {
 }); */
 /*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::any('/val/{id}/report/invoicing', 'submitinvoicing')->name('valapp.sbtinvoic');
     Route::get('/val/list/dispatch', 'listallinstructiondispatch')->name('valapp.listdispatch');
     Route::get('/val/{id}/view-single/{instr_id}/dispatch', 'viewsingledispatch')->name('valapp.viewsingldisp');
     Route::any('/val/{id}/report/dispatch', 'submitdispatch')->name('valapp.sbtidisp');
@@ -95,7 +94,6 @@ Route::controller(ValApprovalController::class)->group(function () {
 /*}); */
 /*
 Route::controller(ValDeclinedController::class)->group(function () {
-    Route::get('/val/list/acknowledgement/declined', 'listalldeclinedacknowledgement')->name('valdec.listackn');
     Route::get('/declined/val/{propid}/view-single/{instr_id}/acknowledgement', 'viewdeclinedsingleacknowledge')->name('valdec.viewsinglackn');
     Route::get('/val/list/quality-check/declined', 'listalldeclinedinstructionqualitycheck')->name('valdec.listquality');
     Route::get('/declined/val/{propid}/view-single/{instr_id}/quality', 'viewdeclinedsinglequalitycheck')->name('valdec.viewsinglqlty');
@@ -322,4 +320,11 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
     Route::get('/val-invoice/{id}/view-port', 'viewsingleinvoicingportfolio')->name('valapp.viewsingleinvoport');
     Route::any('/val/{id}/submit-portfolio/invoice', 'submitinvoicingportfolio')->name('valapp.sbtinvoiceport');
     Route::get('/val/{id}/view-single/{instr_id}/invoice', 'viewsinglenormalinvoicing')->name('valapp.viewsingleinvo');
+    Route::any('/val/{id}/submit-normal/invoicing', 'submitinvoicingnormal')->name('valapp.sbtinvoic');
+});
+/*-------------------valuations decline------------------------ */
+Route::middleware('loginauth')->controller(ValDeclinedController::class)->group(function () {
+    Route::get('/val/list/acknowledgement/declined', 'listalldeclinedacknowledgement')->name('valdec.listackn');
+    Route::get('/val/{id}/view-declined/{instr_id}/acknowledgement', 'viewsingleinstructionacknowledge')->name('valapp.viewsinglackwn');
+    Route::any('/val/allocate/{id}/declined/instruction/{instr_id}', 'allocateinstructionacknowledge')->name('valdec.alloinstr');
 });
