@@ -81,9 +81,6 @@ Route::controller(ValApprovalController::class)->group(function () {
     Route::get('/val/portfolio/{id}/compilation', 'listallinstructionportfoliocompile')->name('valapp.viewsinglportfoli');
     Route::any('/val/portfolio/compile', 'submitportfoliocompiledreports')->name('valapp.sbtcompil');
     Route::any('/val/portfolio/{id}/close', 'closeportfolio')->name('valapp.portclose');
-    Route::get('/val/list/email-report', 'listallinstructionsendingsoftcopy')->name('valapp.listallsoft');
-    Route::get('/val/{id}/view-single/{instr_id}/softcopy', 'viewsinglesoftcopy')->name('valapp.viewsinglsofy');
-    Route::any('/val/{id}/report/send/softcopy', 'submitsoftcopy')->name('valapp.sbtsoft');
     Route::get('/val/list/portfolio/review', 'listallportfolioreview')->name('valapp.listportreview');
     Route::get('/val/portfolio/{id}/review', 'listallinstructionportfolioreview')->name('valapp.viewsinglportrevie');
     Route::any('/val/portfolio/review', 'submitportfolioreviewedreports')->name('valapp.sbtreviewport');
@@ -320,6 +317,9 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
     Route::get('/val/list/dispatch/pending', 'listallinstructionpendingdispatch')->name('valapp.listdispat');
     Route::get('/val/{id}/view-single/{instr_id}/dispatch/pending', 'viewsingleinstructiondispatch')->name('valapp.viewsingldispatch');
     Route::any('/val/{id}/report/dispatched', 'submitdispatch')->name('valapp.sbtdispat');
+    Route::get('/val/list/email-report', 'listallinstructionsendingsoftcopy')->name('valapp.listalltomail');
+    Route::get('/val/{id}/view-single/{instr_id}/to-mail', 'viewsingletomail')->name('valapp.viewsinglsofy');
+    Route::any('/val/{id}/report/send/softcopy', 'submittomail')->name('valapp.sbttomail');
 });
 /*-------------------valuations decline------------------------ */
 Route::middleware('loginauth')->controller(ValDeclinedController::class)->group(function () {
