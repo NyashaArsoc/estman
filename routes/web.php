@@ -77,8 +77,6 @@ Route::controller(ValManageController::class)->group(function () {
 }); */
 /*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::get('/val/{id}/view-single/{instr_id}/dispatch', 'viewsingledispatch')->name('valapp.viewsingldisp');
-    Route::any('/val/{id}/report/dispatch', 'submitdispatch')->name('valapp.sbtidisp');
     Route::get('/val/list/portfolio/compilation', 'listallportfoliocompile')->name('valapp.listportcomp');
     Route::get('/val/portfolio/{id}/compilation', 'listallinstructionportfoliocompile')->name('valapp.viewsinglportfoli');
     Route::any('/val/portfolio/compile', 'submitportfoliocompiledreports')->name('valapp.sbtcompil');
@@ -320,6 +318,8 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
     Route::get('/val/{id}/view-single/{instr_id}/invoice', 'viewsinglenormalinvoicing')->name('valapp.viewsingleinvo');
     Route::any('/val/{id}/submit-normal/invoicing', 'submitinvoicingnormal')->name('valapp.sbtinvoic');
     Route::get('/val/list/dispatch/pending', 'listallinstructionpendingdispatch')->name('valapp.listdispat');
+    Route::get('/val/{id}/view-single/{instr_id}/dispatch/pending', 'viewsingleinstructiondispatch')->name('valapp.viewsingldispatch');
+    Route::any('/val/{id}/report/dispatched', 'submitdispatch')->name('valapp.sbtdispat');
 });
 /*-------------------valuations decline------------------------ */
 Route::middleware('loginauth')->controller(ValDeclinedController::class)->group(function () {
