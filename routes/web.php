@@ -77,7 +77,6 @@ Route::controller(ValManageController::class)->group(function () {
 }); */
 /*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::get('/val/list/dispatch', 'listallinstructiondispatch')->name('valapp.listdispatch');
     Route::get('/val/{id}/view-single/{instr_id}/dispatch', 'viewsingledispatch')->name('valapp.viewsingldisp');
     Route::any('/val/{id}/report/dispatch', 'submitdispatch')->name('valapp.sbtidisp');
     Route::get('/val/list/portfolio/compilation', 'listallportfoliocompile')->name('valapp.listportcomp');
@@ -94,7 +93,6 @@ Route::controller(ValApprovalController::class)->group(function () {
 /*}); */
 /*
 Route::controller(ValDeclinedController::class)->group(function () {
-    Route::get('/declined/val/{propid}/view-single/{instr_id}/acknowledgement', 'viewdeclinedsingleacknowledge')->name('valdec.viewsinglackn');
     Route::get('/val/list/quality-check/declined', 'listalldeclinedinstructionqualitycheck')->name('valdec.listquality');
     Route::get('/declined/val/{propid}/view-single/{instr_id}/quality', 'viewdeclinedsinglequalitycheck')->name('valdec.viewsinglqlty');
 });
@@ -321,6 +319,7 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
     Route::any('/val/{id}/submit-portfolio/invoice', 'submitinvoicingportfolio')->name('valapp.sbtinvoiceport');
     Route::get('/val/{id}/view-single/{instr_id}/invoice', 'viewsinglenormalinvoicing')->name('valapp.viewsingleinvo');
     Route::any('/val/{id}/submit-normal/invoicing', 'submitinvoicingnormal')->name('valapp.sbtinvoic');
+    Route::get('/val/list/dispatch/pending', 'listallinstructionpendingdispatch')->name('valapp.listdispat');
 });
 /*-------------------valuations decline------------------------ */
 Route::middleware('loginauth')->controller(ValDeclinedController::class)->group(function () {

@@ -119,12 +119,7 @@ class ValDeclinedController extends Controller
         }
     }
     /*
-public function viewdeclinedsingleacknowledge($proid,$instrid){
-    $arr['type']   = DB::table('clienttype')
-    ->select('id','description')->get();
-return view('val.declined.view-single-instruct-acknowledge')->with($arr);
-//return view('val.approval.view-single-instruct-acknowledge-norm')->with($arr);
-}
+
 public function listalldeclinedinstructionqualitycheck(){
     $arr['type']   = DB::table('clienttype')
     ->select('id','description')->get();

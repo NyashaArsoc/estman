@@ -918,15 +918,27 @@ class ValApprovalController extends Controller
                     ->update(['completedby' => session('alluser'), 'status' => 'C', 'completedon'
                     => now(), 'currencycode' => $request->currencycode, 'amountinvoiced' => $request->invoicedamount]);
 
-                return redirect()->route('valapp.listinvoice')
-                    ->with('success', 'instruction updated');
+                return redirect()->route('valapp.listinvoices')
+                    ->with('success', 'record added');
             } catch (\Throwable $th) {
-                return redirect()->route('valapp.listinvoice')
+                return redirect()->route('valapp.listinvoices')
                     ->with('error', 'failed to load');
             }
         } catch (DecryptException $th) {
-            return redirect()->route('valapp.listinvoice')
+            return redirect()->route('valapp.listinvoices')
                 ->with('error', 'failed to load');
+        }
+    }
+    /*--------------------dispatch ----------------*/
+    function listallinstructionpendingdispatch()
+    {
+        try {
+            $nom['normal'] = DB::select('EXEC spGetValInstDispatchNormal');
+            $port['portfolio'] = DB::select('EXEC spValGetInstDispatchPortfolio');
+            $arr['stage'] = array_merge($nom['normal'], $port['portfolio']);
+            return view('valuation.approval.list-instruct-dispatch')->with($arr);
+        } catch (\Throwable $th) {
+            return  redirect()->route('dash.val');
         }
     }
     /*
