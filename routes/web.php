@@ -325,6 +325,6 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
 /*-------------------valuations decline------------------------ */
 Route::middleware('loginauth')->controller(ValDeclinedController::class)->group(function () {
     Route::get('/val/list/acknowledgement/declined', 'listalldeclinedacknowledgement')->name('valdec.listackn');
-    Route::get('/val/{id}/view-declined/{instr_id}/acknowledgement', 'viewsingleinstructionacknowledge')->name('valapp.viewsinglackwn');
+    Route::get('/val/{id}/view-declined/{instr_id}/acknowledgement', 'viewsingleinstructionacknowledge')->name('valdec.viewsinglackwn');
     Route::any('/val/allocate/{id}/declined/instruction/{instr_id}', 'allocateinstructionacknowledge')->name('valdec.alloinstr');
 });

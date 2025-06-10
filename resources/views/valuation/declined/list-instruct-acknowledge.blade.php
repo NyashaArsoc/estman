@@ -42,7 +42,7 @@ $description = 'declined instructions on acknowledgement ...';
                         @php $id= Crypt::encrypt($abc->id);$to_id= Crypt::encrypt($abc->allocatedto);
                         $instr_id= Crypt::encrypt($abc->instructionid); @endphp
                         <td><a class="btn btn-info btn-sm " id=""
-                                href="{{route('valapp.viewsinglackwn',[$id,$instr_id])}}"
+                                href="{{route('valdec.viewsinglackwn',[$id,$instr_id])}}"
                                 title="view"><i class="ti-eye mr-0-5"></i>view</a>
                             <!-- <a class="btn btn-warning btn-sm " onclick="confirminstruction(this); return false;"
                                 href="{{route('valapp.confirmacknow',[$id,$instr_id,$to_id])}}"

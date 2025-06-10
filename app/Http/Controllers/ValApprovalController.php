@@ -139,7 +139,7 @@ class ValApprovalController extends Controller
             $instructionid = Crypt::decrypt($instr_id);
             try {
                 DB::table('valinstracknowledgement')->where('id', $acknowledgeid)
-                    ->update(['comments' => $request->reasonsfordecline, 'status' => 'D']);
+                    ->update(['comments' => $request->reasonsfordecline, 'status' => 'D', 'completedon' => now(), 'completedby' => session('alluser')]);
                 DB::table('valinstructions')->where('id', $instructionid)
                     ->update(['status' => 'declined', 'completedon' => now()]);
                 return redirect()->route('valapp.listacknw')
