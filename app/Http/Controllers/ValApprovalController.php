@@ -1138,6 +1138,93 @@ class ValApprovalController extends Controller
                 ->with('error', 'failed to load');
         }
     }
+    function listallportfoliocompile()
+    {
+        try {
+            $arr['portfolio'] = DB::select('EXEC spGetValPortfolioCompilation');
+            return view('valuation.approval.list-instruct-compile-port')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('dash.val');
+        }
+    }
+    function listallinstructionportfoliocompile($id)
+    {
+        try {
+            $portfolioid = Crypt::decrypt($id);
+            try {
+                $arr['instruction']   = DB::table('valinstrlistallportfoliocompilation')
+                    ->where('portfolioid', $portfolioid)->select('*')->get();
+                $arr['portfolio']   = DB::table('valinstrlistportfolio')
+                    ->where('id', $portfolioid)->select('*')->first();
+                return view('valuation.approval.view-single-portfolio-compile')->with($arr);
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.listportcompile')
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.listportcompile')
+                ->with('error', 'failed to load');
+        }
+    }
+    function submitportfoliocompiledreports(Request $request)
+    {
+        try {
+            $selectedids = $request->input('selected_ids');
+            $NumbersInArray         =       count($selectedids);
+            $a  = 0;
+            while ($a   <   $NumbersInArray) {
+                $instructionid = Crypt::decrypt($selectedids[$a]);
+                DB::table('valinstrportfoliocompiled')
+                    ->Insert(['instructionid' => $instructionid, 'operatiorid' => session('alluser')]);
+                $errorcode = 'record added';
+                $a++;
+            }
+            return  redirect()->route('valapp.viewsinglportfoli', $request->portfolio)
+                ->with('success', $errorcode);
+        } catch (\Throwable $th) {
+            return  redirect()->route('valapp.viewsinglportfoli', $request->portfolio)
+                ->with('error', 'failed to load');
+        }
+    }
+    function closeportfolio($id)
+    {
+        try {
+            $portfolioid = Crypt::decrypt($id);
+            try {
+                $instructioncaptured   = DB::table('valinstructions')
+                    ->where('portfolioid', $portfolioid)->select('*')->count();
+                $expected   = DB::table('valinstrportfolio')
+                    ->where('id', $portfolioid)->select('*')->first();
+                $compiled  = DB::table('valinstructions')->join(
+                    'valinstrportfoliocompiled',
+                    'valinstructions.id',
+                    '=',
+                    'valinstrportfoliocompiled.instructionid'
+                )
+                    ->where('valinstructions.portfolioid', $portfolioid)->select('*')->count();
+                if ($instructioncaptured <> $expected->totalproperties) {
+                    return redirect()->route('valapp.viewsinglportfoli', $id)
+                        ->with('error', 'portfolio properties not complete');
+                }
+                if ($compiled <> $expected->totalproperties) {
+                    return redirect()->route('valapp.viewsinglportfoli', $id)
+                        ->with('error', 'some properties pending compilation');
+                }
+                DB::table('valinstrportfolioclosed')
+                    ->Insert(['portfolioid' => $portfolioid, 'operatorid' => session('alluser')]);
+                DB::table('valinstrportfolio')->where('id', $portfolioid)
+                    ->update(['status' => 'C']);
+                return redirect()->route('valapp.listportcomp')
+                    ->with('success', 'portfolio closed');
+            } catch (\Throwable $th) {
+                return redirect()->route('valapp.viewsinglportfoli', $id)
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valapp.viewsinglportfoli', $id)
+                ->with('error', 'failed to load');
+        }
+    }
     /*
 public function __construct(){
      $this->middleware(['loginauth']);
@@ -1747,73 +1834,13 @@ public function listallportfoliocompile(){
     }
 }
 public function listallinstructionportfoliocompile($id){
-    try {
-        $portfolioid = Crypt::decrypt($id);
-        try {
-            $arr['instruction']   = DB::table('valinstrlistallportfoliocompilation')
-            ->where('portfolioid',$portfolioid)->select('*')->get();
-            $arr['portfolio']   = DB::table('valinstrlistportfolio')
-            ->where('id',$portfolioid)->select('*')->first();
-            return view('val.approval.view-single-portfolio-compile')->with($arr);
-        } catch (\Throwable $th) {
-            return redirect()->route('valapp.listportcomp');
-        }
-    } catch (DecryptException $th) {
-        return redirect()->route('valapp.listportcomp');
-    }
+  
 }
 public function submitportfoliocompiledreports(Request $request){
-    try { 
-        $selectedids = $request->input('selected_ids');
-        $NumbersInArray         =       count($selectedids);
-        $a  = 0;
-        while ($a   <   $NumbersInArray){
-            $instructionid = Crypt::decrypt($selectedids[$a]);
-            DB::table('valinstrportfoliocompiled')
-            ->Insert(['instructionid'=>$instructionid,'operatiorid'=>session('alluser')]);
-            $errorcode = 'instruction updated';
-            $a++;
-        }
-        return  redirect()->route('valapp.viewsinglportfoli',$request->portfolio) 
-        ->with('success', $errorcode);
-    } catch (\Throwable $th) {
-        return  redirect()->route('valapp.viewsinglportfoli',$request->portfolio) 
-     ->with('error', 'failed to load');
-    } 
+   
 }
 public function closeportfolio($id){
-    try {
-        $portfolioid = Crypt::decrypt($id);
-        try {
-            $instructioncaptured   = DB::table('valinstructions')
-            ->where('portfolioid',$portfolioid)->select('*')->count();
-            $expected   = DB::table('valinstrportfolio')
-            ->where('id',$portfolioid)->select('*')->first();
-            $compiled  = DB::table('valinstructions')->join('valinstrportfoliocompiled',
-            'valinstructions.id','=','valinstrportfoliocompiled.instructionid')
-            ->where('valinstructions.portfolioid',$portfolioid)->select('*')->count();
-            if($instructioncaptured <> $expected->totalproperties){
-                return redirect()->route('valapp.viewsinglportfoli',$id)
-        ->with('error', 'portfolio properties not complete');
-            }
-            if($compiled <> $expected->totalproperties){
-                return redirect()->route('valapp.viewsinglportfoli',$id)
-        ->with('error', 'some properties pending compilation');
-            }
-            DB::table('valinstrportfolioclosed')
-            ->Insert(['portfolioid'=>$portfolioid,'operatorid'=>session('alluser')]);
-            DB::table('valinstrportfolio')->where('id', $portfolioid)
-            ->update(['status' => 'C']);
-            return redirect()->route('valapp.listportcomp')
-            ->with('success','portfolio closed');
-        } catch (\Throwable $th) {
-        return redirect()->route('valapp.viewsinglportfoli',$id)
-        ->with('error', 'failed to load');
-        }
-    } catch (DecryptException $th) {
-        return redirect()->route('valapp.viewsinglportfoli',$id)
-        ->with('error', 'failed to load');
-    }
+ 
 }
 /* -----------------------end compile portfolio */
     /*-----------------------------send soft copies---------------------*/

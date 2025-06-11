@@ -77,10 +77,6 @@ Route::controller(ValManageController::class)->group(function () {
 }); */
 /*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::get('/val/list/portfolio/compilation', 'listallportfoliocompile')->name('valapp.listportcomp');
-    Route::get('/val/portfolio/{id}/compilation', 'listallinstructionportfoliocompile')->name('valapp.viewsinglportfoli');
-    Route::any('/val/portfolio/compile', 'submitportfoliocompiledreports')->name('valapp.sbtcompil');
-    Route::any('/val/portfolio/{id}/close', 'closeportfolio')->name('valapp.portclose');
     Route::get('/val/list/portfolio/review', 'listallportfolioreview')->name('valapp.listportreview');
     Route::get('/val/portfolio/{id}/review', 'listallinstructionportfolioreview')->name('valapp.viewsinglportrevie');
     Route::any('/val/portfolio/review', 'submitportfolioreviewedreports')->name('valapp.sbtreviewport');
@@ -320,6 +316,10 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
     Route::get('/val/list/email-report', 'listallinstructionsendingsoftcopy')->name('valapp.listalltomail');
     Route::get('/val/{id}/view-single/{instr_id}/to-mail', 'viewsingletomail')->name('valapp.viewsinglsofy');
     Route::any('/val/{id}/report/send/softcopy', 'submittomail')->name('valapp.sbttomail');
+    Route::get('/val/list/portfolio/compilation', 'listallportfoliocompile')->name('valapp.listportcompile');
+    Route::get('/val/portfolio/{id}/compilation', 'listallinstructionportfoliocompile')->name('valapp.viewsinglportfoli');
+    Route::any('/val/portfolio/compilation', 'submitportfoliocompiledreports')->name('valapp.sbtcompilrep');
+    Route::any('/val/close/portfolio/{id}', 'closeportfolio')->name('valapp.closeport');
 });
 /*-------------------valuations decline------------------------ */
 Route::middleware('loginauth')->controller(ValDeclinedController::class)->group(function () {

@@ -1,12 +1,20 @@
 function approveentry(that) {
     var proceedto = confirm("proceed to approve this entry?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
 function rejectlandlord(that) {
     var proceedto = confirm("proceed to reject this landlord?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
@@ -14,6 +22,10 @@ function rejectlandlord(that) {
 function deletelandlord(that) {
     var proceedto = confirm("proceed to delete this landlord?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
@@ -21,6 +33,10 @@ function deletelandlord(that) {
 function approvetenant(that) {
     var proceedto = confirm("proceed to approve this tenant?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
@@ -28,6 +44,10 @@ function approvetenant(that) {
 function rejecttenant(that) {
     var proceedto = confirm("proceed to reject this tenant?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
@@ -35,36 +55,60 @@ function rejecttenant(that) {
 function approveproperty(that) {
     var proceedto = confirm("proceed to approve this property?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
 function rejectproperty(that) {
     var proceedto = confirm("proceed to reject this property?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
 function deleteproperty(that) {
     var proceedto = confirm("proceed to delete this property?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
 function approvelease(that) {
     var proceedto = confirm("proceed to approve this lease?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
 function rejectlease(that) {
     var proceedto = confirm("proceed to reject this lease?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
 function approveprofomaedited(that) {
     var proceedto = confirm("proceed to approve this edited profoma?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
@@ -88,24 +132,40 @@ function rejectapproval(that) {
 function closeportfolio(that) {
     var proceedto = confirm("proceed to close portfolio?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
 function closeportfolioreview(that) {
     var proceedto = confirm("all corrections completed on this report?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
 function deleterecord(that) {
     var proceedto = confirm("proceed to delete this entry?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
 function activaterecord(that) {
     var proceedto = confirm("proceed to activate this entry?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }
