@@ -77,10 +77,6 @@ Route::controller(ValManageController::class)->group(function () {
 }); */
 /*
 Route::controller(ValApprovalController::class)->group(function () {
-    Route::get('/val/list/portfolio/review', 'listallportfolioreview')->name('valapp.listportreview');
-    Route::get('/val/portfolio/{id}/review', 'listallinstructionportfolioreview')->name('valapp.viewsinglportrevie');
-    Route::any('/val/portfolio/review', 'submitportfolioreviewedreports')->name('valapp.sbtreviewport');
-    Route::any('/val/portfolio/{id}/review', 'closeportfolioreview')->name('valapp.portclosereview');
 /*}); */
 /*
 Route::controller(ValDeclinedController::class)->group(function () {
@@ -320,6 +316,10 @@ Route::middleware('loginauth')->controller(ValApprovalController::class)->group(
     Route::get('/val/portfolio/{id}/compilation', 'listallinstructionportfoliocompile')->name('valapp.viewsinglportfoli');
     Route::any('/val/portfolio/compilation', 'submitportfoliocompiledreports')->name('valapp.sbtcompilrep');
     Route::any('/val/close/portfolio/{id}', 'closeportfolio')->name('valapp.closeport');
+    Route::get('/val/list/portfolio/review/pending', 'listallportfolioforreview')->name('valapp.listportreviews');
+    Route::get('/val/portfolio/{id}/review', 'listallinstructionportfolioreview')->name('valapp.viewsinglportreview');
+    Route::any('/val/portfolio/review', 'submitportfolioreviewedreports')->name('valapp.sbtreviewportfolio');
+    Route::any('/val/portfolio/{id}/close/review', 'closeportfolioreview')->name('valapp.portclosereview');
 });
 /*-------------------valuations decline------------------------ */
 Route::middleware('loginauth')->controller(ValDeclinedController::class)->group(function () {
