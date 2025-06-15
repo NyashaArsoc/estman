@@ -251,12 +251,20 @@ Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(
     Route::post('/set-up/add/new/vat/config', 'addnewvatconfig')->name('setin.addnewvat');
     Route::get('/set-up/add/currency/exchangerate', 'addcurrencyrate')->name('setin.ratecurr');
     Route::post('/set-up/add/new/dcurrency/exchangerate', 'addexchangerate')->name('setin.newratecurr');
+    Route::get('/set-up/add/leave/group', 'addleavegroup')->name('setin.addlevgrp');
+    Route::any('/set-up/create/new/leave/group', 'createnewleavegroup')->name('setin.createlevgrp');
 });
 /*-------------------end setup intake------------------------ */
 /*-------------------setup manage------------------------ */
 Route::middleware('loginauth')->controller(SetupManageController::class)->group(function () {
     Route::get('/set-up/base/currency', 'setbasecurrency')->name('setman.addbasecurr');
     Route::post('/set-up/set/base/currency', 'addnewbasecurrency')->name('setman.addbewcode');
+    Route::get('/set-up/leave/group', 'listleavegroups')->name('setman.listlevgrp');
+    Route::any('/disable/{id}/leave/group', 'disableleavegroup')->name('setman.disablelevgrp');
+    Route::any('/activate/{id}/leave/group', 'activateleavegroup')->name('setman.activlevgrp');
+    Route::get('/leave-group/{id}/assign/type', 'viewassignleavegrouptype')->name('setman.viewassignlevtyp');
+    Route::any('/assign-type/{id}/leave/group', 'assigntypeleavegroup')->name('setman.assigntyplevgrp');
+    Route::get('/set-up/leave/group/{id}', 'listtypeperleavegroups')->name('setman.typperlevgrp');
 });
 /*-------------------end setup manage------------------------ */
 /*-------------------valuations intake------------------------ */

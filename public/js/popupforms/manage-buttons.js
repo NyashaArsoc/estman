@@ -116,6 +116,10 @@ function approveprofomaedited(that) {
 function deactivaterecord(that) {
     var proceedto = confirm("proceed to disable this entry?")
     if (proceedto) {
+        var $button = $(that);
+        $button.prop("disabled", true)
+            .css({ "pointer-events": "none", "background-color": "#ccc", "border-color": "#ccc" })
+            .html('loading');
         window.location = anchor.attr("href");
     }
 }

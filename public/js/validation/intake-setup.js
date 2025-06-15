@@ -17,16 +17,16 @@ function validateCurrencyCode() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9/\s/a-z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#currencycodecheck").show();
-                $("#currencycodecheck").html("**follow the required format (ZWL/GBP)");
-                currencycodeError = false;
-                return false;
-            }else{
-                currencycodeError = true;
-                $("#currencycodecheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#currencycodecheck").show();
+            $("#currencycodecheck").html("**follow the required format (ZWL/GBP)");
+            currencycodeError = false;
+            return false;
+        } else {
+            currencycodeError = true;
+            $("#currencycodecheck").hide();
+        }
     }
 }
 //valid text description
@@ -41,23 +41,23 @@ function validateTextDescription() {
         $("#textdescriptioncheck").show();
         textdescriptionError = false;
         return false;
-    } else if (textValue.length < 2 ) {
+    } else if (textValue.length < 2) {
         $("#textdescriptioncheck").show();
         $("#textdescriptioncheck").html("**invalid text");
         textdescriptionError = false;
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#textdescriptioncheck").show();
-                $("#textdescriptioncheck").html("**follow the required format (Description)");
-                textdescriptionError = false;
-                return false;
-            }else{
-                textdescriptionError = true;
-                $("#textdescriptioncheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#textdescriptioncheck").show();
+            $("#textdescriptioncheck").html("**follow the required format (Description)");
+            textdescriptionError = false;
+            return false;
+        } else {
+            textdescriptionError = true;
+            $("#textdescriptioncheck").hide();
+        }
     }
 }
 //period
@@ -79,22 +79,22 @@ function validatePeriodRange() {
 }
 // lease list by tenant
 $("#leaselistcheck").hide();
-  let leasenameError = true;
-  $("#leaselist").keyup(function () {
-      validateLeaseDescription();
-  });
-  function validateLeaseDescription() {
-      let textValue = $("#leaselist").val();
-      if (textValue.length == "") {
-          $("#leaselistcheck").show();
-          leasenameError = false;
-          return false;
-      } else {
+let leasenameError = true;
+$("#leaselist").keyup(function () {
+    validateLeaseDescription();
+});
+function validateLeaseDescription() {
+    let textValue = $("#leaselist").val();
+    if (textValue.length == "") {
+        $("#leaselistcheck").show();
+        leasenameError = false;
+        return false;
+    } else {
         leasenameError = true;
-          $("#leaselistcheck").hide();
-      }
-  }
-  //valid numeric value required
+        $("#leaselistcheck").hide();
+    }
+}
+//valid numeric value required
 $("#numericrequiredcheck").hide();
 let numericrequiredError = true;
 $("#numericrequired").keyup(function () {
@@ -113,16 +113,16 @@ function validateNumericValueRequired() {
         return false;
     } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-            charscheck =  specialChars.test(textValue);
-            if (charscheck == true){
-                 $("#numericrequiredcheck").show();
-                $("#numericrequiredcheck").html("**digits only or (3.5)");
-                numericrequiredError = false;
-                return false;
-            }else{
-                numericrequiredError = true;
-                $("#numericrequiredcheck").hide();
-            }
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#numericrequiredcheck").show();
+            $("#numericrequiredcheck").html("**digits only or (3.5)");
+            numericrequiredError = false;
+            return false;
+        } else {
+            numericrequiredError = true;
+            $("#numericrequiredcheck").hide();
+        }
     }
 }
 // buying rate 
@@ -134,27 +134,27 @@ $("#buyingrate").keyup(function () {
 function validateBuyingRate() {
     let textValue = $("#buyingrate").val();
     let SellingValue = $("#SellingRate").val();
-    let MeanRate; 
+    let MeanRate;
     if (textValue.length == "") {
         $("#buyingratecheck").show();
         buyingrateError = false;
         return false;
-    } else{
+    } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-        charscheck =  specialChars.test(textValue);
-        if (charscheck == true){
-             $("#buyingratecheck").show();
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#buyingratecheck").show();
             $("#buyingratecheck").html("**digits only or (35.9098)");
             buyingrateError = false;
             return false;
-        }else{
-            MeanRate = (parseFloat(textValue)  + parseFloat(SellingValue) )/2
+        } else {
+            MeanRate = (parseFloat(textValue) + parseFloat(SellingValue)) / 2
             $("#meanratecheck").html(MeanRate);
             buyingrateError = true;
             $("#buyingratecheck").hide();
         }
     }
-      
+
 }
 // selling rate 
 $("#sellingratecheck").hide();
@@ -165,73 +165,87 @@ $("#sellingrate").keyup(function () {
 function validateSellingRate() {
     let textValue = $("#sellingrate").val();
     let BuyingValue = $("#buyingrate").val();
-    let MeanRate; 
+    let MeanRate;
     if (textValue.length == "") {
         $("#sellingratecheck").show();
         sellingrateError = false;
         return false;
-    } else{
+    } else {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
-        charscheck =  specialChars.test(textValue);
-        if (charscheck == true){
-            
-             $("#sellingratecheck").show();
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+
+            $("#sellingratecheck").show();
             $("#sellingratecheck").html("**digits only or (35.9098)");
             sellingrateError = false;
             return false;
-        }else{
-            MeanRate = (parseFloat(textValue)  + parseFloat(BuyingValue) )/2
+        } else {
+            MeanRate = (parseFloat(textValue) + parseFloat(BuyingValue)) / 2
             $("#meanratecheck").html(MeanRate);
             sellingrateError = true;
             $("#sellingratecheck").hide();
         }
     }
-       
+
 }
 /*--------------------starting buttons --------------------------*/
- //button currency code
- $("#btn-submit-currency").click(function () {
+//button disable submit
+function disableButtonAndSubmit(button, id) {
+    // Disable the button
+    $(button).prop('disabled', true);
+    $(button).css('background-color', '#ccc');
+    $(button).text('submitting...'); // Change button text
+    // Submit the form
+    $("#" + id).submit();
+}
+//button currency code
+$("#btn-submit-currency").click(function () {
     validateCurrencyCode();
     try {
-        if (currencycodeError == true ){return true;
-        }else{ return false;}
-    } catch (err) { return false;}
+        if (currencycodeError == true) {
+            return true;
+        } else { return false; }
+    } catch (err) { return false; }
 });
- //button single text
- $("#btn-submit-single-text").click(function () {
+//button single text
+$("#btn-submit-single-text").click(function () {
     validateTextDescription();
     try {
-        if (textdescriptionError == true ){return true;
-        }else{ return false; }
-    } catch (err) { return false;}
+        if (textdescriptionError == true) {
+            disableButtonAndSubmit(this, "defaultform");
+        } else { return false; }
+    } catch (err) { return false; }
 });
- //button lease interest
- $("#btn-submit-lease-interest").click(function () {
-    validateNumericValueRequired(); validateLeaseDescription();validatePeriodRange();
+//button lease interest
+$("#btn-submit-lease-interest").click(function () {
+    validateNumericValueRequired(); validateLeaseDescription(); validatePeriodRange();
     try {
-        if (numericrequiredError == true && periodrangeError==true && leasenameError==true ){return true;
-        }else{ return false;}
-    } catch (err) { return false;}
+        if (numericrequiredError == true && periodrangeError == true && leasenameError == true) {
+            return true;
+        } else { return false; }
+    } catch (err) { return false; }
 });
- //button lease interest
- $("#btn-submit-vat-config").click(function () {
+//button lease interest
+$("#btn-submit-vat-config").click(function () {
     validateNumericValueRequired(); validateLeaseDescription();
     try {
-        if (numericrequiredError == true && leasenameError==true ){return true;
-        }else{ return false;}
-    } catch (err) { return false;}
+        if (numericrequiredError == true && leasenameError == true) {
+            return true;
+        } else { return false; }
+    } catch (err) { return false; }
 });
 //button add exchange rate
 $("#btn-submit-exchange-rate").click(function () {
-    validateSellingRate(); validateBuyingRate();validateCurrencyCode();
+    validateSellingRate(); validateBuyingRate(); validateCurrencyCode();
     try {
-        if (buyingrateError==true && sellingrateError ==true && currencycodeError ==true){
+        if (buyingrateError == true && sellingrateError == true && currencycodeError == true) {
             return true;
-        }else{
-             return false;
+        } else {
+            return false;
         }
     } catch (err) {
         alert(err.message);
         return false;
     }
 });
+$("#btn-submit-levtype").click(function () { disableButtonAndSubmit(this, "defaultform"); });
