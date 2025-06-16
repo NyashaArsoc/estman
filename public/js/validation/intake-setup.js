@@ -219,6 +219,23 @@ function validateMaximumDays() {
         }
     }
 }
+//valid client type
+$("#requiedselectcheck").hide();
+let requiedselectError = true;
+$("#requiedselect").keyup(function () {
+    validateRequiredSelect();
+});
+function validateRequiredSelect() {
+    let textValue = $("#requiedselect").val();
+    if (textValue.length == "") {
+        $("#requiedselectcheck").show();
+        requiedselectError = false;
+        return false;
+    } else {
+        requiedselectError = true;
+        $("#requiedselectcheck").hide();
+    }
+}
 /*--------------------starting buttons --------------------------*/
 //button disable submit
 function disableButtonAndSubmit(button, id) {
@@ -282,9 +299,9 @@ $("#btn-submit-exchange-rate").click(function () {
 $("#btn-submit-levtype").click(function () { disableButtonAndSubmit(this, "defaultform"); });
 //button add days to accrue on leave
 $("#btn-setup-typegroup-config").click(function () {
-    validateNumericValueRequired(); validateMaximumDays(); validateCurrencyCode();
+    validateNumericValueRequired(); validateMaximumDays(); validateRequiredSelect();
     try {
-        if (numericrequiredError == true && maximundaysError == true && currencycodeError == true) {
+        if (numericrequiredError == true && maximundaysError == true && requiedselectError == true) {
             disableButtonAndSubmit(this, "defaultform");
         } else { return false; }
     } catch (err) { return false; }

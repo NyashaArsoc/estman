@@ -172,6 +172,8 @@ class SetupManageController extends Controller
             $arr['typegroup'] = DB::table('hctypegroup')->where('groupid', $groupid)->where('typeid', $typeid)->first();
             $arr['group'] = DB::table('hcleavegroups')->where('id', $groupid)->first();
             $arr['type'] = DB::table('hcleavetype')->where('id', $typeid)->first();
+            $arr['config'] = DB::table('hcgrouptypeconfig')->where('typegroupid', $arr['typegroup']->id)->first();
+
             return view('setup.manage.view-single-config-group-type')->with($arr);
         } catch (\Throwable $th) {
             return redirect()->route('setman.typperlevgrp', $gid);
@@ -210,7 +212,33 @@ class SetupManageController extends Controller
                     ->with('success', 'record added');
             }
         } catch (\Throwable $th) {
-            return redirect()->route('setman.typperlevgrp', $id);
+            return redirect()->route('setman.typperlevgrp', $id)
+                ->with('error', 'failed to load');
+        } catch (DecryptException $th) {
+            return  redirect()->route('setman.typperlevgrp', $id)
+                ->with('error', 'failed to load');
+        }
+    }
+    function createaccruedayleavegroup($id, $gid, Request $request)
+    {
+        try {
+            $entryid = Crypt::decrypt($id);
+            $request->validate(['daystoaccrue' => 'required', 'onmaxdays' => 'required',]);
+            DB::table('hcgrouptypeconfig')->updateOrInsert(
+                ['typegroupid' => $entryid],
+                [
+                    'days' => $request->daystoaccrue,
+                    'operatorid' => session('alluser'),
+                    'maxdays' => $request->maximundays,
+                    'onmax' => $request->onmaxdays
+                ]
+            );
+
+            return  redirect()->route('setman.typperlevgrp', $id)
+                ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return redirect()->route('setman.typperlevgrp', $id)
+                ->with('error', 'failed to load');
         } catch (DecryptException $th) {
             return  redirect()->route('setman.typperlevgrp', $id)
                 ->with('error', 'failed to load');

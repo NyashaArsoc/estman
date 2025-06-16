@@ -1,7 +1,8 @@
 @php
 $title = 'Leave Group Definition';
 $description = 'define the days to accrue per month and limits...';
-$groupid= Crypt::encrypt($typegroup->groupid); @endphp
+$groupid= Crypt::encrypt($typegroup->groupid);
+$id= Crypt::encrypt($type->id); @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'Group Definition')
 @section('additional css')
@@ -26,19 +27,19 @@ $groupid= Crypt::encrypt($typegroup->groupid); @endphp
         <span class="badge badge-pill bg-info">{{$group->description ?? '' }} - {{$type->description ?? '' }}</span>
         <hr />
         <form class="form-material material-primary" id="defaultform" method="POST"
-            action="{{ route('setin.addnewcltyp') }}">@csrf
+            action="{{ route('setman.crtaccrue',[$id,$groupid]) }}">@csrf
             <div class="form-group row">
                 <label for="" class="col-sm-2 form-control-label">Days to accrue
                 </label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="numericrequired" name="daystoaccrue"
+                    <input type="text" class="form-control" id="numericrequired" name="daystoaccrue" value="{{$config->days}}"
                         placeholder="2.25" autocomplete="off">
                     <small id="numericrequiredcheck" style="color: red;">required</small>
                 </div>
                 <label for="" class="col-sm-2 form-control-label">Maximun Days
                 </label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="maximundays" name="maximundays"
+                    <input type="text" class="form-control" id="maximundays" name="maximundays" value="{{$config->maxdays}}"
                         placeholder="25" autocomplete="off">
                     <small id="maximundayscheck" style="color: red;">required</small>
                 </div>
@@ -46,12 +47,12 @@ $groupid= Crypt::encrypt($typegroup->groupid); @endphp
             <div class="form-group row">
                 <label for="" class="col-sm-2 form-control-label">On Max Days?</label>
                 <div class="col-sm-4">
-                    <select class="js-example-basic-single w-100" name="onmaxdays" id="currencycode" />
+                    <select class="js-example-basic-single w-100" name="onmaxdays" id="requiedselect" />
                     <option value="">pick option</option>
-                    <option value="1">stop accruing</option>
-                    <option value="1">proceed to accrue</option>
+                    <option value="stop">stop accruing</option>
+                    <option value="proceed">proceed to accrue</option>
                     </select>
-                    <small id="currencycodecheck" style="color: red;">required</small>
+                    <small id="requiedselectcheck" style="color: red;">required</small>
                 </div>
             </div>
             <div class="form-group row">
