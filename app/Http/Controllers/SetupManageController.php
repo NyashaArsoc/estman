@@ -153,7 +153,9 @@ class SetupManageController extends Controller
             $arr['group'] = DB::table('hcleavegroups')->where('id', $entryid)->first();
             $arr['list'] = DB::table('hctypegroup')->select('hctypegroup.typeid', 'hctypegroup.groupid', 'hcleavetype.description')
                 ->join('hcleavetype', 'hctypegroup.typeid', '=', 'hcleavetype.id')->where('hctypegroup.groupid', $entryid)->get();
-
+            $arr['days'] = DB::table('hcleavegroupworkday')->where('groupid', $entryid)
+                ->select('day')->get();
+            // return $arr;
             return view('setup.manage.view-single-leave-group-type')->with($arr);
         } catch (\Throwable $th) {
             return redirect()->route('dash.val');
@@ -175,6 +177,42 @@ class SetupManageController extends Controller
             return redirect()->route('setman.typperlevgrp', $gid);
         } catch (DecryptException $th) {
             return  redirect()->route('setman.typperlevgrp', $gid)
+                ->with('error', 'failed to load');
+        }
+    }
+    function assignworkdayleavegroup($id, Request $request)
+    {
+        try {
+            $entryid = Crypt::decrypt($id);
+            if (empty($request->days)) {
+                // remove all 
+                DB::table('hcleavegroupworkday')->where('groupid', $entryid)
+                    ->delete();
+                return  redirect()->route('setman.typperlevgrp', $id)
+                    ->with('success', 'record added');
+            } else {
+                // insert and remove if not in array
+                $numbers = count($request->days);
+                $a       =       0;
+                while ($a < $numbers) {
+                    $updategroup = array(
+                        'day' => $request->days[$a],
+                        'groupid'       => $entryid,
+                        'operatorid' => session('alluser')
+                    );
+                    DB::table('hcleavegroupworkday')
+                        ->updateOrInsert($updategroup);
+                    $a++;
+                }
+                DB::table('hcleavegroupworkday')->where('groupid', $entryid)
+                    ->whereNotIn('day', $request->days)->delete();
+                return  redirect()->route('setman.typperlevgrp', $id)
+                    ->with('success', 'record added');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->route('setman.typperlevgrp', $id);
+        } catch (DecryptException $th) {
+            return  redirect()->route('setman.typperlevgrp', $id)
                 ->with('error', 'failed to load');
         }
     }

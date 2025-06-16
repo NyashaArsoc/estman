@@ -289,3 +289,4 @@ $("#btn-setup-typegroup-config").click(function () {
         } else { return false; }
     } catch (err) { return false; }
 });
+$("#btn-sbt-work-days").click(function () { disableButtonAndSubmit(this, "defaultform"); });

@@ -87,6 +87,6 @@ $arraygroupids = explode(',',$joinedgroupsis);
 
 @endsection
 @section('additional js')
-<script src="{{ asset('js/validation/user-role.js') }}"></script>
+<script src="{{ asset('js/validation/intake-setup.js') }}"></script>
 <!-- Additional JS End-->
 @endsection

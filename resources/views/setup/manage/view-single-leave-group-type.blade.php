@@ -2,6 +2,9 @@
 $title = 'Leave Group';
 $description = 'below are group details .';
 $groupid= Crypt::encrypt($group->id);
+$joinedgroupdays = $days->implode('day', ',');
+$joinedgroupdays = preg_replace('/\s+/', '', $joinedgroupdays);
+$arraygroupdays = explode(',',$joinedgroupdays);
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'View Leave Group')
@@ -62,46 +65,49 @@ $groupid= Crypt::encrypt($group->id);
                 </table>
             </div>
             <div class="tab-pane show" id="work-days" role="tabpanel" aria-labelledby="days-days-tab"><br />
-                <h5 class="mt-2">Select Working Days</h5>
-                <hr />
-                <div class="form-group row">
-                    <div class="col-sm-8">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="mon" name="days" value="Mon">
-                            <label class="form-check-label" for="mon">Mon</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="tue" name="days" value="Tue">
-                            <label class="form-check-label" for="tue">Tue</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="wed" name="days" value="Wed">
-                            <label class="form-check-label" for="wed">Wed</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="thu" name="days" value="Thu">
-                            <label class="form-check-label" for="thu">Thu</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="fri" name="days" value="Fri">
-                            <label class="form-check-label" for="fri">Fri</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="sat" name="days" value="Sat">
-                            <label class="form-check-label" for="sat">Sat</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="sun" name="days" value="Sun">
-                            <label class="form-check-label" for="sun">Sun</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="hol" name="days" value="Hol">
-                            <label class="form-check-label" for="hol">Holiday</label>
+                <form class="form-material material-primary" id="defaultform" method="POST"
+                    action="{{ route('setman.assigndaygrp',$groupid) }}">@csrf
+                    <h5 class="mt-2">Select Working Days</h5>
+                    <hr />
+                    <div class="form-group row">
+                        <div class="col-sm-8">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="days[]" value="Mon" @if(in_array('Mon',$arraygroupdays)) checked @endif>
+                                <label class="form-check-label" for="mon">Mon</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="days[]" value="Tue" @if(in_array('Tue',$arraygroupdays)) checked @endif>
+                                <label class="form-check-label" for="tue">Tue</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="days[]" value="Wed" @if(in_array('Wed',$arraygroupdays)) checked @endif>
+                                <label class="form-check-label" for="wed">Wed</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="days[]" value="Thu" @if(in_array('Thu',$arraygroupdays)) checked @endif>
+                                <label class="form-check-label" for="thu">Thu</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="days[]" value="Fri" @if(in_array('Fri',$arraygroupdays)) checked @endif>
+                                <label class="form-check-label" for="fri">Fri</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="days[]" value="Sat" @if(in_array('Sat',$arraygroupdays)) checked @endif>
+                                <label class="form-check-label" for="sat">Sat</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="days[]" value="Sun" @if(in_array('Sun',$arraygroupdays)) checked @endif>
+                                <label class="form-check-label" for="sun">Sun</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="days[]" value="Hol" @if(in_array('Hol',$arraygroupdays)) checked @endif>
+                                <label class="form-check-label" for="hol">Holiday</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                @if (in_array(1,$arraycontrolids)) <button type="submit" class="btn btn-primary"
-                    id="btn-sbt-work-days">submit</button> @endif
+                    @if (in_array(1,$arraycontrolids)) <button type="submit" class="btn btn-primary"
+                        id="btn-sbt-work-days">submit</button> @endif
+                </form>
             </div>
         </div><br />
         @include('layout.arlet')
@@ -109,4 +115,8 @@ $groupid= Crypt::encrypt($group->id);
 </div>
 <!-- Content End-->
 
+@endsection
+@section('additional js')
+<script src="{{ asset('js/validation/intake-setup.js') }}"></script>
+<!-- Additional JS End-->
 @endsection
