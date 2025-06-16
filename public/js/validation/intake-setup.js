@@ -188,6 +188,37 @@ function validateSellingRate() {
     }
 
 }
+//valid maximum days
+$("#maximundayscheck").hide();
+let maximundaysError = true;
+$("#maximundays").keyup(function () {
+    validateMaximumDays();
+});
+function validateMaximumDays() {
+    let textValue = $("#maximundays").val();
+    if (textValue.length == "") {
+        $("#maximundayscheck").show();
+        maximundaysError = false;
+        return false;
+    } else if (textValue.length < 1) {
+        $("#maximundayscheck").show();
+        $("#maximundayscheck").html("**invalid input");
+        maximundaysError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#maximundayscheck").show();
+            $("#maximundayscheck").html("**digits only or (35)");
+            maximundaysError = false;
+            return false;
+        } else {
+            maximundaysError = true;
+            $("#maximundayscheck").hide();
+        }
+    }
+}
 /*--------------------starting buttons --------------------------*/
 //button disable submit
 function disableButtonAndSubmit(button, id) {
@@ -249,3 +280,12 @@ $("#btn-submit-exchange-rate").click(function () {
     }
 });
 $("#btn-submit-levtype").click(function () { disableButtonAndSubmit(this, "defaultform"); });
+//button add days to accrue on leave
+$("#btn-setup-typegroup-config").click(function () {
+    validateNumericValueRequired(); validateMaximumDays(); validateCurrencyCode();
+    try {
+        if (numericrequiredError == true && maximundaysError == true && currencycodeError == true) {
+            disableButtonAndSubmit(this, "defaultform");
+        } else { return false; }
+    } catch (err) { return false; }
+});

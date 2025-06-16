@@ -162,4 +162,20 @@ class SetupManageController extends Controller
                 ->with('error', 'failed to load');
         }
     }
+    function viewleavetypegroupconfig($tid, $gid)
+    {
+        try {
+            $typeid = Crypt::decrypt($tid);
+            $groupid = Crypt::decrypt($gid);
+            $arr['typegroup'] = DB::table('hctypegroup')->where('groupid', $groupid)->where('typeid', $typeid)->first();
+            $arr['group'] = DB::table('hcleavegroups')->where('id', $groupid)->first();
+            $arr['type'] = DB::table('hcleavetype')->where('id', $typeid)->first();
+            return view('setup.manage.view-single-config-group-type')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('setman.typperlevgrp', $gid);
+        } catch (DecryptException $th) {
+            return  redirect()->route('setman.typperlevgrp', $gid)
+                ->with('error', 'failed to load');
+        }
+    }
 }

@@ -265,6 +265,7 @@ Route::middleware('loginauth')->controller(SetupManageController::class)->group(
     Route::get('/leave-group/{id}/assign/type', 'viewassignleavegrouptype')->name('setman.viewassignlevtyp');
     Route::any('/assign-type/{id}/leave/group', 'assigntypeleavegroup')->name('setman.assigntyplevgrp');
     Route::get('/set-up/leave/group/{id}', 'listtypeperleavegroups')->name('setman.typperlevgrp');
+    Route::get('/set-up/type/{tid}/leave-group/{gid}', 'viewleavetypegroupconfig')->name('setman.typlevgrpconf');
 });
 /*-------------------end setup manage------------------------ */
 /*-------------------valuations intake------------------------ */

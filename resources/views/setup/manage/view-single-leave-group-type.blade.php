@@ -42,15 +42,12 @@ $groupid= Crypt::encrypt($group->id);
                     <tbody>@php $count=1;@endphp
                         @foreach($list as $abc)
                         <tr>
-                            @php $typeid= Crypt::encrypt($abc->typeid); @endphp
+                            @php $tid= Crypt::encrypt($abc->typeid);$gid= Crypt::encrypt($abc->groupid); @endphp
                             <td>{{$count ++}}</td>
                             <td>{{$abc->description}}</td>
                             <td>@if (in_array(2,$arraycontrolids)) <a class="btn btn-primary btn-sm " id=""
-                                    href="{{route('setman.typperlevgrp', $typeid)}}"
+                                    href="{{route('setman.typlevgrpconf', [$tid,$gid])}}"
                                     title="assign"><i class="ti-settings mr-0-5"></i>config</a>@endif
-                                @if (in_array(3,$arraycontrolids)) <a class="btn btn-info btn-sm " id=""
-                                    href="{{route('setman.typperlevgrp', $typeid)}}"
-                                    title="assign"><i class="ti-eye mr-0-5"></i>view</a>@endif
                             </td>
                         </tr>
                         @endforeach
