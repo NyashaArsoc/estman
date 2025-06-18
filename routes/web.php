@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashController;
+use App\Http\Controllers\HCIntakeController;
 use App\Http\Controllers\LoginAuthController;
 use App\Http\Controllers\PropManApprovalController;
 use App\Http\Controllers\PropManDeclineController;
@@ -49,7 +50,7 @@ Route::middleware('loginauth')->controller(DashController::class)->group(functio
     Route::get('/dashboard/property', 'propertyview')->name('dash.property');
     Route::get('/welcome', 'maindashboard')->name('dash.main');
     Route::get('/dashboard/valuation', 'valuationview')->name('dash.val');
-    // Route::get('/valuation/dashboard', 'valuationdashboard')->name('dash.val');
+    Route::get('/human-capital/dashboard', 'humancapitaldashboard')->name('dash.hc');
     Route::get('/set-up/dashboard', 'setupdashboard')->name('dash.setup');
 });
 /*
@@ -337,4 +338,9 @@ Route::middleware('loginauth')->controller(ValDeclinedController::class)->group(
     Route::get('/val/list/acknowledgement/declined', 'listalldeclinedacknowledgement')->name('valdec.listackn');
     Route::get('/val/{id}/view-declined/{instr_id}/acknowledgement', 'viewsingleinstructionacknowledge')->name('valdec.viewsinglackwn');
     Route::any('/val/allocate/{id}/declined/instruction/{instr_id}', 'allocateinstructionacknowledge')->name('valdec.alloinstr');
+});
+/*-------------------human capital intake------------------------ */
+Route::middleware('loginauth')->controller(HCIntakeController::class)->group(function () {
+    Route::get('/hc/import/staff', 'importstafflist')->name('hcin.impstaf');
+    Route::get('/hc/create/staff', 'createstafflist')->name('hcin.crtstaf');
 });

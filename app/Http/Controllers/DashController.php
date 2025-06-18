@@ -93,9 +93,9 @@ class DashController extends Controller
                 return view('dash/property-view')->with($arr);
         }
     }
-    function valuationview()
+    function humancapitaldashboard()
     {
-        return view('dash.valuation-view');
+        return view('dash.hc-dashboard');
     }
     public function valuationdashboard()
     {

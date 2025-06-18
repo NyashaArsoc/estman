@@ -28,7 +28,8 @@ class AppServiceProvider extends ServiceProvider
         View::composer(views: [
             'layout.valuation-main-menu',
             'layout.propman-main-menu',
-            'layout.setup-main-menu'
+            'layout.setup-main-menu',
+            'layout.hc.hc-main-menu'
         ], callback: MenuComposer::class);
     }
 }
