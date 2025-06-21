@@ -342,5 +342,6 @@ Route::middleware('loginauth')->controller(ValDeclinedController::class)->group(
 /*-------------------human capital intake------------------------ */
 Route::middleware('loginauth')->controller(HCIntakeController::class)->group(function () {
     Route::get('/hc/import/staff', 'importstafflist')->name('hcin.impstaf');
-    Route::get('/hc/create/staff', 'createstafflist')->name('hcin.crtstaf');
+    Route::post('/hc/create/staff', 'createstafflist')->name('hcin.crtstaf');
+    Route::get('/hc/apply/leave', 'applyleave')->name('hcin.applev');
 });

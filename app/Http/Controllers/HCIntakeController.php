@@ -34,4 +34,17 @@ class HCIntakeController extends Controller
             return  redirect()->route('dash.hc');
         }
     }
+    /*-------------------apply----------------------- */
+    function applyleave()
+    {
+        try {
+            $staffids = DB::table('hcstaff')->pluck('staffid');
+            $arr['staff']   = DB::table('systusers')->where('isavailable', 'Y')->where('username', '!=', 'admin')
+                ->whereNotIn('id', $staffids)->select('*')->get();
+            $arr['group']   = DB::table('hcleavegroups')->where('isactive', 'Y')->select('*')->get();
+            return view('hc.intake.apply-leave')->with($arr);
+        } catch (\Throwable $th) {
+            return  redirect()->route('dash.hc');
+        }
+    }
 }
