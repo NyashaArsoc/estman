@@ -39,7 +39,7 @@ $description = 'list of all leave groups...';
                             </i>disable</a>';
                         $buttonactivate = '';
                         }else{
-                        $status = 'blocked';
+                        $status = 'not active';
                         $badge = "badge badge-pill bg-danger badge-secondary";
                         $buttondisable = '';
                         $buttonactivate = '<a onclick="activaterecord(this); return false;" class="btn btn-success btn-sm"

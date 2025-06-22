@@ -2,7 +2,7 @@
 $title = 'Leave Group Definition';
 $description = 'define the days to accrue per month and limits...';
 $groupid= Crypt::encrypt($typegroup->groupid);
-$id= Crypt::encrypt($type->id); @endphp
+$id= Crypt::encrypt($typegroup->id); @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'Group Definition')
 @section('additional css')
@@ -32,14 +32,14 @@ $id= Crypt::encrypt($type->id); @endphp
                 <label for="" class="col-sm-2 form-control-label">Days to accrue
                 </label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="numericrequired" name="daystoaccrue" value="{{$config->days}}"
+                    <input type="text" class="form-control" id="numericrequired" name="daystoaccrue" value="{{$config->days ?? 0}}"
                         placeholder="2.25" autocomplete="off">
                     <small id="numericrequiredcheck" style="color: red;">required</small>
                 </div>
                 <label for="" class="col-sm-2 form-control-label">Maximun Days
                 </label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="maximundays" name="maximundays" value="{{$config->maxdays}}"
+                    <input type="text" class="form-control" id="maximundays" name="maximundays" value="{{$config->maxdays ?? 0}}"
                         placeholder="25" autocomplete="off">
                     <small id="maximundayscheck" style="color: red;">required</small>
                 </div>

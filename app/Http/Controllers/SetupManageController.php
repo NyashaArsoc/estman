@@ -235,13 +235,13 @@ class SetupManageController extends Controller
                 ]
             );
 
-            return  redirect()->route('setman.typperlevgrp', $id)
+            return  redirect()->route('setman.typperlevgrp', $gid)
                 ->with('success', 'record added');
         } catch (\Throwable $th) {
-            return redirect()->route('setman.typperlevgrp', $id)
+            return redirect()->route('setman.typperlevgrp', $gid)
                 ->with('error', 'failed to load');
         } catch (DecryptException $th) {
-            return  redirect()->route('setman.typperlevgrp', $id)
+            return  redirect()->route('setman.typperlevgrp', $gid)
                 ->with('error', 'failed to load');
         }
     }
