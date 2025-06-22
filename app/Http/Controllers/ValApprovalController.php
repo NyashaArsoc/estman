@@ -125,7 +125,7 @@ class ValApprovalController extends Controller
                     ->with('success', 'record confirmed');
             } catch (\Throwable $th) {
                 return redirect()->route('valapp.listacknw')
-                    ->with('error', 'failed to load' . $th);
+                    ->with('error', 'failed to load');
             }
         } catch (DecryptException $th) {
             return redirect()->route('valapp.listacknw')

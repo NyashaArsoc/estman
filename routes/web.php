@@ -49,7 +49,7 @@ Route::controller(LoginAuthController::class)->group(function () {
 Route::middleware('loginauth')->controller(DashController::class)->group(function () {
     Route::get('/dashboard/property', 'propertyview')->name('dash.property');
     Route::get('/welcome', 'maindashboard')->name('dash.main');
-    Route::get('/dashboard/valuation', 'valuationview')->name('dash.val');
+    Route::get('/dashboard/valuation', 'valuationdashboard')->name('dash.val');
     Route::get('/human-capital/dashboard', 'humancapitaldashboard')->name('dash.hc');
     Route::get('/set-up/dashboard', 'setupdashboard')->name('dash.setup');
 });

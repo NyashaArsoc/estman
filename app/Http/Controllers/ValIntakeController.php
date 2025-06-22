@@ -60,22 +60,22 @@ class ValIntakeController extends Controller
                     'companyname' => $request->companyname
                 ]
             );
-            if ($request->clienttype <> 1) {
-                DB::table('valclientcontactperson')->insert([
-                    'email' => $contactemail,
-                    'cell' => $contactcell,
-                    'lastname' => $contactlastname,
-                    'firstname' => $contactfirstname,
-                    'operatorid' => session('alluser'),
-                    'clientid' => $clientid
-                ]);
-            }
+
+            DB::table('valclientcontactperson')->insert([
+                'email' => $contactemail,
+                'cell' => $contactcell,
+                'lastname' => $contactlastname,
+                'firstname' => $contactfirstname,
+                'operatorid' => session('alluser'),
+                'clientid' => $clientid
+            ]);
+
 
             return  redirect()->route('valin.newclient')
                 ->with('success', 'record added');
         } catch (\Throwable $th) {
             return  redirect()->route('valin.newclient')
-                ->with('error', 'failed to load' . $th);
+                ->with('error', 'failed to load');
         }
     }
     /*------------ new valuation property ---------*/

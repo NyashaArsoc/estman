@@ -107,8 +107,8 @@ class DashController extends Controller
         $arr['quality']   = DB::table('valinstrqualitycheck')->where('status', '=', 'P')->get()->count();
         $arr['pending']   = DB::table('valinstructions')->where('status', '=', 'pending')->get()->count();
         $arr['mail']        = DB::table('valinstrsendingreport')->where('status', '=', 'pending')->get()->count();
-        $arr['portfolio']   = DB::select('EXEC spValGetPortfolioCompilation');
-        $arr['portfolioreview']   = DB::select('EXEC spValGetPortfolioReview');
+        $arr['portfolio']   = DB::select('EXEC spGetValPortfolioCompilation');
+        $arr['portfolioreview']   = DB::select('EXEC spGetValPortfolioReview');
         $arr['instructions'] = DB::table('valinstrfinalapproval')
             ->join('valinstructions', 'valinstrfinalapproval.instructionid', '=', 'valinstructions.id')
             ->join('valclientproperty', 'valclientproperty.id', '=', 'valinstructions.propertyid')
