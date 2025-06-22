@@ -10,7 +10,7 @@ function validateCurrencyCode() {
         $("#currencycodecheck").show();
         currencycodeError = false;
         return false;
-    } else if (textValue.length < 2 || textValue.length > 3) {
+    } else if (textValue.length != 3) {
         $("#currencycodecheck").show();
         $("#currencycodecheck").html("**invalid currency code");
         currencycodeError = false;

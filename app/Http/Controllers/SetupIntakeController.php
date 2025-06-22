@@ -23,7 +23,7 @@ class SetupIntakeController extends Controller
             return  redirect()->route('setin.addcurr')
                ->with('error', 'currency already exists');
          }
-         DB::table('setupcurrency')->insert(['code' => $currencycode]);
+         DB::table('setupcurrency')->insert(['code' => $currencycode, 'operatorid' => session('alluser')]);
          return  redirect()->route('setin.addcurr')
             ->with('success', 'record added');
       } catch (\Throwable $th) {
@@ -78,7 +78,7 @@ class SetupIntakeController extends Controller
             return  redirect()->route('setin.addcltyp')
                ->with('error', 'record already exists');
          }
-         DB::table('setupclienttype')->insert(['description' => $textdescription]);
+         DB::table('setupclienttype')->insert(['description' => $textdescription, 'operatorid' => session('alluser')]);
          return  redirect()->route('setin.addcltyp')
             ->with('success', 'record added');
       } catch (\Throwable $th) {
@@ -103,7 +103,7 @@ class SetupIntakeController extends Controller
             return  redirect()->route('setin.addpropty')
                ->with('error', 'record already exists');
          }
-         DB::table('setuppropertytype')->insert(['description' => $textdescription]);
+         DB::table('setuppropertytype')->insert(['description' => $textdescription, 'operatorid' => session('alluser')]);
          return  redirect()->route('setin.addpropty')
             ->with('success', 'record added');
       } catch (\Throwable $th) {
@@ -128,7 +128,7 @@ class SetupIntakeController extends Controller
             return  redirect()->route('setin.addprov')
                ->with('error', 'record already exists');
          }
-         DB::table('setupprovince')->insert(['description' => $textdescription]);
+         DB::table('setupprovince')->insert(['description' => $textdescription, 'operatorid' => session('alluser')]);
          return  redirect()->route('setin.addprov')
             ->with('success', 'record added');
       } catch (\Throwable $th) {
@@ -141,8 +141,11 @@ class SetupIntakeController extends Controller
    public function addleaseinterest()
    {
       try {
-         $leaseids = DB::table('setupleaseinterestrates')->pluck('leaseid');
-         $arr['lease'] = DB::table('propmanalllease')->whereNotIn('id', $leaseids)
+         $leaseids = DB::table('setupleaseinterestrates')->pluck('leaseid')->toArray();
+         $arr['lease'] = DB::table('propmanalllease')
+            ->when(!empty($leaseids), function ($query) use ($leaseids) {
+               return $query->whereNotIn('id', $leaseids);
+            })
             ->where('available', '=', 'Y')->select('*')->get();
          return view('setup.intake.add-lease-interest')->with($arr);
       } catch (\Throwable $th) {
@@ -178,9 +181,11 @@ class SetupIntakeController extends Controller
    public function addvatconfig()
    {
       try {
-         $proptypeids = DB::table('setupvatconfig')->pluck('propertytypeid');
-         $arr['proptype'] = DB::table('setuppropertytype')->whereNotIn('id', $proptypeids)
-            ->get();
+         $proptypeids = DB::table('setupvatconfig')->pluck('propertytypeid')->toArray();
+         $arr['proptype'] = DB::table('setuppropertytype')
+            ->when(!empty($proptypeids), function ($query) use ($proptypeids) {
+               return $query->whereNotIn('id', $proptypeids);
+            })->get();
          return view('setup.intake.add-vat-config')->with($arr);
       } catch (\Throwable $th) {
          return  redirect()->route('dash.setup');
@@ -221,17 +226,17 @@ class SetupIntakeController extends Controller
 
          $textdescription = strtoupper($request->textdescription);
          if (DB::table('hcleavegroups')->select('id')->where('description', $textdescription)->exists()) {
-            return  redirect()->route('setin.createlevgrp')->with('error', 'record already exists');
+            return  redirect()->route('setin.addlevgrp')->with('error', 'record already exists');
          }
 
          DB::table('hcleavegroups')->insert([
             'description' => $textdescription,
             'operatorid' => session('alluser')
          ]);
-         return  redirect()->route('setin.createlevgrp')
+         return  redirect()->route('setin.addlevgrp')
             ->with('success', 'record added');
       } catch (\Throwable $th) {
-         return  redirect()->route('setin.createlevgrp')
+         return  redirect()->route('setin.addlevgrp')
             ->with('error', 'failed to load');
       }
    }

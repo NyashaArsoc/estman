@@ -30,18 +30,19 @@ class SetupManageController extends Controller
                 '=',
                 'Y'
             )->select('code')->latest('id')->first();
-            switch ($codeexists) {
-                case trim($codeexists->code) == $request->currencycode:
-                    return  redirect()->route('setman.addbasecurr')
-                        ->with('error', 'currency already exists');
-                default:
-                    DB::table('setupcurrencybase')->insert(['code' => $request->currencycode]);
-                    return  redirect()->route('setman.addbasecurr')
-                        ->with('success', 'record added');
+            if ($codeexists && trim($codeexists->code) == $request->currencycode) {
+                return redirect()->route('setman.addbasecurr')->with('error', 'Currency already exists');
+            } else {
+                DB::table('setupcurrencybase')->insert([
+                    'code' => $request->currencycode,
+                    'operatorid' => session('alluser')
+                ]);
+
+                return redirect()->route('setman.addbasecurr')->with('success', 'record added');
             }
         } catch (\Throwable $th) {
-            return  redirect()->route('setin.addcurr')
-                ->with('error', 'failed to load' . $th);
+            return  redirect()->route('setman.addbasecurr')
+                ->with('error', 'failed to load');
         }
     }
     function listleavegroups()
