@@ -27,7 +27,7 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            <a href="{{route('dash.val')}}" class="">
+            <a href="{{route('dash.hc')}}" class="">
                 <div class="box box-block tile tile-2 bg-primary mb-2">
                     <div class="t-icon right"></div>
                     <div class="t-content">

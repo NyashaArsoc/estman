@@ -119,45 +119,13 @@ $title = 'Dashboard';
 
 @endsection
 <script>
-    /*
-    // Ensure the script runs after the DOM is fully loaded
-    document.addEventListener('DOMContentLoaded', function() {
-     const ctx = document.getElementById('rentalbilledcollectionschart').getContext('2d');
-        const rentalbilledcollectionschart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: {!! json_encode($dates) !!}, // Dates for the month
-                datasets: [
-                    {
-                        label: 'Collections',
-                        data: {!! json_encode($rentalcollected) !!}, // Collected amounts
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        fill: true,
-                    },
-                    {
-                        label: 'Invoices',
-                        data: {!! json_encode($rentalbilled) !!}, // Billed amounts
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        fill: true,
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    });*/
+
 </script>
+
 @section('additional js')
 <!-- Additional JS Start-->
 <script src="{{ asset('js/validation/lease.js') }}"></script>
+<script src="{{ asset('js/propertydashboard.js') }}"></script>
 <script src="{{ asset('css/select2/select2.min.js') }}"></script>
 <script src="{{ asset('js/select2.js') }}"></script>
 <script src="{{ asset('js/dropdown.js') }}"></script>

@@ -560,7 +560,7 @@ class PropManIntakeController extends Controller
                 ->with('success', 'record added');
         } catch (\Throwable $th) {
             return  redirect()->route('propin.addlease')
-                ->with('error', 'failed to load' . $th);
+                ->with('error', 'failed to load');
         }
     }
     public function addleaserate($id)

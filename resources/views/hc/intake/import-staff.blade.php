@@ -20,7 +20,7 @@ $description = 'import new employees to leave management...'; @endphp
     <div class="box box-block bg-white">
         <h5>{{ $title }}</h5>
         <p class="font-90 text-muted mb-1"> {{ $description }}</p>
-        <form class="form-material material-primary" id="" method="POST"
+        <form class="form-material material-primary" id="defaultform" method="POST"
             action="{{ route('hcin.crtstaf') }}">@csrf
             <div class="form-group row">
                 <label for="" class="col-sm-2 form-control-label">Staff</label>
