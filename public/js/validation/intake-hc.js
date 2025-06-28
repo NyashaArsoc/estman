@@ -32,6 +32,37 @@ function validateLeaveGroupList() {
         $("#leavegroupcheck").hide();
     }
 }
+//valid numeric value required
+$("#numericrequiredcheck").hide();
+let numericrequiredError = true;
+$("#numericrequired").keyup(function () {
+    validateNumericValueRequired();
+});
+function validateNumericValueRequired() {
+    let textValue = $("#numericrequired").val();
+    if (textValue.length == "") {
+        $("#numericrequiredcheck").show();
+        numericrequiredError = false;
+        return false;
+    } else if (textValue.length < 1) {
+        $("#numericrequiredcheck").show();
+        $("#numericrequiredcheck").html("**invalid input");
+        numericrequiredError = false;
+        return false;
+    } else {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~a-z/\s/A-Z]/;
+        charscheck = specialChars.test(textValue);
+        if (charscheck == true) {
+            $("#numericrequiredcheck").show();
+            $("#numericrequiredcheck").html("**digits only or (3.5)");
+            numericrequiredError = false;
+            return false;
+        } else {
+            numericrequiredError = true;
+            $("#numericrequiredcheck").hide();
+        }
+    }
+}
 /*****************************-------buttons submit ----------------------- */
 //button disable submit
 function disableButtonAndSubmit(button, id) {
@@ -46,6 +77,13 @@ function disableButtonAndSubmit(button, id) {
 $("#btn-import-staff").click(function () {
     validateLeaveGroupList(); validateStaffList();
     if (leavegroupError == true && stafflistError == true) {
+        disableButtonAndSubmit(this, "defaultform");
+    } else { return false; }
+});
+//button add take-on balances
+$("#btn-submit-takeon-days").click(function () {
+    validateNumericValueRequired();
+    if (numericrequiredError == true) {
         disableButtonAndSubmit(this, "defaultform");
     } else { return false; }
 });

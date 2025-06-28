@@ -346,4 +346,6 @@ Route::middleware('loginauth')->controller(HCIntakeController::class)->group(fun
     Route::get('/hc/apply/leave', 'applyleave')->name('hcin.applev');
     Route::get('/hc/add/days', 'addleavedays')->name('hcin.addday');
     Route::get('/hc/add/days/{id}/user', 'listgroupsperuser')->name('hcin.lstgrpusr');
+    Route::get('/hc/add/type/{id}/user/{uid}/days', 'addtypedaytouser')->name('hcin.daytotyp');
+    Route::post('/hc/staff/{id}/takeon/{tid}', 'staffaddtakeonbalances')->name('hcin.takeon');
 });

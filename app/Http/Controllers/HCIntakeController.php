@@ -66,15 +66,63 @@ class HCIntakeController extends Controller
         try {
             $userid = Crypt::decrypt($id);
             $arr['staff']   = DB::table('systusers')->where('id', $userid)->first();
-            $arr['staffgroup']   = DB::table('hcstaff')->where('staffid', $userid)->first();
-            $arr['type']   = DB::table('hcstaff')->where('staffid', $userid)->first();
-            $tenant = DB::table('hctypegroup')->join('hcleavetype', 'hctypegroup.typeid', '=', 'hcleavetype.id')
-                ->select('hcleavetype.description', 'hctypegroup.id')->get();
+            $arr['staffgroup']   = DB::table('hcstaff')->join('hcleavegroups', 'hcstaff.groupid', '=', 'hcleavegroups.id')
+                ->where('hcstaff.staffid', $userid)->first();
+            $typeidstakeon = DB::table('hctakeondays')->where('staffid', $userid)->pluck('typegroupid')->toArray();
+            $typeidsdays = DB::table('hcstaffdays')->where('staffid', $userid)->pluck('typegroupid')->toArray();
+            $excludedtypegroupids = array_merge($typeidstakeon, $typeidsdays);
+
+            $arr['typegroup'] = DB::table('hctypegroup')->join('hcleavetype', 'hctypegroup.typeid', '=', 'hcleavetype.id')
+                ->where('hctypegroup.groupid', $arr['staffgroup']->groupid)
+                ->when(!empty($excludedtypegroupids), function ($query) use ($excludedtypegroupids) {
+                    $query->whereNotIn('hctypegroup.id', $excludedtypegroupids);
+                })->select('hcleavetype.description', 'hctypegroup.id')->get();
+            return view('hc.intake.add-day-stafflist-type')->with($arr);
         } catch (\Throwable $th) {
             return redirect()->route('hcin.addday')
                 ->with('error', 'failed to load');
         } catch (DecryptException $th) {
             return redirect()->route('hcin.addday')
+                ->with('error', 'failed to load');
+        }
+    }
+    function addtypedaytouser($id, $uid)
+    {
+        try {
+            $typegroupid    = Crypt::decrypt($id);
+            $userid         = Crypt::decrypt($uid);
+            $arr['staff']   = DB::table('systusers')->where('id', $userid)->first();
+            $arr['staffgroup']   = DB::table('hcstaff')->join('hcleavegroups', 'hcstaff.groupid', '=', 'hcleavegroups.id')
+                ->where('hcstaff.staffid', $userid)->first();
+            $arr['typegroup'] = DB::table('hctypegroup')->join('hcleavetype', 'hctypegroup.typeid', '=', 'hcleavetype.id')
+                ->where('hctypegroup.id', $typegroupid)->select('hcleavetype.description', 'hctypegroup.id')->first();
+            return view('hc.intake.add-takeon-type-staff-day')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('hcin.lstgrpusr', $uid)
+                ->with('error', 'failed to load');
+        } catch (DecryptException $th) {
+            return redirect()->route('hcin.lstgrpusr', $uid)
+                ->with('error', 'failed to load');
+        }
+    }
+    function staffaddtakeonbalances($id, $tid, Request $request)
+    {
+        try {
+            $typegroupid    = Crypt::decrypt($tid);
+            $userid         = Crypt::decrypt($id);
+            DB::table('hctakeondays')->insert([
+                'staffid' => $userid,
+                'typegroupid' => $typegroupid,
+                'days' => $request->takeondays,
+                'operatorid' => session('alluser')
+            ]);
+            return redirect()->route('hcin.lstgrpusr',  $id)
+                ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return redirect()->route('hcin.daytotyp', [$tid, $id])
+                ->with('error', 'failed to load');
+        } catch (DecryptException $th) {
+            return redirect()->route('hcin.daytotyp', [$tid, $id])
                 ->with('error', 'failed to load');
         }
     }
