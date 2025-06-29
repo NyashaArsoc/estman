@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashController;
 use App\Http\Controllers\HCIntakeController;
+use App\Http\Controllers\HCManageController;
 use App\Http\Controllers\LoginAuthController;
 use App\Http\Controllers\PropManApprovalController;
 use App\Http\Controllers\PropManDeclineController;
@@ -348,4 +349,9 @@ Route::middleware('loginauth')->controller(HCIntakeController::class)->group(fun
     Route::get('/hc/add/days/{id}/user', 'listgroupsperuser')->name('hcin.lstgrpusr');
     Route::get('/hc/add/type/{id}/user/{uid}/days', 'addtypedaytouser')->name('hcin.daytotyp');
     Route::post('/hc/staff/{id}/takeon/{tid}', 'staffaddtakeonbalances')->name('hcin.takeon');
+});
+/*-------------------human capital manage------------------------ */
+Route::middleware('loginauth')->controller(HCManageController::class)->group(function () {
+    Route::get('/hc/list/staff', 'listallstaff')->name('hcman.liststff');
+    Route::get('/hc/view/staff/{uid}/{gid}', 'viewsinglestaff')->name('hcman.viwstff');
 });
