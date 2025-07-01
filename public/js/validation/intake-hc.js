@@ -63,6 +63,145 @@ function validateNumericValueRequired() {
         }
     }
 }
+//date valid from
+$("#datefromcheck").hide();
+let datefromError = true;
+$("#datefrom").keyup(function () {
+    validateDateFrom();
+});
+function validateDateFrom() {
+    let textValue = $("#datefrom").val();
+    if (textValue.length == "") {
+        $("#datefromcheck").show();
+        datefromError = false;
+        return false;
+    } else {
+        datefromError = true;
+        $("#datefromcheck").hide();
+    }
+}
+//valid to
+$("#datetocheck").hide();
+let datetoError = true;
+$("#dateto").keyup(function () {
+    validateDateTo();
+});
+function validateDateTo() {
+    let textValue = $("#dateto").val();
+    if (textValue.length == "") {
+        $("#datetocheck").show();
+        datetoError = false;
+        return false;
+    } else {
+        datetoError = true;
+        $("#datetocheck").hide();
+    }
+}
+//validate date bigger than
+let daterangeError = true;
+function validateDateRange() {
+    var date_from = new Date($('#datefrom').val());
+    var date_to = new Date($('#dateto').val());
+    if (isNaN(date_from.getTime()) || isNaN(date_to.getTime())) {
+        $("#datetocheck").show().html("invalid date format.");
+        daterangeError = false;
+        return false;
+    }
+    if (date_from > date_to) {
+        $("#datetocheck").show().html("invalid date format.");
+        daterangeError = false;
+        return false;
+    } else {
+        $("#datetocheck").hide();
+        daterangeError = true;
+        return true;
+    }
+}
+// not required pdf document
+$("#notrequiredpdfcheck").hide();
+let notrequiredpdfdocumentError = true;
+$("#notrequiredpdf").keyup(function () {
+    validateNotRequiredPDFDocument();
+});
+function validateNotRequiredPDFDocument() {
+    let textValue = $("#notrequiredpdf")[0];
+    if (textValue.files.length !== 0) {
+        var uploadedfile = textValue.files[0];
+        // Check the file extension
+        var uploadedExtension = uploadedfile.name.split('.').pop().toLowerCase();
+        if (uploadedExtension !== 'pdf') {
+            $("#notrequiredpdfcheck").show();
+            $("#notrequiredpdfcheck").html("**file must be pdf ");
+            notrequiredpdfdocumentError = false;
+            return false;
+        } else {
+
+            if (uploadedfile.size > 2000 * 1024) { // file must be less than 2Mb
+                $("#notrequiredpdfcheck").show();
+                $("#notrequiredpdfcheck").html("**file must be less that 2MB");
+                notrequiredpdfdocumentError = false;
+                return false;
+            } else {
+                notrequiredpdfdocumentError = true;
+                $("#notrequiredpdfcheck").hide();
+            }
+        }
+    }
+}
+// comment highlights not required text
+$("#commentshighlightscheck").hide();
+let commentshighlightsError = true;
+$("#commentshighlights").keyup(function () {
+    validateCommentsHighlights();
+});
+function validateCommentsHighlights() {
+    let textValue = $("#commentshighlights").val();
+    const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|<>\/?~]/;
+    charscheck = specialChars.test(textValue);
+    if (charscheck == true) {
+        $("#commentshighlightscheck").show();
+        $("#commentshighlightscheck").html("**remove characters");
+        commentshighlightsError = false;
+        return false;
+    } else {
+        commentshighlightsError = true;
+        $("#commentshighlightscheck").hide();
+    }
+}
+//calculate days taken
+function calculateLeaveDaysTaken() {
+    var datefrom = new Date($('#datefrom').val());
+    var dateto = new Date($('#dateto').val());
+    var timediff = dateto.getTime() - datefrom.getTime();
+    var daydiff = Math.ceil(timediff / (1000 * 3600 * 24)) + 1;
+    if (isNaN(datefrom.getTime()) || isNaN(dateto.getTime())) {
+        $('#daysapplied').text('0');
+        return;
+    }
+    if (daydiff <= 0) { $('#daysapplied').text('0 days'); }
+    else { $('#daysapplied').text(daydiff + ' day' + (daydiff > 1 ? 's' : '')); }
+
+}
+$('#datefrom, #dateto').on('change', function () {
+    calculateLeaveDaysTaken();
+});
+//calculate days taken 
+let daysufficientError = true;
+function calculateDaysDifference() {
+    let applied = parseFloat($('#daysapplied').text()) || 0;
+    let available = parseFloat($('#daysavailable').text()) || 0;
+    $('#daysavailable_input').val(available);
+    $('#daysapplied_input').val(applied);
+    if (applied > available) {
+        $("#insufficientdayscheck").show().html("days not sufficient.");
+        daysufficientError = false;
+        return false;
+    } else {
+        $("#insufficientdayscheck").hide();
+        daysufficientError = true;
+        return true;
+    }
+}
 /*****************************-------buttons submit ----------------------- */
 //button disable submit
 function disableButtonAndSubmit(button, id) {
@@ -84,6 +223,15 @@ $("#btn-import-staff").click(function () {
 $("#btn-submit-takeon-days").click(function () {
     validateNumericValueRequired();
     if (numericrequiredError == true) {
+        disableButtonAndSubmit(this, "defaultform");
+    } else { return false; }
+});
+$("#btn-apply-leave").click(function () {
+    validateDateTo(); validateDateFrom(); validateDateRange(); validateLeaveGroupList();
+    validateNotRequiredPDFDocument(); validateCommentsHighlights(); calculateDaysDifference();
+    if (datetoError == true && datefromError == true && daterangeError == true && leavegroupError == true
+        && notrequiredpdfdocumentError == true && commentshighlightsError == true && daysufficientError == true
+    ) {
         disableButtonAndSubmit(this, "defaultform");
     } else { return false; }
 });

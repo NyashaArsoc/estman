@@ -40,12 +40,14 @@ class HCIntakeController extends Controller
     function applyleave()
     {
         try {
-            $staffids = DB::table('hcstaff')->pluck('staffid');
-            $arr['staff']   = DB::table('systusers')->where('isavailable', 'Y')->where('username', '!=', 'admin')
-                ->whereNotIn('id', $staffids)->select('*')->get();
-            $arr['group']   = DB::table('hcleavegroups')->where('isactive', 'Y')->select('*')->get();
+            $arr['myuser'] = $this->userdetail();
+            $arr['myrole'] = DB::table('systroles')->where('id', $arr['myuser']->roleid)->select('*')->first();
+            $arr['typegroup'] = DB::table('hcstaff')->join('hctypegroup', 'hcstaff.groupid', '=', 'hctypegroup.groupid')
+                ->join('hcleavetype', 'hctypegroup.typeid', '=', 'hcleavetype.id')->where('hcstaff.staffid', $arr['myuser']->id)
+                ->select('hcleavetype.description', 'hctypegroup.id as typegroupid', 'hcstaff.staffid', 'hcstaff.groupid')->get();
             return view('hc.intake.apply-leave')->with($arr);
         } catch (\Throwable $th) {
+            return $th;
             return  redirect()->route('dash.hc');
         }
     }
@@ -123,6 +125,55 @@ class HCIntakeController extends Controller
                 ->with('error', 'failed to load');
         } catch (DecryptException $th) {
             return redirect()->route('hcin.daytotyp', [$tid, $id])
+                ->with('error', 'failed to load');
+        }
+    }
+    function getdaysavailable($uid, $tid)
+    {
+        try {
+            $arr['days']   = DB::table('hcstaffdays')->where('typegroupid', $tid)
+                ->where('staffid', $uid)->first();
+            $arr['typegroup'] = DB::table('hctypegroup')->join('hcleavetype', 'hctypegroup.typeid', '=', 'hcleavetype.id')
+                ->where('hctypegroup.id', $tid)->select('hcleavetype.description', 'hctypegroup.id')->first();
+            return view('hc.intake.get-single-staff-days')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('hcin.applev')
+                ->with('error', 'failed to load');
+        }
+    }
+    /*-------------apply leave */
+    function createleave(Request $request, $uid, $rid)
+    {
+        try {
+            $request->validate([
+                'dateto' => 'required',
+                'datefrom' => 'required',
+            ]);
+            $userid         = Crypt::decrypt($uid);
+            $routeto         = Crypt::decrypt($rid);
+            $typegroup   = DB::table('hctypegroup')->where('id', $request->leavegroup)->first();
+
+            DB::table('hcleaveapplication')->insert([
+                'daysapplied' => $request->daysapplied,
+                'daysavailable' => $request->daysavailable,
+                'comments' => $request->commentshighlights,
+                'dateto' => $request->dateto,
+                'datefrom' => $request->datefrom,
+                'attachments' => $request->leaveattachment,
+                'operatorid' => session('alluser'),
+                'hctypegroupid' => $request->leavegroup,
+                'staffid' => $userid,
+                'groupid' => $typegroup->groupid,
+                'typeid' => $typegroup->typeid,
+                'routeto' => $routeto
+            ]);
+            return redirect()->route('hcin.applev')
+                ->with('success', 'record added');
+        } catch (\Throwable $th) {
+            return redirect()->route('hcin.applev')
+                ->with('error', 'failed to load');
+        } catch (DecryptException $th) {
+            return redirect()->route('hcin.applev')
                 ->with('error', 'failed to load');
         }
     }

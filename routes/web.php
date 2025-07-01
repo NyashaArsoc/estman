@@ -349,6 +349,8 @@ Route::middleware('loginauth')->controller(HCIntakeController::class)->group(fun
     Route::get('/hc/add/days/{id}/user', 'listgroupsperuser')->name('hcin.lstgrpusr');
     Route::get('/hc/add/type/{id}/user/{uid}/days', 'addtypedaytouser')->name('hcin.daytotyp');
     Route::post('/hc/staff/{id}/takeon/{tid}', 'staffaddtakeonbalances')->name('hcin.takeon');
+    Route::get('/hc/staff/{uid}/typeid/{tid}', 'getdaysavailable');
+    Route::post('/hc/apply/{uid}/leave/create/{rid}', 'createleave')->name('hcin.cretlev');
 });
 /*-------------------human capital manage------------------------ */
 Route::middleware('loginauth')->controller(HCManageController::class)->group(function () {

@@ -131,3 +131,15 @@ function getpropmantenantbyleaseid() {
 		}
 	});
 }
+//get leave days available by userid and hctypegroup
+function getavailableleavedays() {
+	var textValue = $("#leavegroup").val();
+	var anothertextValue = document.querySelector('#myuser').value;
+	$.ajax({
+		type: "GET",
+		url: "/hc/staff" + '/' + anothertextValue + '/typeid/' + textValue,
+		success: function (data) {
+			$("#leavedetailsform").html(data);
+		}
+	});
+}

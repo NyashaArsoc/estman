@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class hcruntakeondays extends Command
 {
@@ -26,7 +27,13 @@ class hcruntakeondays extends Command
      */
     public function handle()
     {
-        // Execute the stored procedure
-        DB::select('EXEC spPostHCmoveTakeonDays');
+        try {
+            DB::select('EXEC spPostHCmoveTakeonDays');
+            $this->info('Stored procedure executed successfully.');
+            Log::info('spPostHCmoveTakeonDays ran successfully.');
+        } catch (\Exception $e) {
+            $this->error('Stored procedure failed: ' . $e->getMessage());
+            Log::error('spPostHCmoveTakeonDays failed: ' . $e->getMessage());
+        }
     }
 }
