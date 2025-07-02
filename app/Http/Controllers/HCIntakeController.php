@@ -177,4 +177,17 @@ class HCIntakeController extends Controller
                 ->with('error', 'failed to load');
         }
     }
+    /*----------take working days------------------ */
+    function getgroupworkingdays($gid)
+    {
+        $workdays = DB::table('hcleavegroupworkday')->where('groupid', $gid)->pluck('day')
+            ->map(function ($day) {
+                return trim($day);
+            });
+        $holidays = DB::table('hcholiday')->pluck('holidaydate')
+            ->map(function ($date) {
+                return \Carbon\Carbon::parse($date)->format('YYYY-MM-DD');
+            });
+        return response()->json(['workdays' => $workdays, 'holidays' => $holidays]);
+    }
 }

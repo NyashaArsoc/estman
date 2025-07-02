@@ -1,6 +1,6 @@
 @php $title = 'Leave Days';
 $description = 'list of all staff...'; @endphp
-@extends('layout.hc.hc-main-menu')
+@extends('layout.hc-main-menu')
 @section('title', 'Add Days')
 @section('content')
 <!-- Content Start-->

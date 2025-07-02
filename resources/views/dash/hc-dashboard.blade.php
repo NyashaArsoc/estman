@@ -1,5 +1,5 @@
 @php
 $title = 'Dashboard';
 @endphp
-@extends('layout.hc.hc-main-menu')
+@extends('layout.hc-main-menu')
 @section('title', 'Human Capital Dashboard')

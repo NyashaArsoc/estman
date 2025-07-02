@@ -1,7 +1,7 @@
 @php
 $title = 'Import Staff';
 $description = 'import new employees to leave management...'; @endphp
-@extends('layout.hc.hc-main-menu')
+@extends('layout.hc-main-menu')
 @section('title', 'Import Staff')
 @section('additional css')
 <!-- Additional css Start-->

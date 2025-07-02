@@ -4,7 +4,7 @@ $description = 'complete all required field to submit application...';
 $uid= Crypt::encrypt($myuser->id);
 $rid = Crypt::encrypt($myrole->id);
 @endphp
-@extends('layout.hc.hc-main-menu')
+@extends('layout.hc-main-menu')
 @section('title', 'Apply Leave')
 @section('additional css')
 <!-- Additional css Start-->

@@ -353,6 +353,7 @@ Route::middleware('loginauth')->controller(HCIntakeController::class)->group(fun
     Route::post('/hc/staff/{id}/takeon/{tid}', 'staffaddtakeonbalances')->name('hcin.takeon');
     Route::get('/hc/staff/{uid}/typeid/{tid}', 'getdaysavailable');
     Route::post('/hc/apply/{uid}/leave/create/{rid}', 'createleave')->name('hcin.cretlev');
+    Route::get('/hc/leavegroup/working-days/{gid}', 'getgroupworkingdays');
 });
 /*-------------------human capital manage------------------------ */
 Route::middleware('loginauth')->controller(HCManageController::class)->group(function () {

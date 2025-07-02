@@ -1,6 +1,6 @@
 @php $title = 'Staff List';
 $description = 'list of all staff...'; @endphp
-@extends('layout.hc.hc-main-menu')
+@extends('layout.hc-main-menu')
 @section('title', 'Manage Staff')
 @section('content')
 <!-- Content Start-->
