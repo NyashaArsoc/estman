@@ -255,6 +255,8 @@ Route::middleware('loginauth')->controller(SetupIntakeController::class)->group(
     Route::post('/set-up/add/new/dcurrency/exchangerate', 'addexchangerate')->name('setin.newratecurr');
     Route::get('/set-up/add/leave/group', 'addleavegroup')->name('setin.addlevgrp');
     Route::any('/set-up/create/new/leave/group', 'createnewleavegroup')->name('setin.createlevgrp');
+    Route::get('/set-up/add/leave/holiday', 'addleaveholiday')->name('setin.addlevhol');
+    Route::any('/set-up/create/new/holiday', 'createleaveholiday')->name('setin.createholid');
 });
 /*-------------------end setup intake------------------------ */
 /*-------------------setup manage------------------------ */

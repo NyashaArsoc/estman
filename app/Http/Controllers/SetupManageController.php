@@ -124,13 +124,15 @@ class SetupManageController extends Controller
                     $numbers = count($request->ChangeRoleGroup);
                     $a       =       0;
                     while ($a < $numbers) {
-                        $updaterolegroup = array(
+                        $condition = [
                             'typeid' => $request->ChangeRoleGroup[$a],
-                            'groupid'       => $entryid,
+                            'groupid' => $entryid
+                        ];
+
+                        $updatevalues = [
                             'operatorid' => session('alluser')
-                        );
-                        DB::table('hctypegroup')
-                            ->updateOrInsert($updaterolegroup);
+                        ];
+                        DB::table('hctypegroup')->updateOrInsert($condition, $updatevalues);
                         $a++;
                     }
                     DB::table('hctypegroup')->where('groupid', $entryid)

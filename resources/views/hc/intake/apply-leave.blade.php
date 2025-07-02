@@ -58,7 +58,7 @@ $rid = Crypt::encrypt($myrole->id);
                 <label for="" class="col-sm-2 form-control-label">Leave Type</label>
                 <div class="col-sm-4">
                     <select class="js-example-basic-single w-100" name="leavegroup" id="leavegroup" onchange="getavailableleavedays();">
-                        <option value="">select group</option>
+                        <option value="">select type</option>
                         @foreach ($typegroup as $abc)
                         <option value="{{ $abc->typegroupid }}"> {{ $abc->description }}</option>
                         @endforeach

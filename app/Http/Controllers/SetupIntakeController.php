@@ -240,4 +240,28 @@ class SetupIntakeController extends Controller
             ->with('error', 'failed to load');
       }
    }
+   /*-----------leave holiday------------------ */
+   function addleaveholiday()
+   {
+      return view('setup.intake.add-leave-holiday');
+   }
+   function createleaveholiday(Request $request)
+   {
+      try {
+         if (DB::table('hcholiday')->select('id')->where('holidaydate', $request->holidaydate)->exists()) {
+            return  redirect()->route('setin.addlevhol')
+               ->with('error', 'date already exists');
+         }
+         DB::table('hcholiday')->insert([
+            'holidaydate' => $request->holidaydate,
+            'description' => $request->textdescription,
+            'operatorid' => session('alluser')
+         ]);
+         return  redirect()->route('setin.addlevhol')
+            ->with('success', 'record added');
+      } catch (\Throwable $th) {
+         return  redirect()->route('setin.addlevhol')
+            ->with('error', 'failed to load');
+      }
+   }
 }

@@ -236,6 +236,25 @@ function validateRequiredSelect() {
         $("#requiedselectcheck").hide();
     }
 }
+//valid date
+var today = new Date().toISOString().split('T')[0];
+$("#dateto").attr("min", today);
+$("#datetocheck").hide();
+let datetoError = true;
+$("#dateto").keyup(function () {
+    validateDateTo();
+});
+function validateDateTo() {
+    let textValue = $("#dateto").val();
+    if (textValue.length == "") {
+        $("#datetocheck").show();
+        datetoError = false;
+        return false;
+    } else {
+        datetoError = true;
+        $("#datetocheck").hide();
+    }
+}
 /*--------------------starting buttons --------------------------*/
 //button disable submit
 function disableButtonAndSubmit(button, id) {
