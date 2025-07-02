@@ -41,6 +41,7 @@ class HCIntakeController extends Controller
     {
         try {
             $arr['myuser'] = $this->userdetail();
+            $arr['staffgroup']   = DB::table('hcstaff')->where('hcstaff.staffid', $arr['myuser']->id)->first();
             $arr['myrole'] = DB::table('systroles')->where('id', $arr['myuser']->roleid)->select('*')->first();
             $arr['typegroup'] = DB::table('hcstaff')->join('hctypegroup', 'hcstaff.groupid', '=', 'hctypegroup.groupid')
                 ->join('hcleavetype', 'hctypegroup.typeid', '=', 'hcleavetype.id')->where('hcstaff.staffid', $arr['myuser']->id)
@@ -186,7 +187,7 @@ class HCIntakeController extends Controller
             });
         $holidays = DB::table('hcholiday')->pluck('holidaydate')
             ->map(function ($date) {
-                return \Carbon\Carbon::parse($date)->format('YYYY-MM-DD');
+                return \Carbon\Carbon::parse($date)->format('Y-m-d');
             });
         return response()->json(['workdays' => $workdays, 'holidays' => $holidays]);
     }

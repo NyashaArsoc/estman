@@ -168,6 +168,23 @@ function validateCommentsHighlights() {
         $("#commentshighlightscheck").hide();
     }
 }
+
+let groupWorkdays = [];
+let holidayDates = [];
+function dayToString(dayIndex) {
+    return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dayIndex];
+}
+function loadWorkingData(callback) {
+    let groupId = $('#myusergroup').val();
+    $.get('/hc/leavegroup/working-days/' + groupId, function (data) {
+        groupWorkdays = data.workdays;
+        holidayDates = data.holidays;
+        callback();
+    });
+}
+loadWorkingData(function () {
+    $('#datefrom, #dateto').on('change', calculateLeaveDaysTaken);
+});
 //calculate days taken
 function calculateLeaveDaysTaken() {
     var datefrom = new Date($('#datefrom').val());
@@ -178,8 +195,23 @@ function calculateLeaveDaysTaken() {
         $('#daysapplied').text('0');
         return;
     }
-    if (daydiff <= 0) { $('#daysapplied').text('0 days'); }
-    else { $('#daysapplied').text(daydiff + ' day' + (daydiff > 1 ? 's' : '')); }
+    // if (daydiff <= 0) { $('#daysapplied').text('0 days'); }
+    // else { $('#daysapplied').text(daydiff + ' day' + (daydiff > 1 ? 's' : '')); }
+    let count = 0;
+    let current = new Date(datefrom);
+    while (current <= dateto) {
+        let dayStr = dayToString(current.getDay()); // e.g., 'Mon'
+        let dateStr = current.toISOString().split('T')[0]; // e.g., '2025-07-09'
+        let isHoliday = holidayDates.includes(dateStr);
+        let isWorkingDay = groupWorkdays.includes(dayStr);
+        let worksOnHoliday = groupWorkdays.includes('Hol');
+
+        if ((isHoliday && worksOnHoliday) || (!isHoliday && isWorkingDay)) {
+            count++;
+        }
+        current.setDate(current.getDate() + 1);
+    }
+    $('#daysapplied').text(count + ' day' + (count !== 1 ? 's' : ''));
 
 }
 $('#datefrom, #dateto').on('change', function () {

@@ -31,6 +31,7 @@ $rid = Crypt::encrypt($myrole->id);
                 <div class="col-sm-4">
                     <input type="text" class="form-control " value="{{ $myuser->lastname }} {{ $myuser->firstname}}" readonly>
                     <input type="text" hidden value="{{ $myuser->id }}" readonly id="myuser">
+                    <input type="text" hidden value="{{ $staffgroup->groupid }}" readonly id="myusergroup">
                 </div>
                 <h5>Details:</h5>
                 <div class="col-sm-4">
