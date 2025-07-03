@@ -56,9 +56,11 @@ class HCIntakeController extends Controller
     function addleavedays()
     {
         try {
-            $staffids = DB::table('hcstaff')->pluck('staffid');
+            /* $staffids = DB::table('hcstaff')->pluck('staffid');
             $arr['staff']   = DB::table('systusers')->where('isavailable', 'Y')->where('username', '!=', 'admin')
-                ->whereIn('id', $staffids)->select('*')->get();
+                ->whereIn('id', $staffids)->select('*')->get();*/
+            $arr['staff']   = DB::table('hcstafftakeondays')->get();
+
             return view('hc.intake.add-day-stafflist')->with($arr);
         } catch (\Throwable $th) {
             return  redirect()->route('dash.hc');
