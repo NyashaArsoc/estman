@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashController;
+use App\Http\Controllers\HCApprovalController;
 use App\Http\Controllers\HCIntakeController;
 use App\Http\Controllers\HCManageController;
 use App\Http\Controllers\LoginAuthController;
@@ -359,4 +360,10 @@ Route::middleware('loginauth')->controller(HCIntakeController::class)->group(fun
 Route::middleware('loginauth')->controller(HCManageController::class)->group(function () {
     Route::get('/hc/list/staff', 'listallstaff')->name('hcman.liststff');
     Route::get('/hc/view/staff/{uid}/{gid}', 'viewsinglestaff')->name('hcman.viwstff');
+});
+/*-------------------human capital intake------------------------ */
+Route::middleware('loginauth')->controller(HCApprovalController::class)->group(function () {
+    Route::get('/hc/leave/approval', 'listpendingapproval')->name('hcapp.listlev');
+    Route::get('/hc/leave/application/{id}/approval', 'viewsingleapplication')->name('hcapp.viwsingapp');
+    Route::any('/hc/leave/application/{id}/first-approve', 'apprpveingleapplication')->name('hcapp.apprvleve');
 });
