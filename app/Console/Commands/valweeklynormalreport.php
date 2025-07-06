@@ -87,7 +87,7 @@ class valweeklynormalreport extends Command
         try {
             // Send email
             Mail::send('tomail.val-weekly-normal-report', $arr, function ($message) {
-                $message->to('kudzchitz@gmail.com') // Replace with the recipient's email
+                $message->to('systemreports@arsoc.co.zw') // Replace with the recipient's email
                     ->subject('Weekly Status Report (Normal)');
             });
 
@@ -95,7 +95,7 @@ class valweeklynormalreport extends Command
         } catch (\Exception $e) {
             $errormessage = 'Error: ' . $e->getMessage();
             Mail::send([], [], function ($message) use ($errormessage) {
-                $message->to('marcos@intpro.co.zw')
+                $message->to('systemreports@arsoc.co.zw')
                     ->subject('Weekly Status Report (Normal)')
                     ->setBody($errormessage, 'text/plain');
             });

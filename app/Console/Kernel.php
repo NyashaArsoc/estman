@@ -19,7 +19,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:propmanrunremit')->monthlyOn(7, '00:20')->withoutOverlapping();
         $schedule->command('app:hcruntakeondays')->dailyAt('23:00')->withoutOverlapping();
         $schedule->command('app:valweeklynormalreport')->weeklyOn(1, '04:30')->withoutOverlapping();
-        // $schedule->command('app:valweeklynormalreport')->everyMinute()->withoutOverlapping();
+        $schedule->command('app:valweeklyportfolioreport')->weeklyOn(1, '06:30')->withoutOverlapping();
+        // $schedule->command('app:valweeklyportfolioreport')->everyMinute()->withoutOverlapping();
     }
 
     /**
