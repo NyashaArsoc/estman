@@ -6,6 +6,8 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 
 class HCApprovalController extends Controller
 {
@@ -119,11 +121,14 @@ class HCApprovalController extends Controller
     {
         try {
             $applicationid = Crypt::decrypt($id);
+            $arr['myuser'] = $this->userdetail();
             $arr['application']   = DB::table('hcleaveapplication')->where('id', $applicationid)->first();
             $arr['days']   = DB::table('hcstaffdays')->where('typegroupid', $arr['application']->hctypegroupid)
                 ->where('staffid', $arr['application']->staffid)->first();
             $arr['typegroup'] = DB::table('hctypegroup')->join('hcleavetype', 'hctypegroup.typeid', '=', 'hcleavetype.id')
                 ->where('hctypegroup.id', $arr['application']->hctypegroupid)->first();
+            $arr['staff']   = DB::table('systusers')->where('id', $arr['application']->staffid)->first();
+            $arr['reportto']   = DB::table('systusers')->where('username', $arr['application']->approvedby)->first();
             if (!$arr['typegroup']) {
                 return redirect()->route('hcapp.listlevcon')
                     ->with('error', 'leave group no longer exist');
@@ -137,11 +142,22 @@ class HCApprovalController extends Controller
                     ->with('error', 'insufficient days');
             }
             $newdays = $arr['days']->days - $arr['application']->daysapplied;
+            $arr["title"]               = "Application for " . $arr['staff']->lastname;
+            $arr['today']               = date('d-M-Y');
+            $arr['balance']               = $newdays;
+            $applicationpdf =   PDF::loadView('tomail/hc-leave-form', $arr);
+
+            Mail::raw('Leave Application.', function ($message) use ($arr, $applicationpdf) {
+                $message->to($arr['staff']->email)
+                    ->cc($arr['myuser']->email)
+                    ->subject($arr["staff"]->lastname . ' Leave Form')
+                    ->attachData($applicationpdf->output(), '' . $arr["title"] . '.pdf');
+            });
+
             DB::table('hcstaffdays')->where('id', $arr['days']->id)->update(['days' => $newdays]);
 
             DB::table('hcleaveapplication')->where('id', $applicationid)
                 ->update(['status' => 'A', 'confirmedby' => session('alluser'), 'confirmedon' => now()]);
-
             return  redirect()->route('hcapp.listlevcon')
                 ->with('success', 'record approved');
         } catch (\Throwable $th) {
