@@ -58,7 +58,7 @@
                     </li>
                     <li class="menu-title">Human Capital</li>
                     <li class="with-sub">
-                        <a href="{{route('dash.property')}}" class="waves-effect  waves-light">
+                        <a href="{{route('dash.hc')}}" class="waves-effect  waves-light">
 
                             <span class="s-icon"><i class="ti-anchor"></i></span>
                             <span class="s-text">Dashboard</span>
