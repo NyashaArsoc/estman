@@ -51,7 +51,7 @@ class valweeklyportfolioreport extends Command
             Mail::send([], [], function ($message) use ($errormessage) {
                 $message->to('systemreports@arsoc.co.zw')
                     ->subject('Weekly Status Report (Normal)')
-                    ->setBody($errormessage, 'text/plain');
+                    ->text($errormessage, 'text/plain');
             });
         }
     }
