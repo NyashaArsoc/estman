@@ -370,4 +370,5 @@ Route::middleware('loginauth')->controller(HCApprovalController::class)->group(f
     Route::get('/hc/leave/application/confirmation', 'listpendingconfirmation')->name('hcapp.listlevcon');
     Route::get('/hc/leave/application/{id}/confirm', 'viewsingleapplicationconfirm')->name('hcapp.viwsingappcon');
     Route::any('/hc/leave/application/{id}/second-approve', 'confirmsingleapplication')->name('hcapp.confleve');
+    Route::any('/hc-pdf/{path}/leave-download/attachment', 'downloadattachments')->name('hcapp.dwnattchpdf');
 });

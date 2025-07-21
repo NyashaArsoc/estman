@@ -2,6 +2,9 @@
 $title = 'Leave Application';
 $description = 'leave application approval...';
 $id= Crypt::encrypt($application->id);
+$attachement= Crypt::encrypt($application->attachments);
+$requiredpdf = (!is_null($application->attachments)) ? route('hcapp.dwnattchpdf',[$attachement]) : '';
+$attachementrequiredpdf = (!is_null($application->attachments)) ? 'download file' : '';
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'Application')
@@ -61,7 +64,7 @@ $id= Crypt::encrypt($application->id);
                     </div>
                     <div class="clearfix mb-0-25">
                         <span class="float-xs-left">Attachment:</span>
-                        <span class="float-xs-right" id="daysapplied">{{ $application->attachments }} </span>
+                        <span class="float-xs-right" id="daysapplied"> <a href="{{ $requiredpdf }}">{{ $attachementrequiredpdf}}</a></span>
                     </div>
                     <div class="clearfix mb-0-25">
                         <span class="float-xs-left">Comments:</span>

@@ -27,6 +27,11 @@ class HCManageController extends Controller
             $userid = Crypt::decrypt($uid);
             $arr['staff']   = DB::table('hcallstaff')->where('staffid', $userid)->first();
             $arr['typegroup'] = DB::select('EXEC spGetHCLeaveDaysPerStaff ?', [$userid]);
+            $arr['application']   = DB::table('hcleaveapplication')
+                ->select('hcleavetype.description', 'hcleaveapplication.*')
+                ->join('hcleavetype', 'hcleaveapplication.typeid', '=', 'hcleavetype.id')
+                ->where('hcleaveapplication.staffid', $userid)->get();
+
             return view('hc.manage.view-single-staff')->with($arr);
         } catch (\Throwable $th) {
             return redirect()->route('hcin.addday')

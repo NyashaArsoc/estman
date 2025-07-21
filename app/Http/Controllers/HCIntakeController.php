@@ -155,6 +155,12 @@ class HCIntakeController extends Controller
             $userid         = Crypt::decrypt($uid);
             $routeto         = Crypt::decrypt($rid);
             $typegroup   = DB::table('hctypegroup')->where('id', $request->leavegroup)->first();
+            //checking if the attachment is there 
+            if ($request->hasFile('leaveattachment')) {
+                $reportdoc = $request->file('leaveattachment');
+                $reportdocname = $userid . '.' . $request->datefrom . '.' . $reportdoc->getClientOriginalExtension();
+                $reportdoc->storeAs('public/documents/hc/leave', $reportdocname);
+            }
 
             DB::table('hcleaveapplication')->insert([
                 'daysapplied' => $request->daysapplied,
@@ -162,7 +168,7 @@ class HCIntakeController extends Controller
                 'comments' => $request->commentshighlights,
                 'dateto' => $request->dateto,
                 'datefrom' => $request->datefrom,
-                'attachments' => $request->leaveattachment,
+                'attachments' => $reportdocname,
                 'operatorid' => session('alluser'),
                 'hctypegroupid' => $request->leavegroup,
                 'staffid' => $userid,

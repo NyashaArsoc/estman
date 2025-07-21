@@ -102,7 +102,7 @@ class DashController extends Controller
     {
         $arr['myuser'] = $this->userdetail();
         $arr['totalapplication']   = DB::table('hcleaveapplication')->where('staffid', $arr['myuser']->id)->get()->count();
-        $arr['approvedapplication']   = DB::table('hcleaveapplication')->where('staffid', $arr['myuser']->id)->where('status', '=', 'C')->get()->count();
+        $arr['approvedapplication']   = DB::table('hcleaveapplication')->where('staffid', $arr['myuser']->id)->where('status', '=', 'A')->get()->count();
         $arr['rejectedapplication']   = DB::table('hcleaveapplication')->where('staffid', $arr['myuser']->id)->where('status', '=', 'R')->get()->count();
         $arr['application']   = DB::table('hcleaveapplication')->join('hcleavetype', 'hcleaveapplication.typeid', '=', 'hcleavetype.id')
             ->select(
@@ -110,7 +110,8 @@ class DashController extends Controller
                 'hcleaveapplication.status',
                 'hcleaveapplication.daysapplied'
             )
-            ->where('hcleaveapplication.staffid', $arr['myuser']->id)->take(3)->get();
+            ->where('hcleaveapplication.staffid', $arr['myuser']->id)
+            ->orderBy('hcleaveapplication.id', 'desc')->take(3)->get();
         return view('dash.hc-dashboard')->with($arr);
     }
     public function valuationdashboard()

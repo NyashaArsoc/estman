@@ -26,6 +26,9 @@ $description = 'all staff details...';
             <li class="nav-item">
                 <a class="nav-link" id="leave-days-tab" data-toggle="tab" href="#leave-days" role="tab" aria-controls="leave-days" aria-selected="true">Leave Days</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" id="leave-application-tab" data-toggle="tab" href="#leave-application" role="tab" aria-controls="leave-application" aria-selected="true">Leave Applications</a>
+            </li>
         </ul>
         <!-- Tabs Content -->
         <div class="tab-content" id="clientTabContent">
@@ -69,9 +72,9 @@ $description = 'all staff details...';
                                 <td>{{ $abc->leavetype }}</td>
                                 <td>{{ $abc->daysavailable }}</td>
                                 <td>
-                                    <a class="btn btn-info btn-sm " id=""
+                                    <!-- <a class="btn btn-info btn-sm " id=""
                                         href=""
-                                        title="view"><i class="ti-eye mr-0-5"></i>view</a>
+                                        title="view"><i class="ti-eye mr-0-5"></i>view</a> -->
                                 </td>
                             </tr>
                             @endforeach
@@ -82,6 +85,58 @@ $description = 'all staff details...';
                                 <th>Type</th>
                                 <th>Days</th>
                                 <th>Option</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    @include('layout.arlet')
+                </div>
+            </div>
+            <div class="tab-pane show" id="leave-application" role="tabpanel" aria-labelledby="leave-application-tab"><br />
+                <div class="table-responsive">
+                    <hr />
+                    <table class="datatable table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>@php $count=1;@endphp
+                            @foreach($application as $abc)
+                            <tr>
+                                @php
+                                $id= Crypt::encrypt($abc->id);
+                                if (trim($abc->status) == 'A'){$status = 'approved';
+                                $badge = "badge badge-pill bg-success badge-secondary";
+                                }else if (trim($abc->status) == 'P'){
+                                $status = 'pending';
+                                $badge = 'badge badge-pill bg-warning badge-secondary';
+                                }else if (trim($abc->status) == 'C'){
+                                $status = 'confirmation pending';
+                                $badge = 'badge badge-pill bg-warning badge-secondary';
+                                }else{
+                                $status = 'inactive';
+                                $badge = 'badge badge-pill bg-danger badge-secondary';
+                                }
+                                @endphp
+                                <td>{{$count ++}}</td>
+                                <td>{{ $abc->description }}</td>
+                                <td>{{ $abc->datefrom }}</td>
+                                <td>{{ $abc->dateto }}</td>
+                                <td><span class="{{ $badge }}">{{ $status }}</span></td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>No</th>
+                                <th>Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Status</th>
                             </tr>
                         </tfoot>
                     </table>

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class HCApprovalController extends Controller
 {
@@ -85,8 +86,7 @@ class HCApprovalController extends Controller
                     'hcleaveapplication.datefrom',
                     'hcleaveapplication.dateto',
                     'hcleaveapplication.daysapplied'
-                )
-                ->where('hcleaveapplication.routeto', $myrole->id)->where('hcleaveapplication.status', 'C')->get();
+                )->where('hcleaveapplication.status', 'C')->get();
 
             return view('hc.approval.list-leave-confirmation')->with($arr);
         } catch (\Throwable $th) {
@@ -166,6 +166,19 @@ class HCApprovalController extends Controller
         } catch (DecryptException $th) {
             return redirect()->route('hcapp.viwsingappcon', $id)
                 ->with('error', 'failed to load');
+        }
+    }
+    function downloadattachments($path)
+    {
+        try {
+            $filename = Crypt::decrypt($path);
+            //check the existance of receipt first
+            if (!Storage::disk('public')->exists("documents/hc/leave/{$filename}")) {
+                return abort(404);
+            }
+            return response()->download(storage_path("app/public/documents/hc/leave/{$filename}"));
+        } catch (DecryptException $th) {
+            return redirect()->route('dash.hc');
         }
     }
 }
