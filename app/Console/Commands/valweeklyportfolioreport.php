@@ -41,7 +41,7 @@ class valweeklyportfolioreport extends Command
         try {
             // Send email
             Mail::send('tomail.val-weekly-portfolio-report', $arr, function ($message) {
-                $message->to('systemreports@arsoc.co.zw') // Replace with the recipient's email
+                $message->to('valuations@intpro.co.zw') // Replace with the recipient's email
                     ->subject('Weekly Status Report (Portfolios)');
             });
 

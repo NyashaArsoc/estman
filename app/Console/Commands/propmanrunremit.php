@@ -37,7 +37,7 @@ class propmanrunremit extends Command
             $status = 1;
         }
         // Prepare email data
-        $toemail = 'systemreports@arsoc.co.zw';
+        $toemail = 'propman@intpro.co.zw';
         $subject = $status == 0 ? 'Success: Pre Remittance Processed' : 'Failure: Pre Remittance Processing Failed';
         $message = $status == 0 ? 'The pre-remittance process completed successfully.' : 'The pre-remittance process cannot run twice in the same period';
         // Send the email

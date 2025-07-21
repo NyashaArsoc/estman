@@ -443,8 +443,8 @@ class PropManApprovalController extends Controller
 
 
                 //invoice data
-                $arr["email"]               = "snyaude@arsoc.co.zw";
-                $arr["ccemail"]             = "snyaude@arsoc.co.zw";
+                $arr["email"]               = "propman@intpro.co.zw";
+                $arr["ccemail"]             = "propman@intpro.co.zw";
                 $arr["title"]               = "Invoice for $tenantname";
                 $arr["invoicetitle"]        = "Invoice";
                 $arr["tenantname"]          = $tenantname;
@@ -472,7 +472,7 @@ class PropManApprovalController extends Controller
                 $invoicepdf =   PDF::loadView('tomail/invoice', $arr);
                 //mail the invoice
                 Mail::raw('Monthly Invoice.', function ($message) use ($arr, $invoicepdf) {
-                    $message->to('systemreports@arsoc.co.zw')
+                    $message->to('propman@intpro.co.zw')
                         ->subject($arr["period"] . ' Invoice')
                         ->attachData($invoicepdf->output(), '' . $arr["title"] . '.pdf');
                 });

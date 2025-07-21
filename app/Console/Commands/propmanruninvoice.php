@@ -31,7 +31,7 @@ class propmanruninvoice extends Command
         $result = DB::select('EXEC spPostPropManPreInvoice');
         $status = $result[0]->ReturnValue;
         // Prepare email data
-        $toemail = 'systemreports@arsoc.co.zw';
+        $toemail = 'propman@intpro.co.zw';
         $subject = $status == 0 ? 'Success: Pre Invoice Processed' : 'Failure: Pre Invoice Processing Failed';
         $message = $status == 0 ? 'The pre-invoice process completed successfully.' : 'The pre-invoice process encountered a failure.';
         // Send the email

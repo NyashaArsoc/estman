@@ -87,7 +87,7 @@ class valweeklynormalreport extends Command
         try {
             // Send email
             Mail::send('tomail.val-weekly-normal-report', $arr, function ($message) {
-                $message->to('systemreports@arsoc.co.zw') // Replace with the recipient's email
+                $message->to('valuations@intpro.co.zw') // Replace with the recipient's email
                     ->subject('Weekly Status Report (Normal)');
             });
 
