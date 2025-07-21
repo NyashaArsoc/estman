@@ -137,7 +137,7 @@ $("#btn-reject-entry").click(function () {
     validateRejectReasons();
     try {
         if (rejectionreasonError == true) {
-            return true;
+            disableButtonAndSubmit(this, "defaultform");
         } else {
             return false;
         }
@@ -149,7 +149,7 @@ $("#btn-reject-entry").click(function () {
 $("#btn-edit-profoma").click(function () {
     try {
         validateTotalBilled();
-        if (proptotalbillError == true) { return true; }
+        if (proptotalbillError == true) { disableButtonAndSubmit(this, "defaultform"); }
         else { return false; }
     } catch (err) {
         return false;

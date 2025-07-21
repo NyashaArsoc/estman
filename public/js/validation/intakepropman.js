@@ -1581,14 +1581,14 @@ $("#btn-add-landlord").click(function () {
             if (billingaddressError == true && cellError == true && emailError == true &&
                 contactcellError == true && contactfirstnameError == true && contactlastnameError == true &&
                 contactemailError == true && clienttypeError == true && firstnameError == true &&
-                lastnameError == true && nationalidError == true) { return true } else { return false }
+                lastnameError == true && nationalidError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false }
         } else {
             validateCompanyName(); validateCompanyNumber(); validateNumericValueNotRequired();
             if (billingaddressError == true && cellError == true && emailError == true &&
                 contactcellError == true && contactfirstnameError == true && contactlastnameError == true &&
                 contactemailError == true && clienttypeError == true && companynameError == true &&
                 companynumberError && numericnotrequiredError == true) {
-                return true;
+                disableButtonAndSubmit(this, "defaultform");
             } else { return false; }
         }
     } catch (err) { return false; }
@@ -1610,13 +1610,13 @@ $("#btn-add-property").click(function () {
                 validateAddRooms(); validateAddBedRooms(); validateNumericValueRequired();
                 validateNumericValueNotRequired();
                 if (roomsError == true && bedroomsError == true && numericrequiredError == true &&
-                    numericnotrequiredError == true) { return true; } else { return false; }
+                    numericnotrequiredError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false; }
             } else {// not residential ie commercial
                 validateAddTotalArea(); validateAddLettableArea(); validateAddExpectedRate();
                 validateLettable_TotalArea();
                 if (totalareaError == true && lettableareaError == true && expectedrateError == true &&
                     lettabletotalareaError == true) {
-                    return true;
+                    disableButtonAndSubmit(this, "defaultform");
                 } else { return false; }
             }
         } else { return false; }
@@ -1636,7 +1636,7 @@ $("#btn-add-tenant").click(function () {
             if (billingaddressError == true && cellError == true && emailError == true &&
                 clienttypeError == true && firstnameError == true && keencellError == true && keenemailError == true
                 && lastnameError == true && nationalidError == true && keenfirstnameError == true &&
-                keenlastnameError == true) { return true } else { return false }
+                keenlastnameError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false }
         } else {
             validateCompanyName(); validateCompanyNumber(); validateNumericValueNotRequired();
             validateContactCell(); validateContactEmail(); validateContactLastName();
@@ -1645,7 +1645,7 @@ $("#btn-add-tenant").click(function () {
                 contactcellError == true && contactfirstnameError == true && contactlastnameError == true &&
                 contactemailError == true && clienttypeError == true && companynameError == true &&
                 companynumberError && numericnotrequiredError == true) {
-                return true;
+                disableButtonAndSubmit(this, "defaultform");
             } else { return false; }
         }
     } catch (err) {
@@ -1666,11 +1666,11 @@ $("#btn-add-lease").click(function () {
             if (propertytype == 1) {//residential 
                 validateAddExpectedRental();
                 if (expectedrateError == true && expectedrentalError == true) {
-                    return true;
+                    disableButtonAndSubmit(this, "defaultform");
                 } else { return false; }
             } else {
                 validateAddLettableArea(); validateAddExpectedRate();
-                if (lettableareaError == true && expectedrateError == true) { return true; } else { return false; }
+                if (lettableareaError == true && expectedrateError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false; }
             }
         } else { return false; }
 
@@ -1689,13 +1689,13 @@ $("#btn-edit-landlord").click(function () {
             validateFirstName(); validateLastName(); validateNationalID();
             if (billingaddressError == true && cellError == true && emailError == true
                 && clienttypeError == true && firstnameError == true &&
-                lastnameError == true && nationalidError == true) { return true } else { return false }
+                lastnameError == true && nationalidError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false }
         } else {
             validateCompanyName(); validateCompanyNumber(); validateNumericValueNotRequired();
             if (billingaddressError == true && cellError == true && emailError == true
                 && clienttypeError == true && companynameError == true &&
                 companynumberError && numericnotrequiredError == true) {
-                return true;
+                disableButtonAndSubmit(this, "defaultform");
             } else { return false; }
         }
     } catch (err) { return false; }
@@ -1706,7 +1706,7 @@ $("#btn-add-landlord-contact").click(function () {
     validateContactLastName(); validateContactFirstName();
     try {
         if (contactcellError == true && contactfirstnameError == true && contactlastnameError == true &&
-            contactemailError == true) { return true } else { return false }
+            contactemailError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false }
     } catch (err) { return false; }
 });
 //--------- btn edit landlord bank
@@ -1716,7 +1716,7 @@ $("#btn-edit-landlord-bank").click(function () {
     try {
         if (accountnameError == true && banknameError == true && notrequiredgeneraltextcapsError == true &&
             numericrequiredError == true && currencycodeError == true) {
-            return true;
+            disableButtonAndSubmit(this, "defaultform");
         } else { return false; }
     } catch (err) { return false; }
 });
@@ -1737,13 +1737,13 @@ $("#btn-edit-property").click(function () {
                 validateAddRooms(); validateAddBedRooms(); validateNumericValueRequired();
                 validateNumericValueNotRequired();
                 if (roomsError == true && bedroomsError == true && numericrequiredError == true &&
-                    numericnotrequiredError == true) { return true; } else { return false; }
+                    numericnotrequiredError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false; }
             } else {// not residential ie commercial
                 validateAddTotalArea(); validateAddLettableArea(); validateAddExpectedRate();
                 validateLettable_TotalArea();
                 if (totalareaError == true && lettableareaError == true && expectedrateError == true &&
                     lettabletotalareaError == true) {
-                    return true;
+                    disableButtonAndSubmit(this, "defaultform");
                 } else { return false; }
             }
         } else { return false; }
@@ -1757,7 +1757,7 @@ $("#btn-add-lease-rate").click(function () {
     validateCurrencyCode(); validateLeaseOperationalCost();
     validateLeaseRatesCost();
     try {
-        if (currencycodeError == true && leaseoperationcostError == true && leaseratecostError == true) { return true } else { return false }
+        if (currencycodeError == true && leaseoperationcostError == true && leaseratecostError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false }
     } catch (err) { return false; }
 });
 // --------------btn edit lease
@@ -1774,11 +1774,11 @@ $("#btn-edit-lease").click(function () {
             if (propertytype == 1) {//residential 
                 validateAddExpectedRental();
                 if (expectedrateError == true && expectedrentalError == true) {
-                    return true;
+                    disableButtonAndSubmit(this, "defaultform");
                 } else { return false; }
             } else {
                 validateAddLettableArea(); validateAddExpectedRate();
-                if (lettableareaError == true && expectedrateError == true) { return true; } else { return false; }
+                if (lettableareaError == true && expectedrateError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false; }
             }
         } else { return false; }
 
@@ -1792,7 +1792,7 @@ $("#btn-edit-lease").click(function () {
 $("#btn-add-lease-prepay").click(function () {
     validateCurrencyCode(); validateLeaseRatesCost();
     try {
-        if (currencycodeError == true && leaseratecostError == true) { return true } else { return false }
+        if (currencycodeError == true && leaseratecostError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false }
     } catch (err) { return false; }
 });
 // button process receipt 
@@ -1802,7 +1802,7 @@ $("#add-lease-receipt").click(function () {
     if (currencycodeError == true && receiptingleaseError == true && numericrequiredError == true
         && daterequiredError == true) {
         //valid
-        return true;
+        disableButtonAndSubmit(this, "defaultform");
     } else {
         //failed
         return false;

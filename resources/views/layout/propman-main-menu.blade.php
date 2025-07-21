@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="{{ asset('css/manage/prev-next/prev-next.css') }}">
     <!--===============================================================================================-->
     <link rel="stylesheet" href="{{ asset('css/manage/search/dataTables.bootstrap4.min.css') }}" /><!--search-->
-    <link rel = "stylesheet" type = "text/css" href = "{{ asset('css/popupforms/msg.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/popupforms/msg.css') }}" />
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://rawgit.com/lykmapipo/themify-icons/master/css/themify-icons.css" rel="stylesheet">
     <!--plugin for showing modal details-->
@@ -55,10 +55,11 @@
                             <span class="s-icon"><i class="ti-home"></i></span>
                             <span class="s-text">Dashboard</span>
                         </a>
-                    </li><li class="menu-title">Property Management</li>
+                    </li>
+                    <li class="menu-title">Property Management</li>
                     <li class="with-sub">
                         <a href="{{route('dash.property')}}" class="waves-effect  waves-light">
-                            
+
                             <span class="s-icon"><i class="ti-anchor"></i></span>
                             <span class="s-text">Dashboard</span>
                         </a>
@@ -72,9 +73,9 @@
                         <ul>
                             @foreach ($propmanintake as $abc)
                             <li><a href="{{url (trim($abc->descriptionroute)) }}">
-                                {{$abc->eventdescription}}</a></li>
+                                    {{$abc->eventdescription}}</a></li>
                             @endforeach
-                          </ul>
+                        </ul>
                     </li>
                     <li class="with-sub">
                         <a href="#" class="waves-effect  waves-light">
@@ -85,9 +86,9 @@
                         <ul>
                             @foreach ($propmanapprove as $abc)
                             <li><a href="{{url (trim($abc->descriptionroute)) }}">
-                                {{$abc->eventdescription}}</a></li>
+                                    {{$abc->eventdescription}}</a></li>
                             @endforeach
-                          </ul>
+                        </ul>
                     </li>
                     <li class="with-sub">
                         <a href="#" class="waves-effect  waves-light">
@@ -98,7 +99,7 @@
                         <ul>
                             @foreach ($propmandecline as $abc)
                             <li><a href="{{url (trim($abc->descriptionroute)) }}">
-                                {{$abc->eventdescription}}</a></li>
+                                    {{$abc->eventdescription}}</a></li>
                             @endforeach
                         </ul>
                     </li>
@@ -111,7 +112,7 @@
                         <ul>
                             @foreach ($propmanmanage as $abc)
                             <li><a href="{{url (trim($abc->descriptionroute)) }}">
-                                {{$abc->eventdescription}}</a></li>
+                                    {{$abc->eventdescription}}</a></li>
                             @endforeach
                         </ul>
                     </li>
@@ -135,7 +136,7 @@
                             <li><a href="{{route('login.profile')}}">Profile</a></li>
                             <li> <a href="{{route('login.signout')}}">Sign Out</a></li>
                         </ul>
-                    </li>                  
+                    </li>
                 </ul>
             </div>
         </div> <!-- Sidebar second -->
@@ -162,10 +163,10 @@
                         <span class="hamburger"></span>
                     </div>
                     <ul class="nav navbar-nav float-md-right">
-                        <li class="nav-item dropdown"><a class="nav-link" 
-                            data-toggle="dropdown" aria-expanded="false">
-                            {{ $user->firstname . ' ' . $user->lastname ?? ''}}														
-                        </a> </li>
+                        <li class="nav-item dropdown"><a class="nav-link"
+                                data-toggle="dropdown" aria-expanded="false">
+                                {{ $user->firstname . ' ' . $user->lastname ?? ''}}
+                            </a> </li>
                         <li class="nav-item dropdown hidden-sm-down">
                             <a href="#" data-toggle="dropdown" aria-expanded="false">
                                 <span class="avatar box-32">
@@ -195,9 +196,9 @@
             <!-- Content -->
             <div class="content-area py-1">
                 <div class="container-fluid">
-              <!--content start-->
+                    <!--content start-->
                     @yield ('content')
-                <!--content ends-->
+                    <!--content ends-->
                 </div>
             </div>
             <!-- Footer -->

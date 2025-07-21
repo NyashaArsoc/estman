@@ -743,7 +743,7 @@ class PropManIntakeController extends Controller
     public function processleasepayment(Request $request)
     {
         try {
-            $currentperioddate      =       Carbon::now()->format('Y-m-d');
+            $currentperioddate      =       Carbon::now()->endOfMonth()->format('Y-m-d');
             $trxid                  =       $this->gettransationid();
             $basecurrency           =       $this->getbasecurrency();
             switch (true) {
@@ -901,7 +901,7 @@ class PropManIntakeController extends Controller
                 // Check if there's remaining amount after clearing arrears
                 if ($remainingamount > 0) {
                     // Store as prepayment
-
+                    echo "remaining amount is " . $remainingamount;
                     $prepaymentamountremain = abs($remainingamount);
                     $existingprepayment = DB::table('propmanleaseprepayments')->where(
                         'currencycode',
@@ -950,6 +950,7 @@ class PropManIntakeController extends Controller
                 'receiptreference' => $request->receiptreference,
                 'multicurrency' => $ismulticurrency
             ]);
+
             /*---------end check if multicurrency is enables------------------ */
             return  redirect()->route('propin.payment')
                 ->with('success', 'record added');
