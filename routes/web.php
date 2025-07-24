@@ -366,7 +366,7 @@ Route::middleware('loginauth')->controller(HCManageController::class)->group(fun
 Route::middleware('loginauth')->controller(HCApprovalController::class)->group(function () {
     Route::get('/hc/leave/approval', 'listpendingapproval')->name('hcapp.listlev');
     Route::get('/hc/leave/application/{id}/approval', 'viewsingleapplication')->name('hcapp.viwsingapp');
-    Route::any('/hc/leave/application/{id}/first-approve', 'apprpveingleapplication')->name('hcapp.apprvleve');
+    Route::post('/hc/leave/application/{id}/first-approve', 'apprpveingleapplication')->name('hcapp.apprvleve');
     Route::get('/hc/leave/application/confirmation', 'listpendingconfirmation')->name('hcapp.listlevcon');
     Route::get('/hc/leave/application/{id}/confirm', 'viewsingleapplicationconfirm')->name('hcapp.viwsingappcon');
     Route::any('/hc/leave/application/{id}/second-approve', 'confirmsingleapplication')->name('hcapp.confleve');

@@ -57,14 +57,33 @@ class HCApprovalController extends Controller
                 ->with('error', 'failed to load');
         }
     }
-    function apprpveingleapplication($id)
+    function apprpveingleapplication(Request $request, $id)
     {
+
         try {
             $applicationid = Crypt::decrypt($id);
-            DB::table('hcleaveapplication')->where('id', $applicationid)
-                ->update(['status' => 'C', 'approvedby' => session('alluser'), 'approvedon' => now()]);
-            return  redirect()->route('hcapp.listlev')
-                ->with('success', 'record approved');
+            if ($request->has('approve')) {
+
+                DB::table('hcleaveapplication')->where('id', $applicationid)
+                    ->update([
+                        'status' => 'C',
+                        'approvedby' => session('alluser'),
+                        'approvedon' => now(),
+                        'firstapprovalcomments' => $request->commentshighlights
+                    ]);
+                return  redirect()->route('hcapp.listlev')
+                    ->with('success', 'record approved');
+            } elseif ($request->has('decline')) {
+                DB::table('hcleaveapplication')->where('id', $applicationid)
+                    ->update([
+                        'status' => 'D',
+                        'firstapprovalcomments' => $request->commentshighlights,
+                        'approvedby' => session('alluser'),
+                        'approvedon' => now()
+                    ]);
+                return redirect()->route('hcapp.listlev')
+                    ->with('success', 'record declined');
+            }
         } catch (\Throwable $th) {
             return redirect()->route('hcapp.listlev')
                 ->with('error', 'failed to load');
@@ -117,7 +136,7 @@ class HCApprovalController extends Controller
                 ->with('error', 'failed to load');
         }
     }
-    function confirmsingleapplication($id)
+    function confirmsingleapplication(Request $request, $id)
     {
         try {
             $applicationid = Crypt::decrypt($id);
@@ -128,38 +147,11 @@ class HCApprovalController extends Controller
             $arr['typegroup'] = DB::table('hctypegroup')->join('hcleavetype', 'hctypegroup.typeid', '=', 'hcleavetype.id')
                 ->where('hctypegroup.id', $arr['application']->hctypegroupid)->first();
             $arr['staff']   = DB::table('systusers')->where('id', $arr['application']->staffid)->first();
-            $arr['reportto']   = DB::table('systusers')->where('username', $arr['application']->approvedby)->first();
-            if (!$arr['typegroup']) {
-                return redirect()->route('hcapp.listlevcon')
-                    ->with('error', 'leave group no longer exist');
+            if ($request->has('decline')) {
+                return 'decline';
             }
-            if (!$arr['days']) {
-                return redirect()->route('hcapp.listlevcon')
-                    ->with('error', 'leave days not found');
-            }
-            if ($arr['application']->daysapplied > $arr['days']->days) {
-                return redirect()->route('hcapp.viwsingappcon', $id)
-                    ->with('error', 'insufficient days');
-            }
-            $newdays = $arr['days']->days - $arr['application']->daysapplied;
-            $arr["title"]               = "Application for " . $arr['staff']->lastname;
-            $arr['today']               = date('d-M-Y');
-            $arr['balance']               = $newdays;
-            $applicationpdf =   PDF::loadView('tomail/hc-leave-form', $arr);
-
-            Mail::raw('Leave Application.', function ($message) use ($arr, $applicationpdf) {
-                $message->to($arr['staff']->email)
-                    ->cc($arr['myuser']->email)
-                    ->subject($arr["staff"]->lastname . ' Leave Form')
-                    ->attachData($applicationpdf->output(), '' . $arr["title"] . '.pdf');
-            });
-
-            DB::table('hcstaffdays')->where('id', $arr['days']->id)->update(['days' => $newdays]);
-
-            DB::table('hcleaveapplication')->where('id', $applicationid)
-                ->update(['status' => 'A', 'confirmedby' => session('alluser'), 'confirmedon' => now()]);
-            return  redirect()->route('hcapp.listlevcon')
-                ->with('success', 'record approved');
+            return $request;
+            //return 'here';
         } catch (\Throwable $th) {
             return redirect()->route('hcapp.viwsingappcon', $id)
                 ->with('error', 'failed to load');
@@ -168,17 +160,17 @@ class HCApprovalController extends Controller
                 ->with('error', 'failed to load');
         }
     }
-    function downloadattachments($path)
-    {
-        try {
-            $filename = Crypt::decrypt($path);
-            //check the existance of receipt first
-            if (!Storage::disk('public')->exists("documents/hc/leave/{$filename}")) {
-                return abort(404);
-            }
-            return response()->download(storage_path("app/public/documents/hc/leave/{$filename}"));
-        } catch (DecryptException $th) {
-            return redirect()->route('dash.hc');
+}
+function downloadattachments($path)
+{
+    try {
+        $filename = Crypt::decrypt($path);
+        //check the existance of receipt first
+        if (!Storage::disk('public')->exists("documents/hc/leave/{$filename}")) {
+            return abort(404);
         }
+        return response()->download(storage_path("app/public/documents/hc/leave/{$filename}"));
+    } catch (DecryptException $th) {
+        return redirect()->route('dash.hc');
     }
 }

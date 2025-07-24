@@ -24,7 +24,7 @@ $attachementrequiredpdf = (!is_null($application->attachments)) ? 'download file
             {{ $reportto->firstname}} {{ $reportto->lastname}}
         </span>
         <form class="form-material material-primary" id="defaultform" method="POST"
-            action="" enctype="multipart/form-data">@csrf
+            action="{{ route('hcapp.confleve',$id) }}" enctype="multipart/form-data">@csrf
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Name</label>
                 <div class="col-sm-4">
@@ -71,8 +71,8 @@ $attachementrequiredpdf = (!is_null($application->attachments)) ? 'download file
             <div class="form-group row">
                 <label for="Highlights" class="col-sm-2 col-form-label">Any Comments?</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" id="commentshighlights" name="commentshighlights">
-                    <small id="commentshighlightscheck" style="color: red;"></small>
+                    <input type="text" class="form-control" id="rejectreason" name="commentshighlights">
+                    <small id="rejectreasoncheck" style="color: red;">requied</small>
                 </div>
 
             </div>
@@ -80,11 +80,15 @@ $attachementrequiredpdf = (!is_null($application->attachments)) ? 'download file
             <div class="form-group row">
                 <div class="offset-sm-2 col-sm-4">
                     @if (in_array(5,$arraycontrolids))
-                    <a class="btn btn-success btn-sm" href="{{route('hcapp.confleve',$id)}}" title="accept" onclick="confirminstruction(this); return false;">
-                        <i class="ti-check mr-0-5"></i>approve</a>@endif
+                    <button type="submit" class="btn btn-success btn-sm" name="approve" id="btn-approve-entry">
+                        <i class="ti-check mr-0-5"></i>approve
+                    </button>
+                    @endif
                     @if (in_array(6,$arraycontrolids))
-                    <button type="submit" class="btn btn-danger btn-sm" id="btn-reject-entry"><i class="ti-close mr-0-5">
-                        </i>decline</button>@endif
+                    <button type="submit" class="btn btn-danger btn-sm" name="decline" id="btn-reject-entry">
+                        <i class="ti-close mr-0-5"></i>decline
+                    </button>
+                    @endif
                 </div>
             </div>
             @include('layout.arlet')
@@ -93,4 +97,8 @@ $attachementrequiredpdf = (!is_null($application->attachments)) ? 'download file
 </div>
 <!-- Content End-->
 
+@endsection
+@section('additional js')
+<script src="{{ asset('js/validation/intake-hc.js') }}"></script>
+<!-- Additional JS End-->
 @endsection
