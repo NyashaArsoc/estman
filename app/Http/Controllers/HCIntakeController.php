@@ -6,6 +6,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
 
 class HCIntakeController extends Controller
 {
@@ -154,7 +155,9 @@ class HCIntakeController extends Controller
             ]);
             $userid         = Crypt::decrypt($uid);
             $routeto         = Crypt::decrypt($rid);
+            $myuser = $this->userdetail();
             $typegroup   = DB::table('hctypegroup')->where('id', $request->leavegroup)->first();
+            $myreportto   = DB::table('systusers')->where('roleid', $routeto)->first();
             //checking if the attachment is there 
             if ($request->hasFile('leaveattachment')) {
                 $reportdoc = $request->file('leaveattachment');
@@ -176,6 +179,12 @@ class HCIntakeController extends Controller
                 'typeid' => $typegroup->typeid,
                 'routeto' => $routeto
             ]);
+            $mymessage = 'Approve Leave for: ' . $myuser->lastname . ', ' . $myuser->firstname . ' from ' . $request->datefrom . ' to ' . $request->dateto;
+            Mail::send([], [], function ($message) use ($mymessage, $myreportto) {
+                $message->to($myreportto->email)
+                    ->subject('Leave Application Approval')
+                    ->setBody($mymessage, 'text/plain');
+            });
             return redirect()->route('hcin.applev')
                 ->with('success', 'record added');
         } catch (\Throwable $th) {

@@ -91,7 +91,7 @@
         </tr>
         <tr>
             <td><strong>{{$invoicetitle}}<strong></td>
-            <td class="right-cell"><img src="https://intpro.co.zw/wp-content/uploads/2023/02/newlogo2.png" class="logo"></td>
+            <td class="right-cell"><img src="https://uatwlqqahsybwdryppbh.supabase.co/storage/v1/object/public/images/logos/logo-light.png" class="logo"></td>
         </tr>
     </table>
     <table id="addresstable">

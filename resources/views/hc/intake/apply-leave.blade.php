@@ -2,7 +2,7 @@
 $title = 'Apply Leave';
 $description = 'complete all required field to submit application...';
 $uid= Crypt::encrypt($myuser->id);
-$rid = Crypt::encrypt($myrole->id);
+$rid = Crypt::encrypt($myrole->reportto);
 @endphp
 @extends('layout.hc-main-menu')
 @section('title', 'Apply Leave')
