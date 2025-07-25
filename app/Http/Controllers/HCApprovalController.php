@@ -73,17 +73,16 @@ class HCApprovalController extends Controller
                     ]);
                 return  redirect()->route('hcapp.listlev')
                     ->with('success', 'record approved');
-            } elseif ($request->has('decline')) {
-                DB::table('hcleaveapplication')->where('id', $applicationid)
-                    ->update([
-                        'status' => 'D',
-                        'firstapprovalcomments' => $request->commentshighlights,
-                        'approvedby' => session('alluser'),
-                        'approvedon' => now()
-                    ]);
-                return redirect()->route('hcapp.listlev')
-                    ->with('success', 'record declined');
             }
+            DB::table('hcleaveapplication')->where('id', $applicationid)
+                ->update([
+                    'status' => 'D',
+                    'firstapprovalcomments' => $request->commentshighlights,
+                    'approvedby' => session('alluser'),
+                    'approvedon' => now()
+                ]);
+            return redirect()->route('hcapp.listlev')
+                ->with('success', 'record declined');
         } catch (\Throwable $th) {
             return redirect()->route('hcapp.listlev')
                 ->with('error', 'failed to load');
@@ -147,11 +146,56 @@ class HCApprovalController extends Controller
             $arr['typegroup'] = DB::table('hctypegroup')->join('hcleavetype', 'hctypegroup.typeid', '=', 'hcleavetype.id')
                 ->where('hctypegroup.id', $arr['application']->hctypegroupid)->first();
             $arr['staff']   = DB::table('systusers')->where('id', $arr['application']->staffid)->first();
-            if ($request->has('decline')) {
-                return 'decline';
+            $arr['reportto']   = DB::table('systusers')->where('username', $arr['application']->approvedby)->first();
+            $arr["title"]               = "Application for " . $arr['staff']->lastname;
+            $arr['today']               = date('d-M-Y');
+
+
+            if ($request->has('approve')) {
+                if (!$arr['typegroup']) {
+                    return redirect()->route('hcapp.listlevcon')
+                        ->with('error', 'leave group no longer exist');
+                }
+                if (!$arr['days']) {
+                    return redirect()->route('hcapp.listlevcon')
+                        ->with('error', 'leave days not found');
+                }
+                if ($arr['application']->daysapplied > $arr['days']->days) {
+                    return redirect()->route('hcapp.viwsingappcon', $id)
+                        ->with('error', 'insufficient days');
+                }
+                //get days available 
+                $newdays = $arr['days']->days - $arr['application']->daysapplied;
+                $arr['balance']               = $newdays;
+                //send attachment to staff
+                $applicationpdf =   PDF::loadView('tomail/hc-leave-form', $arr);
+                Mail::raw('Leave Application.', function ($message) use ($arr, $applicationpdf) {
+                    $message->to($arr['staff']->email)
+                        ->cc($arr['myuser']->email)
+                        ->subject($arr["staff"]->lastname . ' Leave Form')
+                        ->attachData($applicationpdf->output(), '' . $arr["title"] . '.pdf');
+                });
+                DB::table('hcstaffdays')->where('id', $arr['days']->id)->update(['days' => $newdays]);
+                DB::table('hcleaveapplication')->where('id', $applicationid)
+                    ->update([
+                        'status' => 'A',
+                        'confirmedby' => session('alluser'),
+                        'confirmedon' => now(),
+                        'confirmationapprovalcomments' => $request->commentshighlights
+                    ]);
+                return  redirect()->route('hcapp.listlevcon')
+                    ->with('success', 'record approved');
             }
-            return $request;
-            //return 'here';
+            //if declined
+            DB::table('hcleaveapplication')->where('id', $applicationid)
+                ->update([
+                    'status' => 'D',
+                    'confirmationapprovalcomments' => $request->commentshighlights,
+                    'confirmedby' => session('alluser'),
+                    'confirmedon' => now()
+                ]);
+            return redirect()->route('hcapp.listlevcon')
+                ->with('success', 'record declined');
         } catch (\Throwable $th) {
             return redirect()->route('hcapp.viwsingappcon', $id)
                 ->with('error', 'failed to load');

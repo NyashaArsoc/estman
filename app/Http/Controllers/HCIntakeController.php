@@ -164,6 +164,7 @@ class HCIntakeController extends Controller
                 $reportdocname = $userid . '.' . $request->datefrom . '.' . $reportdoc->getClientOriginalExtension();
                 $reportdoc->storeAs('public/documents/hc/leave', $reportdocname);
             }
+            $reportdocname = null;
 
             DB::table('hcleaveapplication')->insert([
                 'daysapplied' => $request->daysapplied,
@@ -179,17 +180,18 @@ class HCIntakeController extends Controller
                 'typeid' => $typegroup->typeid,
                 'routeto' => $routeto
             ]);
+
             $mymessage = 'Approve Leave for: ' . $myuser->lastname . ', ' . $myuser->firstname . ' from ' . $request->datefrom . ' to ' . $request->dateto;
-            Mail::send([], [], function ($message) use ($mymessage, $myreportto) {
+            Mail::html("<p>$mymessage</p>", function ($message) use ($myreportto) {
                 $message->to($myreportto->email)
-                    ->subject('Leave Application Approval')
-                    ->setBody($mymessage, 'text/plain');
+                    ->subject('Leave Application Approval');
             });
+
             return redirect()->route('hcin.applev')
                 ->with('success', 'record added');
         } catch (\Throwable $th) {
             return redirect()->route('hcin.applev')
-                ->with('error', 'failed to load');
+                ->with('error', 'failed to load' . $th);
         } catch (DecryptException $th) {
             return redirect()->route('hcin.applev')
                 ->with('error', 'failed to load');

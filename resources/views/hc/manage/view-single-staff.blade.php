@@ -118,7 +118,7 @@ $description = 'all staff details...';
                                 $status = 'confirmation pending';
                                 $badge = 'badge badge-pill bg-warning badge-secondary';
                                 }else{
-                                $status = 'inactive';
+                                $status = 'declined';
                                 $badge = 'badge badge-pill bg-danger badge-secondary';
                                 }
                                 @endphp

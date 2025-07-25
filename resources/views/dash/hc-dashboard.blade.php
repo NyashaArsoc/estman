@@ -76,8 +76,8 @@ $title = 'Dashboard';
                             <tr>@php
                                 if (trim($abc->status) == 'P' || trim($abc->status) == 'C'){
                                 $status = 'pending';$badge = "badge badge-pill bg-info badge-secondary";
-                                }else if(trim($abc->status) == 'R'){
-                                $status = 'rejected';$badge = "badge badge-pill bg-danger badge-secondary";
+                                }else if(trim($abc->status) == 'D'){
+                                $status = 'declined';$badge = "badge badge-pill bg-danger badge-secondary";
                                 }else if(trim($abc->status) == 'A'){
                                 $status = 'approved';$badge = "badge badge-pill bg-success badge-secondary";
                                 }

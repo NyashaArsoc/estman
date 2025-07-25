@@ -103,7 +103,7 @@ class DashController extends Controller
         $arr['myuser'] = $this->userdetail();
         $arr['totalapplication']   = DB::table('hcleaveapplication')->where('staffid', $arr['myuser']->id)->get()->count();
         $arr['approvedapplication']   = DB::table('hcleaveapplication')->where('staffid', $arr['myuser']->id)->where('status', '=', 'A')->get()->count();
-        $arr['rejectedapplication']   = DB::table('hcleaveapplication')->where('staffid', $arr['myuser']->id)->where('status', '=', 'R')->get()->count();
+        $arr['rejectedapplication']   = DB::table('hcleaveapplication')->where('staffid', $arr['myuser']->id)->where('status', '=', 'D')->get()->count();
         $arr['application']   = DB::table('hcleaveapplication')->join('hcleavetype', 'hcleaveapplication.typeid', '=', 'hcleavetype.id')
             ->select(
                 'hcleavetype.description',
