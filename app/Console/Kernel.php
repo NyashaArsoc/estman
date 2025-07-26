@@ -17,10 +17,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:propmanleaseexpiry')->daily()->withoutOverlapping();
         $schedule->command('app:propmanruninvoice')->monthlyOn(25, '00:20')->withoutOverlapping();
         $schedule->command('app:propmanrunremit')->monthlyOn(7, '00:20')->withoutOverlapping();
-        $schedule->command('app:hcruntakeondays')->dailyAt('23:00')->withoutOverlapping();
+        $schedule->command('app:hcruntakeondays')->dailyAt('00:10')->withoutOverlapping();
         $schedule->command('app:valweeklynormalreport')->weeklyOn(1, '04:30')->withoutOverlapping();
         $schedule->command('app:valweeklyportfolioreport')->weeklyOn(1, '06:30')->withoutOverlapping();
-        //$schedule->command('app:propmanleaseexpiry')->everyMinute()->withoutOverlapping();
+        $schedule->command('app:hcruntakeondays')->everyMinute()->withoutOverlapping();
     }
 
     /**
