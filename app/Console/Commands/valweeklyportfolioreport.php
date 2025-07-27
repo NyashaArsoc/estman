@@ -47,11 +47,11 @@ class valweeklyportfolioreport extends Command
 
             $this->info('Weekly report email sent successfully!');
         } catch (\Exception $e) {
-            $errormessage = 'Error: ' . $e->getMessage();
-            Mail::send([], [], function ($message) use ($errormessage) {
-                $message->to('systemreports@arsoc.co.zw')
-                    ->subject('Weekly Status Report (Normal)')
-                    ->text($errormessage, 'text/plain');
+            $mymessage = 'Error: ' . $e->getMessage();
+            $mymailto = 'systemreports@arsoc.co.zw';
+            Mail::html("<p>$mymessage</p>", function ($message) use ($mymailto) {
+                $message->to($mymailto)
+                    ->subject('Weekly Status Report (Portfolios)');
             });
         }
     }
