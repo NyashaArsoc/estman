@@ -255,6 +255,23 @@ function validateDateTo() {
         $("#datetocheck").hide();
     }
 }
+//daterequired
+$("#daterequiredcheck").hide();
+let daterequiredError = true;
+$("#daterequired").keyup(function () {
+    validateDateRequired();
+});
+function validateDateRequired() {
+    let textValue = $("#daterequired").val();
+    if (textValue.length == "") {
+        $("#daterequiredcheck").show();
+        daterequiredError = false;
+        return false;
+    } else {
+        daterequiredError = true;
+        $("#daterequiredcheck").hide();
+    }
+}
 /*--------------------starting buttons --------------------------*/
 //button disable submit
 function disableButtonAndSubmit(button, id) {
@@ -303,10 +320,10 @@ $("#btn-submit-vat-config").click(function () {
 });
 //button add exchange rate
 $("#btn-submit-exchange-rate").click(function () {
-    validateSellingRate(); validateBuyingRate(); validateCurrencyCode();
+    validateDateRequired(); validateBuyingRate(); validateCurrencyCode();
     try {
-        if (buyingrateError == true && sellingrateError == true && currencycodeError == true) {
-            return true;
+        if (buyingrateError == true && daterequiredError == true && currencycodeError == true) {
+            disableButtonAndSubmit(this, "defaultform");
         } else {
             return false;
         }

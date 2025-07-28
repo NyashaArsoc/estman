@@ -48,10 +48,20 @@ class SetupIntakeController extends Controller
    public function addexchangerate(Request $request)
    {
       try {
-         DB::table('setupcurrencyrate')->insert([
+         /*DB::table('setupcurrencyrate')->insert([
             'currencycode' => $request->currencycode,
             'buyingrate' => $request->buyingrate,
             'sellingrate' => $request->sellingrate,
+            'operatorid' => session('alluser')
+         ]);*/
+         if (DB::table('setupcurrencyrate')->select('id')->where('currencycode', $request->currencycode)->where('ratedate', $request->exchangedate)->exists()) {
+            return  redirect()->route('setin.ratecurr')
+               ->with('error', 'rate already captured for this date');
+         }
+         DB::table('setupcurrencyrate')->insert([
+            'currencycode' => $request->currencycode,
+            'meanrate' => $request->exchangerate,
+            'ratedate' => $request->exchangedate,
             'operatorid' => session('alluser')
          ]);
          return  redirect()->route('setin.ratecurr')

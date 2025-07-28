@@ -37,6 +37,23 @@ $description = 'add currency exchange rate...'; @endphp
                 </div>
             </div><br />
             <div class="form-group row">
+                <label for="" class="col-sm-2 form-control-label">Exchange Rate</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" id="buyingrate" name="exchangerate"
+                        placeholder="8.987" autocomplete="off">
+                    <small id="buyingratecheck" style="color: red;">required</small>
+                </div>
+                <label for="Commission" class="col-sm-2 form-control-label">Exchange Date
+                </label>
+                <div class="col-sm-4">
+                    <div class="input-group has-success">
+                        <input type="date" class="form-control" autocomplete="off"
+                            id="daterequired" name="exchangedate" placeholder="yyyy-mm-dd">
+                    </div>
+                    <small id="daterequiredcheck" style="color: red;">required</small>
+                </div>
+            </div>
+            <!-- <div class="form-group row">
                 <label for="" class="col-sm-2 form-control-label">Buying Rate</label>
                 <div class="col-sm-2">
                     <input type="text" class="form-control" id="buyingrate" name="buyingrate"
@@ -53,7 +70,7 @@ $description = 'add currency exchange rate...'; @endphp
                 <div class="col-sm-2">
                     <small id="meanratecheck" style="color: red;"></small>
                 </div>
-            </div>
+            </div> -->
             <div class="form-group row">
                 @if (in_array(1,$arraycontrolids))
                 <div class="offset-sm-2 col-sm-10">
