@@ -44,8 +44,9 @@ class hcmonthlyleavereport extends Command
             $arr['applications'] = $applications;
             // Send email
             Mail::send('tomail.hc-leave-application-report', $arr, function ($message) {
-                $message->to('ngaatendweb@intpro.co.zw')->cc('coo@intpro.co.zw')
-                    ->bcc('marcos@intpro.co.zw')
+                // $message->to('ngaatendweb@intpro.co.zw')->cc('coo@intpro.co.zw')
+                //     ->bcc('marcos@intpro.co.zw')
+                $message->to('systemreports@arsoc.co.zw')
                     ->subject('Monthly Leave Report');
             });
 

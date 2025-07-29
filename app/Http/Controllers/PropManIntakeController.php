@@ -672,7 +672,8 @@ class PropManIntakeController extends Controller
                     'currencycode' => $request->currencycode,
                     'operatorid' => session('alluser'),
                     'balrent' => $request->amount,
-                    'leaseid' => $leaseid
+                    'leaseid' => $leaseid,
+                    'baldays' => 10
                 ]);
                 return  redirect()->route('propdec.editviewlea', $id)
                     ->with('success', 'record added');
