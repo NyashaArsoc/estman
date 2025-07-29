@@ -2,12 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Traits\HandlingMail;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class valweeklynormalreport extends Command
 {
+    use HandlingMail;
     /**
      * The name and signature of the console command.
      *
@@ -84,10 +86,14 @@ class valweeklynormalreport extends Command
         $arr['mailcompletedcw']   = DB::table('valinstrsendingreport')
             ->where([['status', '=', 'C'], ['datestamp', '>=', $arr['mondayfirstday']], ['datestamp', '<=', $arr['sundaylastday']]])
             ->whereNotIn('instructionid', $arr['portfolioids'])->count();
+        $systmail = $this->getmails('val', 'to');
+        if ($systmail == 'failed') {
+            $systmail = "systemreports@arsoc.co.zw";
+        }
         try {
             // Send email
-            Mail::send('tomail.val-weekly-normal-report', $arr, function ($message) {
-                $message->to('systemreports@arsoc.co.zw') // Replace with the recipient's email
+            Mail::send('tomail.val-weekly-normal-report', $arr, function ($message) use ($systmail) {
+                $message->to($systmail) // Replace with the recipient's email
                     ->subject('Weekly Status Report (Normal)');
             });
 

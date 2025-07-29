@@ -2,12 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Traits\HandlingMail;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class propmanrunremit extends Command
 {
+    use HandlingMail;
     /**
      * The name and signature of the console command.
      *
@@ -37,12 +39,16 @@ class propmanrunremit extends Command
             $status = 1;
         }
         // Prepare email data
-        $toemail = 'systemreports@arsoc.co.zw';
+
+        $systmail = $this->getmails('prop', 'to');
+        if ($systmail == 'failed') {
+            $systmail = "systemreports@arsoc.co.zw";
+        }
         $subject = $status == 0 ? 'Success: Pre Remittance Processed' : 'Failure: Pre Remittance Processing Failed';
         $message = $status == 0 ? 'The pre-remittance process completed successfully.' : 'The pre-remittance process cannot run twice in the same period';
         // Send the email
-        Mail::raw($message, function ($message) use ($toemail, $subject) {
-            $message->to($toemail)
+        Mail::raw($message, function ($message) use ($subject, $systmail) {
+            $message->to($systmail)
                 ->subject($subject);
         });
         $this->info('email sent.');

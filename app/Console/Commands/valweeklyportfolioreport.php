@@ -2,12 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Traits\HandlingMail;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class valweeklyportfolioreport extends Command
 {
+    use HandlingMail;
     /**
      * The name and signature of the console command.
      *
@@ -38,10 +40,14 @@ class valweeklyportfolioreport extends Command
         $arr['portfoliocompilation'] = DB::select('EXEC spGetValPortfolioCompilation');
         //portfolio pending  review
         $arr['portfolioreview'] = DB::select('EXEC spGetValPortfolioCompilation');
+        $systmail = $this->getmails('val', 'to');
+        if ($systmail == 'failed') {
+            $systmail = "systemreports@arsoc.co.zw";
+        }
         try {
             // Send email
-            Mail::send('tomail.val-weekly-portfolio-report', $arr, function ($message) {
-                $message->to('systemreports@arsoc.co.zw') // Replace with the recipient's email
+            Mail::send('tomail.val-weekly-portfolio-report', $arr, function ($message) use ($systmail) {
+                $message->to($systmail) // Replace with the recipient's email
                     ->subject('Weekly Status Report (Portfolios)');
             });
 

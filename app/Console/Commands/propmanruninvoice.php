@@ -2,12 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Traits\HandlingMail;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class propmanruninvoice extends Command
 {
+    use HandlingMail;
     /**
      * The name and signature of the console command.
      *
@@ -31,12 +33,15 @@ class propmanruninvoice extends Command
         $result = DB::select('EXEC spPostPropManPreInvoice');
         $status = $result[0]->ReturnValue;
         // Prepare email data
-        $toemail = 'systemreports@arsoc.co.zw';
+        $systmail = $this->getmails('prop', 'to');
+        if ($systmail == 'failed') {
+            $systmail = "systemreports@arsoc.co.zw";
+        }
         $subject = $status == 0 ? 'Success: Pre Invoice Processed' : 'Failure: Pre Invoice Processing Failed';
         $message = $status == 0 ? 'The pre-invoice process completed successfully.' : 'The pre-invoice process encountered a failure.';
         // Send the email
-        Mail::raw($message, function ($message) use ($toemail, $subject) {
-            $message->to($toemail)
+        Mail::raw($message, function ($message) use ($systmail, $subject) {
+            $message->to($systmail)
                 ->subject($subject);
         });
         $this->info('email sent.');

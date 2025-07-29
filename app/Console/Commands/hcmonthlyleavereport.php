@@ -2,13 +2,16 @@
 
 namespace App\Console\Commands;
 
+use App\Traits\HandlingMail;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class hcmonthlyleavereport extends Command
 {
+    use HandlingMail;
     /**
      * The name and signature of the console command.
      *
@@ -42,15 +45,20 @@ class hcmonthlyleavereport extends Command
                 )->get();
             $arr['leavetype'] = $applications->groupBy('leavetype');
             $arr['applications'] = $applications;
+            $systmail = $this->getmails('hc', 'to');
+            $systmailcc = $this->getmails('hc', 'cc');
+            if ($systmail == 'failed' || $systmailcc == 'failed') {
+                $systmail = 'systemreports@arsoc.co.zw';
+                $systmailcc = 'systemreports@arsoc.co.zw';
+            }
             // Send email
-            Mail::send('tomail.hc-leave-application-report', $arr, function ($message) {
-                // $message->to('ngaatendweb@intpro.co.zw')->cc('coo@intpro.co.zw')
-                //     ->bcc('marcos@intpro.co.zw')
-                $message->to('systemreports@arsoc.co.zw')
+            Mail::send('tomail.hc-leave-application-report', $arr, function ($message) use ($systmailcc, $systmail) {
+                $message->to($systmail)->cc($systmailcc)
                     ->subject('Monthly Leave Report');
             });
 
             $this->info('Weekly report email sent successfully!');
+            Log::info('send.' . $systmail . ' and cc: ' . $systmailcc);
         } catch (\Exception $e) {
             $mymessage = 'Error: ' . $e->getMessage();
             $mymailto = 'systemreports@arsoc.co.zw';
@@ -58,6 +66,7 @@ class hcmonthlyleavereport extends Command
                 $message->to($mymailto)
                     ->subject('Leave Report Error');
             });
+            Log::error('mail failed: ' . $e->getMessage());
         }
     }
 }

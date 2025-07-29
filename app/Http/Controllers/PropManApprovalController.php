@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\HandlingMail;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 
 class PropManApprovalController extends Controller
 {
+    use HandlingMail;
     /*---------------approval new landlord-----------------*/
     public function listlandlordapproval()
     {
@@ -412,6 +414,12 @@ class PropManApprovalController extends Controller
         try {
             $invoiceid = Crypt::decrypt($id);
             try {
+                $systmail = $this->getmails('prop', 'to');
+                if ($systmail == 'failed') {
+                    return redirect()->route('propapp.listpre')
+                        ->with('error', 'system email not set');
+                }
+                //get the invoice details
                 $invoice   = DB::table('propmaninvoicepre')
                     ->where('id', $invoiceid)->select('*')->first();
                 $tenant = DB::table('propmanalllease')->join(
@@ -443,8 +451,8 @@ class PropManApprovalController extends Controller
 
 
                 //invoice data
-                $arr["email"]               = "systemreports@arsoc.co.zw";
-                $arr["ccemail"]             = "systemreports@arsoc.co.zw";
+                $arr["email"]               = $systmail;
+                $arr["ccemail"]             = $tenant->email;
                 $arr["title"]               = "Invoice for $tenantname";
                 $arr["invoicetitle"]        = "Invoice";
                 $arr["tenantname"]          = $tenantname;
