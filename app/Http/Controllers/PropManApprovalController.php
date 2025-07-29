@@ -571,7 +571,7 @@ class PropManApprovalController extends Controller
                         break;
 
                     default:
-                        $exchangerate = DB::table('setupcurrencyrate')->where('currencycode', $roll->currencycode)
+                        $exchangerate = DB::table('setupcurrencyrate')->where('currencycode', $roll->currencycode)->where('ratedate', $request->datestamp)
                             ->select('meanrate')->orderBy('id', 'DESC')->first();
 
                         if ($exchangerate) {

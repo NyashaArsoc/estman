@@ -529,22 +529,22 @@ class PropManIntakeController extends Controller
                     $tablearray = [
                         'leaseid' => $leaseid,
                         'currencycode' => $currencycode[$a],
-                        'leasebalancebd' => $leasebalancebd[$a],
+                        'balrent' => $leasebalancebd[$a],
                         'operatorid' => session('alluser'),
                         'baldays' => 10
                     ];
-                    $tablename = 'propmanleasearrearsdetails';
+                    $tablename = 'propmantempleasearrearsdetails';
                 } else {
                     $tablearray = [
                         'leaseid' => $leaseid,
                         'currencycode' => $currencycode[$a],
                         'balance' => $leasebalancebd[$a] * -1
                     ];
-                    $tablename = 'propmanleaseprepayments';
+                    $tablename = 'propmantempleaseprepayments';
                 }
                 if ($currencycode[$a] <> 0) {
                     DB::table($tablename)->insert($tablearray);
-                    DB::table('propmanleasecurrentbillrates')
+                    DB::table('propmantempleasecurrentbillrates')
                         ->Insert([
                             'deposit' => $leasedepositpaid[$a],
                             'ratescosts' => $leaseratescost[$a],
@@ -560,7 +560,7 @@ class PropManIntakeController extends Controller
                 ->with('success', 'record added');
         } catch (\Throwable $th) {
             return  redirect()->route('propin.addlease')
-                ->with('error', 'failed to load');
+                ->with('error', 'failed to load' . $th);
         }
     }
     public function addleaserate($id)
@@ -762,7 +762,12 @@ class PropManIntakeController extends Controller
             $exchangerate = DB::table('setupcurrencyrate')->where(
                 'currencycode',
                 $request->receiptcurrency
-            )->select('meanrate')->orderby('id', 'DESC')->first();
+            )->where('ratedate', $request->receiptdate)
+                ->select('meanrate')->orderby('id', 'DESC')->first();
+            if (!$exchangerate) {
+                return redirect()->route('propin.payment')
+                    ->with('error', 'no exchange rate for the day set');
+            }
 
             /*---------check if multicurrency is enables------------------ */
             $ismulticurrency = $request->has('multicurrency');
