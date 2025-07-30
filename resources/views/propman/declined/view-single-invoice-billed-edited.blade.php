@@ -24,7 +24,7 @@ $invoice->balancebd + $invoice->interest + $invoice->vat);
     <div class="box box-block bg-white">
         <h5>{{ $invoice->currencycode.' - '.$title }}</h5>
         <p class="font-90 text-muted mb-1"> {{ $description }}</p>
-        <form class="form-material material-primary" action="{{ route('propdec.updtpre', $id)}}"
+        <form class="form-material material-primary" action="{{ route('propdec.updtpreinvoice', $id)}}"
             method="POST" id="defaultform"> @csrf
             <div class="form-group row">
                 <label for="" class="col-sm-2 form-control-label">Tenant Name</label>
@@ -115,5 +115,6 @@ $invoice->balancebd + $invoice->interest + $invoice->vat);
 @section('additional js')
 <!-- Additional JS Start-->
 <script src="{{ asset('js/popupforms/manage-buttons.js') }}"></script>
+<script src="{{ asset('js/validation/approvalpropman.js') }}"></script>
 <!-- Additional JS End-->
 @endsection

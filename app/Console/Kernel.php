@@ -22,7 +22,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:valweeklyportfolioreport')->weeklyOn(1, '06:30')->withoutOverlapping();
         $schedule->command('app:hcmonthlyactivity')->monthlyOn(1, '00:30')->withoutOverlapping();
         $schedule->command('app:hcmonthlyleavereport')->monthlyOn(22, '00:30')->withoutOverlapping();
-        // $schedule->command('app:hcmonthlyleavereport')->everyMinute()->withoutOverlapping();
+        //$schedule->command('app:propmanruninvoice')->everyMinute()->withoutOverlapping();
     }
 
     /**

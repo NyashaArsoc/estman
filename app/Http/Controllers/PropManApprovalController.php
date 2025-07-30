@@ -479,8 +479,8 @@ class PropManApprovalController extends Controller
                 //convert to pdf
                 $invoicepdf =   PDF::loadView('tomail/invoice', $arr);
                 //mail the invoice
-                Mail::raw('Monthly Invoice.', function ($message) use ($arr, $invoicepdf) {
-                    $message->to('systemreports@arsoc.co.zw')
+                Mail::raw('Monthly Invoice.', function ($message) use ($arr, $invoicepdf, $systmail) {
+                    $message->to($systmail)->cc($arr["ccemail"] ?? '')
                         ->subject($arr["period"] . ' Invoice')
                         ->attachData($invoicepdf->output(), '' . $arr["title"] . '.pdf');
                 });

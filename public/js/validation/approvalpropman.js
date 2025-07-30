@@ -165,3 +165,10 @@ $("#btn-process-remit").click(function () {
         return false;
     }
 });
+$("#btn-edit-pro").click(function () {
+    try {
+        disableButtonAndSubmit(this, "defaultform");
+    } catch (err) {
+        return false;
+    }
+});

@@ -192,7 +192,7 @@ Route::middleware('loginauth')->controller(PropManDeclineController::class)->gro
     Route::get('/prop/edit/{id}/pre-invoice/view', 'editinvoicebilled')->name('propdec.editpre');
     Route::get('/prop/invoice/list/billed/edited', 'listalleditedpreinvoice')->name('propdec.listpre');
     Route::get('/prop/view/{id}/pre-invoice/edited', 'vieweditedinvoicebilled')->name('propdec.vieweditpre');
-    Route::any('/prop/update/{id}/preinvoice/approve', 'approveupdateinvoicebilled')->name('propdec.updtpre');
+    Route::any('/prop/update/{id}/preinvoice/approve', 'approveupdateinvoicebilled')->name('propdec.updtpreinvoice');
 });
 /*-------------------end property management declines------------------------ */
 /*-------------------property management declines------------------------ */
