@@ -2,9 +2,9 @@
 $title = 'View Client Details';
 $description = 'Below are the details of the client.';
 if ($client->clienttypeid == 1){
-$fullname   =  $client->firstname.' '.$client->lastname ;
-  }else{
-  $fullname   =  $client->companyname; }
+$fullname = $client->firstname.' '.$client->lastname ;
+}else{
+$fullname = $client->companyname; }
 @endphp
 @extends('layout.no-menu-layout')
 @section('title', 'View Client Details')
@@ -81,13 +81,13 @@ $fullname   =  $client->firstname.' '.$client->lastname ;
                             @php
                             $id = Crypt::encrypt($abc->id);
                             if(trim($abc->isavailable)=='Y'){
-                                $status = 'available';
-                                $badge = 'badge badge-pill bg-success badge-secondary';
+                            $status = 'available';
+                            $badge = 'badge badge-pill bg-success badge-secondary';
                             }else{
-                                $status = 'inactive';
-                                $badge = 'badge badge-pill bg-danger badge-secondary';
+                            $status = 'inactive';
+                            $badge = 'badge badge-pill bg-danger badge-secondary';
                             }
-                        @endphp
+                            @endphp
                             <td>{{$count ++}}</td>
                             <td>{{$abc->firstname }} {{$abc->lastname }}</td>
                             <td>{{$abc->cell}} </td>

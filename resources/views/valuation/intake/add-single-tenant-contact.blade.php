@@ -1,13 +1,12 @@
 @php
-$title = 'Edit Tenant Keen';
-$description = 'update next of keen details...';
+$title = 'Add Tenant Contact';
+$description = 'update tenant details...';
 $id= Crypt::encrypt($tenant->id);
-$contactid= Crypt::encrypt($contact->id);
 $divindividualclass = $tenant->clienttypeid == 1 ? 'hide': 'dropdwn';
 $divcompanyclass = $tenant->clienttypeid != 1 ? 'hide': 'dropdwn';
 @endphp
 @extends('layout.no-menu-layout')
-@section('title', 'Edit Tenant')
+@section('title', 'Add Keen')
 @section('additional css')
 <!-- Additional css Start-->
 <!-- Additional css End-->
@@ -28,7 +27,7 @@ $divcompanyclass = $tenant->clienttypeid != 1 ? 'hide': 'dropdwn';
         <span class="badge badge-pill bg-info">{{$tenant->description ?? '' }}</span>
         <hr />
         <form class="form-material material-primary" method="POST" id="defaultform"
-            action="{{ route('propma.updatenakeen', [$id,$contactid]) }}">@csrf
+            action="{{ route('propin.addnewtencon', $id) }}">@csrf
 
             <div id="corporategroup">
                 <div class="form-group row">
@@ -40,19 +39,19 @@ $divcompanyclass = $tenant->clienttypeid != 1 ? 'hide': 'dropdwn';
                 </div>
             </div>
             <br />
-            <h5>contact person </h5>
+            <h5>next of keen person </h5>
             <div class="form-group row">
                 <label for="FirstName" class="col-sm-2 form-control-label">First Name</label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" id="contactfirstname"
-                        name="contactfirstname" value="{{ $contact->firstname ?? ''}}" autocomplete="off">
+                        name="contactfirstname" autocomplete="off">
                     <small id="contactfirstnamecheck" style="color: red;">required</small>
                 </div>
 
                 <label for="LastName" class="col-sm-2 form-control-label">Last Name</label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" id="contactlastname"
-                        name="contactlastname" value="{{ $contact->lastname ?? ''}}" autocomplete="off">
+                        name="contactlastname" autocomplete="off">
                     <small id="contactlastnamecheck" style="color: red;">required</small>
                 </div>
             </div>
@@ -60,18 +59,18 @@ $divcompanyclass = $tenant->clienttypeid != 1 ? 'hide': 'dropdwn';
                 <label for="Cell" class="col-sm-2 col-form-label">Cell</label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" id="contactcell" name="contactcell"
-                        value="{{ $contact->cell ?? ''}}" autocomplete="off">
+                        autocomplete="off">
                     <small id="contactcellcheck" style="color: red;">required</small>
                 </div>
                 <label for="Email" class="col-sm-2 col-form-label">Email</label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" id="contactemail" name="contactemail"
-                        value="{{ $contact->email ?? ''}}" autocomplete="off">
+                        autocomplete="off">
                     <small id="contactemailcheck" style="color: red;">required</small>
                 </div>
             </div>
             <div class="form-group row">
-                @if (in_array(2,$arraycontrolids))
+                @if (in_array(1,$arraycontrolids))
                 <div class="offset-sm-2 col-sm-10">
                     <button type="submit" class="btn btn-primary" id="btn-add-landlord-contact">submit</button>
                 </div>

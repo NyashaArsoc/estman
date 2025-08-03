@@ -27,8 +27,8 @@ $divcompanyclass = $tenant->clienttypeid != 1 ? 'hide': 'dropdwn';
         <p class="font-90 text-muted mb-1"> {{ $description }}</p>
         <span class="badge badge-pill bg-info">{{$tenant->description ?? '' }}</span>
         <hr />
-        <form class="form-material material-primary" method="POST" id="defaultform"
-            action="{{ route('propma.updatenakeen', [$id,$contactid]) }}">@csrf
+        <form class="form-material material-primary" id="" method="POST" id="defaultform"
+            action="{{ route('propma.updatenacon', [$id,$contactid]) }}">@csrf
 
             <div id="corporategroup">
                 <div class="form-group row">

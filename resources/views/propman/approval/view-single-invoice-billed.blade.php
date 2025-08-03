@@ -25,7 +25,7 @@ $invoice->balancebd + $invoice->interest + $invoice->vat);
         <h5>{{ $invoice->currencycode.' - '.$title }}</h5>
         <p class="font-90 text-muted mb-1"> {{ $description }}</p>
         <form class="form-material material-primary" action="{{ route('propapp.preapp',$id) }}"
-            method="POST"> @csrf
+            id="defaultform" method="POST"> @csrf
             <div class="form-group row">
                 <label for="" class="col-sm-2 form-control-label">Tenant Name</label>
                 <div class="col-sm-4">

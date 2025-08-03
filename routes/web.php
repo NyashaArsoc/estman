@@ -74,11 +74,7 @@ Route::controller(ReportController::class)->group(function(){
     Route::get('/print/lease/statement', 'printleasestatement')->name('report.printstatement');
 }); */
 /*
-Route::controller(ValManageController::class)->group(function () {
-    Route::get('/val/list/client', 'listallclient')->name('valman.listclient');
-    Route::get('/val/{id}/client/edit', 'editsingleclient')->name('valman.editclient');
-    Route::get('/val/{id}/client/view', 'viewsingleclient')->name('valman.viewclient');
-}); */
+*/
 /*
 Route::controller(ValApprovalController::class)->group(function () {
 /*}); */
@@ -294,6 +290,7 @@ Route::middleware('loginauth')->controller(ValIntakeController::class)->group(fu
     Route::post('/val/submit/page/normal-instr', 'addnormalsubmitpage')->name('valin.normpage1');
     Route::get('/val/{id}/nom/{vid}/inst/{cid}/pur/{pid}/typ/{tid}/pay/{payid}/{accessdate}', 'addinstructionnormalsteptwo')->name('valin.normpage2');
     Route::any('/val/allocate/new/normal-instr', 'allocateinstructionnorm')->name('valin.allonom');
+    Route::get('/val/new/client/{id}/contact', 'addnewclientdetails')->name('valin.newclient');
 });
 /*-------------------end valuations intake------------------------ */
 /*-------------------valuations approval------------------------ */
@@ -343,6 +340,14 @@ Route::middleware('loginauth')->controller(ValDeclinedController::class)->group(
     Route::get('/val/list/acknowledgement/declined', 'listalldeclinedacknowledgement')->name('valdec.listackn');
     Route::get('/val/{id}/view-declined/{instr_id}/acknowledgement', 'viewsingleinstructionacknowledge')->name('valdec.viewsinglackwn');
     Route::any('/val/allocate/{id}/declined/instruction/{instr_id}', 'allocateinstructionacknowledge')->name('valdec.alloinstr');
+});
+/*-------------------valuations manage------------------------ */
+Route::controller(ValManageController::class)->group(function () {
+    Route::get('/val/list/client', 'listallclient')->name('valman.listclient');
+    Route::get('/val/{id}/client/edit', 'editsingleclient')->name('valman.editclient');
+    Route::get('/val/{id}/client/view', 'viewsingleclient')->name('valman.viewclient');
+    Route::get('/val/{id}/client/add/contact/{cid}', 'editaddsingleclient')->name('valman.editaddclient');
+    Route::any('/val/update/{id}/client', 'updateclientdetails')->name('valman.updtclient');
 });
 /*-------------------human capital intake------------------------ */
 Route::middleware('loginauth')->controller(HCIntakeController::class)->group(function () {

@@ -676,3 +676,15 @@ $("#btn-val-instr-normal-1").click(function () {
         return false;
     }
 });
+// add val new client
+$("#btn-edit-client").click(function () {
+    validateCell(); validateEmail();
+    try {
+        validateFirstName(); validateLastName();
+        if (cellError == true && emailError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false }
+
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
