@@ -66,7 +66,7 @@ class ValManageController extends Controller
                 ->with('error', 'failed to load');
         }
     }
-    function editaddsingleclient($id, $cid)
+    function editsingleclientcontact($id, $cid)
     {
         try {
             $clientid = Crypt::decrypt($id);
@@ -77,7 +77,7 @@ class ValManageController extends Controller
                     ->select('setupclienttype.description', 'valclientdetail.*')->first();
                 $arr['contact'] = DB::table('valclientcontactperson')->where('id', $contactid)
                     ->select('*')->first();
-                return view('valuation.manage.edit-add-single-client')->with($arr);
+                return view('valuation.manage.edit-single-client-contact')->with($arr);
             } catch (\Throwable $th) {
                 return  redirect()->route('valman.editclient', $id)
                     ->with('error', 'failed to load');
@@ -104,6 +104,29 @@ class ValManageController extends Controller
                         'firstname' => $request->firstname
                     ]);
                 return  redirect()->route('valman.listclient')
+                    ->with('success', 'record updated');
+            } catch (\Throwable $th) {
+                return redirect()->route('valman.editclient', $id)
+                    ->with('error', 'failed to load');
+            }
+        } catch (DecryptException $th) {
+            return redirect()->route('valman.editclient', $id)
+                ->with('error', 'failed to load');
+        }
+    }
+    function updatesingleclientcontact($id, $cid, Request $request)
+    {
+        try {
+            $contactid = Crypt::decrypt($cid);
+            try {
+                DB::table('valclientcontactperson')->where('id', $contactid)
+                    ->update([
+                        'firstname' => $request->contactfirstname,
+                        'cell' => $request->contactcell,
+                        'email' => $request->contactemail,
+                        'lastname' => $request->contactlastname
+                    ]);
+                return  redirect()->route('valman.editclient', $id)
                     ->with('success', 'record updated');
             } catch (\Throwable $th) {
                 return redirect()->route('valman.editclient', $id)

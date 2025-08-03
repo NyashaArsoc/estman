@@ -354,4 +354,43 @@ class ValIntakeController extends Controller
                 ->with('error', 'failed to load' . $th);
         }
     }
+    function addnewclientcontact($id)
+    {
+        try {
+            $clientid = Crypt::decrypt($id);
+            $arr['client'] = DB::table('valclientdetail')->where('valclientdetail.id', $clientid)
+                ->join('setupclienttype', 'setupclienttype.id', '=', 'valclientdetail.clienttypeid')
+                ->select('setupclienttype.description', 'valclientdetail.*')->first();
+            return view('valuation.intake.add-single-client-contact')->with($arr);
+        } catch (DecryptException $th) {
+            return  redirect()->route('valman.editclient', $id)
+                ->with('error', 'failed to load');
+        }
+    }
+    function createnewclientcontact($id, Request $request)
+    {
+        try {
+            $clientid = Crypt::decrypt($id);
+            if (DB::table('valclientcontactperson')->select('id')->where('email ', $request->contactemail)->exists()) {
+                return  redirect()->route('valin.newclient', $id)
+                    ->with('error', 'contact exists');
+            }
+            DB::table('valclientcontactperson')->insert([
+                'email' => $request->contactemail,
+                'cell' => $request->contactcell,
+                'lastname' => $request->contactlastname,
+                'firstname' => $request->contactfirstname,
+                'operatorid' => session('alluser'),
+                'clientid' => $clientid
+            ]);
+            return  redirect()->route('valman.editclient', $id)
+                ->with('success', 'record added');
+        } catch (DecryptException $th) {
+            return  redirect()->route('valman.editclient', $id)
+                ->with('error', 'failed to load');
+        } catch (\Throwable $th) {
+            return  redirect()->route('valman.editclient', $id)
+                ->with('error', 'failed to load');
+        }
+    }
 }

@@ -105,7 +105,7 @@ $divcompanyclass = $client->clienttypeid != 1 ? 'hide': 'dropdwn';
             <div class="tab-pane show" id="client-contact" role="tabpanel" aria-labelledby="client-contact-tab">
                 <h5 class="mt-2">Contact</h5>
                 @if (in_array(1,$arraycontrolids))
-                <a class="btn btn-primary btn-sm" href="{{route('propin.addtencon', $id)}}
+                <a class="btn btn-primary btn-sm" href="{{route('valin.newclient', $id)}}
                 " title="add">create new</a>
                 @endif
                 <hr />

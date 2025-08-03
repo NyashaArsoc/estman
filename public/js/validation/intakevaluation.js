@@ -680,9 +680,20 @@ $("#btn-val-instr-normal-1").click(function () {
 $("#btn-edit-client").click(function () {
     validateCell(); validateEmail();
     try {
-        validateFirstName(); validateLastName();
         if (cellError == true && emailError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false }
 
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+// add val new client contact
+$("#btn-add-client-contact").click(function () {
+    validateContactFirstName(); validateContactLastName();
+    validateContactCell(); validateContactEmail();
+    try {
+        if (contactcellError == true &&
+            contactfirstnameError == true && contactlastnameError == true && contactemailError == true) { disableButtonAndSubmit(this, "defaultform"); } else { return false }
     } catch (err) {
         alert(err.message);
         return false;
