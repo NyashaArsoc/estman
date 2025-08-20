@@ -137,4 +137,15 @@ class ValManageController extends Controller
                 ->with('error', 'failed to load');
         }
     }
+    /*-----------list all instructions ------------- */
+    function listallinstructions()
+    {
+        try {
+            $arr['stage']    = DB::select('EXEC spGetValInstructionStages');
+            return view('valuation.manage.list-instructions')->with($arr);
+        } catch (\Throwable $th) {
+            return $th;
+            return  redirect()->route('dash.val');
+        }
+    }
 }
