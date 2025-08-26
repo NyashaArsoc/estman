@@ -351,6 +351,7 @@ Route::controller(ValManageController::class)->group(function () {
     Route::any('/val/update/{id}/client', 'updateclientdetails')->name('valman.updtclient');
     Route::any('/val/contact/{id}/client/update/{cid}', 'updatesingleclientcontact')->name('valman.editclientdet');
     Route::get('/val/list/instructions', 'listallinstructions')->name('valman.listinstr');
+    Route::get('/val/instruction/{id}/stage', 'viewsingleinstructionstage')->name('valman.viewinstrstage');
 });
 /*-------------------human capital intake------------------------ */
 Route::middleware('loginauth')->controller(HCIntakeController::class)->group(function () {

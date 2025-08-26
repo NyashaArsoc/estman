@@ -44,7 +44,7 @@ $description = 'Report stages...';
                         <td><span class="badge badge-pill {{ $status }}">{{$abc->current_stage}}</span> </td>
                         @php $id= Crypt::encrypt($abc->id); @endphp
                         <td><a class="btn btn-info btn-sm " id=""
-                                href=""
+                                href="{{route('valman.viewinstrstage',$id)}}"
                                 title="view"><i class="ti-eye mr-0-5"></i>view</a>
                         </td>
                     </tr>

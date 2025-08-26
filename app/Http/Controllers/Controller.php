@@ -156,42 +156,56 @@ class Controller extends BaseController
             return 'failed' . $th;
         }
     }
-    /* take the transaction id for all transactions
- 
-//find general ledger for accounts without subledgers
-
-//find latest exchange rate for currency
-public function getexchangerate($currencycode){
-    try {
-        $exchangerate   = DB::table('currencyrate')
-            ->select('*')->where('currencycode',$currencycode)
-            ->latest('id')->first();
-        if(is_null($exchangerate)){
-            return 'failed';
-        }else{
-            if(is_null($exchangerate->meanrate)){
-                return 'failed';
-            }else{
-                return $exchangerate->meanrate;
-            } 
+    /*--------get valuations client detail by instruction-----------*/
+    function getvaluationclient($isportfolio, $contactid, $instructionid, $portid)
+    {
+        try {
+            $purpose = match (trim($isportfolio)) {
+                'N' => DB::table('valinstructions')->where('id', $instructionid)
+                    ->select('*')->first(),
+                default => DB::table('valinstrportfolio')
+                    ->where('id', $portid)
+                    ->select('*')->first(),
+            };
+            $client = match (trim($isportfolio)) {
+                'N' => DB::table('valclientcontactperson')->join(
+                    'valclientdetail',
+                    'valclientcontactperson.clientid',
+                    '=',
+                    'valclientdetail.id'
+                )
+                    ->where('valclientcontactperson.id', $contactid)
+                    ->select(
+                        'valclientdetail.companyname',
+                        'valclientdetail.lastname',
+                        'valclientdetail.firstname',
+                        'valclientcontactperson.firstname As contactfirstname',
+                        'valclientcontactperson.lastname As contactlastname',
+                        'valclientcontactperson.cell',
+                        'valclientcontactperson.email',
+                        'valclientdetail.contactaddress'
+                    )->first(),
+                default => DB::table('valclientcontactperson')->join(
+                    'valclientdetail',
+                    'valclientcontactperson.clientid',
+                    '=',
+                    'valclientdetail.id'
+                )
+                    ->where('valclientcontactperson.id', $purpose->clientcontactid)
+                    ->select(
+                        'valclientdetail.companyname',
+                        'valclientdetail.lastname',
+                        'valclientdetail.firstname',
+                        'valclientcontactperson.firstname As contactfirstname',
+                        'valclientcontactperson.lastname As contactlastname',
+                        'valclientcontactperson.cell',
+                        'valclientcontactperson.email',
+                        'valclientdetail.contactaddress'
+                    )->first(),
+            };
+            return $client;
+        } catch (\Throwable $th) {
+            return 'failed' . $th;
         }
-    } catch (QueryException $th) {
-        return 'failed';
     }
-}
-
-
-public function getgraceperiod($currencycode){
-    try {
-    $grace   = DB::table('arrearsconfig')
-            ->select('*')->where('currencycode',$currencycode)
-            ->latest('id')->first();
-        if(is_null($grace)){ return 'failed'; }
-        else{ return $grace;}
-    } catch (QueryException $th) {
-        return 'failed';
-    }
-}
-
-*/
 }

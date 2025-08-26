@@ -148,4 +148,84 @@ class ValManageController extends Controller
             return  redirect()->route('dash.val');
         }
     }
+    function viewsingleinstructionstage($id)
+    {
+        try {
+            $instructionid = Crypt::decrypt($id);
+            $arr['instruction'] = DB::select('EXEC spGetValSingleInstructionStage ?', [$instructionid]);
+            $arr['instr']   = DB::table('valinstructions')->where('id', $instructionid)
+                ->select('*')->first();
+            $arr['client'] = $this->getvaluationclient(
+                $arr['instr']->isportfolio,
+                $arr['instr']->contactid,
+                $instructionid,
+                $arr['instr']->portfolioid
+            );
+            $arr['upload']   = DB::table('valinstruploads')->where('instructionid', $instructionid)
+                ->select('*')->first();
+            return view('valuation.manage.view-instruction-stage')->with($arr);
+        } catch (DecryptException $th) {
+            return  redirect()->route('valman.listinstr')
+                ->with('error', 'failed to load');
+        }
+    }
+    public function viewsingleinstructionstageh($ids)
+    {
+        $id = Crypt::decrypt($ids);
+        // In real case, call your stored procedure or build query
+        // Dummy data for now:
+        $instruction = (object)[
+            'id' => $id,
+            'current_stage' => 'Compilation', // pretend from SP
+            'stages' => [
+                'Initiated' => [
+                    'status' => 'C',
+                    'actioned_by' => 'Admin User',
+                    'completed_at' => '2025-08-10 09:30:00'
+                ],
+                'Acknowledged' => [
+                    'status' => 'C',
+                    'actioned_by' => 'John Zito',
+                    'completed_at' => '2025-08-11 10:00:00'
+                ],
+                'Compilation' => [
+                    'status' => 'P',
+                    'actioned_by' => null,
+                    'completed_at' => null
+                ],
+                'Quality Check' => [
+                    'status' => 'N', // not started
+                    'actioned_by' => null,
+                    'completed_at' => null
+                ],
+                'Invoicing' => [
+                    'status' => 'N',
+                    'actioned_by' => null,
+                    'completed_at' => null
+                ],
+                'Approval' => [
+                    'status' => 'N',
+                    'actioned_by' => null,
+                    'completed_at' => null
+                ],
+                'Printing' => [
+                    'status' => 'N',
+                    'actioned_by' => null,
+                    'completed_at' => null
+                ],
+                'Email Report' => [
+                    'status' => 'N',
+                    'actioned_by' => null,
+                    'completed_at' => null
+                ],
+                'Dispatch' => [
+                    'status' => 'N',
+                    'actioned_by' => null,
+                    'completed_at' => null
+                ]
+            ]
+        ];
+
+        return view('valuation.manage.view-instruction-stage', compact('instruction'));
+    }
 }
