@@ -299,7 +299,7 @@ function validateReportDocument() {
         var uploadedfile = textValue.files[0];
         // Check the file extension
         var uploadedExtension = uploadedfile.name.split('.').pop().toLowerCase();
-        var acceptedExtensions = ['doc', 'docx', 'odt'];
+        var acceptedExtensions = ['doc', 'docx', 'odt', 'pdf'];
         if (!acceptedExtensions.includes(uploadedExtension)) {
             $("#reportdocumentcheck").show();
             $("#reportdocumentcheck").html("**file must be document ");

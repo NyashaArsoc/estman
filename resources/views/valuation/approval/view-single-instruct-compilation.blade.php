@@ -180,7 +180,7 @@ $propid= Crypt::encrypt($instr->propertyid);
                 </label>
                 <div class="col-sm-4">
                     <input type="file" class="form-control" id="reportdocument" name="reportdocument"
-                        accept=".doc, .docx, .odt">
+                        accept=".doc, .docx, .odt, .pdf">
                     <small id="reportdocumentcheck" style="color: red;">required</small>
                 </div>
                 <label for="" class="col-sm-2 col-form-label">Schedule
