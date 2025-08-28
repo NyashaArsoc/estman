@@ -159,13 +159,12 @@ class HCIntakeController extends Controller
             $typegroup   = DB::table('hctypegroup')->where('id', $request->leavegroup)->first();
             $myreportto   = DB::table('systusers')->where('roleid', $routeto)->first();
             //checking if the attachment is there 
+            $reportdocname = null;
             if ($request->hasFile('leaveattachment')) {
                 $reportdoc = $request->file('leaveattachment');
                 $reportdocname = $userid . '.' . $request->datefrom . '.' . $reportdoc->getClientOriginalExtension();
                 $reportdoc->storeAs('public/documents/hc/leave', $reportdocname);
             }
-            $reportdocname = null;
-
             DB::table('hcleaveapplication')->insert([
                 'daysapplied' => $request->daysapplied,
                 'daysavailable' => $request->daysavailable,

@@ -274,7 +274,7 @@ Route::middleware('loginauth')->controller(SetupManageController::class)->group(
 /*-------------------end setup manage------------------------ */
 /*-------------------valuations intake------------------------ */
 Route::middleware('loginauth')->controller(ValIntakeController::class)->group(function () {
-    Route::get('/val/new/client', 'addnewclientdetails')->name('valin.newclient');
+    Route::get('/val/new/client', 'addnewclientdetails')->name('valin.client');
     Route::any('/val/add/new/client', 'createnewclientdetails')->name('valin.createclient');
     Route::get('/val/new/property', 'addnewpropertydetails')->name('valin.newprop');
     Route::any('/val/add/new/property', 'createnewpropertydetails')->name('valin.createprop');

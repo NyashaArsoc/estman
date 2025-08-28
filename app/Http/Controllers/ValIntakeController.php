@@ -27,12 +27,12 @@ class ValIntakeController extends Controller
         try {
             if (!is_null($request->email)) {
                 if (DB::table('valclientdetail')->select('id')->where('email', $request->email)->exists()) {
-                    return  redirect()->route('valin.newclient')
+                    return  redirect()->route('valin.client')
                         ->with('error', 'client exists');
                 }
             } elseif (!is_null($request->contactemail)) {
                 if (DB::table('valclientcontactperson')->select('id')->where('email', $request->contactemail)->exists()) {
-                    return  redirect()->route('valin.newclient')
+                    return  redirect()->route('valin.client')
                         ->with('error', 'contact exists');
                 }
             }
@@ -71,10 +71,10 @@ class ValIntakeController extends Controller
             ]);
 
 
-            return  redirect()->route('valin.newclient')
+            return  redirect()->route('valin.client')
                 ->with('success', 'record added');
         } catch (\Throwable $th) {
-            return  redirect()->route('valin.newclient')
+            return  redirect()->route('valin.client')
                 ->with('error', 'failed to load');
         }
     }

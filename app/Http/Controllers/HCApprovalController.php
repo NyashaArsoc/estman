@@ -204,17 +204,17 @@ class HCApprovalController extends Controller
                 ->with('error', 'failed to load');
         }
     }
-}
-function downloadattachments($path)
-{
-    try {
-        $filename = Crypt::decrypt($path);
-        //check the existance of receipt first
-        if (!Storage::disk('public')->exists("documents/hc/leave/{$filename}")) {
-            return abort(404);
+    function downloadattachments($path)
+    {
+        try {
+            $filename = Crypt::decrypt($path);
+            //check the existance of receipt first
+            if (!Storage::disk('public')->exists("documents/hc/leave/{$filename}")) {
+                return abort(404);
+            }
+            return response()->download(storage_path("app/public/documents/hc/leave/{$filename}"));
+        } catch (DecryptException $th) {
+            return redirect()->route('dash.hc');
         }
-        return response()->download(storage_path("app/public/documents/hc/leave/{$filename}"));
-    } catch (DecryptException $th) {
-        return redirect()->route('dash.hc');
     }
 }
