@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\HandlingMail;
 
 class HCApprovalController extends Controller
 {
+    use HandlingMail;
     function listpendingapproval()
     {
         try {
@@ -62,6 +64,10 @@ class HCApprovalController extends Controller
 
         try {
             $applicationid = Crypt::decrypt($id);
+            $systmail = $this->getmails('hc', 'to');
+            if ($systmail == 'failed') {
+                $systmail = 'systemreports@arsoc.co.zw';
+            }
             if ($request->has('approve')) {
 
                 DB::table('hcleaveapplication')->where('id', $applicationid)
@@ -71,6 +77,11 @@ class HCApprovalController extends Controller
                         'approvedon' => now(),
                         'firstapprovalcomments' => $request->commentshighlights
                     ]);
+                $mymessage = 'leave application pending your confirmation: ';
+                Mail::html("<p>$mymessage</p>", function ($message) use ($systmail) {
+                    $message->to($systmail)
+                        ->subject('Leave Notification');
+                });
                 return  redirect()->route('hcapp.listlev')
                     ->with('success', 'record approved');
             }
@@ -81,6 +92,7 @@ class HCApprovalController extends Controller
                     'approvedby' => session('alluser'),
                     'approvedon' => now()
                 ]);
+
             return redirect()->route('hcapp.listlev')
                 ->with('success', 'record declined');
         } catch (\Throwable $th) {

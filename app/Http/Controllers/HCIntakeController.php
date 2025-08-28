@@ -146,9 +146,17 @@ class HCIntakeController extends Controller
         }
     }
     /*-------------apply leave */
+    function returnleaverequired($id)
+    {
+        $typegroup = DB::table('hctypegroup')->where('id', $id)->first();
+        $config = DB::table('hcleavetypeconfig')->where('typeid', $typegroup->typeid)
+            ->where('required', 'Attach')->select('required')->first();
+        return response()->json(['config' => $config]);
+    }
     function createleave(Request $request, $uid, $rid)
     {
         try {
+
             $request->validate([
                 'dateto' => 'required',
                 'datefrom' => 'required',
@@ -158,7 +166,13 @@ class HCIntakeController extends Controller
             $myuser = $this->userdetail();
             $typegroup   = DB::table('hctypegroup')->where('id', $request->leavegroup)->first();
             $myreportto   = DB::table('systusers')->where('roleid', $routeto)->first();
+            $config = DB::table('hcleavetypeconfig')->where('typeid', $typegroup->typeid)
+                ->where('required', 'Attach')->select('required')->first();
             //checking if the attachment is there 
+            if ($config && !$request->hasFile('leaveattachment')) {
+                return redirect()->route('hcin.applev')
+                    ->with('error', 'attachment is required');
+            }
             $reportdocname = null;
             if ($request->hasFile('leaveattachment')) {
                 $reportdoc = $request->file('leaveattachment');

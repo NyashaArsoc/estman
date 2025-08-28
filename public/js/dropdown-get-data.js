@@ -142,4 +142,17 @@ function getavailableleavedays() {
 			$("#leavedetailsform").html(data);
 		}
 	});
+	$.ajax({
+		type: "GET",
+		url: "/hc/leavetype/required/" + textValue,
+		success: function (data) {
+			if (data.config) {
+				$("#notrequiredpdf").attr("required", true);
+				$("#notrequiredpdfcheck").show().text("required");
+			} else {
+				$("#notrequiredpdf").removeAttr("required");
+				$("#notrequiredpdfcheck").hide();
+			}
+		}
+	});
 }

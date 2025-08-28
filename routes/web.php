@@ -270,6 +270,9 @@ Route::middleware('loginauth')->controller(SetupManageController::class)->group(
     Route::get('/set-up/type/{tid}/leave-group/{gid}', 'viewleavetypegroupconfig')->name('setman.typlevgrpconf');
     Route::any('/work-days/{id}/leave/group', 'assignworkdayleavegroup')->name('setman.assigndaygrp');
     Route::post('/config-days/{id}/leave/group-type/{gid}', 'createaccruedayleavegroup')->name('setman.crtaccrue');
+    Route::get('/set-up/leave/type', 'listleavetype')->name('setman.listlevtype');
+    Route::get('/set-up/leave/tyoe/{id}', 'viewsingleleavetype')->name('setman.viewtype');
+    Route::any('/work-days/{id}/leave/group', 'assignconfigleavetype')->name('setman.assignconfigtype');
 });
 /*-------------------end setup manage------------------------ */
 /*-------------------valuations intake------------------------ */
@@ -357,6 +360,7 @@ Route::controller(ValManageController::class)->group(function () {
 Route::middleware('loginauth')->controller(HCIntakeController::class)->group(function () {
     Route::get('/hc/import/staff', 'importstafflist')->name('hcin.impstaf');
     Route::post('/hc/create/staff', 'createstafflist')->name('hcin.crtstaf');
+    Route::get('/hc/leavetype/required/{id}', 'returnleaverequired');
     Route::get('/hc/apply/leave', 'applyleave')->name('hcin.applev');
     Route::get('/hc/add/days', 'addleavedays')->name('hcin.addday');
     Route::get('/hc/add/days/{id}/user', 'listgroupsperuser')->name('hcin.lstgrpusr');

@@ -51,7 +51,7 @@ class SetupManageController extends Controller
             $arr['group'] = DB::table('hcleavegroups')->select('*')->get();
             return view('setup.manage.list-leave-group')->with($arr);
         } catch (\Throwable $th) {
-            return redirect()->route('dash.val');
+            return redirect()->route('dash.setup');
         }
     }
     function disableleavegroup($id)
@@ -161,7 +161,7 @@ class SetupManageController extends Controller
             // return $arr;
             return view('setup.manage.view-single-leave-group-type')->with($arr);
         } catch (\Throwable $th) {
-            return redirect()->route('dash.val');
+            return redirect()->route('dash.setup');
         } catch (DecryptException $th) {
             return  redirect()->route('setman.listlevgrp')
                 ->with('error', 'failed to load');
@@ -244,6 +244,68 @@ class SetupManageController extends Controller
                 ->with('error', 'failed to load');
         } catch (DecryptException $th) {
             return  redirect()->route('setman.typperlevgrp', $gid)
+                ->with('error', 'failed to load');
+        }
+    }
+    function listleavetype()
+    {
+        try {
+            $arr['group'] = DB::table('hcleavetype')->select('*')->get();
+            return view('setup.manage.list-leave-type')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('dash.setup');
+        }
+    }
+    function viewsingleleavetype($id)
+    {
+        try {
+            $entryid = Crypt::decrypt($id);
+            $arr['type'] = DB::table('hcleavetype')->where('id', $entryid)->first();
+            $arr['config'] = DB::table('hcleavetypeconfig')->where('typeid', $entryid)
+                ->select('required')->get();
+
+            return view('setup.manage.view-single-leave-type')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('dash.setup');
+        } catch (DecryptException $th) {
+            return  redirect()->route('setman.listlevgrp')
+                ->with('error', 'failed to load');
+        }
+    }
+    function assignconfigleavetype($id, Request $request)
+    {
+        try {
+            $entryid = Crypt::decrypt($id);
+            if (empty($request->required)) {
+                // remove all 
+                DB::table('hcleavetypeconfig')->where('typeid', $entryid)
+                    ->delete();
+                return  redirect()->route('setman.viewtype', $id)
+                    ->with('success', 'record added');
+            } else {
+                // insert and remove if not in array
+                $numbers = count($request->required);
+                $a       =       0;
+                while ($a < $numbers) {
+                    $updategroup = array(
+                        'required' => $request->required[$a],
+                        'typeid'       => $entryid,
+                        'operatorid' => session('alluser')
+                    );
+                    DB::table('hcleavetypeconfig')
+                        ->updateOrInsert($updategroup);
+                    $a++;
+                }
+                DB::table('hcleavetypeconfig')->where('typeid', $entryid)
+                    ->whereNotIn('required', $request->required)->delete();
+                return  redirect()->route('setman.viewtype', $id)
+                    ->with('success', 'record added');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->route('setman.viewtype', $id)
+                ->with('error', 'failed to load');
+        } catch (DecryptException $th) {
+            return  redirect()->route('setman.viewtype', $id)
                 ->with('error', 'failed to load');
         }
     }
