@@ -272,7 +272,7 @@ Route::middleware('loginauth')->controller(SetupManageController::class)->group(
     Route::post('/config-days/{id}/leave/group-type/{gid}', 'createaccruedayleavegroup')->name('setman.crtaccrue');
     Route::get('/set-up/leave/type', 'listleavetype')->name('setman.listlevtype');
     Route::get('/set-up/leave/tyoe/{id}', 'viewsingleleavetype')->name('setman.viewtype');
-    Route::any('/work-days/{id}/leave/group', 'assignconfigleavetype')->name('setman.assignconfigtype');
+    Route::any('/work-days/{id}/leave/type', 'assignconfigleavetype')->name('setman.assignconfigtype');
 });
 /*-------------------end setup manage------------------------ */
 /*-------------------valuations intake------------------------ */
