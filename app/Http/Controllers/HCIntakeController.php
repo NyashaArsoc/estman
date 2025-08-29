@@ -204,7 +204,7 @@ class HCIntakeController extends Controller
                 ->with('success', 'record added');
         } catch (\Throwable $th) {
             return redirect()->route('hcin.applev')
-                ->with('error', 'failed to load' . $th);
+                ->with('error', 'failed to load');
         } catch (DecryptException $th) {
             return redirect()->route('hcin.applev')
                 ->with('error', 'failed to load');
