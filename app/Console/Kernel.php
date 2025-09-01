@@ -20,9 +20,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:hcruntakeondays')->dailyAt('00:10')->withoutOverlapping();
         $schedule->command('app:valweeklynormalreport')->weeklyOn(1, '04:30')->withoutOverlapping();
         $schedule->command('app:valweeklyportfolioreport')->weeklyOn(1, '06:30')->withoutOverlapping();
-        $schedule->command('app:hcmonthlyactivity')->monthlyOn(1, '00:30')->withoutOverlapping();
+        $schedule->command('app:hcmonthlyactivity')->monthlyOn(1, '20:30')->withoutOverlapping();
         $schedule->command('app:hcmonthlyleavereport')->monthlyOn(22, '00:30')->withoutOverlapping();
-        //$schedule->command('app:propmanrunremit')->everyMinute()->withoutOverlapping();
+        // $schedule->command('app:hcmonthlyactivity')->everyMinute()->withoutOverlapping();
     }
 
     /**
