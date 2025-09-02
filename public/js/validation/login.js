@@ -10,7 +10,7 @@ function validateUsername() {
         $("#usernamecheck").show();
         usernameError = false;
         return false;
-    }else {
+    } else {
         usernameError = true;
         $("#usernamecheck").hide();
     }
@@ -27,7 +27,7 @@ function validatePassword() {
         $("#passwordcheck").show();
         passwordError = false;
         return false;
-    }else {
+    } else {
         passwordError = true;
         $("#passwordcheck").hide();
     }
@@ -39,22 +39,22 @@ $("#confirmpassword").keyup(function () {
     validateConfirmPassword();
 });
 function validateConfirmPassword() {
-    let textValue       = $("#confirmpassword").val();
-    let passwordValue   = $("#password").val();
+    let textValue = $("#confirmpassword").val();
+    let passwordValue = $("#password").val();
     if (textValue.length == "") {
         $("#confirmpasswordcheck").show();
         confirmpasswordError = false;
         return false;
-    }else {
-        if(textValue != passwordValue){
-           $("#confirmpasswordcheck").show();
-           $("#confirmpasswordcheck").html("**password mismatch");
-           confirmpasswordError = false;
-        }else{
-           confirmpasswordError = true;
+    } else {
+        if (textValue != passwordValue) {
+            $("#confirmpasswordcheck").show();
+            $("#confirmpasswordcheck").html("**password mismatch");
+            confirmpasswordError = false;
+        } else {
+            confirmpasswordError = true;
             $("#confirmpasswordcheck").hide();
         }
-       
+
     }
 }
 //old password check
@@ -69,7 +69,7 @@ function validateCurrentPassword() {
         $("#currentpasswordcheck").show();
         currentpasswordError = false;
         return false;
-    }else {
+    } else {
         currentpasswordError = true;
         $("#currentpasswordcheck").hide();
     }
@@ -85,43 +85,43 @@ function disableButtonAndSubmit(button, id) {
 }
 //button signin
 $("#btn-submit-login").click(function () {
-    validatePassword();validateUsername();
+    validatePassword(); validateUsername();
     try {
-        if (passwordError == true && usernameError==true ){
-            disableButtonAndSubmit(this,"defaultform");
-        }else{
-             return false;
+        if (passwordError == true && usernameError == true) {
+            disableButtonAndSubmit(this, "defaultform");
+        } else {
+            return false;
         }
     } catch (err) {
         alert(err.message);
         return false;
     }
 });
- //change password
- $("#btn-user-profile").click(function () {
-    validateConfirmPassword();validatePassword();
-     try {
-         if (confirmpasswordError==true && passwordError== true ){
-             return true;
-         }else{
-              return false;
-         }
-     } catch (err) {
-         alert(err.message);
-         return false;
-     }
- });
-  //password expire
-  $("#btn-submit-pass-expire").click(function () {
-    validateConfirmPassword();validatePassword();validateCurrentPassword();
-     try {
-         if (confirmpasswordError==true && passwordError== true && currentpasswordError== true){
-             return true;
-         }else{
-              return false;
-         }
-     } catch (err) {
-         alert(err.message);
-         return false;
-     }
- });
+//change password
+$("#btn-user-profile").click(function () {
+    validateConfirmPassword(); validatePassword();
+    try {
+        if (confirmpasswordError == true && passwordError == true) {
+            disableButtonAndSubmit(this, "defaultform");
+        } else {
+            return false;
+        }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
+//password expire
+$("#btn-submit-pass-expire").click(function () {
+    validateConfirmPassword(); validatePassword(); validateCurrentPassword();
+    try {
+        if (confirmpasswordError == true && passwordError == true && currentpasswordError == true) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (err) {
+        alert(err.message);
+        return false;
+    }
+});
