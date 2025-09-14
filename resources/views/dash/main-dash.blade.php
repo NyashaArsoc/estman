@@ -40,6 +40,17 @@
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            <a href="{{route('dash.admin')}}" class="">
+                <div class="box box-block tile tile-2 bg-info mb-2">
+                    <div class="t-icon right"></div>
+                    <div class="t-content">
+                        <h2 class="mb-1"><i class="ti-archive"></i></h2>
+                        <h6 class="text-uppercase">Admin</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             <a href="{{route('dash.setup')}}" class="">
                 <div class="box box-block tile tile-2 bg-secondary mb-2">
                     <div class="t-icon right"></div>

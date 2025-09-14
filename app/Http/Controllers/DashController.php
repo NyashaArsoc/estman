@@ -20,6 +20,16 @@ class DashController extends Controller
             return $this->userforcelogout($error);
         }
     }
+    /*------------------------admin dashboard------------------ */
+    function administrationdashboard()
+    {
+        try {
+            return view('dash/admin-dashboard');
+        } catch (\Throwable $th) {
+            return redirect()->route('hcapp.listlev')
+                ->with('error', 'failed to load');
+        }
+    }
     /*---------------property management dashboard------------------------*/
     public function propertyviewchart()
     {

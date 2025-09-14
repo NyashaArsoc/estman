@@ -29,7 +29,8 @@ class AppServiceProvider extends ServiceProvider
             'layout.valuation-main-menu',
             'layout.propman-main-menu',
             'layout.setup-main-menu',
-            'layout.hc-main-menu'
+            'layout.hc-main-menu',
+            'layout.admin-main-menu'
         ], callback: MenuComposer::class);
     }
 }

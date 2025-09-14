@@ -55,6 +55,7 @@ Route::middleware('loginauth')->controller(DashController::class)->group(functio
     Route::get('/human-capital/dashboard', 'humancapitaldashboard')->name('dash.hc');
     Route::get('/set-up/dashboard', 'setupdashboard')->name('dash.setup');
     Route::get('/dashboard/property/chart', 'propertyviewchart');
+    Route::get('/admin/dashboard', 'administrationdashboard')->name('dash.admin');
 });
 /*
 Route::controller(ReportController::class)->group(function(){

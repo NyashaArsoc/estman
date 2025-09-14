@@ -30,6 +30,11 @@ class MenuComposer extends Controller
             $hcapprove      =   'hcapprove';
             $hcdecline      =   'hcdecline';
             $hcmanage      =   'hcmanage';
+            //administration 
+            $adminintake      =   'adminintake';
+            $adminapprove      =   'adminapprove';
+            $admindecline      =   'admindecline';
+            $adminmanage      =   'adminmanage';
 
             $arr['valintake'] = DB::select('EXEC spGetMenuList ?,?', [$user->roleid, $valintake]);
             $arr['valapprove'] = DB::select('EXEC spGetMenuList ?,?', [$user->roleid, $valapprove]);
@@ -48,6 +53,11 @@ class MenuComposer extends Controller
             $arr['hcapprove'] = DB::select('EXEC spGetMenuList ?,?', [$user->roleid, $hcapprove]);
             $arr['hcdecline'] = DB::select('EXEC spGetMenuList ?,?', [$user->roleid, $hcdecline]);
             $arr['hcmanage'] = DB::select('EXEC spGetMenuList ?,?', [$user->roleid, $hcmanage]);
+            // admin 
+            $arr['adminintake'] = DB::select('EXEC spGetMenuList ?,?', [$user->roleid, $adminintake]);
+            $arr['adminapprove'] = DB::select('EXEC spGetMenuList ?,?', [$user->roleid, $adminapprove]);
+            $arr['admindecline'] = DB::select('EXEC spGetMenuList ?,?', [$user->roleid, $admindecline]);
+            $arr['adminmanage'] = DB::select('EXEC spGetMenuList ?,?', [$user->roleid, $adminmanage]);
             $view->with($arr);
         } catch (\Throwable $th) {
             $error = 'fail to load menu';

@@ -151,6 +151,25 @@ $description = 'tenant payments...'; @endphp
                 </div>
             </div>
         </form>
+        <div class="modal fade" id="printReceiptModal" tabindex="-1" role="dialog" aria-labelledby="printReceiptModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="printReceiptModalLabel">Print Receipt</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Do you want to print a receipt?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="noPrintBtn" data-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary" id="yesPrintBtn">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         @include('layout.arlet')
     </div>
 </div>
@@ -161,4 +180,30 @@ $description = 'tenant payments...'; @endphp
 <script src="{{ asset('css/select2/select2.min.js') }}"></script>
 <script src="{{ asset('js/select2.js') }}"></script>
 <!-- Additional JS End-->
+<script>
+    $(document).ready(function() {
+        $('#defaultform').append('<input type="hidden" name="print_receipt" id="printDecision" value="no" />');
+
+        $('#defaultform').on('submit', function(e) {
+            if (!$(this).data('submitted')) {
+                e.preventDefault();
+                $('#printReceiptModal').modal('show');
+            }
+        });
+
+        $('#noPrintBtn').on('click', function() {
+            $('#printDecision').val('no');
+            $('#defaultform').data('submitted', true).submit();
+        });
+
+        $('#yesPrintBtn').on('click', function() {
+            $('#printDecision').val('yes');
+            $('#defaultform').data('submitted', true).submit();
+        });
+
+        $('#printReceiptModal').on('hidden.bs.modal', function() {
+            $('#defaultform').data('submitted', false);
+        });
+    });
+</script>
 @endsection
