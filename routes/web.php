@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\AdminApprovalController;
+use App\Http\Controllers\AdminDeclinedController;
+use App\Http\Controllers\AdminIntakeController;
+use App\Http\Controllers\AdminManageController;
 use App\Http\Controllers\DashController;
 use App\Http\Controllers\HCApprovalController;
 use App\Http\Controllers\HCIntakeController;
@@ -385,4 +389,20 @@ Route::middleware('loginauth')->controller(HCApprovalController::class)->group(f
     Route::get('/hc/leave/application/{id}/confirm', 'viewsingleapplicationconfirm')->name('hcapp.viwsingappcon');
     Route::any('/hc/leave/application/{id}/second-approve', 'confirmsingleapplication')->name('hcapp.confleve');
     Route::any('/hc-pdf/{path}/leave-download/attachment', 'downloadattachments')->name('hcapp.dwnattchpdf');
+});
+/*----------------------Admin intake-------------- */
+Route::middleware('adminauth')->controller(AdminIntakeController::class)->group(function () {
+    Route::get('/test/admin', '')->name('admin.test');
+});
+/*----------------------Admin approval-------------- */
+Route::middleware('adminauth')->controller(AdminApprovalController::class)->group(function () {
+    Route::get('/test/admin', '')->name('admin.test');
+});
+/*----------------------Admin decline-------------- */
+Route::middleware('adminauth')->controller(AdminDeclinedController::class)->group(function () {
+    Route::get('/test/admin', '')->name('admin.test');
+});
+/*----------------------Admin manage-------------- */
+Route::middleware('adminauth')->controller(AdminManageController::class)->group(function () {
+    Route::get('/test/admin', '')->name('admin.test');
 });
