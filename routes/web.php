@@ -391,9 +391,9 @@ Route::middleware('loginauth')->controller(HCApprovalController::class)->group(f
     Route::any('/hc-pdf/{path}/leave-download/attachment', 'downloadattachments')->name('hcapp.dwnattchpdf');
 });
 /*----------------------Admin intake-------------- */
-Route::middleware('adminauth')->controller(AdminIntakeController::class)->group(function () {
-    Route::get('/test/admin', '')->name('admin.test');
-});
+//Route::middleware('adminauth')->controller(AdminIntakeController::class)->group(function () {
+  //  Route::get('/test/admin', '')->name('admin.test');
+//});
 /*----------------------Admin approval-------------- */
 Route::middleware('adminauth')->controller(AdminApprovalController::class)->group(function () {
     Route::get('/test/admin', '')->name('admin.test');
@@ -406,3 +406,6 @@ Route::middleware('adminauth')->controller(AdminDeclinedController::class)->grou
 Route::middleware('adminauth')->controller(AdminManageController::class)->group(function () {
     Route::get('/test/admin', '')->name('admin.test');
 });
+
+
+ Route::get('/admin/intake/requisition-form', [AdminIntakeController::class, 'form'])->name('admin.intake.requisition.form');
