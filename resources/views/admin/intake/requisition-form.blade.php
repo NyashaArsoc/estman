@@ -16,7 +16,6 @@ $description = 'Complete all required fields to submit requisition...';
 <div class="container-fluid">
   <h4>{{ $title }}</h4>
   <ol class="breadcrumb no-bg mb-1">
-    {{-- <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li> --}}
     <li class="breadcrumb-item active">{{ $title }}</li>
   </ol>
 
@@ -35,47 +34,43 @@ $description = 'Complete all required fields to submit requisition...';
             <option value="">Select type</option>
             <option value="product">Product</option>
             <option value="service">Service</option>
-            <option value="maintenance">Maintenance</option>
           </select>
           <small class="text-danger d-block mt-1">Required</small>
         </div>
       </div>
 
-      <!-- Requisition Details -->
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Requisition Number</label>
-        <div class="col-sm-4"><input type="text" name="requisition_number" class="form-control" required></div>
-        <label class="col-sm-2 col-form-label">Quantity</label>
-        <div class="col-sm-4"><input type="number" name="quantity" class="form-control" required></div>
-      </div>
-
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Unit Cost</label>
-        <div class="col-sm-4"><input type="number" name="unit_cost" class="form-control" step="0.01" required></div>
-        <label class="col-sm-2 col-form-label">Supplier / Provider</label>
-        <div class="col-sm-4"><input type="text" name="supplier" class="form-control" required></div>
-      </div>
-
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Attachment</label>
-        <div class="col-sm-4"><input type="file" name="attachment" class="form-control"></div>
-      </div>
-
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Description / Notes</label>
-        <div class="col-sm-10">
-          <textarea name="description" class="form-control" rows="3" placeholder="Add any relevant notes or comments..." required></textarea>
-        </div>
+      <!-- Requisition Table -->
+      <div class="table-responsive mt-4">
+        <table class="table table-bordered" id="requisitionTable">
+          <thead>
+            <tr>
+              <th>Requisition Number</th>
+              <th>Quantity</th>
+              <th id="costHeader">Unit Cost</th>
+              <th id="supplierHeader">Supplier</th>
+              <th>Attachment</th>
+              <th>Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="entry-row">
+              <td><input type="text" class="form-control requisition_number" required></td>
+              <td><input type="number" class="form-control quantity" required></td>
+              <td><input type="number" class="form-control unit_cost" step="0.01" required></td>
+              <td><input type="text" class="form-control supplier" required></td>
+              <td><input type="file" class="form-control attachment"></td>
+              <td><button type="button" class="btn btn-success btn-sm saveRow">Save</button></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <!-- Submit Button -->
-      {{-- @if (in_array(1, $arraycontrolids)) --}}
       <div class="form-group row mt-4">
         <div class="offset-sm-2 col-sm-10">
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
-      {{-- @endif --}}
 
       @include('layout.arlet')
     </form>
@@ -87,4 +82,47 @@ $description = 'Complete all required fields to submit requisition...';
 <script src="{{ asset('js/validation/intakeadmin.js') }}"></script>
 <script src="{{ asset('css/select2/select2.min.js') }}"></script>
 <script src="{{ asset('js/select2.js') }}"></script>
+
+<script>
+  // Update column labels based on requisition type
+  document.getElementById('requisitiontype').addEventListener('change', function () {
+    const selectedType = this.value;
+    document.getElementById('costHeader').textContent = selectedType === 'service' ? 'Service Fee' : 'Unit Cost';
+    document.getElementById('supplierHeader').textContent = selectedType === 'service' ? 'Service Provider' : 'Supplier';
+  });
+
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('saveRow')) {
+      const row = e.target.closest('tr');
+      const requisitionNumber = row.querySelector('.requisition_number').value;
+      const quantity = row.querySelector('.quantity').value;
+      const unitCost = row.querySelector('.unit_cost').value;
+      const supplier = row.querySelector('.supplier').value;
+
+      if (requisitionNumber && quantity && unitCost && supplier) {
+        row.querySelectorAll('input').forEach(input => input.setAttribute('readonly', true));
+        row.querySelector('.attachment').setAttribute('disabled', true);
+        e.target.outerHTML = `<button type="button" class="btn btn-danger btn-sm deleteRow">Delete</button>`;
+
+        const newRow = document.createElement('tr');
+        newRow.classList.add('entry-row');
+        newRow.innerHTML = `
+          <td><input type="text" class="form-control requisition_number" required></td>
+          <td><input type="number" class="form-control quantity" required></td>
+          <td><input type="number" class="form-control unit_cost" step="0.01" required></td>
+          <td><input type="text" class="form-control supplier" required></td>
+          <td><input type="file" class="form-control attachment"></td>
+          <td><button type="button" class="btn btn-success btn-sm saveRow">Save</button></td>
+        `;
+        document.querySelector('#requisitionTable tbody').insertBefore(newRow, document.querySelector('#requisitionTable tbody').firstChild);
+      } else {
+        alert('Please fill in all required fields before saving.');
+      }
+    }
+
+    if (e.target && e.target.classList.contains('deleteRow')) {
+      e.target.closest('tr').remove();
+    }
+  });
+</script>
 @endsection
