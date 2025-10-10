@@ -18,7 +18,6 @@
 <div class="container-fluid">
   <h4>{{ $title }}</h4>
   <ol class="breadcrumb no-bg mb-1">
-    {{-- <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li> --}}
     <li class="breadcrumb-item active">{{ $title }}</li>
   </ol>
 
@@ -61,9 +60,13 @@
                   <a href="{{ route('admin.requisition.view', ['id' => $id]) }}" class="btn btn-sm btn-outline-primary">
                     <i class="ti-eye"></i> View
                   </a>
-                  <button class="btn btn-sm btn-outline-success btn-approve" data-id="{{ $req->requisition_code }}">
-                    <i class="ti-check"></i> Approve
-                  </button>
+                  @if(!$req->finance_approved)
+                    <button class="btn btn-sm btn-outline-success btn-approve" data-id="{{ $req->requisition_code }}">
+                      <i class="ti-check"></i> Approve
+                    </button>
+                  @else
+                    <span class="badge badge-success">Finance Approved</span>
+                  @endif
                 </td>
               </tr>
             @empty
