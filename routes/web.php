@@ -396,9 +396,16 @@ Route::middleware('loginauth')->controller(AdminIntakeController::class)->group(
     Route::post('/requisition/create', 'createrequisition')->name('admin.cretreq');
 });
 /*----------------------Admin approval-------------- */
-Route::middleware('adminauth')->controller(AdminApprovalController::class)->group(function () {
-    Route::get('/test/admin', '')->name('admin.test');
-});
+#Route::middleware('adminauth')->controller(AdminApprovalController::class)->group(function () {
+ #   Route::get('/test/admin', '')->name('admin.test');
+#});
+Route::get('admin/approval/requisition-approval', [AdminApprovalController::class, 'requisitionApproval'])
+    ->name('admin.approval.requisition-approval');
+
+Route::get('admin/approval/requisition-view/{id}', [AdminApprovalController::class, 'requisitionView'])
+    ->name('admin.requisition.view');
+
+
 /*----------------------Admin decline-------------- */
 Route::middleware('adminauth')->controller(AdminDeclinedController::class)->group(function () {
     Route::get('/test/admin', '')->name('admin.test');
@@ -407,3 +414,5 @@ Route::middleware('adminauth')->controller(AdminDeclinedController::class)->grou
 Route::middleware('adminauth')->controller(AdminManageController::class)->group(function () {
     Route::get('/test/admin', '')->name('admin.test');
 });
+
+

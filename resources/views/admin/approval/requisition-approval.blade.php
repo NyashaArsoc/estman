@@ -7,6 +7,19 @@
 
   $title = 'Approval Workflow';
   $description = 'Review and approve requisitions submitted by initiators. Requisition type is shown for clarity.';
+
+  // Inject dummy requisition data directly in Blade
+  $requisitions = collect([
+    (object)[
+      'id' => 1,
+      'requisition_code' => 'REQ-2025-001',
+      'submitted_by' => 'Tariro Moyo',
+      'type' => 'procurement',
+      'amount' => 1250.75,
+      'status' => 'pending',
+      'finance_approved' => false,
+    ],
+  ]);
 @endphp
 
 @extends('layout.admin-main-menu')
@@ -60,13 +73,6 @@
                   <a href="{{ route('admin.requisition.view', ['id' => $id]) }}" class="btn btn-sm btn-outline-primary">
                     <i class="ti-eye"></i> View
                   </a>
-                  @if(!$req->finance_approved)
-                    <button class="btn btn-sm btn-outline-success btn-approve" data-id="{{ $req->requisition_code }}">
-                      <i class="ti-check"></i> Approve
-                    </button>
-                  @else
-                    <span class="badge badge-success">Finance Approved</span>
-                  @endif
                 </td>
               </tr>
             @empty
@@ -80,17 +86,6 @@
             </tr>
           @endisset
         </tbody>
-        <tfoot>
-          <tr>
-            <th>No</th>
-            <th>Requisition ID</th>
-            <th>Submitted By</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Options</th>
-          </tr>
-        </tfoot>
       </table>
       @include('layout.arlet')
     </div>
@@ -100,26 +95,5 @@
 @endsection
 
 @section('additional js')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const approveButtons = document.querySelectorAll('.btn-approve');
-
-  function showConfirmation(action, id) {
-    const confirmed = confirm(`Are you sure you want to ${action} requisition ${id}?`);
-    if (confirmed) {
-      console.log(`${action} confirmed for ${id}`);
-      const statusLabel = document.querySelector(`button[data-id="${id}"]`).closest('tr').querySelector('.status-label');
-      statusLabel.textContent = 'Approved';
-      statusLabel.className = 'status-label text-success font-weight-bold';
-    }
-  }
-
-  approveButtons.forEach(button => {
-    button.addEventListener('click', function () {
-      const id = this.getAttribute('data-id');
-      showConfirmation('approve', id);
-    });
-  });
-});
-</script>
+<!-- No approval logic needed -->
 @endsection
