@@ -396,14 +396,16 @@ Route::middleware('loginauth')->controller(AdminIntakeController::class)->group(
     Route::post('/requisition/create', 'createrequisition')->name('admin.cretreq');
 });
 /*----------------------Admin approval-------------- */
-Route::middleware('adminauth')->controller(AdminApprovalController::class)->group(function () {
-    Route::get('/test/admin', '')->name('admin.test');
+Route::middleware('loginauth')->controller(AdminApprovalController::class)->group(function () {
+    Route::get('/requisition/pending-approval', 'listallrequisitionpending')->name('admapp.lstreqapp');
+    Route::get('/view/requisition/{id}/pending-approval', 'viewsignlerequisitionpending')->name('admapp.viwsinglereqapp');
+    Route::get('/test/admin', 'requisitionApproval')->name('admin.test');
 });
 /*----------------------Admin decline-------------- */
 Route::middleware('adminauth')->controller(AdminDeclinedController::class)->group(function () {
-    Route::get('/test/admin', '')->name('admin.test');
+    Route::get('/test/admiin', '')->name('admin.test');
 });
 /*----------------------Admin manage-------------- */
 Route::middleware('adminauth')->controller(AdminManageController::class)->group(function () {
-    Route::get('/test/admin', '')->name('admin.test');
+    Route::get('/test/admibn', '')->name('admin.test');
 });
