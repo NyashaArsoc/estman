@@ -56,24 +56,10 @@ $description = 'Review requisition details and proceed with approval or decline.
       <label for="trailDeclineReason">Reason for Decline</label>
       <textarea class="form-control" id="trailDeclineReason" rows="2" placeholder="Optional reason if declining..."></textarea>
     </div>
-    <button id="trailDeclineBtn" class="btn btn-outline-danger float-right">Decline</button>
-
-    <hr />
-    <h6>Finance & Bank Approval</h6>
-    <ul class="list-unstyled">
-      <li><strong>Finance Department</strong> – <span id="financeStatus" class="text-warning">Pending</span></li>
-      <li><strong>Bank Approval</strong> – <span id="bankStatus" class="text-muted">Waiting for Finance</span></li>
-    </ul>
-
-    <div class="form-group mt-3">
-      <label for="declineReason">Reason for Decline</label>
-      <textarea class="form-control" id="declineReason" rows="2" placeholder="Optional reason if declining..."></textarea>
-    </div>
 
     <div class="mt-3">
-      <button id="financeApproveBtn" class="btn btn-outline-success" disabled>Finance Approve</button>
-      <button id="bankApproveBtn" class="btn btn-outline-success" disabled>Bank Approve</button>
-      <button id="declineBtn" class="btn btn-outline-danger float-right">Decline</button>
+      <button id="finalApproveBtn" class="btn btn-success">Approve</button>
+      <button id="trailDeclineBtn" class="btn btn-danger float-right">Decline</button>
     </div>
   </div>
 </div>
@@ -83,13 +69,6 @@ $description = 'Review requisition details and proceed with approval or decline.
 @section('additional js')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  const financeBtn = document.getElementById('financeApproveBtn');
-  const bankBtn = document.getElementById('bankApproveBtn');
-  const financeStatus = document.getElementById('financeStatus');
-  const bankStatus = document.getElementById('bankStatus');
-  const declineBtn = document.getElementById('declineBtn');
-  const declineReason = document.getElementById('declineReason');
-
   const totalApprovers = {{ $order->approvers->count() ?? 0 }};
   let approvedCount = 0;
 
@@ -100,10 +79,6 @@ document.addEventListener('DOMContentLoaded', function () {
       status.className = 'text-success';
 
       approvedCount++;
-      if (approvedCount === totalApprovers) {
-        financeBtn.disabled = false;
-      }
-
       const nextBtn = document.getElementById('approverBtn{{ $index + 1 }}');
       const nextStatus = document.getElementById('approverStatus{{ $index + 1 }}');
       if (nextBtn && nextStatus) {
@@ -114,34 +89,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   @endforeach
 
-  financeBtn?.addEventListener('click', function () {
-    financeStatus.textContent = 'Approved';
-    financeStatus.className = 'text-success';
-    bankStatus.textContent = 'Pending';
-    bankStatus.className = 'text-warning';
-    bankBtn.disabled = false;
+  document.getElementById('finalApproveBtn')?.addEventListener('click', function () {
+    alert('Requisition approved.');
   });
 
-  bankBtn?.addEventListener('click', function () {
-    bankStatus.textContent = 'Approved';
-    bankStatus.className = 'text-success';
-    alert('Bank has approved. Payment processing can now begin.');
-  });
-
-  declineBtn?.addEventListener('click', function () {
-    const reason = declineReason.value.trim();
-    if (reason === '') {
-      alert('Please provide a reason for declining.');
-    } else {
-      alert('Requisition declined with reason: ' + reason);
-    }
-  });
-
-  const trailDeclineBtn = document.getElementById('trailDeclineBtn');
-  const trailDeclineReason = document.getElementById('trailDeclineReason');
-
-  trailDeclineBtn?.addEventListener('click', function () {
-    const reason = trailDeclineReason.value.trim();
+  document.getElementById('trailDeclineBtn')?.addEventListener('click', function () {
+    const reason = document.getElementById('trailDeclineReason').value.trim();
     if (reason === '') {
       alert('Please provide a reason for declining.');
     } else {
