@@ -401,6 +401,7 @@ Route::middleware('loginauth')->controller(AdminApprovalController::class)->grou
     Route::get('/view/requisition/{id}/pending-approval', 'viewsignlerequisitionpending')->name('admapp.viwsinglereqapp');
     Route::get('/test/admin', 'requisitionApproval')->name('admin.test');
 });
+
 /*----------------------Admin decline-------------- */
 Route::middleware('adminauth')->controller(AdminDeclinedController::class)->group(function () {
     Route::get('/test/admiin', '')->name('admin.test');
