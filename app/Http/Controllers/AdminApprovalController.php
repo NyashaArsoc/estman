@@ -24,8 +24,19 @@ class AdminApprovalController extends Controller
     {
         try {
             $orderno = Crypt::decrypt($id);
-
-            return view('admin.approval.requisition-view');
+            $arr['order']   = DB::table('adminrequisition')->where('id', $orderno)->first();
+            $arr['orderdetails']   = DB::table('adminrequisitiondetails')->where('requisitionnumber', $orderno)->get();
+            $arr['orderattachment']   = DB::table('adminrequisitionattachment')->where('requisitionnumber', $orderno)->get();
+            $arr['orderapproval'] = DB::table('adminrequisitionapproval')->join('systusers', 'adminrequisitionapproval.approverid', '=', 'systusers.id')
+                ->where('adminrequisitionapproval.requisitionnumber', $orderno)->select(
+                    'adminrequisitionapproval.action',
+                    'adminrequisitionapproval.actiondate',
+                    'adminrequisitionapproval.status',
+                    'systusers.firstname',
+                    'systusers.lastname'
+                )->first();
+            return $arr;
+            // return view('admin.approval.requisition-view')->with($arr);
         } catch (\Throwable $th) {
             return redirect()->route('admapp.lstreqapp')
                 ->with('error', 'failed to load');
