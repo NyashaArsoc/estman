@@ -16,128 +16,118 @@ $description = 'Review requisition details and proceed with approval or decline.
   <div class="box box-block bg-white">
     <h5>{{ $title }}</h5>
     <p class="font-90 text-muted mb-1">{{ $description }}</p>
+    <form class="form-material material-primary" id="defaultform" method="POST"
+      action="{{ route('admapp.apprvereq', Crypt::encrypt($order->id)) }}" enctype="multipart/form-data">
+      @csrf
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#info" role="tab">Requisition Info</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#items" role="tab">Itemized Breakdown</a></li>
+      </ul>
 
-    <ul class="nav nav-tabs" role="tablist">
-      <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#info" role="tab">Requisition Info</a></li>
-      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#items" role="tab">Itemized Breakdown</a></li>
-    </ul>
+      <div class="tab-content pt-3">
+        <!-- Requisition Info Tab -->
+        <div class="tab-pane active" id="info" role="tabpanel">
+          <table class="table table-bordered">
+            <tr>
+              <th>Order Number</th>
+              <td>ORD - {{ $order->id }}</td>
+            </tr>
+            <tr>
+              <th>Submitted By</th>
+              <td>{{ $order->operatorid }}</td>
+            </tr>
+            <tr>
+              <th>Description</th>
+              <td>{{ $order->description }}</td>
+            </tr>
+            <tr>
+              <th>Justification</th>
+              <td>{{ $order->justification }}</td>
+            </tr>
+            <tr>
+              <th>Type</th>
+              <td>{{ ucfirst($order->requisitiontype) }}</td>
+            </tr>
+            <tr>
+              <th>Total Amount</th>
+              <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td><span class="badge badge-warning">{{ ucfirst($order->status) }}</span></td>
+            </tr>
+          </table>
 
-    <div class="tab-content pt-3">
-      <!-- Requisition Info Tab -->
-      <div class="tab-pane active" id="info" role="tabpanel">
-        <table class="table table-bordered">
-          <tr>
-            <th>Order Number</th>
-            <td>ORD - {{ $order->id }}</td>
-          </tr>
-          <tr>
-            <th>Submitted By</th>
-            <td>{{ $order->operatorid }}</td>
-          </tr>
-          <tr>
-            <th>Description</th>
-            <td>{{ $order->description }}</td>
-          </tr>
-          <tr>
-            <th>Justification</th>
-            <td>{{ $order->justification }}</td>
-          </tr>
-          <tr>
-            <th>Type</th>
-            <td>{{ ucfirst($order->requisitiontype) }}</td>
-          </tr>
-          <tr>
-            <th>Total Amount</th>
-            <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
-          </tr>
-          <tr>
-            <th>Status</th>
-            <td><span class="badge badge-warning">{{ ucfirst($order->status) }}</span></td>
-          </tr>
-        </table>
+          <hr />
+          <h6>Approval Trail</h6>
+          <ul class="list-unstyled">
+            @foreach($orderapproval as $abc)
+            <li>
+              <strong>{{ $abc->lastname }} {{ $abc->firstname }}</strong> – <span class="text-muted">{{ $abc->status }}</span> actioned on
+              <em>{{ $abc->actiondate ? $abc->actiondate->format('d M Y, H:i') : '' }}
+              </em>
+            </li>
+            @endforeach
+          </ul>
 
-        <hr />
-        <h6>Approval Trail</h6>
-        <ul class="list-unstyled">
-          @foreach($orderapproval as $abc)
-          <li>
-            <strong>{{ $abc->lastname }} {{ $abc->firstname }}</strong> – <span class="text-muted">{{ $abc->status }}</span> actioned on
-            <em>{{ $abc->actiondate ? $abc->actiondate->format('d M Y, H:i') : '' }}
-            </em>
-          </li>
-          @endforeach
-        </ul>
+          <div class="form-group mt-3">
+            <label for="trailDeclineReason">Reason for Decline</label>
+            <textarea class="form-control" id="rejectreason" rows="2" placeholder="Optional reason if declining..." name="reasons_comments"></textarea>
+            <small id="rejectreasoncheck" style="color: red;"> required</small>
+          </div>
+        </div>
 
-        <div class="form-group mt-3">
-          <label for="trailDeclineReason">Reason for Decline</label>
-          <textarea class="form-control" id="trailDeclineReason" rows="2" placeholder="Optional reason if declining..."></textarea>
+        <!-- Itemized Breakdown Tab -->
+        <div class="tab-pane" id="items" role="tabpanel">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Rate</th>
+                <th>VAT (%)</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>@php $count=1;@endphp
+              @foreach($orderdetails as $abc)
+              <tr>
+                <td>{{ $count++ }}</td>
+                <td>{{ $abc->item }}</td>
+                <td>{{ $abc->quantity }}</td>
+                <td>{{ number_format($abc->rate, 2) }}</td>
+                <td>{{ number_format($abc->vat, 2) }}</td>
+                <td>{{ number_format($abc->totalprice, 2) }}</td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+
+          <hr />
+          <h6>Quotation Attachment</h6>
+          <ul>
+            @foreach($orderattachment as $abc)
+            <li>@php $attachement= Crypt::encrypt($abc->attachment);
+              $requiredpdf = (!is_null($abc->attachment)) ? route('admapp.dwnquoteordr',[$attachement]) : '';
+              $attachementrequiredpdf = (!is_null($abc->attachment)) ? 'download file' : '';@endphp
+              <a href="{{ $requiredpdf }}" target="_blank">{{ $attachementrequiredpdf}}</a>
+            </li>
+            @endforeach
+          </ul>
         </div>
       </div>
 
-      <!-- Itemized Breakdown Tab -->
-      <div class="tab-pane" id="items" role="tabpanel">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Item</th>
-              <th>Qty</th>
-              <th>Rate</th>
-              <th>VAT (%)</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>@php $count=1;@endphp
-            @foreach($orderdetails as $abc)
-            <tr>
-              <td>{{ $count++ }}</td>
-              <td>{{ $abc->item }}</td>
-              <td>{{ $abc->quantity }}</td>
-              <td>{{ number_format($abc->rate, 2) }}</td>
-              <td>{{ number_format($abc->vat, 2) }}</td>
-              <td>{{ number_format($abc->totalprice, 2) }}</td>
-            </tr>
-            @endforeach
-          </tbody>
-        </table>
-
-        <hr />
-        <h6>Quotation Attachment</h6>
-        <ul>
-          @foreach($orderattachment as $abc)
-          <li>@php $attachement= Crypt::encrypt($abc->attachment);
-            $requiredpdf = (!is_null($abc->attachment)) ? route('admapp.dwnquoteordr',[$attachement]) : '';
-            $attachementrequiredpdf = (!is_null($abc->attachment)) ? 'download file' : '';@endphp
-            <a href="{{ $requiredpdf }}" target="_blank">{{ $attachementrequiredpdf}}</a>
-          </li>
-          @endforeach
-        </ul>
+      <div class="mt-4">
+        <button id="btn-approve-entry" class="btn btn-success" type="submit">approve</button>
+        <button id="btn-reject-entry" class="btn btn-danger float-right" type="submit">decline</button>
       </div>
-    </div>
-
-    <div class="mt-4">
-      <button id="finalApproveBtn" class="btn btn-success">Approve</button>
-      <button id="trailDeclineBtn" class="btn btn-danger float-right">Decline</button>
-    </div>
+      @include('layout.arlet')
+    </form>
   </div>
 </div>
 @endsection
 
 @section('additional js')
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('finalApproveBtn')?.addEventListener('click', function() {
-      alert('Requisition approved.');
-    });
-
-    document.getElementById('trailDeclineBtn')?.addEventListener('click', function() {
-      const reason = document.getElementById('trailDeclineReason').value.trim();
-      if (reason === '') {
-        alert('Please provide a reason for declining.');
-      } else {
-        alert('Requisition declined with reason: ' + reason);
-      }
-    });
-  });
-</script>
+<script src="{{ asset('js/validation/approvaladmin.js') }}"></script>
 @endsection

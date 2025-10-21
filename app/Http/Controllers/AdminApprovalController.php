@@ -58,4 +58,50 @@ class AdminApprovalController extends Controller
             return redirect()->route('dash.admin');
         }
     }
+    function approveorderrequisition(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            // dd($request->all());
+
+            $orderno = Crypt::decrypt($id);
+            $user = $this->userdetail();
+            $total = DB::table('adminrequisitiondetails')->where('requisitionnumber', $orderno)->sum('totalprice');
+            if ($request->input('action') === 'approve') {
+
+                DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $user->id)->update([
+                    'status' => 'C',
+                    'action' => 1,
+                    'actiondate' => now()
+                ]);
+                $sequence = DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->max('id');
+                $currentapprover = DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $user->id)->first();
+                //check if current approver is the last approver
+                if ($sequence == $currentapprover->id) {
+                    //update requisition as approved    
+                    DB::table('adminrequisition')->where('id', $orderno)->update(['status' => 'completed']);
+                }
+            } elseif ($request->input('action') === 'decline') {
+                DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $user->id)->update([
+                    'status' => 'D',
+                    'comments' => $request->reasons_comments,
+                    'action' => 1,
+                    'actiondate' => now()
+                ]);
+                //update requisition as declined
+                DB::table('adminrequisition')->where('id', $orderno)->update(['status' => 'declined']);
+            }
+            DB::table('adminrequisition')->where('id', $orderno)->update(['overraltotal' => $total]);
+            DB::commit();
+            return redirect()->route('admapp.lstreqapp')
+                ->with('success', 'record updated');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->route('admapp.viwsinglereqapp', [$id])
+                ->with('error', 'failed to load');
+        } catch (DecryptException $th) {
+            return redirect()->route('admapp.viwsinglereqapp', [$id])
+                ->with('error', 'failed to load');
+        }
+    }
 }

@@ -39,9 +39,9 @@ $description = 'Review and approve requisitions submitted by initiators. Requisi
             <td> {{ $abc->description }} </td>
             <td> {{ $abc->requisitiontype }} </td>
             <td> {{ $abc->currencycode }} {{ $abc->totalprice }} </td>
-            <td><a class="btn btn-info btn-sm " id=""
+            <td> @if (in_array(3,$arraycontrolids))<a class="btn btn-info btn-sm " id=""
                 href="{{route('admapp.viwsinglereqapp',$id)}}"
-                title="view"><i class="ti-eye mr-0-5"></i>view</a>
+                title="view"><i class="ti-eye mr-0-5"></i>view</a> @endif
             </td>
           </tr>@endforeach
         </tbody>

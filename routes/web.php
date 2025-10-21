@@ -400,6 +400,7 @@ Route::middleware('loginauth')->controller(AdminApprovalController::class)->grou
     Route::get('/requisition/pending-approval', 'listallrequisitionpending')->name('admapp.lstreqapp');
     Route::get('/view/requisition/{id}/pending-approval', 'viewsignlerequisitionpending')->name('admapp.viwsinglereqapp');
     Route::any('/admin-quotation/{path}/order-download/attachment', 'downloadattachments')->name('admapp.dwnquoteordr');
+    Route::post('/admin/order/{id}/approval', 'approveorderrequisition')->name('admapp.apprvereq');
 });
 
 /*----------------------Admin decline-------------- */
