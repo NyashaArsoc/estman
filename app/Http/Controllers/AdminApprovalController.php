@@ -6,6 +6,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AdminApprovalController extends Controller
 {
@@ -34,9 +35,8 @@ class AdminApprovalController extends Controller
                     'adminrequisitionapproval.status',
                     'systusers.firstname',
                     'systusers.lastname'
-                )->first();
-            return $arr;
-            // return view('admin.approval.requisition-view')->with($arr);
+                )->get();
+            return view('admin.approval.requisition-view')->with($arr);
         } catch (\Throwable $th) {
             return redirect()->route('admapp.lstreqapp')
                 ->with('error', 'failed to load');
@@ -45,8 +45,17 @@ class AdminApprovalController extends Controller
                 ->with('error', 'failed to load');
         }
     }
-    public function requisitionView()
+    function downloadattachments($path)
     {
-        return view('admin.approval.requisition-view');
+        try {
+            $filename = Crypt::decrypt($path);
+            //check the existance of receipt first
+            if (!Storage::disk('public')->exists("documents/admin/requisition/quotes/{$filename}")) {
+                return abort(404);
+            }
+            return response()->download(storage_path("app/public/documents/admin/requisition/quotes/{$filename}"));
+        } catch (DecryptException $th) {
+            return redirect()->route('dash.admin');
+        }
     }
 }

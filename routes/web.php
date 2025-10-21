@@ -399,7 +399,7 @@ Route::middleware('loginauth')->controller(AdminIntakeController::class)->group(
 Route::middleware('loginauth')->controller(AdminApprovalController::class)->group(function () {
     Route::get('/requisition/pending-approval', 'listallrequisitionpending')->name('admapp.lstreqapp');
     Route::get('/view/requisition/{id}/pending-approval', 'viewsignlerequisitionpending')->name('admapp.viwsinglereqapp');
-    Route::get('/test/admin', 'requisitionApproval')->name('admin.test');
+    Route::any('/admin-quotation/{path}/order-download/attachment', 'downloadattachments')->name('admapp.dwnquoteordr');
 });
 
 /*----------------------Admin decline-------------- */
@@ -410,5 +410,3 @@ Route::middleware('adminauth')->controller(AdminDeclinedController::class)->grou
 Route::middleware('adminauth')->controller(AdminManageController::class)->group(function () {
     Route::get('/test/admibn', '')->name('admin.test');
 });
-
-
