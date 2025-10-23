@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminApprovalController extends Controller
 {
@@ -60,7 +61,7 @@ class AdminApprovalController extends Controller
     }
     function approveorderrequisition(Request $request, $id)
     {
-        DB::beginTransaction();
+        //DB::beginTransaction();
         try {
             // dd($request->all());
 
@@ -68,9 +69,10 @@ class AdminApprovalController extends Controller
             $user = $this->userdetail();
             $total = DB::table('adminrequisitiondetails')->where('requisitionnumber', $orderno)->sum('totalprice');
             if ($request->input('action') === 'approve') {
-
-                DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $user->id)->update([
-                    'status' => 'C',
+                $applicationpdf =   PDF::loadView('admin/approval/pdf/order-pdf');
+                return $applicationpdf->download('order-pdf.pdf');
+               /* DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $user->id)->update([
+                'status' => 'C',
                     'action' => 1,
                     'actiondate' => now()
                 ]);
@@ -80,7 +82,7 @@ class AdminApprovalController extends Controller
                 if ($sequence == $currentapprover->id) {
                     //update requisition as approved    
                     DB::table('adminrequisition')->where('id', $orderno)->update(['status' => 'completed']);
-                }
+                }*/
             } elseif ($request->input('action') === 'decline') {
                 DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $user->id)->update([
                     'status' => 'D',
@@ -91,17 +93,18 @@ class AdminApprovalController extends Controller
                 //update requisition as declined
                 DB::table('adminrequisition')->where('id', $orderno)->update(['status' => 'declined']);
             }
-            DB::table('adminrequisition')->where('id', $orderno)->update(['overraltotal' => $total]);
-            DB::commit();
+            /*DB::table('adminrequisition')->where('id', $orderno)->update(['overraltotal' => $total]);
+            DB::commit();*/
             return redirect()->route('admapp.lstreqapp')
                 ->with('success', 'record updated');
         } catch (\Throwable $th) {
-            DB::rollBack();
-            return redirect()->route('admapp.viwsinglereqapp', [$id])
-                ->with('error', 'failed to load');
+           // DB::rollBack();
+            /*return redirect()->route('admapp.viwsinglereqapp', [$id])
+                ->with('error', 'failed to load');*/
+                return $th;
         } catch (DecryptException $th) {
             return redirect()->route('admapp.viwsinglereqapp', [$id])
-                ->with('error', 'failed to load');
+                ->with('error', 'failed to load', $th);
         }
     }
 }
