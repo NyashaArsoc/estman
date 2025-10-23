@@ -137,7 +137,9 @@
     <p>{{ optional($order)->description }}</p>
   </div>
 
-  @if(isset($order->type) && $order->type === 'product')
+  @php $type = strtolower(trim(optional($order)->type)); @endphp
+
+  @if($type === 'product')
     <div class="section">
       <h4>Product Breakdown</h4>
       <table>
@@ -181,7 +183,7 @@
         </tbody>
       </table>
     </div>
-  @elseif(isset($order->type) && $order->type === 'service')
+  @elseif($type === 'service')
     <div class="section">
       <h4>Service Breakdown</h4>
       <table>
@@ -191,25 +193,27 @@
             <th>Description</th>
             <th>Rate</th>
             <th>VAT (%)</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
           @php $serviceTotal = 0; @endphp
-          @forelse(optional($order)->services ?? [] as $service)
+          @forelse(optional($order)->items ?? [] as $service)
             <tr>
-              <td>{{ optional($service)->name }}</td>
+              <td>{{ optional($service)->item }}</td>
               <td>{{ optional($service)->description }}</td>
               <td>{{ optional($service)->rate }}</td>
               <td>{{ optional($service)->vat }}</td>
+              <td>{{ optional($service)->totalprice }}</td>
             </tr>
-            @php $serviceTotal += optional($service)->total ?? 0; @endphp
+            @php $serviceTotal += optional($service)->totalprice ?? 0; @endphp
           @empty
             <tr>
-              <td colspan="4" style="text-align: center;">No service items available.</td>
+              <td colspan="5" style="text-align: center;">No service items available.</td>
             </tr>
           @endforelse
           <tr class="totals-row">
-            <td colspan="3">Total</td>
+            <td colspan="4">Total</td>
             <td>{{ number_format($serviceTotal, 2) }}</td>
           </tr>
         </tbody>
