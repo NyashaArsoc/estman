@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>Order Summary</title>
@@ -47,7 +48,7 @@
       background-color: #ffffff;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       margin-bottom: 25px;
     }
 
@@ -80,7 +81,8 @@
       margin-top: 10px;
     }
 
-    th, td {
+    th,
+    td {
       border: 1px solid #d5d8dc;
       padding: 8px;
       text-align: left;
@@ -111,10 +113,11 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="header">
-    <img src="{{ public_path('ESTMANLOGO.png') }}" alt="ESTMAN Logo">
+    <img src="https://uatwlqqahsybwdryppbh.supabase.co/storage/v1/object/public/images/logos/logo-light.png" alt="ESTMAN Logo">
     <div class="header-text">
       <h2>Order Summary</h2>
       <p>Generated on {{ now()->format('d M Y') }}</p>
@@ -123,102 +126,88 @@
 
   <div class="section">
     <div class="details-grid">
-      <p><strong>Order Number:</strong> {{ optional($order)->number }}</p>
-      <p><strong>Submitted By:</strong> {{ optional($order)->submitted_by }}</p>
-      <p><strong>Currency:</strong> {{ optional($order)->currency }}</p>
-      <p><strong>Total Amount:</strong> {{ optional($order)->total_amount }}</p>
-      <p><strong>Justification:</strong> {{ optional($order)->justification }}</p>
-      <p><strong>Requisition Type:</strong> {{ optional($order)->type }}</p>
+      <p><strong>Order Number:</strong> ORD - {{ $order->id }}</p>
+      <p><strong>Submitted By:</strong> {{ $order->operatorid }}</p>
+      <p><strong>Justification:</strong>{{ $order->justification }}</p>
+      <p><strong>Requisition Type:</strong>{{ ucfirst($order->requisitiontype) }}</p>
     </div>
   </div>
 
   <div class="section">
     <h4>Descriptions</h4>
-    <p>{{ optional($order)->description }}</p>
+    <p>{{ $order->description }}</p>
   </div>
 
-  @if(isset($order->type) && $order->type === 'product')
-    <div class="section">
-      <h4>Product Breakdown</h4>
-      <table>
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Qty</th>
-            <th>Rate</th>
-            <th>VAT (%)</th>
-            <th>Subtotal</th>
-            <th>VAT Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          @php $sub = 0; $vat = 0; $total = 0; @endphp
-          @forelse(optional($order)->items ?? [] as $item)
-            <tr>
-              <td>{{ optional($item)->name }}</td>
-              <td>{{ optional($item)->qty }}</td>
-              <td>{{ optional($item)->rate }}</td>
-              <td>{{ optional($item)->vat }}</td>
-              <td>{{ optional($item)->subtotal }}</td>
-              <td>{{ optional($item)->vat_amount }}</td>
-            </tr>
-            @php
-              $sub += optional($item)->subtotal ?? 0;
-              $vat += optional($item)->vat_amount ?? 0;
-              $total += optional($item)->total ?? 0;
-            @endphp
-          @empty
-            <tr>
-              <td colspan="6" style="text-align: center;">No product items available.</td>
-            </tr>
-          @endforelse
-          <tr class="totals-row">
-            <td colspan="3">Totals</td>
-            <td>{{ number_format($sub, 2) }}</td>
-            <td>{{ number_format($vat, 2) }}</td>
-            <td>{{ number_format($total, 2) }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  @elseif(isset($order->type) && $order->type === 'service')
-    <div class="section">
-      <h4>Service Breakdown</h4>
-      <table>
-        <thead>
-          <tr>
-            <th>Service</th>
-            <th>Description</th>
-            <th>Rate</th>
-            <th>VAT (%)</th>
-          </tr>
-        </thead>
-        <tbody>
-          @php $serviceTotal = 0; @endphp
-          @forelse(optional($order)->services ?? [] as $service)
-            <tr>
-              <td>{{ optional($service)->name }}</td>
-              <td>{{ optional($service)->description }}</td>
-              <td>{{ optional($service)->rate }}</td>
-              <td>{{ optional($service)->vat }}</td>
-            </tr>
-            @php $serviceTotal += optional($service)->total ?? 0; @endphp
-          @empty
-            <tr>
-              <td colspan="4" style="text-align: center;">No service items available.</td>
-            </tr>
-          @endforelse
-          <tr class="totals-row">
-            <td colspan="3">Total</td>
-            <td>{{ number_format($serviceTotal, 2) }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  @endif
-
+  @if(trim($order->requisitiontype) === 'product')
   <div class="section">
-    <p><strong>Status:</strong> <span class="status-badge">{{ optional($order)->status }}</span></p>
+    <h4>Product Breakdown</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Item</th>
+          <th>Qty</th>
+          <th>Rate</th>
+          <th>VAT</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @php $count=1;@endphp
+        @foreach($orderdetails as $abc)
+        <tr>
+          <td>{{ $count++ }}</td>
+          <td>{{ $abc->item }}</td>
+          <td>{{ $abc->quantity }}</td>
+          <td>{{ number_format($abc->rate, 2) }}</td>
+          <td>{{ number_format($abc->vat, 2) }}</td>
+          <td>{{ number_format($abc->totalprice, 2) }}</td>
+        </tr>
+        @endforeach
+        <tr>
+          <td colspan="6" style="text-align: center;">No product items available.</td>
+        </tr>
+        <tr class="totals-row">
+          <td colspan="3">Totals</td>
+          <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
+          <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
+          <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+  @elseif(trim($order->requisitiontype)=== 'service')
+  <div class="section">
+    <h4>Service Breakdown</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Item</th>
+          <th>Rate</th>
+          <th>VAT</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @php $count=1;@endphp
+        @foreach($orderdetails as $abc)
+        <tr>
+          <td>{{ $count++ }}</td>
+          <td>{{ $abc->item }}</td>
+          <td>{{ number_format($abc->rate, 2) }}</td>
+          <td>{{ number_format($abc->vat, 2) }}</td>
+          <td>{{ number_format($abc->totalprice, 2) }}</td>
+        </tr>
+        @endforeach
+        <tr class="totals-row">
+          <td colspan="3">Total</td>
+          <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  @endif
 </body>
+
 </html>
