@@ -69,9 +69,11 @@ class AdminApprovalController extends Controller
             $user = $this->userdetail();
             $total = DB::table('adminrequisitiondetails')->where('requisitionnumber', $orderno)->sum('totalprice');
             if ($request->input('action') === 'approve') {
-                $applicationpdf =   PDF::loadView('admin/approval/pdf/order-pdf');
+                $arr['order']   = DB::table('adminrequisition')->where('id', $orderno)->first();
+                $arr['orderdetails']   = DB::table('adminrequisitiondetails')->where('requisitionnumber', $orderno)->get();
+                $applicationpdf =   PDF::loadView('admin/approval/pdf/order-pdf', $arr);
                 return $applicationpdf->download('order-pdf.pdf');
-               /* DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $user->id)->update([
+                /* DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $user->id)->update([
                 'status' => 'C',
                     'action' => 1,
                     'actiondate' => now()
@@ -98,10 +100,10 @@ class AdminApprovalController extends Controller
             return redirect()->route('admapp.lstreqapp')
                 ->with('success', 'record updated');
         } catch (\Throwable $th) {
-           // DB::rollBack();
+            // DB::rollBack();
             /*return redirect()->route('admapp.viwsinglereqapp', [$id])
                 ->with('error', 'failed to load');*/
-                return $th;
+            return $th;
         } catch (DecryptException $th) {
             return redirect()->route('admapp.viwsinglereqapp', [$id])
                 ->with('error', 'failed to load', $th);
