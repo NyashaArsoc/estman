@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <title>Order Summary</title>
@@ -15,7 +14,7 @@
     }
 
     .header {
-      background-color: #1a5276;
+      background-color: #0b2c4d;
       color: #fff;
       padding: 20px 30px;
       border-radius: 8px;
@@ -25,8 +24,15 @@
       justify-content: space-between;
     }
 
-    .header img {
-      height: 50px;
+    .logo-block {
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      background-color: #ffffff;
+      color: #0b2c4d;
+      padding: 6px 12px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     .header-text {
@@ -48,24 +54,8 @@
       background-color: #ffffff;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       margin-bottom: 25px;
-    }
-
-    .details-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px 30px;
-    }
-
-    .details-grid p {
-      margin: 5px 0;
-    }
-
-    .details-grid strong {
-      display: inline-block;
-      width: 120px;
-      color: #34495e;
     }
 
     .section h4 {
@@ -81,8 +71,7 @@
       margin-top: 10px;
     }
 
-    th,
-    td {
+    th, td {
       border: 1px solid #d5d8dc;
       padding: 8px;
       text-align: left;
@@ -97,27 +86,24 @@
       background-color: #fdfefe;
     }
 
-    .status-badge {
-      display: inline-block;
-      padding: 6px 12px;
-      background-color: #27ae60;
-      color: #fff;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 12px;
-    }
-
     .totals-row td {
       font-weight: bold;
       background-color: #f4f6f7;
     }
+
+    .details-table td {
+      padding: 6px 10px;
+    }
+
+    .details-table strong {
+      color: #34495e;
+    }
   </style>
 </head>
-
 <body>
 
   <div class="header">
-    <img src="https://uatwlqqahsybwdryppbh.supabase.co/storage/v1/object/public/images/logos/logo-light.png" alt="ESTMAN Logo">
+    <div class="logo-block">ESTMAN</div>
     <div class="header-text">
       <h2>Order Summary</h2>
       <p>Generated on {{ now()->format('d M Y') }}</p>
@@ -125,12 +111,32 @@
   </div>
 
   <div class="section">
-    <div class="details-grid">
-      <p><strong>Order Number:</strong> ORD - {{ $order->id }}</p>
-      <p><strong>Submitted By:</strong> {{ $order->operatorid }}</p>
-      <p><strong>Justification:</strong>{{ $order->justification }}</p>
-      <p><strong>Requisition Type:</strong>{{ ucfirst($order->requisitiontype) }}</p>
-    </div>
+    <table class="details-table">
+      <tr>
+        <td><strong>Order Number:</strong></td>
+        <td>ORD - {{ $order->id }}</td>
+      </tr>
+      <tr>
+        <td><strong>Submitted By:</strong></td>
+        <td>{{ $order->submitted_by ?? '—' }}</td>
+      </tr>
+      <tr>
+        <td><strong>Currency:</strong></td>
+        <td>{{ $order->currencycode }}</td>
+      </tr>
+      <tr>
+        <td><strong>Total Amount:</strong></td>
+        <td>{{ number_format($order->total_amount, 2) }}</td>
+      </tr>
+      <tr>
+        <td><strong>Justification:</strong></td>
+        <td>{{ $order->justification }}</td>
+      </tr>
+      <tr>
+        <td><strong>Requisition Type:</strong></td>
+        <td>{{ ucfirst($order->requisitiontype) }}</td>
+      </tr>
+    </table>
   </div>
 
   <div class="section">
@@ -138,76 +144,83 @@
     <p>{{ $order->description }}</p>
   </div>
 
-  @if(trim($order->requisitiontype) === 'product')
-  <div class="section">
-    <h4>Product Breakdown</h4>
-    <table>
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Item</th>
-          <th>Qty</th>
-          <th>Rate</th>
-          <th>VAT</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        @php $count=1;@endphp
-        @foreach($orderdetails as $abc)
-        <tr>
-          <td>{{ $count++ }}</td>
-          <td>{{ $abc->item }}</td>
-          <td>{{ $abc->quantity }}</td>
-          <td>{{ number_format($abc->rate, 2) }}</td>
-          <td>{{ number_format($abc->vat, 2) }}</td>
-          <td>{{ number_format($abc->totalprice, 2) }}</td>
-        </tr>
-        @endforeach
-        <tr>
-          <td colspan="6" style="text-align: center;">No product items available.</td>
-        </tr>
-        <tr class="totals-row">
-          <td colspan="3">Totals</td>
-          <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
-          <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
-          <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  @elseif(trim($order->requisitiontype)=== 'service')
-  <div class="section">
-    <h4>Service Breakdown</h4>
-    <table>
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Item</th>
-          <th>Rate</th>
-          <th>VAT</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        @php $count=1;@endphp
-        @foreach($orderdetails as $abc)
-        <tr>
-          <td>{{ $count++ }}</td>
-          <td>{{ $abc->item }}</td>
-          <td>{{ number_format($abc->rate, 2) }}</td>
-          <td>{{ number_format($abc->vat, 2) }}</td>
-          <td>{{ number_format($abc->totalprice, 2) }}</td>
-        </tr>
-        @endforeach
-        <tr class="totals-row">
-          <td colspan="3">Total</td>
-          <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  @endif
-</body>
+  @php $type = strtolower(trim($order->requisitiontype)); @endphp
 
+  @if($type === 'product')
+    <div class="section">
+      <h4>Product Breakdown</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th>VAT</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          @php $count = 1; @endphp
+          @forelse($order->items as $item)
+            <tr>
+              <td>{{ $count++ }}</td>
+              <td>{{ $item->item }}</td>
+              <td>{{ $item->quantity }}</td>
+              <td>{{ number_format($item->rate, 2) }}</td>
+              <td>{{ number_format($item->vat, 2) }}</td>
+              <td>{{ number_format($item->totalprice, 2) }}</td>
+            </tr>
+          @empty
+            <tr>
+              <td colspan="6" style="text-align: center;">No product items available.</td>
+            </tr>
+          @endforelse
+          <tr class="totals-row">
+            <td colspan="3">Totals</td>
+            <td>{{ $order->currencycode }} {{ number_format($order->total_amount, 2) }}</td>
+            <td>{{ $order->currencycode }} {{ number_format($order->total_amount, 2) }}</td>
+            <td>{{ $order->currencycode }} {{ number_format($order->total_amount, 2) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  @elseif($type === 'service')
+    <div class="section">
+      <h4>Service Breakdown</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Item</th>
+            <th>Rate</th>
+            <th>VAT</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          @php $count = 1; @endphp
+          @forelse($order->items as $item)
+            <tr>
+              <td>{{ $count++ }}</td>
+              <td>{{ $item->item }}</td>
+              <td>{{ number_format($item->rate, 2) }}</td>
+              <td>{{ number_format($item->vat, 2) }}</td>
+              <td>{{ number_format($item->totalprice, 2) }}</td>
+            </tr>
+          @empty
+            <tr>
+              <td colspan="5" style="text-align: center;">No service items available.</td>
+            </tr>
+          @endforelse
+          <tr class="totals-row">
+            <td colspan="4">Total</td>
+            <td>{{ $order->currencycode }} {{ number_format($order->total_amount, 2) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  @endif
+
+</body>
 </html>
