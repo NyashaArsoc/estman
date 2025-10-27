@@ -359,7 +359,7 @@ function disableButtonAndSubmit(button, id) {
 //button submit requisition
 $("#btn-submit-requisition").click(function () {
     validateRequisitionType(); validateApprovalMode(); validateApprovers(); validateCurrencyCode();
-    if (requisitiontypeError == true && approvalmodeError == true && approversError == true) {
+    if (requisitiontypeError == true && approvalmodeError == true && approversError == true && currencycodeError == true) {
         disableButtonAndSubmit(this, "defaultform");
     } else { return false; }
 });

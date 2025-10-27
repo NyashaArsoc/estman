@@ -21,6 +21,7 @@ class AdminIntakeController extends Controller
     }
     function createrequisition(Request $request)
     {
+        DB::beginTransaction();
         try {
             $approver = json_decode($request->approversorder, true);
             $productrate = (!empty($request->productrate)) ? $request->productrate : [0];
@@ -76,12 +77,13 @@ class AdminIntakeController extends Controller
                     ]);
                 }
             }
-
+            DB::commit();
             return  redirect()->route('admin.request')
                 ->with('success', 'record added');
         } catch (\Throwable $th) {
+            DB::rollBack();
             return redirect()->route('admin.request')
-                ->with('error', 'failed to load' . $th);
+                ->with('error', 'failed to load');
         }
     }
     public function form()
