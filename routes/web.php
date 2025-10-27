@@ -391,18 +391,23 @@ Route::middleware('loginauth')->controller(HCApprovalController::class)->group(f
     Route::any('/hc-pdf/{path}/leave-download/attachment', 'downloadattachments')->name('hcapp.dwnattchpdf');
 });
 /*----------------------Admin intake-------------- */
-Route::middleware('adminauth')->controller(AdminIntakeController::class)->group(function () {
-    Route::get('/test/admin', '')->name('admin.test');
+Route::middleware('loginauth')->controller(AdminIntakeController::class)->group(function () {
+    Route::get('/payment/request', 'paymentrequest')->name('admin.request');
+    Route::post('/requisition/create', 'createrequisition')->name('admin.cretreq');
 });
 /*----------------------Admin approval-------------- */
-Route::middleware('adminauth')->controller(AdminApprovalController::class)->group(function () {
-    Route::get('/test/admin', '')->name('admin.test');
+Route::middleware('loginauth')->controller(AdminApprovalController::class)->group(function () {
+    Route::get('/requisition/pending-approval', 'listallrequisitionpending')->name('admapp.lstreqapp');
+    Route::get('/view/requisition/{id}/pending-approval', 'viewsignlerequisitionpending')->name('admapp.viwsinglereqapp');
+    Route::any('/admin-quotation/{path}/order-download/attachment', 'downloadattachments')->name('admapp.dwnquoteordr');
+    Route::post('/admin/order/{id}/approval', 'approveorderrequisition')->name('admapp.apprvereq');
 });
+
 /*----------------------Admin decline-------------- */
 Route::middleware('adminauth')->controller(AdminDeclinedController::class)->group(function () {
-    Route::get('/test/admin', '')->name('admin.test');
+    Route::get('/test/admiin', '')->name('admin.test');
 });
 /*----------------------Admin manage-------------- */
 Route::middleware('adminauth')->controller(AdminManageController::class)->group(function () {
-    Route::get('/test/admin', '')->name('admin.test');
+    Route::get('/test/admibn', '')->name('admin.test');
 });
