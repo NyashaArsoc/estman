@@ -2,7 +2,7 @@
 $title = 'Approve Requisition';
 $description = 'Review requisition details and proceed with approval or decline.';
 @endphp
-@extends('layout.admin-main-menu')
+@extends('layout.no-menu-layout')
 @section('title', 'Order Approval')
 @section('content')
 <div class="container-fluid">
@@ -28,13 +28,34 @@ $description = 'Review requisition details and proceed with approval or decline.
         <!-- Requisition Info Tab -->
         <div class="tab-pane active" id="info" role="tabpanel">
           <table class="table table-bordered">
-            <tr><th>Order Number</th><td>ORD - {{ $order->id }}</td></tr>
-            <tr><th>Submitted By</th><td>{{ $order->operatorid }}</td></tr>
-            <tr><th>Description</th><td>{{ $order->description }}</td></tr>
-            <tr><th>Justification</th><td>{{ $order->justification }}</td></tr>
-            <tr><th>Type</th><td>{{ ucfirst($order->requisitiontype) }}</td></tr>
-            <tr><th>Total Amount</th><td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td></tr>
-            <tr><th>Status</th><td><span class="badge badge-warning">{{ ucfirst($order->status) }}</span></td></tr>
+            <tr>
+              <th>Order Number</th>
+              <td>ORD - {{ $order->id }}</td>
+            </tr>
+            <tr>
+              <th>Submitted By</th>
+              <td>{{ $order->operatorid }}</td>
+            </tr>
+            <tr>
+              <th>Description</th>
+              <td>{{ $order->description }}</td>
+            </tr>
+            <tr>
+              <th>Justification</th>
+              <td>{{ $order->justification }}</td>
+            </tr>
+            <tr>
+              <th>Type</th>
+              <td>{{ ucfirst($order->requisitiontype) }}</td>
+            </tr>
+            <tr>
+              <th>Total Amount</th>
+              <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td><span class="badge badge-warning">{{ ucfirst($order->status) }}</span></td>
+            </tr>
           </table>
 
           <hr />
@@ -60,55 +81,55 @@ $description = 'Review requisition details and proceed with approval or decline.
           @php $count = 1; $type = strtolower(trim($order->requisitiontype)); @endphp
 
           @if($type === 'product')
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Item</th>
-                  <th>Qty</th>
-                  <th>Rate</th>
-                  <th>VAT (%)</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($orderdetails as $abc)
-                <tr>
-                  <td>{{ $count++ }}</td>
-                  <td>{{ $abc->item }}</td>
-                  <td>{{ $abc->quantity }}</td>
-                  <td>{{ number_format($abc->rate, 2) }}</td>
-                  <td>{{ number_format($abc->vat, 2) }}</td>
-                  <td>{{ number_format($abc->totalprice, 2) }}</td>
-                </tr>
-                @endforeach
-              </tbody>
-            </table>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Rate</th>
+                <th>VAT (%)</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($orderdetails as $abc)
+              <tr>
+                <td>{{ $count++ }}</td>
+                <td>{{ $abc->item }}</td>
+                <td>{{ $abc->quantity }}</td>
+                <td>{{ number_format($abc->rate, 2) }}</td>
+                <td>{{ number_format($abc->vat, 2) }}</td>
+                <td>{{ number_format($abc->totalprice, 2) }}</td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
           @elseif($type === 'service')
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Service</th>
-                  <th>Description</th>
-                  <th>Rate</th>
-                  <th>VAT (%)</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($orderdetails as $abc)
-                <tr>
-                  <td>{{ $count++ }}</td>
-                  <td>{{ $abc->item }}</td>
-                  <td>{{ optional($abc)->description }}</td>
-                  <td>{{ number_format($abc->rate, 2) }}</td>
-                  <td>{{ number_format($abc->vat, 2) }}</td>
-                  <td>{{ number_format($abc->totalprice, 2) }}</td>
-                </tr>
-                @endforeach
-              </tbody>
-            </table>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Service</th>
+                <th>Description</th>
+                <th>Rate</th>
+                <th>VAT (%)</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($orderdetails as $abc)
+              <tr>
+                <td>{{ $count++ }}</td>
+                <td>{{ $abc->item }}</td>
+                <td>{{ optional($abc)->description }}</td>
+                <td>{{ number_format($abc->rate, 2) }}</td>
+                <td>{{ number_format($abc->vat, 2) }}</td>
+                <td>{{ number_format($abc->totalprice, 2) }}</td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
           @endif
 
           <hr />
@@ -117,9 +138,9 @@ $description = 'Review requisition details and proceed with approval or decline.
             @foreach($orderattachment as $abc)
             <li>
               @php
-                $attachement = Crypt::encrypt($abc->attachment);
-                $requiredpdf = (!is_null($abc->attachment)) ? route('admapp.dwnquoteordr',[$attachement]) : '';
-                $attachementrequiredpdf = (!is_null($abc->attachment)) ? 'download file' : '';
+              $attachement = Crypt::encrypt($abc->attachment);
+              $requiredpdf = (!is_null($abc->attachment)) ? route('admapp.dwnquoteordr',[$attachement]) : '';
+              $attachementrequiredpdf = (!is_null($abc->attachment)) ? 'download file' : '';
               @endphp
               <a href="{{ $requiredpdf }}" target="_blank">{{ $attachementrequiredpdf }}</a>
             </li>

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 
 class AdminApprovalController extends Controller
 {
@@ -61,30 +62,39 @@ class AdminApprovalController extends Controller
     }
     function approveorderrequisition(Request $request, $id)
     {
-        //DB::beginTransaction();
+        DB::beginTransaction();
         try {
             // dd($request->all());
 
             $orderno = Crypt::decrypt($id);
-            $user = $this->userdetail();
+            $arr['user'] = $this->userdetail();
             $total = DB::table('adminrequisitiondetails')->where('requisitionnumber', $orderno)->sum('totalprice');
             if ($request->input('action') === 'approve') {
-                $applicationpdf =   PDF::loadView('admin/approval/pdf/order-pdf');
-                return $applicationpdf->download('order-pdf.pdf');
-               /* DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $user->id)->update([
-                'status' => 'C',
+                $arr['order']   = DB::table('adminrequisition')->where('id', $orderno)->first();
+                $arr['orderdetails']   = DB::table('adminrequisitiondetails')->where('requisitionnumber', $orderno)->get();
+                $arr['usermail']  = DB::table('systusers')->where('username', $arr['order']->operatorid)->select('*')->first();
+                $orderpdf =   PDF::loadView('admin/approval/pdf/order-pdf', $arr);
+                //return $applicationpdf->download('order-pdf.pdf');
+                DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $arr['user']->id)->update([
+                    'status' => 'C',
                     'action' => 1,
                     'actiondate' => now()
                 ]);
                 $sequence = DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->max('id');
-                $currentapprover = DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $user->id)->first();
+                $currentapprover = DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $arr['user']->id)->first();
                 //check if current approver is the last approver
                 if ($sequence == $currentapprover->id) {
                     //update requisition as approved    
                     DB::table('adminrequisition')->where('id', $orderno)->update(['status' => 'completed']);
-                }*/
+                    //mail the order 
+                    Mail::raw('Order Completion.', function ($message) use ($arr, $orderpdf) {
+                        $message->to($arr['usermail']->email)->cc($arr['user']->email ?? '')
+                            ->subject('ORD-' . $arr['order']->id)
+                            ->attachData($orderpdf->output(), '' . 'ORD-' . $arr['order']->id . '.pdf');
+                    });
+                }
             } elseif ($request->input('action') === 'decline') {
-                DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $user->id)->update([
+                DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $arr['user']->id)->update([
                     'status' => 'D',
                     'comments' => $request->reasons_comments,
                     'action' => 1,
@@ -93,18 +103,17 @@ class AdminApprovalController extends Controller
                 //update requisition as declined
                 DB::table('adminrequisition')->where('id', $orderno)->update(['status' => 'declined']);
             }
-            /*DB::table('adminrequisition')->where('id', $orderno)->update(['overraltotal' => $total]);
-            DB::commit();*/
+            DB::table('adminrequisition')->where('id', $orderno)->update(['overraltotal' => $total]);
+            DB::commit();
             return redirect()->route('admapp.lstreqapp')
                 ->with('success', 'record updated');
         } catch (\Throwable $th) {
-           // DB::rollBack();
-            /*return redirect()->route('admapp.viwsinglereqapp', [$id])
-                ->with('error', 'failed to load');*/
-                return $th;
+            DB::rollBack();
+            return redirect()->route('admapp.viwsinglereqapp', [$id])
+                ->with('error', 'failed to load');
         } catch (DecryptException $th) {
             return redirect()->route('admapp.viwsinglereqapp', [$id])
-                ->with('error', 'failed to load', $th);
+                ->with('error', 'failed to load');
         }
     }
 }
