@@ -408,9 +408,9 @@ Route::middleware('adminauth')->controller(AdminDeclinedController::class)->grou
     Route::get('/test/admiin', '')->name('admin.test');
 });
 /*----------------------Admin manage-------------- */
-/*Route::middleware('adminauth')->controller(AdminManageController::class)->group(function () {
-    Route::get('/test/admibn', '')->name('admin.test');
-});*/
+Route::middleware('loginauth')->controller(AdminManageController::class)->group(function () {
+    Route::get('/list/orders', 'listallorders')->name('admin.allorder');
+});
 
 
 // Admin Manage Routes
@@ -424,4 +424,3 @@ Route::controller(AdminManageController::class)->group(function () {
     // Download requisition PDF
     Route::get('/admin/manage/download-requisition/{id}', 'downloadRequisition')->name('admapp.dwnrequisition');
 });
-

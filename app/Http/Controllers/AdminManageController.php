@@ -9,6 +9,15 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminManageController extends Controller
 {
+    function listallorders()
+    {
+        try {
+            $arr['order']    = DB::table('adminallorder')->get();
+            return view('admin.manage.manage-requisition')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('dash.admin');
+        }
+    }
     // Show requisition list
     public function showManagePage()
     {

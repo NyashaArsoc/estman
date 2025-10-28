@@ -93,8 +93,4 @@ class AdminIntakeController extends Controller
                 ->with('error', 'failed to load');
         }
     }
-    public function form()
-    {
-        return view('admin.intake.requisition-form');
-    }
 }

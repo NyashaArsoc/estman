@@ -1,6 +1,6 @@
 @php
-  $title = 'Manage Requisitions';
-  $description = 'Track and review all submitted requisitions. Viability and status are shown for clarity.';
+$title = 'Manage Requisitions';
+$description = 'Track and review all submitted requisitions. Viability and status are shown for clarity.';
 @endphp
 
 @extends('layout.admin-main-menu')
@@ -25,63 +25,57 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Requisition ID</th>
-            <th>Vendor</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Viability</th>
-            <th>Status</th>
+            <th>Order No</th>
             <th>Submitted By</th>
+            <th>Type</th>
             <th>Description</th>
-            <th>Actions</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Options</th>
           </tr>
         </thead>
-        <tbody>
-          @php $count = 1; @endphp
-          @foreach($requisitions as $req)
-            @php
-              $isViable = property_exists($req, 'is_viable') ? $req->is_viable : null;
-              $viabilityClass = $isViable ? 'badge-success' : 'badge-danger';
-              $viabilityLabel = $isViable ? 'Viable' : 'Not Viable';
-
-              $statusClass = match(trim($req->status ?? '')) {
-                'approved' => 'badge-success',
-                'declined' => 'badge-danger',
-                default => 'badge-warning',
-              };
-
-              $id = Crypt::encrypt($req->id);
+        <tbody>@php $count=1;@endphp
+          @foreach($order as $abc)
+          <tr>@php $id= Crypt::encrypt($abc->ordernumber);
+            if (trim($abc->requisitionstatus) == 'declined'){
+            $badge = 'bg-danger';
+            }elseif (trim($abc->requisitionstatus) == 'pending'){
+            $badge = 'bg-info';
+            }elseif (trim($abc->requisitionstatus) == 'completed'){
+            $badge = 'bg-success';
+            }else{
+            $badge = 'bg-warning';
+            }
             @endphp
-            <tr>
-              <td>{{ $count++ }}</td>
-              <td><strong>{{ property_exists($req, 'id') ? $req->id : 'N/A' }}</strong></td>
-              <td>{{ property_exists($req, 'vendor') && trim($req->vendor) !== '' ? $req->vendor : 'Not specified' }}</td>
-              <td>{{ property_exists($req, 'category') && trim($req->category) !== '' ? ucfirst(trim($req->category)) : 'Not specified' }}</td>
-              <td>${{ number_format(property_exists($req, 'amount') ? $req->amount : 0, 2) }}</td>
-              <td><span class="badge {{ $viabilityClass }}">{{ $viabilityLabel }}</span></td>
-              <td><span class="badge {{ $statusClass }}">{{ ucfirst(trim($req->status ?? 'Pending')) }}</span></td>
-              <td>{{ property_exists($req, 'submitted_by') && trim($req->submitted_by) !== '' ? $req->submitted_by : 'Unknown' }}</td>
-              <td>{{ property_exists($req, 'description') && trim($req->description) !== '' ? $req->description : 'Not specified' }}</td>
-              <td>
-                <a href="{{ route('admin.requisition.view', ['id' => $id]) }}" class="btn btn-info btn-sm" title="View">
-                  <i class="ti-eye mr-0-5"></i>View
-                </a>
-              </td>
-            </tr>
-          @endforeach
+            <td>{{ $count++ }}</td>
+            <td>{{ $abc->ordernumber }} </td>
+            <td> {{ $abc->operatorid }}</td>
+            <td> {{ $abc->requisitiontype }} </td>
+            <td> {{ $abc->description }} </td>
+            <td><span class="badge badge-pill {{ $badge }}">{{$abc->requisitionstatus}}</span> </td>
+            <td> {{ $abc->currencycode }} {{ $abc->totalprice }} </td>
+            <td> @if (in_array(3,$arraycontrolids))<a class="btn btn-info btn-sm " id=""
+                href="{{route('admapp.viwsinglereqapp',$id)}}"
+                title="view"><i class="ti-eye mr-0-5"></i>view</a> @endif
+            </td>
+          </tr>@endforeach
         </tbody>
+        <tfoot>
+          <tr>
+            <th>#</th>
+            <th>Order No</th>
+            <th>Submitted By</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Options</th>
+          </tr>
+        </tfoot>
       </table>
       @include('layout.arlet')
     </div>
   </div>
 </div>
 <!-- Content End -->
-@endsection
-
-@section('additional js')
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    console.log('Manage requisition table loaded');
-  });
-</script>
 @endsection
