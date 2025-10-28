@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class AdminIntakeController extends Controller
 {
@@ -58,10 +59,16 @@ class AdminIntakeController extends Controller
                 $tablename = 'adminrequisitiondetails';
             }
             foreach ($approver as $abc) {
+                $usermail  = DB::table('systusers')->where('id', $abc['id'])->select('*')->first();
                 DB::table('adminrequisitionapproval')->insert([
                     'requisitionnumber' => $requisitionnumber,
                     'approverid' => $abc['id']
                 ]);
+                $mymessage = 'Requisition for: ' . $request->description . ' is pending for approval';
+                Mail::html("<p>$mymessage</p>", function ($message) use ($usermail, $requisitionnumber) {
+                    $message->to($usermail->email)
+                        ->subject('Request For Approval Order No: ORD-' . $requisitionnumber);
+                });
             }
             while ($a   <   $arraytotal) {
                 DB::table($tablename)->insert($tablearray);

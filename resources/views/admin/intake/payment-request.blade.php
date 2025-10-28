@@ -204,7 +204,6 @@ $description = 'Complete all required fields to submit a requisition...';
 @endsection
 @section('additional js')
 <script src="{{ asset('js/validation/intake-admin.js') }}"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('css/select2/select2.min.js') }}"></script>
 <script src="{{ asset('js/select2.js') }}"></script>
 <script src="{{ asset('js/file-dropzone.js') }}"></script>
