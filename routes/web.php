@@ -408,6 +408,20 @@ Route::middleware('adminauth')->controller(AdminDeclinedController::class)->grou
     Route::get('/test/admiin', '')->name('admin.test');
 });
 /*----------------------Admin manage-------------- */
-Route::middleware('adminauth')->controller(AdminManageController::class)->group(function () {
+/*Route::middleware('adminauth')->controller(AdminManageController::class)->group(function () {
     Route::get('/test/admibn', '')->name('admin.test');
+});*/
+
+
+// Admin Manage Routes
+Route::controller(AdminManageController::class)->group(function () {
+    // Requisition list (no middleware for now)
+    Route::get('/test/admibn', 'showManagePage')->name('admin.test');
+
+    // View requisition
+    Route::get('/admin/manage/view-requisition/{id}', 'viewRequisition')->name('admin.requisition.view');
+
+    // Download requisition PDF
+    Route::get('/admin/manage/download-requisition/{id}', 'downloadRequisition')->name('admapp.dwnrequisition');
 });
+
