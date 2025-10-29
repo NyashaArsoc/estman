@@ -409,18 +409,7 @@ Route::middleware('adminauth')->controller(AdminDeclinedController::class)->grou
 });
 /*----------------------Admin manage-------------- */
 Route::middleware('loginauth')->controller(AdminManageController::class)->group(function () {
-    Route::get('/list/orders', 'listallorders')->name('admin.allorder');
-});
-
-
-// Admin Manage Routes
-Route::controller(AdminManageController::class)->group(function () {
-    // Requisition list (no middleware for now)
-    Route::get('/test/admibn', 'showManagePage')->name('admin.test');
-
-    // View requisition
-    Route::get('/admin/manage/view-requisition/{id}', 'viewRequisition')->name('admin.requisition.view');
-
-    // Download requisition PDF
-    Route::get('/admin/manage/download-requisition/{id}', 'downloadRequisition')->name('admapp.dwnrequisition');
+    Route::get('/list/orders', 'listallorders')->name('adman.allorder');
+    Route::get('/view/requisition/{id}/order', 'singleorderrequisition')->name('adman.viwsinglereqordr');
+    Route::get('/admin/{id}/order-download', 'downloadorderrequisition')->name('adman.dwnreqordr');
 });

@@ -73,8 +73,6 @@ class AdminApprovalController extends Controller
                 $arr['order']   = DB::table('adminrequisition')->where('id', $orderno)->first();
                 $arr['orderdetails']   = DB::table('adminrequisitiondetails')->where('requisitionnumber', $orderno)->get();
                 $arr['usermail']  = DB::table('systusers')->where('username', $arr['order']->operatorid)->select('*')->first();
-                $orderpdf =   PDF::loadView('admin/approval/pdf/order-pdf', $arr);
-                //return $applicationpdf->download('order-pdf.pdf');
                 DB::table('adminrequisitionapproval')->where('requisitionnumber', $orderno)->where('approverid', $arr['user']->id)->update([
                     'status' => 'C',
                     'action' => 1,
@@ -86,6 +84,15 @@ class AdminApprovalController extends Controller
                 if ($sequence == $currentapprover->id) {
                     //update requisition as approved    
                     DB::table('adminrequisition')->where('id', $orderno)->update(['status' => 'completed']);
+                    $arr['orderapproval'] = DB::table('adminrequisitionapproval')->join('systusers', 'adminrequisitionapproval.approverid', '=', 'systusers.id')
+                        ->where('adminrequisitionapproval.requisitionnumber', $orderno)->select(
+                            'adminrequisitionapproval.action',
+                            'adminrequisitionapproval.actiondate',
+                            'adminrequisitionapproval.status',
+                            'systusers.firstname',
+                            'systusers.lastname'
+                        )->get();
+                    $orderpdf =   PDF::loadView('admin/approval/pdf/order-pdf', $arr);
                     //mail the order 
                     Mail::raw('Order Completion.', function ($message) use ($arr, $orderpdf) {
                         $message->to($arr['usermail']->email)->cc($arr['user']->email ?? '')

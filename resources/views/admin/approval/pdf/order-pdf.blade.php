@@ -6,10 +6,10 @@
   <title>Order Summary</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
+      font-family: Arial, sans-serif;
       font-size: 13px;
-      color: #2c3e50;
-      background-color: #f4f6f7;
+      /*color: #2c3e50;
+      background-color: #f4f6f7;*/
       margin: 0;
       padding: 30px;
     }
@@ -53,7 +53,7 @@
 
     .section {
       background-color: #ffffff;
-      padding: 20px;
+      padding: 15px;
       border-radius: 8px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       margin-bottom: 25px;
@@ -74,14 +74,9 @@
 
     th,
     td {
-      border: 1px solid #d5d8dc;
+      border: 0px solid #d5d8dc;
       padding: 8px;
       text-align: left;
-    }
-
-    th {
-      background-color: #eaf2f8;
-      color: #1a5276;
     }
 
     tr:nth-child(even) {
@@ -90,7 +85,6 @@
 
     .totals-row td {
       font-weight: bold;
-      background-color: #f4f6f7;
     }
 
     .details-table td {
@@ -98,7 +92,7 @@
     }
 
     .details-table strong {
-      color: #34495e;
+      color: #000000fa;
     }
 
     .logo {
@@ -116,6 +110,22 @@
     #bottomline {
       border-bottom: 1px solid #000;
       /* Bottom border for the last cell */
+    }
+
+    #textleft {
+      text-align: left;
+    }
+
+    #textright {
+      text-align: right;
+    }
+
+    .footer {
+      text-align: left;
+      /* Align text to the left */
+      padding: 10px;
+      margin-top: auto;
+      border-top: 1px solid #000;
     }
   </style>
 </head>
@@ -165,13 +175,13 @@
     <h4>Product Breakdown</h4>
     <table>
       <thead>
-        <tr>
-          <th>No</th>
-          <th>Item</th>
-          <th>Qty</th>
-          <th>Rate</th>
-          <th>VAT</th>
-          <th>Total</th>
+        <tr id="bottomline">
+          <th id="textleft">No</th>
+          <th id="textleft">Item</th>
+          <th id="textright">Qty</th>
+          <th id="textright">Rate</th>
+          <th id="textright">VAT</th>
+          <th id="textright">Total</th>
         </tr>
       </thead>
       <tbody>
@@ -180,10 +190,10 @@
         <tr>
           <td>{{ $count++ }}</td>
           <td>{{ $abc->item }}</td>
-          <td>{{ $abc->quantity }}</td>
-          <td>{{ number_format($abc->rate, 2) }}</td>
-          <td>{{ number_format($abc->vat, 2) }}</td>
-          <td>{{ number_format($abc->totalprice, 2) }}</td>
+          <td id="textright">{{ $abc->quantity }}</td>
+          <td id="textright">{{ number_format($abc->rate, 2) }}</td>
+          <td id="textright">{{ number_format($abc->vat, 2) }}</td>
+          <td id="textright">{{ number_format($abc->totalprice, 2) }}</td>
         </tr>
         @empty
         <tr>
@@ -192,7 +202,7 @@
         @endforelse
         <tr class="totals-row">
           <td colspan="4">Total</td>
-          <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
+          <td id="textright">{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
         </tr>
       </tbody>
     </table>
@@ -202,12 +212,12 @@
     <h4>Service Breakdown</h4>
     <table>
       <thead>
-        <tr>
-          <th>No</th>
-          <th>Item</th>
-          <th>Rate</th>
-          <th>VAT</th>
-          <th>Total</th>
+        <tr id="bottomline">
+          <th id="textleft">No</th>
+          <th id="textleft">Item</th>
+          <th id="textright">Rate</th>
+          <th id="textright">VAT</th>
+          <th id="textright">Total</th>
         </tr>
       </thead>
       <tbody>
@@ -216,9 +226,9 @@
         <tr>
           <td>{{ $count++ }}</td>
           <td>{{ $abc->item }}</td>
-          <td>{{ number_format($abc->rate, 2) }}</td>
-          <td>{{ number_format($abc->vat, 2) }}</td>
-          <td>{{ number_format($abc->totalprice, 2) }}</td>
+          <td id="textright">{{ number_format($abc->rate, 2) }}</td>
+          <td id="textright">{{ number_format($abc->vat, 2) }}</td>
+          <td id="textright">{{ number_format($abc->totalprice, 2) }}</td>
         </tr>
         @empty
         <tr>
@@ -227,7 +237,7 @@
         @endforelse
         <tr class="totals-row">
           <td colspan="4">Total</td>
-          <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
+          <td id="textright">{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
         </tr>
       </tbody>
     </table>
@@ -238,6 +248,26 @@
     <tr>
       <td>Justification <br> {{ $order->justification }} </td>
     </tr>
+  </table>
+  <table id="descrptiontable">
+    <tr id="bottomline">
+      <td>Approver</td>
+      <td>Status</td>
+    </tr>
+    @foreach($orderapproval as $abc)<tr>@php
+      if (trim($abc->status) == 'C'){
+      $status = 'approved';
+      }elseif (trim($abc->status) == 'P'){
+      $status = 'pending';
+      }elseif (trim($abc->status) == 'D'){
+      $status = 'declined';
+      }else{
+      $status = 'not actioned';
+      }
+      @endphp
+      <td>{{ $abc->lastname }} {{ $abc->firstname }}</td>
+      <td> {{ $status }}</td>
+    </tr> @endforeach
   </table>
   <div class="footer">&copy; estman</div>
 </body>

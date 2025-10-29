@@ -1,6 +1,6 @@
 @php
-  $title = 'View Requisition';
-  $description = 'Review requisition details and download if needed.';
+$title = 'View Requisition';
+$description = 'Review requisition details and download if needed.';
 @endphp
 
 @extends('layout.no-menu-layout')
@@ -12,7 +12,7 @@
   <h4>{{ $title }}</h4>
   <ol class="breadcrumb no-bg mb-1">
     <li class="breadcrumb-item"><a href="{{ route('dash.admin') }}">Dashboard</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('admin.test') }}">Manage</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('adman.allorder') }}">Manage</a></li>
     <li class="breadcrumb-item active">{{ $title }}</li>
   </ol>
 
@@ -29,13 +29,34 @@
       <!-- Requisition Info Tab -->
       <div class="tab-pane active" id="info" role="tabpanel">
         <table class="table table-bordered">
-          <tr><th>Order Number</th><td>ORD - {{ $order->id }}</td></tr>
-          <tr><th>Submitted By</th><td>{{ $order->operatorid }}</td></tr>
-          <tr><th>Description</th><td>{{ $order->description }}</td></tr>
-          <tr><th>Justification</th><td>{{ $order->justification }}</td></tr>
-          <tr><th>Type</th><td>{{ ucfirst($order->requisitiontype) }}</td></tr>
-          <tr><th>Total Amount</th><td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td></tr>
-          <tr><th>Status</th><td><span class="badge badge-warning">{{ ucfirst($order->status) }}</span></td></tr>
+          <tr>
+            <th>Order Number</th>
+            <td>ORD - {{ $order->id }}</td>
+          </tr>
+          <tr>
+            <th>Submitted By</th>
+            <td>{{ $order->operatorid }}</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td>{{ $order->description }}</td>
+          </tr>
+          <tr>
+            <th>Justification</th>
+            <td>{{ $order->justification }}</td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td>{{ ucfirst($order->requisitiontype) }}</td>
+          </tr>
+          <tr>
+            <th>Total Amount</th>
+            <td>{{ $order->currencycode }} {{ number_format($order->overraltotal, 2) }}</td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td><span class="badge badge-warning">{{ ucfirst($order->status) }}</span></td>
+          </tr>
         </table>
       </div>
 
@@ -46,7 +67,14 @@
         @if($type === 'product')
         <table class="table table-bordered">
           <thead>
-            <tr><th>No</th><th>Item</th><th>Qty</th><th>Rate</th><th>VAT (%)</th><th>Total</th></tr>
+            <tr>
+              <th>No</th>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Rate</th>
+              <th>VAT (%)</th>
+              <th>Total</th>
+            </tr>
           </thead>
           <tbody>
             @foreach($orderdetails as $abc)
@@ -64,7 +92,14 @@
         @elseif($type === 'service')
         <table class="table table-bordered">
           <thead>
-            <tr><th>No</th><th>Service</th><th>Description</th><th>Rate</th><th>VAT (%)</th><th>Total</th></tr>
+            <tr>
+              <th>No</th>
+              <th>Service</th>
+              <th>Description</th>
+              <th>Rate</th>
+              <th>VAT (%)</th>
+              <th>Total</th>
+            </tr>
           </thead>
           <tbody>
             @foreach($orderdetails as $abc)
@@ -87,9 +122,9 @@
           @foreach($orderattachment as $abc)
           <li>
             @php
-              $attachement = Crypt::encrypt($abc->attachment);
-              $requiredpdf = (!is_null($abc->attachment)) ? route('admapp.dwnquoteordr',[$attachement]) : '';
-              $attachementrequiredpdf = (!is_null($abc->attachment)) ? 'Download file' : '';
+            $attachement = Crypt::encrypt($abc->attachment);
+            $requiredpdf = (!is_null($abc->attachment)) ? route('admapp.dwnquoteordr',[$attachement]) : '';
+            $attachementrequiredpdf = (!is_null($abc->attachment)) ? 'Download file' : '';
             @endphp
             <a href="{{ $requiredpdf }}" target="_blank">{{ $attachementrequiredpdf }}</a>
           </li>
@@ -99,7 +134,7 @@
     </div>
 
     <div class="mt-4">
-      <a href="{{ route('admapp.dwnrequisition', Crypt::encrypt($order->id)) }}" class="btn btn-info">Download Requisition</a>
+      <a href="{{ route('adman.dwnreqordr', Crypt::encrypt($order->id)) }}" class="btn btn-info">Download Requisition</a>
     </div>
   </div>
 </div>

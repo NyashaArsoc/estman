@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class AdminManageController extends Controller
 {
@@ -18,76 +18,55 @@ class AdminManageController extends Controller
             return redirect()->route('dash.admin');
         }
     }
-    // Show requisition list
-    public function showManagePage()
+    function singleorderrequisition($id)
     {
-        $requisitions = DB::table('adminrequisition')->get();
-
-        // Layout compatibility variables
-        $adminintake = [];
-        $adminapprove = [];
-        $admindecline = [];
-        $adminmanage = [];
-        $user = (object)['firstname' => 'Shania', 'lastname' => 'Nyaude'];
-
-        return view('admin.manage.manage-requisition', compact(
-            'requisitions',
-            'adminintake',
-            'adminapprove',
-            'admindecline',
-            'adminmanage',
-            'user'
-        ));
+        try {
+            $orderno = Crypt::decrypt($id);
+            $arr['order']   = DB::table('adminrequisition')->where('id', $orderno)->first();
+            $arr['orderdetails']   = DB::table('adminrequisitiondetails')->where('requisitionnumber', $orderno)->get();
+            $arr['orderattachment']   = DB::table('adminrequisitionattachment')->where('requisitionnumber', $orderno)->get();
+            $arr['orderapproval'] = DB::table('adminrequisitionapproval')->join('systusers', 'adminrequisitionapproval.approverid', '=', 'systusers.id')
+                ->where('adminrequisitionapproval.requisitionnumber', $orderno)->select(
+                    'adminrequisitionapproval.action',
+                    'adminrequisitionapproval.actiondate',
+                    'adminrequisitionapproval.status',
+                    'systusers.firstname',
+                    'systusers.lastname'
+                )->get();
+            return view('admin.manage.manage-requisition-view')->with($arr);
+        } catch (\Throwable $th) {
+            return redirect()->route('admin.allorder')
+                ->with('error', 'failed to load');
+        } catch (DecryptException $th) {
+            return redirect()->route('admin.allorder')
+                ->with('error', 'failed to load');
+        }
     }
-
-    // View requisition details
-    public function viewRequisition($id)
+    function downloadorderrequisition($id)
     {
-        $decryptedId = Crypt::decrypt($id);
+        try {
+            $orderno = Crypt::decrypt($id);
+            $arr['order']   = DB::table('adminrequisition')->where('id', $orderno)->first();
+            $arr['orderdetails']   = DB::table('adminrequisitiondetails')->where('requisitionnumber', $orderno)->get();
+            $arr['usermail']  = DB::table('systusers')->where('username', $arr['order']->operatorid)->select('*')->first();
 
-        $order = DB::table('adminrequisition')->where('id', $decryptedId)->first();
-        $orderdetails = DB::table('adminrequisitiondetails')->where('requisitionnumber', $decryptedId)->get();
-        $orderapproval = DB::table('adminrequisitionapproval')->where('requisitionnumber', $decryptedId)->get();
-        $orderattachment = DB::table('adminrequisitionattachment')->where('requisitionnumber', $decryptedId)->get();
-
-        // Layout compatibility variables
-        $adminintake = [];
-        $adminapprove = [];
-        $admindecline = [];
-        $adminmanage = [];
-        $user = (object)['firstname' => 'Shania', 'lastname' => 'Nyaude'];
-
-        return view('admin.manage.manage-requisition-view', compact(
-            'order',
-            'orderdetails',
-            'orderapproval',
-            'orderattachment',
-            'adminintake',
-            'adminapprove',
-            'admindecline',
-            'adminmanage',
-            'user'
-        ));
-    }
-
-    // Download requisition as PDF
-    public function downloadRequisition($id)
-    {
-        $decryptedId = Crypt::decrypt($id);
-
-        $order = DB::table('adminrequisition')->where('id', $decryptedId)->first();
-        $orderdetails = DB::table('adminrequisitiondetails')->where('requisitionnumber', $decryptedId)->get();
-        $orderapproval = DB::table('adminrequisitionapproval')->where('requisitionnumber', $decryptedId)->get();
-        $orderattachment = DB::table('adminrequisitionattachment')->where('requisitionnumber', $decryptedId)->get();
-
-        // Corrected view path for PDF generation
-        $pdf = Pdf::loadView('admin.approval.pdf.order-pdf', compact(
-            'order',
-            'orderdetails',
-            'orderapproval',
-            'orderattachment'
-        ));
-
-        return $pdf->download('ORD-' . $decryptedId . '.pdf');
+            $arr['orderapproval'] = DB::table('adminrequisitionapproval')->join('systusers', 'adminrequisitionapproval.approverid', '=', 'systusers.id')
+                ->where('adminrequisitionapproval.requisitionnumber', $orderno)->select(
+                    'adminrequisitionapproval.action',
+                    'adminrequisitionapproval.actiondate',
+                    'adminrequisitionapproval.status',
+                    'systusers.firstname',
+                    'systusers.lastname'
+                )->get();
+            // return $arr;
+            $orderpdf =   PDF::loadView('admin/approval/pdf/order-pdf', $arr);
+            return $orderpdf->download('ORD-' . $orderno . '.pdf');
+        } catch (\Throwable $th) {
+            return redirect()->route('admin.allorder')
+                ->with('error', 'failed to download');
+        } catch (DecryptException $th) {
+            return redirect()->route('admin.allorder')
+                ->with('error', 'failed to download');
+        }
     }
 }

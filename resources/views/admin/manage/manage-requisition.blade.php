@@ -55,7 +55,7 @@ $description = 'Track and review all submitted requisitions. Viability and statu
             <td><span class="badge badge-pill {{ $badge }}">{{$abc->requisitionstatus}}</span> </td>
             <td> {{ $abc->currencycode }} {{ $abc->totalprice }} </td>
             <td> @if (in_array(3,$arraycontrolids))<a class="btn btn-info btn-sm " id=""
-                href="{{route('admapp.viwsinglereqapp',$id)}}"
+                href="{{route('adman.viwsinglereqordr',$id)}}"
                 title="view"><i class="ti-eye mr-0-5"></i>view</a> @endif
             </td>
           </tr>@endforeach
