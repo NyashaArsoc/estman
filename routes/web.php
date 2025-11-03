@@ -413,3 +413,21 @@ Route::middleware('loginauth')->controller(AdminManageController::class)->group(
     Route::get('/view/requisition/{id}/order', 'singleorderrequisition')->name('adman.viwsinglereqordr');
     Route::get('/admin/{id}/order-download', 'downloadorderrequisition')->name('adman.dwnreqordr');
 });
+
+/*---------------------- Property Management Reporting Views ----------------------*/
+Route::prefix('prop/report')->middleware('loginauth')->group(function () {
+    Route::view('/', 'report.dashboard.index')->name('prop.report.dashboard');
+
+    // ✅ Invoices
+    Route::view('/invoices', 'propman.reporting.invoices.invoices')->name('prop.report.invoices');
+    Route::get('/invoice/generate', [ReportController::class, 'generateInvoiceReport'])->name('prop.report.invoice.generate');
+
+    // ✅ Landlords
+    Route::view('/landlords', 'propman.reporting.landlords.landlords')->name('prop.report.landlords');
+    Route::get('/landlord/generate', [ReportController::class, 'generateLandlordReport'])->name('prop.report.landlord.generate');
+
+    // ✅ Leases, Property, Tenants (if not yet restructured, leave as-is)
+    Route::view('/leases', 'propman.reporting.leases')->name('prop.report.leases');
+    Route::view('/property', 'propman.reporting.property')->name('prop.report.property');
+    Route::view('/tenants', 'propman.reporting.tenants')->name('prop.report.tenants');
+});
