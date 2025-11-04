@@ -63,8 +63,8 @@ $description = 'Review requisition details and proceed with approval or decline.
           <ul class="list-unstyled">
             @foreach($orderapproval as $abc)
             <li>
-              <strong>{{ $abc->lastname }} {{ $abc->firstname }}</strong> – <span class="text-muted">{{ $abc->status }}</span> actioned on
-              <em>{{ $abc->actiondate ? $abc->actiondate->format('d M Y, H:i') : '' }}</em>
+              <strong>{{ $abc->lastname }} {{ $abc->firstname }}</strong> – <span class="text-muted">{{ $abc->status }}</span> <strong> actioned on </strong>
+              <em>{{ $abc->actiondate ? \Carbon\Carbon::parse($abc->actiondate)->format('d M, Y H:i') : '' }}</em>
             </li>
             @endforeach
           </ul>
