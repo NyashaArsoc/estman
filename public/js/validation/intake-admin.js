@@ -38,7 +38,7 @@ function validateProductItem() {
         return false;
     } else if (textValue.length < 5) {
         $("#productitemcheck").show();
-        $("#productitemcheck").html("**invalid address");
+        $("#productitemcheck").html("**invalid Description");
         productitemError = false;
         return false;
     } else {

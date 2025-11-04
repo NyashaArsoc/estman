@@ -25,9 +25,8 @@ class AdminIntakeController extends Controller
         DB::beginTransaction();
         try {
             $approver = json_decode($request->approversorder, true);
-            $productrate = (!empty($request->productrate)) ? $request->productrate : [0];
-            $servicerate = (!empty($request->servicerate)) ? $request->servicerate : [0];
-            $a  = 0;
+            $tablename = 'adminrequisitiondetails';
+
             $requisitionnumber =  DB::table('adminrequisition')->insertGetId([
                 'requisitiontype' => $request->requisitiontype,
                 'approvalsequency' => $request->approvalmode,
@@ -37,26 +36,29 @@ class AdminIntakeController extends Controller
                 'operatorid' => session('alluser')
             ]);
             if ($request->requisitiontype === 'product') {
-                $arraytotal =       count($productrate);
-                $tablearray = [
-                    'requisitionnumber' => $requisitionnumber,
-                    'item' => $request->productitem[$a],
-                    'quantity' => $request->productqty[$a],
-                    'vat' => $request->productvat[$a],
-                    'totalprice' => $request->producttotal[$a],
-                    'rate' => $request->productrate[$a]
-                ];
-                $tablename = 'adminrequisitiondetails';
+                $item       = $request->productitem ?? [];
+                $quantity   = $request->productqty ?? [];
+                $vat        = $request->productvat ?? [];
+                $totalprice = $request->producttotal ?? [];
+                $rate       = $request->productrate ?? [];
             } elseif ($request->requisitiontype === 'service') {
-                $arraytotal =       count($servicerate);
+                $item       = $request->serviceitem ?? [];
+                $quantity   = [];
+                $vat        = $request->servicevat ?? [];
+                $totalprice = $request->servicetotal ?? [];
+                $rate       = $request->servicerate ?? [];
+            }
+            foreach ($rate as $abc => $rate) {
                 $tablearray = [
                     'requisitionnumber' => $requisitionnumber,
-                    'item' => $request->serviceitem[$a],
-                    'vat' => $request->servicevat[$a],
-                    'totalprice' => $request->servicetotal[$a],
-                    'rate' => $request->servicerate[$a]
+                    'item' => $item[$abc] ?? null,
+                    'quantity' => $quantity[$abc] ?? null,
+                    'vat' => $vat[$abc] ?? 0,
+                    'totalprice' => $totalprice[$abc] ?? 0,
+                    'rate' => $rate ?? 0,
                 ];
-                $tablename = 'adminrequisitiondetails';
+
+                DB::table($tablename)->insert($tablearray);
             }
             foreach ($approver as $abc) {
                 $usermail  = DB::table('systusers')->where('id', $abc['id'])->select('*')->first();
@@ -70,10 +72,7 @@ class AdminIntakeController extends Controller
                         ->subject('Request For Approval Order No: ORD-' . $requisitionnumber);
                 });
             }
-            while ($a   <   $arraytotal) {
-                DB::table($tablename)->insert($tablearray);
-                $a++;
-            }
+
             if ($request->hasFile('quotations')) {
                 foreach ($request->file('quotations') as $abc) {
                     $otherattachment = $request->file('quotations');

@@ -160,13 +160,13 @@ $description = 'Complete all required fields to submit a requisition...';
                     </thead>
                     <tbody>
                         <tr class="entry-row">
-                            <td><input type="text" name="serviceitem[]" id="serviceitem" class="form-control">
+                            <td><input type="text" name="serviceitem" id="serviceitem" class="form-control">
                                 <small id="serviceitemcheck" style="color: red;">required</small>
                             </td>
-                            <td><input type="text" name="servicerate[]" id="servicerate" class="form-control">
+                            <td><input type="text" name="servicerate" id="servicerate" class="form-control">
                                 <small id="serviceratecheck" style="color: red;">required</small>
                             </td>
-                            <td><input type="text" name="servicevat[]" id="servicevat" class="form-control">
+                            <td><input type="text" name="servicevat" id="servicevat" class="form-control">
                                 <small id="servicevatcheck" style="color: red;"></small>
                             </td>
                             <td><small id="servicetotal" style="color: blue;"></small></td>
