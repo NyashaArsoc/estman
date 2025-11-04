@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Crypt;
+use App\Models\Invoice;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\InvoiceExport;
+use Illuminate\Support\Facades\Auth;
+use App\Exports\LandlordExport;
 
 class ReportController extends Controller
 {
@@ -240,5 +245,95 @@ public function printleasestatement(Request $request){
         ->with('error', 'failed to load property rent roll'.$th);
     }
 }
+
+public function generateInvoiceReport(Request $request)
+{
+    $from = $request->input('date_from');
+    $to = $request->input('date_to');
+    $format = $request->input('format');
+
+    $invoices = collect([
+        ['invoice_number' => 'INV001', 'client_name' => 'Acme Corp', 'amount' => 1200.50, 'created_at' => '2025-10-25'],
+        ['invoice_number' => 'INV002', 'client_name' => 'Beta Ltd', 'amount' => 850.00, 'created_at' => '2025-10-26'],
+        ['invoice_number' => 'INV003', 'client_name' => 'Gamma Inc', 'amount' => 430.75, 'created_at' => '2025-10-28'],
+    ]);
+
+    $user = Auth::user();
+
+    if ($format === 'pdf') {
+        return Pdf::loadView('propman.reporting.invoices.invoices-export', [
+            'invoices' => $invoices,
+            'from' => $from,
+            'to' => $to,
+            'user' => $user,
+        ])->download('invoice-report.pdf');
+    }
+
+    if ($format === 'excel') {
+        return Excel::download(new InvoiceExport($invoices, $from, $to), 'invoice-report.xlsx');
+    }
+
+    return back()->with('error', 'Invalid format selected.');
+}
+
+public function generateLandlordReport(Request $request)
+{
+    $from = $request->input('date_from');
+    $to = $request->input('date_to');
+    $format = $request->input('format');
+    $landlordType = $request->input('landlord_type', 'all');
+
+    $landlords = collect([
+        (object)[
+            'firstname' => 'Tawanda',
+            'lastname' => 'Moyo',
+            'companyname' => 'Moyo Estates',
+            'companynumber' => 'REG2025-001',
+            'cell' => '0771234567',
+            'email' => 'tmoyo@moyoestates.co.zw',
+            'tel' => '0244567879',
+            'tin' => 'TIN-00123',
+            'clienttypeid' => 'corporate',
+            'property_count' => 3,
+            'isactive' => 'Y',
+        ],
+        (object)[
+            'firstname' => 'Rudo',
+            'lastname' => 'Chikore',
+            'nationalID' => '63-9876543X21',
+            'cell' => '0779876543',
+            'email' => 'rchikore@example.com',
+            'tel' => '0244567890',
+            'clienttypeid' => 'individual',
+            'property_count' => 1,
+            'isactive' => 'N',
+        ],
+    ]);
+
+    if ($landlordType !== 'all') {
+        $landlords = $landlords->filter(fn($l) => strtolower($l->clienttypeid) === strtolower($landlordType));
+    }
+
+    $user = Auth::user();
+
+    if ($format === 'pdf') {
+        return Pdf::loadView('propman.reporting.landlords.landlords-export', [
+            'landlords' => $landlords,
+            'from' => $from,
+            'to' => $to,
+            'user' => $user,
+            'landlordType' => $landlordType,
+        ])
+        ->setPaper('a4', 'landscape')
+        ->download('landlord-report.pdf');
+    }
+
+    if ($format === 'excel') {
+        return Excel::download(new LandlordExport($landlords, $from, $to, $landlordType), 'landlord-report.xlsx');
+    }
+
+    return back()->with('error', 'Invalid format selected.');
+}
+
 }
     

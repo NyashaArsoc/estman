@@ -1,102 +1,81 @@
 @php
-  $adminintake = $adminintake ?? [];
-  $adminapprove = $adminapprove ?? [];
-  $admindecline = $admindecline ?? [];
-  $adminmanage = $adminmanage ?? [];
-  $user = $user ?? (object)['firstname' => 'Shania', 'lastname' => 'Nyaude'];
-  $requisitions = $requisitions ?? [];
-  $title = 'Manage Requisitions';
+$title = 'Manage Requisitions';
+$description = 'Track and review all submitted requisitions. Viability and status are shown for clarity.';
 @endphp
 
 @extends('layout.admin-main-menu')
 
-@section('title', $title)
+@section('title', 'Manage Requisitions')
 
 @section('content')
-<style>
-  .table th,
-  .table td {
-    border: 1px solid #ced4da;
-  }
-  .table th {
-    font-weight: bold;
-    background-color: #f8f9fa;
-    color: #000;
-  }
-  .table td {
-    vertical-align: middle;
-  }
-  .btn-sm {
-    border-radius: 6px;
-    font-weight: 500;
-    padding: 6px 16px;
-    font-size: 14px;
-    height: 38px;
-  }
-  .btn-primary { background-color: #007bff; color: #fff; }
-  .badge-success { background-color: #28a745; }
-  .badge-danger { background-color: #dc3545; }
-  .badge-warning { background-color: #ffc107; color: #212529; }
-</style>
+<!-- Content Start -->
+<div class="container-fluid">
+  <h4>{{ $title }}</h4>
+  <ol class="breadcrumb no-bg mb-1">
+    <li class="breadcrumb-item active">{{ $title }}</li>
+  </ol>
 
-<div class="page-header">
-  <h3 class="page-title" style="color: #000;">{{ $title }}</h3>
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item active" aria-current="page">Manage</li>
-    </ol>
-  </nav>
+  <div class="box box-block bg-white">
+    <h5>{{ $title }}</h5>
+    <p class="font-90 text-muted mb-1">{{ $description }}</p>
+
+    <div class="table-responsive">
+      <hr />
+      <table class="datatable table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Order No</th>
+            <th>Submitted By</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Options</th>
+          </tr>
+        </thead>
+        <tbody>@php $count=1;@endphp
+          @foreach($order as $abc)
+          <tr>@php $id= Crypt::encrypt($abc->ordernumber);
+            if (trim($abc->requisitionstatus) == 'declined'){
+            $badge = 'bg-danger';
+            }elseif (trim($abc->requisitionstatus) == 'pending'){
+            $badge = 'bg-info';
+            }elseif (trim($abc->requisitionstatus) == 'completed'){
+            $badge = 'bg-success';
+            }else{
+            $badge = 'bg-warning';
+            }
+            @endphp
+            <td>{{ $count++ }}</td>
+            <td>{{ $abc->ordernumber }} </td>
+            <td> {{ $abc->operatorid }}</td>
+            <td> {{ $abc->requisitiontype }} </td>
+            <td> {{ $abc->description }} </td>
+            <td><span class="badge badge-pill {{ $badge }}">{{$abc->requisitionstatus}}</span> </td>
+            <td> {{ $abc->currencycode }} {{ $abc->totalprice }} </td>
+            <td> @if (in_array(3,$arraycontrolids))<a class="btn btn-info btn-sm " id=""
+                href="{{route('adman.viwsinglereqordr',$id)}}"
+                title="view"><i class="ti-eye mr-0-5"></i>view</a> @endif
+            </td>
+          </tr>@endforeach
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>#</th>
+            <th>Order No</th>
+            <th>Submitted By</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Options</th>
+          </tr>
+        </tfoot>
+      </table>
+      @include('layout.arlet')
+    </div>
+  </div>
 </div>
-
-<p>Track and review all submitted requisitions below.</p>
-
-<div class="table-responsive mt-4">
-  <table class="table table-bordered table-hover">
-    <thead class="thead-dark">
-      <tr>
-        <th>#</th>
-        <th>Requisition ID</th>
-        <th>Vendor</th>
-        <th>Category</th>
-        <th>Amount</th>
-        <th>Viability</th>
-        <th>Status</th>
-        <th>Submitted By</th>
-        <th>Description</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @forelse($requisitions as $index => $req)
-        @php
-          $viabilityClass = $req->is_viable ? 'badge-success' : 'badge-danger';
-          $statusClass = match($req->status) {
-            'approved' => 'badge-success',
-            'declined' => 'badge-danger',
-            default => 'badge-warning',
-          };
-          $id = Crypt::encrypt($req->id);
-        @endphp
-        <tr class="{{ $index % 2 === 0 ? 'table-light' : '' }}">
-          <td>{{ $index + 1 }}</td>
-          <td><strong>{{ $req->id }}</strong></td>
-          <td>{{ $req->vendor }}</td>
-          <td>{{ ucfirst($req->category) }}</td>
-          <td>${{ number_format($req->amount, 2) }}</td>
-          <td><span class="badge {{ $viabilityClass }}">{{ $req->is_viable ? 'Viable' : 'Not Viable' }}</span></td>
-          <td><span class="badge {{ $statusClass }}">{{ ucfirst($req->status) }}</span></td>
-          <td>{{ $req->submitted_by }}</td>
-          <td>{{ $req->description }}</td>
-          <td>
-            <a href="{{ route('admin.requisition.view', ['id' => $id]) }}" class="btn btn-sm btn-primary">View</a>
-          </td>
-        </tr>
-      @empty
-        <tr>
-          <td colspan="10" class="text-center text-muted">No requisitions found.</td>
-        </tr>
-      @endforelse
-    </tbody>
-  </table>
-</div>
+<!-- Content End -->
 @endsection
