@@ -111,7 +111,6 @@ $description = 'Review requisition details and proceed with approval or decline.
               <tr>
                 <th>No</th>
                 <th>Service</th>
-                <th>Description</th>
                 <th>Rate</th>
                 <th>VAT (%)</th>
                 <th>Total</th>
@@ -122,7 +121,6 @@ $description = 'Review requisition details and proceed with approval or decline.
               <tr>
                 <td>{{ $count++ }}</td>
                 <td>{{ $abc->item }}</td>
-                <td>{{ optional($abc)->description }}</td>
                 <td>{{ number_format($abc->rate, 2) }}</td>
                 <td>{{ number_format($abc->vat, 2) }}</td>
                 <td>{{ number_format($abc->totalprice, 2) }}</td>

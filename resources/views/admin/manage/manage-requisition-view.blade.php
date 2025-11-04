@@ -12,7 +12,7 @@ $description = 'Review requisition details and download if needed.';
   <h4>{{ $title }}</h4>
   <ol class="breadcrumb no-bg mb-1">
     <li class="breadcrumb-item"><a href="{{ route('dash.admin') }}">Dashboard</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('adman.allorder') }}">Manage</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('adman.allorder') }}">List</a></li>
     <li class="breadcrumb-item active">{{ $title }}</li>
   </ol>
 
@@ -31,7 +31,7 @@ $description = 'Review requisition details and download if needed.';
         <table class="table table-bordered">
           <tr>
             <th>Order Number</th>
-            <td>ORD - {{ $order->id }}</td>
+            <td>ORD-{{ $order->id }}</td>
           </tr>
           <tr>
             <th>Submitted By</th>
@@ -95,7 +95,6 @@ $description = 'Review requisition details and download if needed.';
             <tr>
               <th>No</th>
               <th>Service</th>
-              <th>Description</th>
               <th>Rate</th>
               <th>VAT (%)</th>
               <th>Total</th>
@@ -106,7 +105,6 @@ $description = 'Review requisition details and download if needed.';
             <tr>
               <td>{{ $count++ }}</td>
               <td>{{ $abc->item }}</td>
-              <td>{{ optional($abc)->description }}</td>
               <td>{{ number_format($abc->rate, 2) }}</td>
               <td>{{ number_format($abc->vat, 2) }}</td>
               <td>{{ number_format($abc->totalprice, 2) }}</td>
