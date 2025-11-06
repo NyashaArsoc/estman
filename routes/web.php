@@ -21,6 +21,7 @@ use App\Http\Controllers\ValDeclinedController;
 use App\Http\Controllers\ValIntakeController;
 use App\Http\Controllers\ValManageController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DiaryReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -431,4 +432,44 @@ Route::prefix('prop/report')->middleware('loginauth')->group(function () {
     /*Route::view('/leases', 'propman.reporting.leases')->name('prop.report.leases');
     Route::view('/property', 'propman.reporting.property')->name('prop.report.property');
     Route::view('/tenants', 'propman.reporting.tenants')->name('prop.report.tenants');*/
+});
+
+Route::prefix('report/diary')->group(function () {
+    Route::get('/', [DiaryReportController::class, 'dashboard'])->name('report.diary.index');
+
+    // Landlord Diary
+    Route::get('/landlord', [DiaryReportController::class, 'landlordIndex'])->name('report.diary.landlord.index');
+    Route::get('/landlord/approval', [DiaryReportController::class, 'landlordApproval'])->name('report.diary.landlord.approval');
+    Route::get('/landlord/onboarding', [DiaryReportController::class, 'landlordOnboarding'])->name('report.diary.landlord.onboarding');
+    Route::get('/landlord/status', [DiaryReportController::class, 'landlordStatus'])->name('report.diary.landlord.status');
+    Route::get('/landlord/summary', [DiaryReportController::class, 'landlordSummary'])->name('report.diary.landlord.summary');
+    Route::get('/landlord/acquisition', [DiaryReportController::class, 'landlordAcquisition'])->name('report.diary.landlord.acquisition');
+    Route::get('/landlord/tenants', [DiaryReportController::class, 'landlordTenants'])->name('report.diary.landlord.tenants');
+    Route::get('/landlord/remittance', [DiaryReportController::class, 'landlordRemittance'])->name('report.diary.landlord.remittance');
+
+    // Tenant Diary
+    Route::get('/tenant', [DiaryReportController::class, 'tenantIndex'])->name('report.diary.tenant.index');
+    Route::get('/tenant/registration', [DiaryReportController::class, 'tenantRegistration'])->name('report.diary.tenant.registration');
+    Route::get('/tenant/linkage', [DiaryReportController::class, 'tenantLinkage'])->name('report.diary.tenant.linkage');
+    Route::get('/tenant/next-of-kin', [DiaryReportController::class, 'tenantNextOfKin'])->name('report.diary.tenant.next-of-kin');
+    Route::get('/tenant/contact', [DiaryReportController::class, 'tenantContact'])->name('report.diary.tenant.contact');
+    Route::get('/tenant/payment', [DiaryReportController::class, 'tenantPayment'])->name('report.diary.tenant.payment');
+    Route::get('/tenant/status', [DiaryReportController::class, 'tenantStatus'])->name('report.diary.tenant.status');
+
+    // Property Diary
+    Route::get('/property', [DiaryReportController::class, 'propertyIndex'])->name('report.diary.property.index');
+    Route::get('/property/registration', [DiaryReportController::class, 'propertyRegistration'])->name('report.diary.property.registration');
+    Route::get('/property/transfers', [DiaryReportController::class, 'propertyTransfers'])->name('report.diary.property.transfers');
+    Route::get('/property/occupancy', [DiaryReportController::class, 'propertyOccupancy'])->name('report.diary.property.occupancy');
+    Route::get('/property/maintenance', [DiaryReportController::class, 'propertyMaintenance'])->name('report.diary.property.maintenance');
+    Route::get('/property/commission', [DiaryReportController::class, 'propertyCommission'])->name('report.diary.property.commission');
+    Route::get('/property/location', [DiaryReportController::class, 'propertyLocation'])->name('report.diary.property.location');
+
+    // Lease Diary
+    Route::get('/lease', [DiaryReportController::class, 'leaseIndex'])->name('report.diary.lease.index');
+    Route::get('/lease/creation', [DiaryReportController::class, 'leaseCreation'])->name('report.diary.lease.creation');
+    Route::get('/lease/validity', [DiaryReportController::class, 'leaseValidity'])->name('report.diary.lease.validity');
+    Route::get('/lease/renewal', [DiaryReportController::class, 'leaseRenewal'])->name('report.diary.lease.renewal');
+    Route::get('/lease/uploads', [DiaryReportController::class, 'leaseUploads'])->name('report.diary.lease.uploads');
+    Route::get('/lease/financial', [DiaryReportController::class, 'leaseFinancial'])->name('report.diary.lease.financial');
 });
