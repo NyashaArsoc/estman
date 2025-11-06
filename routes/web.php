@@ -446,6 +446,7 @@ Route::prefix('report/diary')->group(function () {
     Route::get('/landlord/acquisition', [DiaryReportController::class, 'landlordAcquisition'])->name('report.diary.landlord.acquisition');
     Route::get('/landlord/tenants', [DiaryReportController::class, 'landlordTenants'])->name('report.diary.landlord.tenants');
     Route::get('/landlord/remittance', [DiaryReportController::class, 'landlordRemittance'])->name('report.diary.landlord.remittance');
+    Route::get('/landlord/approval/export', [DiaryReportController::class, 'exportLandlordApproval'])->name('report.diary.landlord.approval.export');
 
     // Tenant Diary
     Route::get('/tenant', [DiaryReportController::class, 'tenantIndex'])->name('report.diary.tenant.index');
