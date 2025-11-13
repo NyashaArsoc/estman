@@ -122,10 +122,161 @@
                             <span class="s-icon"><i class="ti-bar-chart"></i></span>
                             <span class="s-text">Reports</span>
                         </a>
+
+
+                        <!--Report items list created -->
+
+
                         <ul>
-                            <li><a href="#"></a></li>
+                            <!--item 1 -->
+
+                            <li class="with-sub">
+                                <a href="#" class="waves-effect  waves-light">
+                                    <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+
+                                    <span class="s-text">Dairy</span>
+                                </a>
+                                <ul>
+                                    <li><a href="#">Landlord</a></li>
+                                    <li><a href="#">Tenant</a></li>
+                                    <li><a href="#">Property</a></li>
+                                    <li><a href="#">Lease</a></li>
+                                </ul>
+                            </li>
+
+                            <!--item 2 -->
+
+                            <li class="with-sub">
+                                <a href="#" class="waves-effect  waves-light">
+                                    <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                                    <span class="s-text">Financial </span>
+                                </a>
+                                <ul>
+                                    <li><a href="#">Monthly</a></li>
+                                    <li><a href="#">Quarterly</a></li>
+                                    <li><a href="#">Year-to-Date</a></li>
+                                    <li><a href="#">Deductions</a></li>
+
+                                </ul>
+                            </li>
+
+                            <!--item 3 -->
+
+                            <li class="with-sub">
+                                <a href="#" class="waves-effect  waves-light">
+                                    <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                                    <span class="s-text">Income </span>
+                                </a>
+                                <ul>
+                                    <li><a href="#">Total Rent Received</a></li>
+                                    <li><a href="#">Net Remittance After</a></li>
+                                    <li><a href="#">Year-to-Date</a></li>
+                                    <li><a href="#">Income by Property</a></li>
+                                    <li><a href="#">Income by Tenants</a></li>
+                                    <li><a href="#">Income by Currency</a></li>
+                                </ul>
+                            </li>
+
+                            <!--item 4 -->
+
+                            <li class="with-sub">
+                                <a href="#" class="waves-effect  waves-light">
+                                    <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                                    <span class="s-text">Rent Payments </span>
+                                </a>
+                                <ul>
+                                    <li><a href="#">Tenant Payment History</a></li>
+                                    <li><a href="#">Unpaid Rent</a></li>
+                                    <li><a href="#">Payment Reconciliation</a></li>
+                                    <li><a href="#">Receipt Summary</a></li>
+                                    <li><a href="#">Payment by Method</a></li>
+                                </ul>
+                            </li>
+
+                            <!--item 5 -->
+
+                            <li class="with-sub">
+                                <a href="#" class="waves-effect  waves-light">
+                                    <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                                    <span class="s-text">Billing and Collection</span>
+                                </a>
+                                <ul>
+                                    <li><a href="#">Invoice Summary</a></li>
+                                    <li><a href="#">Billing breakdown</a></li>
+                                    <li><a href="#">Collection Summary</a></li>
+                                    <li><a href="#">Currency -Bases Billing</a></li>
+
+                                </ul>
+                            </li>
+
+                            <!--item 6 -->
+
+                            <li class="with-sub">
+                                <a href="#" class="waves-effect  waves-light">
+                                    <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                                    <span class="s-text">Property Holdings</span>
+                                </a>
+                                <ul>
+                                    <li><a href="#">Property-list by landlord</a></li>
+                                    <li><a href="#">Accupancy Status</a></li>
+                                    <li><a href="#">Year-to-Date</a></li>
+                                    <li><a href="#">Deductions</a></li>
+
+                                </ul>
+                            </li>
+
+                            <!--item 7 -->
+
+                            <li class="with-sub">
+                                <a href="#" class="waves-effect  waves-light">
+                                    <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                                    <span class="s-text">Lease</span>
+                                </a>
+                                <ul>
+                                    <li><a href="#">lease Validity</a></li>
+                                    <li><a href="#">Renewal schedule</a></li>
+                                    <li><a href="#">Attachments</a></li>
+                                    <li><a href="#">Lease financials</a></li>
+                                </ul>
+                            </li>
+
+                            <!--item 8 -->
+
+                            <li class="with-sub">
+                                <a href="#" class="waves-effect  waves-light">
+                                    <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                                    <span class="s-text">Tenant</span>
+                                </a>
+                                <ul>
+                                    <li><a href="#">Mapping</a></li>
+                                    <li><a href="#">Lease Summary</a></li>
+                                    <li><a href="#">Contact</a></li>
+                                    <li><a href="#">Individual</a></li>
+                                </ul>
+                            </li>
+
+                            <!--item 9 -->
+
+                            <li class="with-sub">
+                                <a href="#" class="waves-effect  waves-light">
+                                    <span class="s-caret"><i class="fa fa-angle-down"></i></span>
+                                    <span class="s-text">Profile and Contact</span>
+                                </a>
+                                <ul>
+                                    <li><a href="#">landlord contact </a></li>
+                                    <li><a href="#">Company registration</a></li>
+                                    <li><a href="#">TIN / VAT</a></li>
+                                    <li><a href="#">National ID</a></li>
+                                    <li><a href="#">Banking Details</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
+                    
+
+                    <!-- Above content is the one that i edited,-->
+
+
                     <li class="with-sub">
                         <a href="#" class="waves-effect  waves-light">
                             <span class="s-caret"><i class="fa fa-angle-down"></i></span>
